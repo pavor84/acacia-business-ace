@@ -5,10 +5,11 @@
 package com.cosmos.acacia.crm.data.product;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -19,33 +20,35 @@ public class ProductSupplierPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "product_id", nullable = false)
-    private BigInteger productId;
+    @Type(type="uuid")
+    private UUID productId;
 
     @Basic(optional = false)
     @Column(name = "supplier_id", nullable = false)
-    private BigInteger supplierId;
+    @Type(type="uuid")
+    private UUID supplierId;
 
     public ProductSupplierPK() {
     }
 
-    public ProductSupplierPK(BigInteger productId, BigInteger supplierId) {
+    public ProductSupplierPK(UUID productId, UUID supplierId) {
         this.productId = productId;
         this.supplierId = supplierId;
     }
 
-    public BigInteger getProductId() {
+    public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(BigInteger productId) {
+    public void setProductId(UUID productId) {
         this.productId = productId;
     }
 
-    public BigInteger getSupplierId() {
+    public UUID getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(BigInteger supplierId) {
+    public void setSupplierId(UUID supplierId) {
         this.supplierId = supplierId;
     }
 

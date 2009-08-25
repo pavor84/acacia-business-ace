@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.payment;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -32,7 +32,7 @@ public interface CustomerPaymentRemote {
      * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<CustomerPayment> listCustomerPayments(BigInteger parentDataObjectId);
+    List<CustomerPayment> listCustomerPayments(UUID parentDataObjectId);
 
     /**
      * Deletes the customerPayment, - if the integrity is violated, throws an {@link ValidationException} 
@@ -46,7 +46,7 @@ public interface CustomerPaymentRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    CustomerPayment newCustomerPayment(BigInteger parentDataObjectId);
+    CustomerPayment newCustomerPayment(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view

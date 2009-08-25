@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -74,10 +75,12 @@ public class AssemblingCategory
     @Id
     @Column(name = "assembling_category_id", nullable = false)
     @Property(title="Assembling Category Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger assemblingCategoryId;
+    @Type(type="uuid")
+    private UUID assemblingCategoryId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Column(name = "category_code", nullable = false)
     @Property(title="Category Code", propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
@@ -104,15 +107,15 @@ public class AssemblingCategory
     public AssemblingCategory() {
     }
 
-    public AssemblingCategory(BigInteger assemblingCategoryId) {
+    public AssemblingCategory(UUID assemblingCategoryId) {
         this.assemblingCategoryId = assemblingCategoryId;
     }
 
-    public BigInteger getAssemblingCategoryId() {
+    public UUID getAssemblingCategoryId() {
         return assemblingCategoryId;
     }
 
-    public void setAssemblingCategoryId(BigInteger assemblingCategoryId) {
+    public void setAssemblingCategoryId(UUID assemblingCategoryId) {
         this.assemblingCategoryId = assemblingCategoryId;
     }
 
@@ -177,25 +180,25 @@ public class AssemblingCategory
     }
 
     @Override
-    public BigInteger getParentId()
+    public UUID getParentId()
     {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
+    public void setParentId(UUID parentId)
     {
         this.parentId = parentId;
     }
 
     @Override
-    public BigInteger getId()
+    public UUID getId()
     {
         return getAssemblingCategoryId();
     }
 
     @Override
-    public void setId(BigInteger id)
+    public void setId(UUID id)
     {
         setAssemblingCategoryId(id);
     }

@@ -4,7 +4,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,6 +22,7 @@ import com.cosmos.acacia.annotation.ResourceDisplay;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import org.hibernate.annotations.Type;
 
 /**
  * Created	:	21.03.2008
@@ -83,11 +84,13 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Id
     @Column(name = "partner_id", nullable = false)
     @Property(title="Partner id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger partnerId;
+    @Type(type="uuid")
+    private UUID partnerId;
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id")
     @ManyToOne(optional=false)
@@ -101,19 +104,19 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
 
     /**
      * Getter for parentId
-     * @return BigInteger
+     * @return UUID
      */
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     /**
      * Setter for parentId
-     * @param parentId - BigInteger
+     * @param parentId - UUID
      */
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -137,27 +140,27 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
 
     /**
      * Getter for partnerId
-     * @return BigInteger
+     * @return UUID
      */
-    public BigInteger getPartnerId() {
+    public UUID getPartnerId() {
         return partnerId;
     }
 
     /**
      * Setter for partnerId
-     * @param partnerId - BigInteger
+     * @param partnerId - UUID
      */
-    public void setPartnerId(BigInteger partnerId) {
+    public void setPartnerId(UUID partnerId) {
         this.partnerId = partnerId;
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPartnerId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPartnerId(id);
     }
 

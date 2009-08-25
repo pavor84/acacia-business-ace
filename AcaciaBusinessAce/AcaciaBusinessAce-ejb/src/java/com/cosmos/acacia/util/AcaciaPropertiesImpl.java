@@ -8,7 +8,7 @@ package com.cosmos.acacia.util;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
 import com.cosmos.acacia.security.AccessLevel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,11 +25,10 @@ import java.util.TreeSet;
  *
  * @author Miro
  */
-public class AcaciaPropertiesImpl
-    implements ManageableAcaciaProperties, Serializable
-{
+public class AcaciaPropertiesImpl implements ManageableAcaciaProperties, Serializable {
+
     private AccessLevel accessLevel;
-    private BigInteger relatedObjectId;
+    private UUID relatedObjectId;
     protected AcaciaProperties parentProperties;
     protected TreeMap<String, Serializable> data = new TreeMap<String, Serializable>();
 
@@ -40,7 +39,7 @@ public class AcaciaPropertiesImpl
 
     public AcaciaPropertiesImpl(
             AccessLevel accessLevel,
-            BigInteger relatedObjectId)
+            UUID relatedObjectId)
     {
         this.accessLevel = accessLevel;
         this.relatedObjectId = relatedObjectId;
@@ -48,7 +47,7 @@ public class AcaciaPropertiesImpl
 
     public AcaciaPropertiesImpl(
         AccessLevel accessLevel,
-        BigInteger relatedObjectId,
+        UUID relatedObjectId,
         List<DbProperty> dbProperties)
     {
         this(accessLevel, relatedObjectId);
@@ -91,7 +90,7 @@ public class AcaciaPropertiesImpl
     }
 
     @Override
-    public BigInteger getRelatedObjectId()
+    public UUID getRelatedObjectId()
     {
         return relatedObjectId;
     }

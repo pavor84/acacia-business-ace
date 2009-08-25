@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -149,11 +149,11 @@ public class CurrencyExchangeRate implements Serializable, CloneableBean<Currenc
         this.fixedExchangeRate = fixedExchangeRate;
     }
 
-    public CurrencyExchangeRate(BigInteger organizationId, Date validFrom, int fromCurrencyId, int toCurrencyId) {
+    public CurrencyExchangeRate(UUID organizationId, Date validFrom, int fromCurrencyId, int toCurrencyId) {
         this.currencyExchangeRatePK = new CurrencyExchangeRatePK(organizationId, validFrom, fromCurrencyId, toCurrencyId);
     }
 
-    public CurrencyExchangeRate(BigInteger organizationId, Date validFrom, DbResource currency) {
+    public CurrencyExchangeRate(UUID organizationId, Date validFrom, DbResource currency) {
         getCurrencyExchangeRatePK().setOrganizationId(organizationId);
         setValidFrom(validFrom);
         setFromCurrency(currency);

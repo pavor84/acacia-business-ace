@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.cash;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public interface CashReconcileRemote {
      * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<CashReconcile> listCashReconciles(BigInteger parentDataObjectId);
+    List<CashReconcile> listCashReconciles(UUID parentDataObjectId);
 
     /**
      * Deletes the cashReconcile, - if the integrity is violated, throws an {@link ValidationException} 
@@ -45,7 +45,7 @@ public interface CashReconcileRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    CashReconcile newCashReconcile(BigInteger parentDataObjectId);
+    CashReconcile newCashReconcile(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view

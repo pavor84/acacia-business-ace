@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -35,7 +35,7 @@ public interface ClassifiersRemote {
      * @param dataObjectType the data object type of the object
      * @return the list of classifiers
      */
-//    List<Classifier> getClassifiers(BigInteger parentDataObjectId,
+//    List<Classifier> getClassifiers(UUID parentDataObjectId,
 //            DataObjectType dataObjectType);
     List<Classifier> getClassifiers(ClassifierGroup classifierGroup,
             DataObjectType dataObjectType);
@@ -63,7 +63,7 @@ public interface ClassifiersRemote {
      * @param parentDataObjectId the parent object id (classifier group)
      * @return the saved classifier
      */
-    Classifier saveClassifier(Classifier classifier, BigInteger parentDataObjectId);
+    Classifier saveClassifier(Classifier classifier, UUID parentDataObjectId);
 
     /**
      * Deletes the specified classifier
@@ -280,7 +280,7 @@ public interface ClassifiersRemote {
      * @param parentDataObjectId
      * @return
      */
-    //Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId);
+    //Classifier saveInitialClassifier(Classifier classifier, UUID parentDataObjectId);
             
     /**
      * If a classifier with the specified key exists, it is returned.

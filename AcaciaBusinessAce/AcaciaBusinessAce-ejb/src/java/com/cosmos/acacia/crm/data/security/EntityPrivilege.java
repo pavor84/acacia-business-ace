@@ -9,7 +9,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -30,7 +30,7 @@ public class EntityPrivilege extends Privilege implements Serializable {
     )
     private DataObject entityDataObject;
 
-    public EntityPrivilege(BigInteger privilegeId) {
+    public EntityPrivilege(UUID privilegeId) {
         super(ENTITY_DATA_OBJECT_ID, privilegeId);
     }
 

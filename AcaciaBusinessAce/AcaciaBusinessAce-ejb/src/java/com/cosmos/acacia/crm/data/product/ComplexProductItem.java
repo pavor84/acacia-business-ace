@@ -12,7 +12,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -57,7 +58,8 @@ public class ComplexProductItem
 
     @Id
     @Column(name = "complex_product_item_id", nullable = false)
-    private BigInteger complexProductItemId;
+    @Type(type="uuid")
+    private UUID complexProductItemId;
 
     @Column(name = "quantity", nullable = false)
     @Property(title="Quantity", propertyValidator=@PropertyValidator(
@@ -108,7 +110,7 @@ public class ComplexProductItem
     {
     }
 
-    public ComplexProductItem(BigInteger complexProductItemId)
+    public ComplexProductItem(UUID complexProductItemId)
     {
         this.complexProductItemId = complexProductItemId;
     }
@@ -118,11 +120,11 @@ public class ComplexProductItem
         this.complexProduct = complexProduct;
     }
 
-    public BigInteger getComplexProductItemId() {
+    public UUID getComplexProductItemId() {
         return complexProductItemId;
     }
 
-    public void setComplexProductItemId(BigInteger complexProductItemId) {
+    public void setComplexProductItemId(UUID complexProductItemId) {
         this.complexProductItemId = complexProductItemId;
     }
 
@@ -185,7 +187,7 @@ public class ComplexProductItem
     }
 
     @Override
-    public BigInteger getParentId()
+    public UUID getParentId()
     {
         if(complexProduct == null)
             return null;
@@ -194,19 +196,19 @@ public class ComplexProductItem
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
+    public void setParentId(UUID parentId)
     {
         //this.parentId = parentId;
     }
 
     @Override
-    public BigInteger getId()
+    public UUID getId()
     {
         return getComplexProductItemId();
     }
 
     @Override
-    public void setId(BigInteger id)
+    public void setId(UUID id)
     {
         setComplexProductItemId(id);
     }

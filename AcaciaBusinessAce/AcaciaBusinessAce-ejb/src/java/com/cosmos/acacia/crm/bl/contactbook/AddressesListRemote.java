@@ -15,7 +15,7 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * An EJB for handling persons
@@ -70,7 +70,7 @@ public interface AddressesListRemote {
      *
      * @return the saved Address
      */
-    Address saveAddress(Address address, BigInteger parentDataObjectId);
+    Address saveAddress(Address address, UUID parentDataObjectId);
 
 
     /**
@@ -87,7 +87,7 @@ public interface AddressesListRemote {
      * @param parentDataObjectId
      * @return list of addresses
      */
-    List<Address> getAddresses(BigInteger parentDataObjectId);
+    List<Address> getAddresses(UUID parentDataObjectId);
 
     /* Handling contact persons */
 
@@ -97,7 +97,7 @@ public interface AddressesListRemote {
      * @param parentDataObjectId
      * @return list of contact persons
      */
-    List<ContactPerson> getContactPersons(BigInteger parentDataObjectId);
+    List<ContactPerson> getContactPersons(UUID parentDataObjectId);
 
     /**
      * 
@@ -130,7 +130,7 @@ public interface AddressesListRemote {
      * @return the saved ContactPerson
      */
     ContactPerson saveContactPerson(ContactPerson contactPerson,
-            BigInteger parentDataObjectId);
+            UUID parentDataObjectId);
 
     /**
      * Deletes a ContactPerson
@@ -148,7 +148,7 @@ public interface AddressesListRemote {
      * @param parentId the id of the current logged organization
      * @return the list of PositionType's
      */
-    List<PositionType> getPositionTypes(DataObject parentDataObject, BigInteger parentId);
+    List<PositionType> getPositionTypes(DataObject parentDataObject, UUID parentId);
 
     /**
      * Gets a list of all position types for a specified
@@ -159,7 +159,7 @@ public interface AddressesListRemote {
      * @return the list of PositionType's
      */
     @SuppressWarnings("unchecked")
-    List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentDataObjectId);
+    List<PositionType> getPositionTypes(Class ownerClass, UUID parentDataObjectId);
 
     /**
      * Lists all persons
@@ -221,7 +221,7 @@ public interface AddressesListRemote {
      */
     CommunicationContact saveCommunicationContact(
             CommunicationContact communicationContact,
-            BigInteger parentDataObjectId,
+            UUID parentDataObjectId,
             ContactPerson contactPerson);
 
     /**

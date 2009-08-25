@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.data.cash.CashReconcile;
  */
 @Stateless
 public class DocumentNumberBean implements DocumentNumberLocal{
+
     @PersistenceContext
     private EntityManager em; 
  

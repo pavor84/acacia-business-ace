@@ -25,7 +25,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * The implementation of handling locations (see interface for more info)
@@ -46,7 +46,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<BankDetail> getBankDetails(BigInteger parentId) {
+    public List<BankDetail> getBankDetails(UUID parentId) {
         if (parentId != null) {
             Query query = em.createNamedQuery("BankDetail.findByParentDataObjectAndDeleted");
             query.setParameter("parentDataObjectId", parentId);
@@ -69,7 +69,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         return new BankDetail();
     }
 
-    public BankDetail saveBankDetail(BankDetail bankDetail, BigInteger parentDataObjectId)
+    public BankDetail saveBankDetail(BankDetail bankDetail, UUID parentDataObjectId)
     {
         bankDetail.setParentId(parentDataObjectId);
 
@@ -87,7 +87,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         return esm.remove(em, bankDetail);
     }
 
-    public List<Person> getBankContacts(BigInteger parentDataObjectId) {
+    public List<Person> getBankContacts(UUID parentDataObjectId) {
         List<ContactPerson> contactPersons = addressesListLocal.getContactPersons(parentDataObjectId);
 
         ArrayList<Person> persons = new ArrayList<Person>(contactPersons.size());
@@ -104,7 +104,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     }
 
     @Override
-    public List<BankDetail> getBankDetailsForOrganization(BigInteger organizationDataObjectId) {
+    public List<BankDetail> getBankDetailsForOrganization(UUID organizationDataObjectId) {
         List<Address> orgAddresses = addressesListLocal.getAddresses(organizationDataObjectId);
         List<BankDetail> result = new ArrayList<BankDetail>();
         

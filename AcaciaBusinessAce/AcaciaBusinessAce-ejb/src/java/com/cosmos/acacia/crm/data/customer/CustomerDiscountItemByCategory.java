@@ -9,7 +9,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -64,11 +64,11 @@ public class CustomerDiscountItemByCategory extends CustomerDiscountItem impleme
     public CustomerDiscountItemByCategory() {
     }
 
-    public CustomerDiscountItemByCategory(BigInteger customerDiscountItemId) {
+    public CustomerDiscountItemByCategory(UUID customerDiscountItemId) {
         this.customerDiscountItemId = customerDiscountItemId;
     }
 
-    public CustomerDiscountItemByCategory(BigInteger customerDiscountItemId, boolean includeHeirs) {
+    public CustomerDiscountItemByCategory(UUID customerDiscountItemId, boolean includeHeirs) {
         this.customerDiscountItemId = customerDiscountItemId;
         this.includeHeirs = includeHeirs;
     }

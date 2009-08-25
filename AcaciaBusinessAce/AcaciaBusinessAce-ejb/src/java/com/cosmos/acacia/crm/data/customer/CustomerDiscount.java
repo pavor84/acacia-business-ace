@@ -11,7 +11,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -49,7 +50,8 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "customer_discount_id", nullable = false)
-    private BigInteger customerDiscountId;
+    @Type(type="uuid")
+    private UUID customerDiscountId;
 
     @JoinColumn(name = "customer_id", referencedColumnName = "partner_id", nullable = false)
     @ManyToOne(optional = false)
@@ -67,20 +69,21 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     private DataObject dataObject;
 
     @Column(name = "organization_id", nullable=false, precision=18, scale=0)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     public CustomerDiscount() {
     }
 
-    public CustomerDiscount(BigInteger customerDiscountId) {
+    public CustomerDiscount(UUID customerDiscountId) {
         this.customerDiscountId = customerDiscountId;
     }
 
-    public BigInteger getCustomerDiscountId() {
+    public UUID getCustomerDiscountId() {
         return customerDiscountId;
     }
 
-    public void setCustomerDiscountId(BigInteger customerDiscountId) {
+    public void setCustomerDiscountId(UUID customerDiscountId) {
         this.customerDiscountId = customerDiscountId;
     }
 
@@ -110,11 +113,11 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 
@@ -142,22 +145,22 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getCustomerDiscountId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setCustomerDiscountId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return getOrganizationId();
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         setOrganizationId(parentId);
     }
 

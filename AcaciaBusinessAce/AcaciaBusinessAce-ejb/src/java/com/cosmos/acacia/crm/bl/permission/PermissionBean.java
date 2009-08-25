@@ -17,7 +17,7 @@ import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermissionPK;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessRight;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.security.AccessControlException;
 import java.util.Set;
 import java.util.TreeSet;
@@ -66,8 +66,8 @@ public class PermissionBean implements PermissionLocal {
             throw new NullPointerException("dataObjectPermissionPK can not be null.");
         }
 
-        BigInteger organizationId = session.getOrganization().getId();
-        BigInteger id;
+        UUID organizationId = session.getOrganization().getId();
+        UUID id;
         if((id = pk.getOrganizationId()) == null || !id.equals(organizationId)) {
             pk.setOrganizationId(organizationId);
         }
@@ -127,8 +127,8 @@ public class PermissionBean implements PermissionLocal {
             throw new NullPointerException("dataObjectTypePermissionPK can not be null.");
         }
 
-        BigInteger organizationId = session.getOrganization().getId();
-        BigInteger id;
+        UUID organizationId = session.getOrganization().getId();
+        UUID id;
         if((id = pk.getOrganizationId()) == null || !id.equals(organizationId)) {
             pk.setOrganizationId(organizationId);
         }

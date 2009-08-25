@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -64,10 +65,12 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
 
     @Id
     @Column(name = "confirmation_item_id", nullable = false)
-    private BigInteger confirmationItemId;
+    @Type(type="uuid")
+    private UUID confirmationItemId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
@@ -126,15 +129,15 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
     public OrderConfirmationItem() {
     }
 
-    public OrderConfirmationItem(BigInteger confirmationItemId) {
+    public OrderConfirmationItem(UUID confirmationItemId) {
         this.confirmationItemId = confirmationItemId;
     }
 
-    public BigInteger getConfirmationItemId() {
+    public UUID getConfirmationItemId() {
         return confirmationItemId;
     }
 
-    public void setConfirmationItemId(BigInteger confirmationItemId) {
+    public void setConfirmationItemId(UUID confirmationItemId) {
         this.confirmationItemId = confirmationItemId;
     }
 
@@ -162,11 +165,11 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
         this.extendedPrice = extendedPrice;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -217,7 +220,7 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return confirmationItemId;
     }
 
@@ -232,7 +235,7 @@ public class OrderConfirmationItem extends DataObjectBean implements Serializabl
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setConfirmationItemId(id);
     }
 

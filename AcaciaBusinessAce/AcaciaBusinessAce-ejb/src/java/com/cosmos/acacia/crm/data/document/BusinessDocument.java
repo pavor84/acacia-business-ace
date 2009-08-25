@@ -28,7 +28,7 @@ import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextField;
 import java.awt.BorderLayout;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -133,7 +133,7 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
     @Id
     @Basic(optional = false)
     @Column(name = "document_id", nullable = false)
-    protected BigInteger documentId;
+    protected UUID documentId;
 
     @JoinColumn(name = "document_type_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
@@ -282,7 +282,7 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
         this.discriminatorId = discriminatorId;
     }
 
-    public BusinessDocument(String discriminatorId, BigInteger documentId) {
+    public BusinessDocument(String discriminatorId, UUID documentId) {
         this(discriminatorId);
         this.documentId = documentId;
     }
@@ -303,11 +303,11 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
         this.documentDate = documentDate;
     }
 
-    public BigInteger getDocumentId() {
+    public UUID getDocumentId() {
         return documentId;
     }
 
-    public void setDocumentId(BigInteger documentId) {
+    public void setDocumentId(UUID documentId) {
         this.documentId = documentId;
     }
 
@@ -407,17 +407,17 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getDocumentId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setDocumentId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         Organization organization;
         if((organization = getPublisher()) != null) {
             return organization.getId();

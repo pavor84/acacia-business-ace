@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -62,7 +62,7 @@ public class Expression implements Serializable, Comparable<Expression>, Compara
         this.expressionPK = expressionPK;
     }
 
-    public Expression(BigInteger organizationId, String expressionKey) {
+    public Expression(UUID organizationId, String expressionKey) {
         this.expressionPK = new ExpressionPK(organizationId, expressionKey);
     }
 

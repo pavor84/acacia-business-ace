@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -24,7 +24,7 @@ public interface PassportsListRemote {
      * @param parentDataObjectId
      * @return list of passports
      */
-    List<Passport> getPassports(BigInteger parentDataObjectId);
+    List<Passport> getPassports(UUID parentDataObjectId);
 
     /**
      * Gets the EntityProperties for Passport
@@ -47,7 +47,7 @@ public interface PassportsListRemote {
      * @param parentDataObjectId
      * @return the saved passport
      */
-    Passport savePassport(Passport passport, BigInteger parentDataObjectId);
+    Passport savePassport(Passport passport, UUID parentDataObjectId);
 
     /**
      * Deletes a Passport

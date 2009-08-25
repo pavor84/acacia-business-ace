@@ -42,7 +42,7 @@ public class CashReconcilePaymentSummary implements Serializable{
     @Id
     @SequenceGenerator(name="CashReconcilePaymentSummaryGen", sequenceName="cash_recon_pay_summary_seq", allocationSize=1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CashReconcilePaymentSummaryGen")
-    @Column(name = "id", nullable = false)
+    @Column(name = "cash_recon_pay_summary_id", nullable = false)
     private Integer id;
     
     @JoinColumn(name = "paymentType", nullable = false, referencedColumnName = "resource_id")
@@ -50,7 +50,7 @@ public class CashReconcilePaymentSummary implements Serializable{
     @Property(title="Payment Type")
     private DbResource paymentType;
     
-    @JoinColumn(name = "currency", nullable = false, referencedColumnName = "resource_id")
+    @JoinColumn(name = "currency_id", nullable = false, referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Currency")
     private DbResource currency;

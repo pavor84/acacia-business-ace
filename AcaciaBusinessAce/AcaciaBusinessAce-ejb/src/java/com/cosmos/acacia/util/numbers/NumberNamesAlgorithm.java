@@ -6,6 +6,6 @@ import java.math.BigInteger;
 public interface NumberNamesAlgorithm {
 
     String getNumberName(BigDecimal decimal);
-    String getNumberName(BigInteger integer);
 
+    String getNumberName(BigInteger integer);
 }

@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -47,7 +48,8 @@ public class AssemblingMessage extends DataObjectBean
     @Id
     @Column(name = "message_id", nullable = false)
     @Property(title="Message Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger messageId;
+    @Type(type="uuid")
+    private UUID messageId;
 
     @Column(name = "message_code", nullable = false)
     @Property(
@@ -287,21 +289,21 @@ public class AssemblingMessage extends DataObjectBean
     public AssemblingMessage() {
     }
 
-    public AssemblingMessage(BigInteger messageId) {
+    public AssemblingMessage(UUID messageId) {
         this.messageId = messageId;
     }
 
-    public AssemblingMessage(BigInteger messageId, String messageCode, String selectionText) {
+    public AssemblingMessage(UUID messageId, String messageCode, String selectionText) {
         this.messageId = messageId;
         this.messageCode = messageCode;
         this.selectionText = selectionText;
     }
 
-    public BigInteger getMessageId() {
+    public UUID getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(BigInteger messageId) {
+    public void setMessageId(UUID messageId) {
         this.messageId = messageId;
     }
 
@@ -406,17 +408,17 @@ public class AssemblingMessage extends DataObjectBean
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getMessageId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setMessageId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if (organization == null) {
             return null;
         }
@@ -425,7 +427,7 @@ public class AssemblingMessage extends DataObjectBean
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         throw new UnsupportedOperationException();
     }
 

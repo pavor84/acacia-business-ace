@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.cash;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -29,7 +29,7 @@ public interface BanknoteQuantityRemote {
      * @param parentId 
      * @return not null list
      */
-    List<BanknoteQuantity> listBanknoteQuantitys(BigInteger parentId);
+    List<BanknoteQuantity> listBanknoteQuantitys(UUID parentId);
 
     /**
      * Deletes the banknoteQuantity, - if the integrity is violated, throws an {@link ValidationException} 
@@ -42,7 +42,7 @@ public interface BanknoteQuantityRemote {
      * 
      * @return not null
      */
-    BanknoteQuantity newBanknoteQuantity(BigInteger parentId);
+    BanknoteQuantity newBanknoteQuantity(UUID parentId);
 
     /**
      * Return entity properties for detailed view

@@ -19,7 +19,7 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +31,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -71,7 +72,8 @@ public class PrivilegeCategory extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "privilege_category_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger privilegeCategoryId;
+    @Type(type="uuid")
+    private UUID privilegeCategoryId;
 
     @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)
@@ -119,20 +121,20 @@ public class PrivilegeCategory extends DataObjectBean implements Serializable {
     public PrivilegeCategory() {
     }
 
-    public PrivilegeCategory(BigInteger privilegeCategoryId) {
+    public PrivilegeCategory(UUID privilegeCategoryId) {
         this.privilegeCategoryId = privilegeCategoryId;
     }
 
-    public PrivilegeCategory(BigInteger privilegeCategoryId, String categoryName) {
+    public PrivilegeCategory(UUID privilegeCategoryId, String categoryName) {
         this.privilegeCategoryId = privilegeCategoryId;
         this.categoryName = categoryName;
     }
 
-    public BigInteger getPrivilegeCategoryId() {
+    public UUID getPrivilegeCategoryId() {
         return privilegeCategoryId;
     }
 
-    public void setPrivilegeCategoryId(BigInteger privilegeCategoryId) {
+    public void setPrivilegeCategoryId(UUID privilegeCategoryId) {
         this.privilegeCategoryId = privilegeCategoryId;
     }
 
@@ -171,17 +173,17 @@ public class PrivilegeCategory extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPrivilegeCategoryId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPrivilegeCategoryId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(organization != null) {
             return organization.getId();
         }

@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -57,7 +57,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Pricelist> listPricelists(BigInteger parentDataObjectId) {
+    public List<Pricelist> listPricelists(UUID parentDataObjectId) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -76,7 +76,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
      * Create entry for every product if some products are not included.
      * @param parentDataObjectId - the parent organization
      */
-    public void updateGeneralPricelist(BigInteger parentDataObjectId) {
+    public void updateGeneralPricelist(UUID parentDataObjectId) {
         Pricelist pricelist = checkGeneralPricelist(parentDataObjectId);
         List<SimpleProduct> notIncluded = getMissingGeneralPricelistProducts(pricelist);
         createGeneralPricelistItems(pricelist, notIncluded);
@@ -104,7 +104,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
      * @param parentDataObjectId 
      * @return
      */
-    private Pricelist checkGeneralPricelist(BigInteger parentDataObjectId) {
+    private Pricelist checkGeneralPricelist(UUID parentDataObjectId) {
         Query q = em.createNamedQuery("Pricelist.findGeneralPricelistForParent");
         q.setParameter("parentDataObjectId", parentDataObjectId);
         
@@ -148,10 +148,10 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         esm.remove(em, pricelist);
     }
 
-    public Pricelist newPricelist(BigInteger parentDataObjectId) {
+    public Pricelist newPricelist(UUID parentDataObjectId) {
         Pricelist c = new Pricelist();
         c.setParentId(parentDataObjectId);
-        c.setCurrency(Currency.Leva.getDbResource());
+        c.setCurrency(Currency.BGN.getDbResource());
         c.setActive(true);
         return c;
     }
@@ -205,7 +205,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<PricelistItem> getPricelistItems(BigInteger parentDataObjectId) {
+    public List<PricelistItem> getPricelistItems(UUID parentDataObjectId) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
 
@@ -217,7 +217,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         return result;
     }
 
-    public PricelistItem newPricelistItem(BigInteger parentDataObjectId) {
+    public PricelistItem newPricelistItem(UUID parentDataObjectId) {
         PricelistItem item = new PricelistItem();
         Pricelist pricelist = em.find(Pricelist.class, parentDataObjectId);
         if (pricelist == null)
@@ -239,7 +239,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         return entityProperties;
     }
 
-    public Pricelist getPricelistById(BigInteger pricelistId) {
+    public Pricelist getPricelistById(UUID pricelistId) {
         Query q = em.createNamedQuery("Pricelist.findById");
         q.setParameter("pricelistId", pricelistId);
         List<Pricelist> result = q.getResultList();
@@ -250,7 +250,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         }
     }
 
-    public PricelistItem getPricelistItemById(BigInteger pricelistItemId) {
+    public PricelistItem getPricelistItemById(UUID pricelistItemId) {
 
         Query q = em.createNamedQuery("PricelistItem.findById");
         q.setParameter("pricelistItemId", pricelistItemId);

@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.permission.DataObjectPermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.security.AccessRight;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Set;
 import javax.ejb.Local;
 

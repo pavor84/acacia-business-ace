@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -59,11 +60,13 @@ public class Passport extends DataObjectBean implements Serializable {
     @Id
     @Column(name = "passport_id", nullable = false)
     @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger passportId;
+    @Type(type="uuid")
+    private UUID passportId;
 
     @Column(name = "parent_id", nullable = false)
     @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "passport_type_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -108,25 +111,25 @@ public class Passport extends DataObjectBean implements Serializable {
     public Passport() {
     }
 
-    public Passport(BigInteger passportId) {
+    public Passport(UUID passportId) {
         this.passportId = passportId;
     }
 
-    public BigInteger getPassportId() {
+    public UUID getPassportId() {
         return passportId;
     }
 
-    public void setPassportId(BigInteger passportId) {
+    public void setPassportId(UUID passportId) {
         this.passportId = passportId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -224,12 +227,12 @@ public class Passport extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPassportId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPassportId(id);
     }
 

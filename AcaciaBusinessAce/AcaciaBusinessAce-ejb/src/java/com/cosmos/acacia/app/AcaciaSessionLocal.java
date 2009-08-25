@@ -9,6 +9,10 @@ import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.enums.MailType;
+import com.cosmos.mail.MailUtils;
+import com.cosmos.mail.MessageParameters;
 import java.util.UUID;
 
 /**
@@ -32,6 +36,8 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
      * @param organization
      */
     void setOrganization(Organization organization);
+
+    void setUserOrganization(UserOrganization userOrganization);
 
     /**
      * Set the currently logged person.
@@ -84,4 +90,12 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote{
     Expression saveExpression(Expression expression);
 
     void deleteExpression(Expression expression);
+
+    void sendMail(MailType mailType, MessageParameters messageParameters);
+
+    MailUtils getSystemMailUtils();
+
+    MailUtils getOrganizationMailUtils();
+
+    MailUtils getUserMailUtils();
 }

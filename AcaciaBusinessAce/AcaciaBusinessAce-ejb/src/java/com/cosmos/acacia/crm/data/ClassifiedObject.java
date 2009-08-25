@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -66,7 +66,7 @@ public class ClassifiedObject implements Serializable {
         this.classifiedObjectPK = classifiedObjectPK;
     }
 
-    public ClassifiedObject(BigInteger classifierId, BigInteger classifiedObjectId) {
+    public ClassifiedObject(UUID classifierId, UUID classifiedObjectId) {
         this.classifiedObjectPK = new ClassifiedObjectPK(classifierId, classifiedObjectId);
     }
 

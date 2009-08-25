@@ -6,9 +6,10 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -18,40 +19,42 @@ import javax.persistence.Embeddable;
 public class ClassifiedObjectPK implements Serializable {
 
     @Column(name = "classifier_id", nullable = false)
-    private BigInteger classifierId;
+    @Type(type="uuid")
+    private UUID classifierId;
 
     @Column(name = "classified_object_id", nullable = false)
-    private BigInteger classifiedObjectId;
+    @Type(type="uuid")
+    private UUID classifiedObjectId;
 
     public ClassifiedObjectPK() {
     }
 
-    public ClassifiedObjectPK(BigInteger classifierId, BigInteger classifiedObjectId) {
+    public ClassifiedObjectPK(UUID classifierId, UUID classifiedObjectId) {
         this.classifierId = classifierId;
         this.classifiedObjectId = classifiedObjectId;
     }
 
-    public BigInteger getClassifierId() {
+    public UUID getClassifierId() {
         return classifierId;
     }
 
-    public void setClassifierId(BigInteger classifierId) {
+    public void setClassifierId(UUID classifierId) {
         this.classifierId = classifierId;
     }
 
-    public BigInteger getClassifiedObjectId() {
+    public UUID getClassifiedObjectId() {
         return classifiedObjectId;
     }
 
-    public void setClassifiedObjectId(BigInteger classifiedObjectId) {
+    public void setClassifiedObjectId(UUID classifiedObjectId) {
         this.classifiedObjectId = classifiedObjectId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += classifierId.intValue();
-        hash += classifiedObjectId.intValue();
+        hash += classifierId.hashCode();
+        hash += classifiedObjectId.hashCode();
         return hash;
     }
 

@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) throws Exception
+    public List<PositionType> getPositionTypes(Class ownerClass, UUID parentId) throws Exception
     {
         log.info("Position type owner type: " + ownerClass);
         Query q = null;
@@ -77,7 +77,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
         return entityProperties;
     }
 
-    public PositionType newPositionType(BigInteger parentId) {
+    public PositionType newPositionType(UUID parentId) {
         PositionType positionType = new PositionType();
         positionType.setParentId(parentId);
         return positionType;
@@ -137,7 +137,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
     @SuppressWarnings("unchecked")
     @Override
     public List<PositionType> getInternalOrganizationPositionTypes(
-            BigInteger parentId) {
+            UUID parentId) {
 
         Query q = em.createNamedQuery("PositionType.findInternalOrganizationPositionTypes");
         q.setParameter("deleted", false);

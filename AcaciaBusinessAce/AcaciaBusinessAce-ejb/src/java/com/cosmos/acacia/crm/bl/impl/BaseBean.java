@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.lang.reflect.ParameterizedType;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +86,7 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
     }
 
     @Override
-    public List<T> list(BigInteger parentDataObjectId) {
+    public List<T> list(UUID parentDataObjectId) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -101,7 +101,7 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
     }
 
     @Override
-    public List<I> listItems(BigInteger parentEntityId) {
+    public List<I> listItems(UUID parentEntityId) {
         if (parentEntityId == null)
             throw new IllegalArgumentException("parentEntityId can't be null");
 
@@ -113,7 +113,7 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
     }
 
     @Override
-    public T newEntity(BigInteger parentDataObjectId) {
+    public T newEntity(UUID parentDataObjectId) {
         T c;
         try {
             c = entityClass.newInstance();
@@ -128,7 +128,7 @@ public abstract class BaseBean<T extends DataObjectBean, I extends DataObjectBea
     }
 
     @Override
-    public I newItem(BigInteger parentEntityId) {
+    public I newItem(UUID parentEntityId) {
         I item;
         try {
             item = itemClass.newInstance();

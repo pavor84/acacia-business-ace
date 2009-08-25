@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -29,7 +29,7 @@ public interface BaseRemote<T extends DataObjectBean, I extends DataObjectBean>{
      * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<T> list(BigInteger parentDataObjectId);
+    List<T> list(UUID parentDataObjectId);
 
     /**
      * Deletes the entity, - if the integrity is violated, throws an {@link ValidationException} 
@@ -43,7 +43,7 @@ public interface BaseRemote<T extends DataObjectBean, I extends DataObjectBean>{
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    T newEntity(BigInteger parentDataObjectId);
+    T newEntity(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view
@@ -69,7 +69,7 @@ public interface BaseRemote<T extends DataObjectBean, I extends DataObjectBean>{
      * @param parentDataObjectId
      * @return
      */
-    List<I> listItems(BigInteger parentEntityId);
+    List<I> listItems(UUID parentEntityId);
 
     /**
      * Delete item.
@@ -83,7 +83,7 @@ public interface BaseRemote<T extends DataObjectBean, I extends DataObjectBean>{
      * @param parentDataObjectId
      * @return
      */
-    I newItem(BigInteger parentEntityId);
+    I newItem(UUID parentEntityId);
 
     /**
      * Save an item

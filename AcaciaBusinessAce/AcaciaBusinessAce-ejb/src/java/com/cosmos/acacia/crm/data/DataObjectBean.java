@@ -22,10 +22,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.persistence.Transient;
 
@@ -90,14 +90,14 @@ public abstract class DataObjectBean implements CloneableBean<DataObjectBean>,
 
     public abstract void setDataObject(DataObject dataObject);
 
-    public abstract BigInteger getId();
+    public abstract UUID getId();
 
-    public abstract void setId(BigInteger id);
+    public abstract void setId(UUID id);
 
-    public abstract BigInteger getParentId();
-    //public abstract void setParentId(BigInteger parentId);
+    public abstract UUID getParentId();
+    //public abstract void setParentId(UUID parentId);
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         getEntityDataObject().setParentDataObjectId(parentId);
     }
 
@@ -332,7 +332,7 @@ public abstract class DataObjectBean implements CloneableBean<DataObjectBean>,
 
     @Override
     public int hashCode() {
-        BigInteger id;
+        UUID id;
         if((id = getId()) != null) {
             return id.hashCode();
         }
@@ -350,8 +350,8 @@ public abstract class DataObjectBean implements CloneableBean<DataObjectBean>,
             return false;
         }
         DataObjectBean other = (DataObjectBean) object;
-        BigInteger thisId = getId();
-        BigInteger otherId = other.getId();
+        UUID thisId = getId();
+        UUID otherId = other.getId();
         if((thisId == null && otherId != null) || (thisId != null && !thisId.equals(otherId))) {
             return false;
         }

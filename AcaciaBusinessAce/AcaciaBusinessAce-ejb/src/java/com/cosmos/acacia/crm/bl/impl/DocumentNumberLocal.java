@@ -15,7 +15,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
  *
  */
 @Local
-public interface DocumentNumberLocal{
+public interface DocumentNumberLocal {
     /**
      * This number is used when generating the first number for a given document.
      * For example the first Purchase Order number issued by a warehouse with index = 7, will 

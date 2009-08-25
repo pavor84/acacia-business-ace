@@ -4,7 +4,7 @@
 package com.cosmos.acacia.crm.data.sales;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  * Created	:	06.10.2008
@@ -75,13 +76,15 @@ public class InvoiceItemLink implements Serializable{
      * that's way it's just an id.
      */
     @Column(name = "template_item_id", nullable=false)
-    private BigInteger templateItemId;
+    @Type(type="uuid")
+    private UUID templateItemId;
     
     /**
      * This is the document used as template, it can be of different type (sales offer, invoice, etc),
      */
     @Column(name = "template_doc_id", nullable=false)
-    private BigInteger templateDocumentId;
+    @Type(type="uuid")
+    private UUID templateDocumentId;
     
     /**
      * This is reference to the actual invoice item, which is created/modified based on the above
@@ -91,7 +94,7 @@ public class InvoiceItemLink implements Serializable{
     @OneToOne
     private InvoiceItem invoiceItem;
     
-    public InvoiceItemLink(BigInteger templateItemId, BigInteger templateDocumentId,
+    public InvoiceItemLink(UUID templateItemId, UUID templateDocumentId,
             InvoiceItem invoiceItem) {
         super();
         this.templateItemId = templateItemId;
@@ -102,7 +105,7 @@ public class InvoiceItemLink implements Serializable{
     public InvoiceItemLink(){
     }
     
-    public InvoiceItemLink(BigInteger templateItemId, InvoiceItem invoiceItem) {
+    public InvoiceItemLink(UUID templateItemId, InvoiceItem invoiceItem) {
         super();
         this.templateItemId = templateItemId;
         this.invoiceItem = invoiceItem;
@@ -124,19 +127,19 @@ public class InvoiceItemLink implements Serializable{
         this.invoiceItem = invoiceItem;
     }
 
-    public BigInteger getTemplateItemId() {
+    public UUID getTemplateItemId() {
         return templateItemId;
     }
 
-    public void setTemplateItemId(BigInteger templateItemId) {
+    public void setTemplateItemId(UUID templateItemId) {
         this.templateItemId = templateItemId;
     }
 
-    public BigInteger getTemplateDocumentId() {
+    public UUID getTemplateDocumentId() {
         return templateDocumentId;
     }
 
-    public void setTemplateDocumentId(BigInteger templateDocumentId) {
+    public void setTemplateDocumentId(UUID templateDocumentId) {
         this.templateDocumentId = templateDocumentId;
     }
 

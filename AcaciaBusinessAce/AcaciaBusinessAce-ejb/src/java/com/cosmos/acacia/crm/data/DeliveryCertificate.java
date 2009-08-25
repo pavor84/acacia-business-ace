@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,6 +32,8 @@ import javax.persistence.Transient;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
+import java.math.BigInteger;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -62,10 +64,12 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     @Id
     @Column(name = "delivery_certificate_id", nullable = false)
-    private BigInteger deliveryCertificateId;
+    @Type(type="uuid")
+    private UUID deliveryCertificateId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id")
     @ManyToOne
@@ -195,25 +199,25 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     public DeliveryCertificate() {
     }
 
-    public DeliveryCertificate(BigInteger deliveryCertificateId) {
+    public DeliveryCertificate(UUID deliveryCertificateId) {
         this.deliveryCertificateId = deliveryCertificateId;
     }
 
-    public BigInteger getDeliveryCertificateId() {
+    public UUID getDeliveryCertificateId() {
         return deliveryCertificateId;
     }
 
-    public void setDeliveryCertificateId(BigInteger deliveryCertificateId) {
+    public void setDeliveryCertificateId(UUID deliveryCertificateId) {
         this.deliveryCertificateId = deliveryCertificateId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -469,12 +473,12 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return this.getDeliveryCertificateId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         this.setDeliveryCertificateId(id);
     }
 
@@ -489,7 +493,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
         Date now = new Date();
         //this.setDeliveryCertificateDate(now);
         this.setCreationTime(now);
-        //this.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
+        //this.setDeliveryCertificateNumber(UUID.valueOf(now.getTime()));
         
         if(this.getCreationTime() == null){
         	this.setCreationTime(new Date());

@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.contacts;
 
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -128,15 +128,15 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
     public Person() {
     }
 
-    public Person(BigInteger id) {
+    public Person(UUID id) {
         setPartnerId(id);
     }
 
-//    public BigInteger getPersonId() {
+//    public UUID getPersonId() {
 //        return personId;
 //    }
 //
-//    public void setPersonId(BigInteger personId) {
+//    public void setPersonId(UUID personId) {
 //        this.personId = personId;
 //    }
 

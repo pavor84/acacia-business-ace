@@ -6,10 +6,11 @@
 package com.cosmos.acacia.crm.data.properties;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -25,7 +26,8 @@ public class DbPropertyPK
 
     @Basic(optional = false)
     @Column(name = "related_object_id", nullable = false)
-    private BigInteger relatedObjectId;
+    @Type(type="uuid")
+    private UUID relatedObjectId;
 
     @Basic(optional = false)
     @Column(name = "property_key", nullable = false, length = 64)
@@ -35,7 +37,7 @@ public class DbPropertyPK
     {
     }
 
-    public DbPropertyPK(String accessLevel, BigInteger relatedObjectId, String propertyKey)
+    public DbPropertyPK(String accessLevel, UUID relatedObjectId, String propertyKey)
     {
         this.accessLevel = accessLevel;
         this.relatedObjectId = relatedObjectId;
@@ -52,12 +54,12 @@ public class DbPropertyPK
         this.accessLevel = accessLevel;
     }
 
-    public BigInteger getRelatedObjectId()
+    public UUID getRelatedObjectId()
     {
         return relatedObjectId;
     }
 
-    public void setRelatedObjectId(BigInteger relatedObjectId)
+    public void setRelatedObjectId(UUID relatedObjectId)
     {
         this.relatedObjectId = relatedObjectId;
     }

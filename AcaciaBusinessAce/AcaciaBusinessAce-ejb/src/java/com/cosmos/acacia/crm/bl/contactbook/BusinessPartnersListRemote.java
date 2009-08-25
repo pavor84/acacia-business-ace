@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public interface BusinessPartnersListRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId);
+    List<BusinessPartner> getBusinessPartners(UUID parentDataObjectId);
 
     List<BusinessPartner> getBusinessPartners(Classifier classifier);
     

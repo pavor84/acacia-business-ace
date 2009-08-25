@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.sql.BatchUpdateException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,8 +37,8 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.util.NumberUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -72,9 +72,9 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         }
         if (entity instanceof DataObjectBean) {
             DataObjectBean doBean = (DataObjectBean) entity;
-            BigInteger id = doBean.getId();
+            UUID id = doBean.getId();
             DataObject dataObject = doBean.getDataObject();
-            BigInteger parentId = doBean.getParentId();
+            UUID parentId = doBean.getParentId();
             if (id == null) {
                 if (dataObject == null || dataObject.getDataObjectId() == null) {
                     DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
@@ -87,15 +87,15 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     dataObject.setParentDataObjectId(parentId);
                     dataObject.setDataObjectType(dot);
                     dataObject.setDataObjectVersion(1);
-                    BigInteger creatorId = null;
-                    BigInteger ownerId = null;
+                    UUID creatorId = null;
+                    UUID ownerId = null;
 
                     try {
                         creatorId = session.getUser().getUserId();
                         ownerId = session.getBranch().getAddressId();
                     } catch (Exception ex) {
-                        creatorId = BigInteger.ZERO;
-                        ownerId = BigInteger.ZERO;
+                        creatorId = NumberUtils.ZERO_UUID;
+                        ownerId = NumberUtils.ZERO_UUID;
                     }
 
                     dataObject.setCreatorId(creatorId);
@@ -103,7 +103,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
 
                     em.persist(dataObject);
                 } else {
-                    BigInteger doParentId = dataObject.getParentDataObjectId();
+                    UUID doParentId = dataObject.getParentDataObjectId();
                     boolean mustUpdateDO = false;
                     if (parentId != null) {
                         if (doParentId == null || !parentId.equals(doParentId)) {
@@ -121,7 +121,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
                     }
                 }
 
-                //id = new BigInteger(dataObject.getDataObjectId().toByteArray());
+                //id = new UUID(dataObject.getDataObjectId().toByteArray());
                 id = dataObject.getDataObjectId();
                 doBean.setId(id);
             } else {
@@ -176,7 +176,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     public void setDocumentNumber(EntityManager em, BusinessDocument businessDocument) {
         //persist(em, businessDocument);
         businessDocument.setDocumentDate(new Date());
-        BigInteger parentEntityId = businessDocument.getParentId();
+        UUID parentEntityId = businessDocument.getParentId();
         DataObject dataObject = businessDocument.getDataObject();
         int dataObjectTypeId = dataObject.getDataObjectType().getDataObjectTypeId();
         //Address branch = getParentAddress(em, dataObject);
@@ -191,7 +191,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     }
 
     private void setOrderPosition(EntityManager em, DataObject dataObject) {
-        BigInteger parentDataObjectId;
+        UUID parentDataObjectId;
         Query q;
         if ((parentDataObjectId = dataObject.getParentDataObjectId()) != null) {
             q = em.createNamedQuery("DataObject.maxOrderPositionByParentDataObjectIdAndDataObjectType");
@@ -351,7 +351,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     }
 
     @Override
-    public DataObjectBean getDataObjectBean(EntityManager em, BigInteger dataObjectId) {
+    public DataObjectBean getDataObjectBean(EntityManager em, UUID dataObjectId) {
         DataObject dataObject = em.find(DataObject.class, dataObjectId);
         if (dataObject == null) {
             return null;
@@ -365,7 +365,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     }
 
     public DataObjectBean getParentEntity(EntityManager em, DataObject dataObject) {
-        BigInteger parentDataObjectId;
+        UUID parentDataObjectId;
         if ((parentDataObjectId = dataObject.getParentDataObjectId()) == null) {
             return null;
         }
@@ -387,7 +387,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         int addressDotId = getAddressDotId();
         while (dataObject != null &&
                 dataObject.getDataObjectType().getDataObjectTypeId() != addressDotId) {
-            BigInteger parentId;
+            UUID parentId;
             if ((parentId = dataObject.getParentDataObjectId()) == null) {
                 return null;
             }

@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -29,10 +30,12 @@ public class ReceiptCertificateItem implements Serializable {
 
     @Id
     @Column(name = "certificate_item_id", nullable = false)
-    private BigInteger certificateItemId;
+    @Type(type="uuid")
+    private UUID certificateItemId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -53,15 +56,15 @@ public class ReceiptCertificateItem implements Serializable {
     public ReceiptCertificateItem() {
     }
 
-    public ReceiptCertificateItem(BigInteger certificateItemId) {
+    public ReceiptCertificateItem(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
-    public BigInteger getCertificateItemId() {
+    public UUID getCertificateItemId() {
         return certificateItemId;
     }
 
-    public void setCertificateItemId(BigInteger certificateItemId) {
+    public void setCertificateItemId(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
@@ -81,11 +84,11 @@ public class ReceiptCertificateItem implements Serializable {
         this.dataObject = dataObject;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 

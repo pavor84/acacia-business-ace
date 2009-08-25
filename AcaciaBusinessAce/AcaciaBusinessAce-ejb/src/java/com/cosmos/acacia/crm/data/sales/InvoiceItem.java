@@ -14,7 +14,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +27,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -69,12 +70,14 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "invoice_item_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Invoice Item Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger invoiceItemId;
+    private UUID invoiceItemId;
 
     @Column(name = "parent_id")
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -144,9 +147,11 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Property(title="Product Description")
     private String productDescription;
     
-    private BigInteger pricelistId;
+    @Type(type="uuid")
+    private UUID pricelistId;
     
-    private BigInteger pricelistItemId;
+    @Type(type="uuid")
+    private UUID pricelistItemId;
 
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -155,23 +160,23 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     public InvoiceItem() {
     }
 
-    public InvoiceItem(BigInteger invoiceItemId) {
+    public InvoiceItem(UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }
 
-    public BigInteger getInvoiceItemId() {
+    public UUID getInvoiceItemId() {
         return invoiceItemId;
     }
 
-    public void setInvoiceItemId(BigInteger invoiceItemId) {
+    public void setInvoiceItemId(UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -281,12 +286,12 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getInvoiceItemId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setInvoiceItemId(id);
     }
 
@@ -351,19 +356,19 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
         this.dueQuantity = dueQuantity;
     }
 
-    public BigInteger getPricelistId() {
+    public UUID getPricelistId() {
         return pricelistId;
     }
 
-    public void setPricelistId(BigInteger pricelistId) {
+    public void setPricelistId(UUID pricelistId) {
         this.pricelistId = pricelistId;
     }
 
-    public BigInteger getPricelistItemId() {
+    public UUID getPricelistItemId() {
         return pricelistItemId;
     }
 
-    public void setPricelistItemId(BigInteger pricelistItemId) {
+    public void setPricelistItemId(UUID pricelistItemId) {
         this.pricelistItemId = pricelistItemId;
     }
 }

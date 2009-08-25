@@ -14,7 +14,7 @@ import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.ejb.Local;
 import javax.persistence.EntityManager;
@@ -50,7 +50,7 @@ public interface EntityStoreManagerLocal
     PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position);
 
     DataObjectBean getDataObjectBean(EntityManager em, DataObject dataObject);
-    DataObjectBean getDataObjectBean(EntityManager em, BigInteger dataObjectId);
+    DataObjectBean getDataObjectBean(EntityManager em, UUID dataObjectId);
 
     Address getParentAddress(EntityManager em, DataObject dataObject);
 

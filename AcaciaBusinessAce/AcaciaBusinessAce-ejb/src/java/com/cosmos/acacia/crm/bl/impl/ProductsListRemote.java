@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -28,7 +28,7 @@ import com.cosmos.beansbinding.EntityProperties;
 @Remote
 public interface ProductsListRemote {
     
-    List<SimpleProduct> getProducts(BigInteger parentId);
+    List<SimpleProduct> getProducts(UUID parentId);
     
     List<ProductCategory> getProductsCategories(DataObject parent);
 
@@ -108,7 +108,7 @@ public interface ProductsListRemote {
      * @param includeHeirs
      * @return
      */
-    List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs);
+    List<SimpleProduct> getProductsForCategory(UUID categoryId, Boolean includeHeirs);
     
     /**
      * Get the product price based on all available discounts and price-lists.

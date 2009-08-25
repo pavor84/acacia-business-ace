@@ -5,11 +5,12 @@
 package com.cosmos.acacia.crm.data.permission;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -21,11 +22,13 @@ public class DataObjectPermissionPK
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     @Basic(optional = false)
     @Column(name = "data_object_id", nullable = false)
-    private BigInteger dataObjectId;
+    @Type(type="uuid")
+    private UUID dataObjectId;
 
     @Basic(optional = false)
     @Column(name = "user_right_type_id", nullable = false)
@@ -38,26 +41,26 @@ public class DataObjectPermissionPK
     public DataObjectPermissionPK() {
     }
 
-    public DataObjectPermissionPK(BigInteger organizationId, BigInteger dataObjectId, int userRightTypeId, int permissionId) {
+    public DataObjectPermissionPK(UUID organizationId, UUID dataObjectId, int userRightTypeId, int permissionId) {
         this.organizationId = organizationId;
         this.dataObjectId = dataObjectId;
         this.userRightTypeId = userRightTypeId;
         this.permissionId = permissionId;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 
-    public BigInteger getDataObjectId() {
+    public UUID getDataObjectId() {
         return dataObjectId;
     }
 
-    public void setDataObjectId(BigInteger dataObjectId) {
+    public void setDataObjectId(UUID dataObjectId) {
         this.dataObjectId = dataObjectId;
     }
 

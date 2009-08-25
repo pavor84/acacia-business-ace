@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.Local;
 
@@ -23,6 +23,6 @@ public interface DeliveryCertificatesLocal extends DeliveryCertificatesRemote {
 	 * @param deliveryCertificateId
 	 * @return
 	 */
-	DeliveryCertificate getDeliveryCertificateById(BigInteger deliveryCertificateId);
+	DeliveryCertificate getDeliveryCertificateById(UUID deliveryCertificateId);
 	
 }

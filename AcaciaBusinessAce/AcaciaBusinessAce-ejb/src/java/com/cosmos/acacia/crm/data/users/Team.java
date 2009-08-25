@@ -23,7 +23,7 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +35,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -84,7 +85,8 @@ public class Team extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "team_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger teamId;
+    @Type(type="uuid")
+    private UUID teamId;
 
     @Basic(optional = false)
     @Column(name = "team_name", nullable = false, length = 50)
@@ -154,20 +156,20 @@ public class Team extends DataObjectBean implements Serializable {
     public Team() {
     }
 
-    public Team(BigInteger teamId) {
+    public Team(UUID teamId) {
         this.teamId = teamId;
     }
 
-    public Team(BigInteger teamId, String teamName) {
+    public Team(UUID teamId, String teamName) {
         this.teamId = teamId;
         this.teamName = teamName;
     }
 
-    public BigInteger getTeamId() {
+    public UUID getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(BigInteger teamId) {
+    public void setTeamId(UUID teamId) {
         this.teamId = teamId;
     }
 
@@ -214,17 +216,17 @@ public class Team extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getTeamId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setTeamId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(organization != null) {
             return organization.getId();
         }

@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -44,7 +44,7 @@ public class ProductPricingValueBean implements ProductPricingValueLocal, Produc
     }
 
     @SuppressWarnings("unchecked")
-    public List<ProductPercentValue> listProductPricingValues(BigInteger parentDataObjectId, Type type) {
+    public List<ProductPercentValue> listProductPricingValues(UUID parentDataObjectId, Type type) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
 
@@ -63,7 +63,7 @@ public class ProductPricingValueBean implements ProductPricingValueLocal, Produc
         esm.remove(em, entity);
     }
 
-    public ProductPercentValue newProductPricingValue(BigInteger parentDataObjectId, Type type) {
+    public ProductPercentValue newProductPricingValue(UUID parentDataObjectId, Type type) {
         ProductPercentValue c = new ProductPercentValue();
         c.setParentId(parentDataObjectId);
         c.setType(type);

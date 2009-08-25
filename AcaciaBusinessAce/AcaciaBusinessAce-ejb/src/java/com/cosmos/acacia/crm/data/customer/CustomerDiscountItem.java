@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.math.MathContext;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -110,7 +110,7 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
     @Id
     @Basic(optional = false)
     @Column(name = "customer_discount_item_id", nullable = false)
-    protected BigInteger customerDiscountItemId;
+    protected UUID customerDiscountItemId;
 
     @Property(title="Discount %", percent=true)
     @Basic(optional = false)
@@ -149,20 +149,20 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
     public CustomerDiscountItem() {
     }
 
-    public CustomerDiscountItem(BigInteger customerDiscountItemId) {
+    public CustomerDiscountItem(UUID customerDiscountItemId) {
         this.customerDiscountItemId = customerDiscountItemId;
     }
 
-    public CustomerDiscountItem(BigInteger customerDiscountItemId, BigDecimal discountPercent) {
+    public CustomerDiscountItem(UUID customerDiscountItemId, BigDecimal discountPercent) {
         this.customerDiscountItemId = customerDiscountItemId;
         this.discountPercent = discountPercent;
     }
 
-    public BigInteger getCustomerDiscountItemId() {
+    public UUID getCustomerDiscountItemId() {
         return customerDiscountItemId;
     }
 
-    public void setCustomerDiscountItemId(BigInteger customerDiscountItemId) {
+    public void setCustomerDiscountItemId(UUID customerDiscountItemId) {
         this.customerDiscountItemId = customerDiscountItemId;
     }
 
@@ -233,17 +233,17 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getCustomerDiscountItemId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setCustomerDiscountItemId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         CustomerDiscount customerDiscount;
         if((customerDiscount = getCustomerDiscount()) != null) {
             return customerDiscount.getCustomerDiscountId();

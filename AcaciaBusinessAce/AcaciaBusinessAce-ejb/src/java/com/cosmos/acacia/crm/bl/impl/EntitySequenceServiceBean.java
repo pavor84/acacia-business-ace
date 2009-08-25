@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.EntitySequence;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,7 +34,7 @@ public class EntitySequenceServiceBean implements EntitySequenceServiceLocal {
     private static ReentrantLock lock = new ReentrantLock();
 
     @Override
-    public long nextValue(BigInteger parentEntityId, int dataObjectTypeId, Long initialValue) {
+    public long nextValue(UUID parentEntityId, int dataObjectTypeId, Long initialValue) {
         lock.lock();
         try {
             EntitySequence entitySequence = getEntitySequence(parentEntityId, dataObjectTypeId);
@@ -70,14 +70,14 @@ public class EntitySequenceServiceBean implements EntitySequenceServiceLocal {
     }
 
     @Override
-    public List<EntitySequence> getEntitySequences(BigInteger entityId) {
+    public List<EntitySequence> getEntitySequences(UUID entityId) {
         Query q = em.createNamedQuery("EntitySequence.findByEntityId");
         q.setParameter("entityId", entityId);
         return new ArrayList<EntitySequence>(q.getResultList());
     }
 
     @Override
-    public EntitySequence getEntitySequence(BigInteger entityId, int dataObjectTypeId) {
+    public EntitySequence getEntitySequence(UUID entityId, int dataObjectTypeId) {
         Query q = em.createNamedQuery("EntitySequence.findByEntityIdAndDataObjectTypeId");
         q.setParameter("entityId", entityId);
         q.setParameter("dataObjectTypeId", dataObjectTypeId);

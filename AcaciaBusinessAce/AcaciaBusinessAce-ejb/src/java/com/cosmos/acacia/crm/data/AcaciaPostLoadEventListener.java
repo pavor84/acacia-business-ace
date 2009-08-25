@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.data;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import org.hibernate.event.EventSource;
 import org.hibernate.event.PostLoadEvent;
 import org.hibernate.event.def.DefaultPostLoadEventListener;
@@ -30,7 +30,7 @@ public class AcaciaPostLoadEventListener
             DataObjectLink doLink = (DataObjectLink)entity;
             DataObject linkedDO = doLink.getLinkedDataObject();
             String linkedObjectName = linkedDO.getDataObjectType().getDataObjectType();
-            BigInteger linkedObjectId = linkedDO.getDataObjectId();
+            UUID linkedObjectId = linkedDO.getDataObjectId();
             EventSource session = event.getSession();
             DataObjectBean linkedDOB = (DataObjectBean)session.get(linkedObjectName, linkedObjectId);
             doLink.setLinkedDataObjectBean(linkedDOB);

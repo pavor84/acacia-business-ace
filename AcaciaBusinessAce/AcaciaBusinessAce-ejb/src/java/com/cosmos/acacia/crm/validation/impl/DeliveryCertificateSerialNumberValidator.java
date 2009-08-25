@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.validation.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -34,7 +34,7 @@ public class DeliveryCertificateSerialNumberValidator implements DeliveryCertifi
 		
 		//check if some other delivery certificate protocol has delivered the product with the same serial number. 
 		//we cannot two products with same serial numbers twice
-		BigInteger deliveryCertificateId = item.getParentId();
+		UUID deliveryCertificateId = item.getParentId();
 		DeliveryCertificate certificate = certificatesBean.getDeliveryCertificateById(deliveryCertificateId);
 		if(DeliveryCertificateStatus.Delivered.equals(certificate.getStatus().getEnumValue())){
 			ve.addMessage("Serial Number", "serialNumber.productAlreadyDelivered");

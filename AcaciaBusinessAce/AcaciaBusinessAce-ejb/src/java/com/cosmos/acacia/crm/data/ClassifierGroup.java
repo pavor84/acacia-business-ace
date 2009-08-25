@@ -10,7 +10,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,6 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -79,12 +80,14 @@ public class ClassifierGroup extends DataObjectBean
 
     @Id
     @Column(name = "classifier_group_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Classifier Group Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger classifierGroupId;
+    private UUID classifierGroupId;
 
     @Column(name = "parent_id")
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @Column(name = "classifier_group_code", nullable = false)
     @Property(title="Group Code", propertyValidator=
@@ -111,32 +114,32 @@ public class ClassifierGroup extends DataObjectBean
     public ClassifierGroup() {
     }
 
-    public ClassifierGroup(BigInteger classifierGroupId) {
+    public ClassifierGroup(UUID classifierGroupId) {
         this.classifierGroupId = classifierGroupId;
     }
 
-    public ClassifierGroup(BigInteger classifierGroupId, boolean isSystemGroup, String classifierGroupCode, String classifierGroupName) {
+    public ClassifierGroup(UUID classifierGroupId, boolean isSystemGroup, String classifierGroupCode, String classifierGroupName) {
         this.classifierGroupId = classifierGroupId;
         this.isSystemGroup = isSystemGroup;
         this.classifierGroupCode = classifierGroupCode;
         this.classifierGroupName = classifierGroupName;
     }
 
-    public BigInteger getClassifierGroupId() {
+    public UUID getClassifierGroupId() {
         return classifierGroupId;
     }
 
-    public void setClassifierGroupId(BigInteger classifierGroupId) {
+    public void setClassifierGroupId(UUID classifierGroupId) {
         this.classifierGroupId = classifierGroupId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -209,12 +212,12 @@ public class ClassifierGroup extends DataObjectBean
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return classifierGroupId;
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         this.classifierGroupId = id;
     }
 

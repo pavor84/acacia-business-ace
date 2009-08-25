@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -45,11 +45,11 @@ public class PatternMaskListBean implements PatternMaskListRemote {
     }
 
     /**
-     * @see com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote#listPatternsByName(java.math.BigInteger)
+     * @see com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote#listPatternsByName(java.util.UUID)
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<PatternMaskFormat> listPatternsByName(BigInteger parentId) {
+    public List<PatternMaskFormat> listPatternsByName(UUID parentId) {
         
         Query q = em.createNamedQuery("PatternMaskFormat.findForParentByName");
         q.setParameter("parentDataObjectId", parentId);
@@ -60,7 +60,7 @@ public class PatternMaskListBean implements PatternMaskListRemote {
     }
 
     @Override
-    public PatternMaskFormat newPatternMaskFormat(BigInteger parentId) {
+    public PatternMaskFormat newPatternMaskFormat(UUID parentId) {
         PatternMaskFormat result = new PatternMaskFormat();
         result.setParentId(parentId);
         return result;

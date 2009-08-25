@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.data;
 import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -54,10 +55,12 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
 
     @Id
     @Column(name = "certificate_item_id", nullable = false)
-    private BigInteger certificateItemId;
+    @Type(type="uuid")
+    private UUID certificateItemId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
@@ -74,8 +77,9 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
     private BigDecimal quantity;
 
     @Column(name = "reference_item_id")
+    @Type(type="uuid")
     @Property(title="Reference Item", visible = false)
-    private BigInteger referenceItemId;
+    private UUID referenceItemId;
     
     //@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="deliveryCertificateItem")
     //private List<DeliveryCertificateSerialNumber> serialNumbers; 
@@ -88,15 +92,15 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
     public DeliveryCertificateItem() {
     }
 
-    public DeliveryCertificateItem(BigInteger certificateItemId) {
+    public DeliveryCertificateItem(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
-    public BigInteger getCertificateItemId() {
+    public UUID getCertificateItemId() {
         return certificateItemId;
     }
 
-    public void setCertificateItemId(BigInteger certificateItemId) {
+    public void setCertificateItemId(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
@@ -116,11 +120,11 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
         this.dataObject = dataObject;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -174,7 +178,7 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
     }
 
 	@Override
-	public BigInteger getId() {
+	public UUID getId() {
 		return getCertificateItemId();
 	}
 
@@ -184,15 +188,15 @@ public class DeliveryCertificateItem extends DataObjectBean implements Serializa
 	}
 
 	@Override
-	public void setId(BigInteger id) {
+	public void setId(UUID id) {
 		setCertificateItemId(id);
 	}
 
-	public BigInteger getReferenceItemId() {
+	public UUID getReferenceItemId() {
 		return referenceItemId;
 	}
 
-	public void setReferenceItemId(BigInteger referenceItemId) {
+	public void setReferenceItemId(UUID referenceItemId) {
 		this.referenceItemId = referenceItemId;
 	}
 	

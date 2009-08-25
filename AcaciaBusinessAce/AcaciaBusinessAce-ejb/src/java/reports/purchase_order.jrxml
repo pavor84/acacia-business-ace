@@ -50,8 +50,8 @@
 	<parameter name="REPORTS_DIR" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="SUBREPORT1" isForPrompting="false" class="net.sf.jasperreports.engine.JasperReport"/>
 
-	<field name="entity.orderNumber" class="java.math.BigInteger"/>
-	<field name="entity.supplierOrderNumber" class="java.math.BigInteger"/>
+	<field name="entity.orderNumber" class="java.util.UUID"/>
+	<field name="entity.supplierOrderNumber" class="java.util.UUID"/>
 	<field name="entity.status" class="com.cosmos.acacia.crm.data.DbResource"/>
 	<field name="entity.supplier.displayName" class="java.lang.String"/>
 	<field name="entity.supplierContact.contact.displayName" class="java.lang.String"/>

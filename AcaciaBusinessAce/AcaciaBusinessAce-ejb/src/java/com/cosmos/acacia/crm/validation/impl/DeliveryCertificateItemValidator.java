@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.validation.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -23,7 +23,7 @@ public class DeliveryCertificateItemValidator implements DeliveryCertificateItem
 		
 		ValidationException ve = new ValidationException();
 		
-		BigInteger invoiceItemId = entity.getReferenceItemId();
+		UUID invoiceItemId = entity.getReferenceItemId();
 		InvoiceItem invoiceItem = invoices.getInvoiceItemById(invoiceItemId);
 		
 		BigDecimal dueQuantity = (invoiceItem.getDueQuantity() != null) ? invoiceItem.getDueQuantity() : BigDecimal.ZERO;

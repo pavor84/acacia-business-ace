@@ -14,7 +14,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,6 +24,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -62,11 +63,13 @@ public class PositionType extends DataObjectBean implements Serializable, TextRe
     @Id
     @Column(name = "position_type_id", nullable = false)
     @Property(title="Position Type Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger positionTypeId;
+    @Type(type="uuid")
+    private UUID positionTypeId;
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Column(name = "position_type_name", nullable = false)
     @Property(title="Position Type Name", propertyValidator=
@@ -101,25 +104,25 @@ public class PositionType extends DataObjectBean implements Serializable, TextRe
     public PositionType() {
     }
 
-    public PositionType(BigInteger positionTypeId) {
+    public PositionType(UUID positionTypeId) {
         this.positionTypeId = positionTypeId;
     }
 
-    public BigInteger getPositionTypeId() {
+    public UUID getPositionTypeId() {
         return positionTypeId;
     }
 
-    public void setPositionTypeId(BigInteger positionTypeId) {
+    public void setPositionTypeId(UUID positionTypeId) {
         this.positionTypeId = positionTypeId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -183,12 +186,12 @@ public class PositionType extends DataObjectBean implements Serializable, TextRe
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPositionTypeId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         positionTypeId = id;
     }
 

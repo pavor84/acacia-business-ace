@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.purchaseorder;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -121,7 +121,7 @@ public interface PurchaseOrderListRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<PurchaseOrderItem> getOrderItems(BigInteger parentDataObjectId);
+    List<PurchaseOrderItem> getOrderItems(UUID parentDataObjectId);
 
     /**
      * Delete order item
@@ -134,7 +134,7 @@ public interface PurchaseOrderListRemote {
      * @param parentDataObjectId
      * @return
      */
-    PurchaseOrderItem newOrderItem(BigInteger parentDataObjectId);
+    PurchaseOrderItem newOrderItem(UUID parentDataObjectId);
 
     /**
      * Save an item
@@ -173,5 +173,5 @@ public interface PurchaseOrderListRemote {
      * @param parentId
      * @return
      */
-    PurchaseOrder getPurchaseOrder(BigInteger id);
+    PurchaseOrder getPurchaseOrder(UUID id);
 }

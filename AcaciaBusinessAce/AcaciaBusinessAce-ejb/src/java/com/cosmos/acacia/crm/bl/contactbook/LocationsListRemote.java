@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -124,7 +124,7 @@ public interface LocationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(BigInteger parentId);
+    List<Address> getAddresses(UUID parentId);
 
     /**
      * Gets the EntityProperties of Address

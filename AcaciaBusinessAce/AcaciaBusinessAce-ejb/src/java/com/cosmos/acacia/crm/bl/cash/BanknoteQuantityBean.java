@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.cash;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class BanknoteQuantityBean implements BanknoteQuantityRemote, BanknoteQua
     }
 
     @SuppressWarnings("unchecked")
-    public List<BanknoteQuantity> listBanknoteQuantitys(BigInteger parentDataObjectId) {
+    public List<BanknoteQuantity> listBanknoteQuantitys(UUID parentDataObjectId) {
         if (parentDataObjectId == null)
             return new ArrayList<BanknoteQuantity>();
         
@@ -69,7 +69,7 @@ public class BanknoteQuantityBean implements BanknoteQuantityRemote, BanknoteQua
         esm.remove(em, banknoteQuantity);
     }
 
-    public BanknoteQuantity newBanknoteQuantity(BigInteger parentId) {
+    public BanknoteQuantity newBanknoteQuantity(UUID parentId) {
         BanknoteQuantity c = new BanknoteQuantity();
         c.setParentId(parentId);
         c.setCurrencyNominal(new CurrencyNominal());

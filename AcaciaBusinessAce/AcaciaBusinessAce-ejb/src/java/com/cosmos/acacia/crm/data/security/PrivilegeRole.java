@@ -17,7 +17,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -67,7 +68,8 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     @Id
     @Basic(optional = false)
     @Column(name = "privilege_role_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger privilegeRoleId;
+    @Type(type="uuid")
+    private UUID privilegeRoleId;
 
     @JoinColumn(name = "privilege_id", referencedColumnName = "privilege_id", nullable = false)
     @ManyToOne(optional = false)
@@ -118,15 +120,15 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     public PrivilegeRole() {
     }
 
-    public PrivilegeRole(BigInteger privilegeRoleId) {
+    public PrivilegeRole(UUID privilegeRoleId) {
         this.privilegeRoleId = privilegeRoleId;
     }
 
-    public BigInteger getPrivilegeRoleId() {
+    public UUID getPrivilegeRoleId() {
         return privilegeRoleId;
     }
 
-    public void setPrivilegeRoleId(BigInteger privilegeRoleId) {
+    public void setPrivilegeRoleId(UUID privilegeRoleId) {
         this.privilegeRoleId = privilegeRoleId;
     }
 
@@ -165,17 +167,17 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPrivilegeRoleId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPrivilegeRoleId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(privilege != null) {
             return privilege.getPrivilegeId();
         }

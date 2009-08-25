@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.invoice;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public interface InvoiceListRemote {
      * @param proform - whether to fetch the invoices or proforma invoices
      * @return not null list
      */
-    List<Invoice> listInvoices(BigInteger parentDataObjectId, Boolean proform);
+    List<Invoice> listInvoices(UUID parentDataObjectId, Boolean proform);
 
     /**
      * Deletes the invoice, - if the integrity is violated, throws an {@link ValidationException} 
@@ -56,7 +56,7 @@ public interface InvoiceListRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    Invoice newInvoice(BigInteger parentDataObjectId);
+    Invoice newInvoice(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view
@@ -82,7 +82,7 @@ public interface InvoiceListRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<InvoiceItem> getInvoiceItems(BigInteger parentDataObjectId);
+    List<InvoiceItem> getInvoiceItems(UUID parentDataObjectId);
 
     /**
      * Delete invoice item.
@@ -99,7 +99,7 @@ public interface InvoiceListRemote {
      * @param parentDataObjectId
      * @return
      */
-    InvoiceItem newInvoiceItem(BigInteger parentDataObjectId);
+    InvoiceItem newInvoiceItem(UUID parentDataObjectId);
 
     /**
      * Save an item
@@ -296,7 +296,7 @@ public interface InvoiceListRemote {
      * @param invoiceId
      * @return
      */
-    Warehouse getInvoiceWarehouse(BigInteger invoiceId);
+    Warehouse getInvoiceWarehouse(UUID invoiceId);
     
     /**
      * Get the turnover for a given recipient after a given date (which may be null)

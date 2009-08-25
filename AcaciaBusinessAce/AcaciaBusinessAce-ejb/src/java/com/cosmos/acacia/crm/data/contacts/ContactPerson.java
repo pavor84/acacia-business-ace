@@ -12,7 +12,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -72,11 +73,13 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     @Id
     @Column(name = "contact_person_id", nullable = false)
     @Property(title="Contact Person Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger contactPersonId;
+    @Type(type="uuid")
+    private UUID contactPersonId;
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
@@ -100,25 +103,25 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     public ContactPerson() {
     }
 
-    public ContactPerson(BigInteger contactPersonId) {
+    public ContactPerson(UUID contactPersonId) {
         this.contactPersonId = contactPersonId;
     }
 
-    public BigInteger getContactPersonId() {
+    public UUID getContactPersonId() {
         return contactPersonId;
     }
 
-    public void setContactPersonId(BigInteger contactPersonId) {
+    public void setContactPersonId(UUID contactPersonId) {
         this.contactPersonId = contactPersonId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -174,12 +177,12 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getContactPersonId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         contactPersonId = id;
     }
 

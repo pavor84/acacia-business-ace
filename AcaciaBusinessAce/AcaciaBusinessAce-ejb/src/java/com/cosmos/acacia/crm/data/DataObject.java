@@ -6,8 +6,8 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -61,7 +62,8 @@ public class DataObject implements Serializable {
         }
     )
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "DOSequenceGenerator")
-    private BigInteger dataObjectId;
+    @Type(type="uuid")
+    private UUID dataObjectId;
 
     @Column(name = "data_object_version", nullable = false)
     private int dataObjectVersion;
@@ -75,10 +77,12 @@ public class DataObject implements Serializable {
     private Date creationTime = new Date();
 
     @Column(name = "creator_id", nullable = false)
-    private BigInteger creatorId = BigInteger.ZERO;
+    @Type(type="uuid")
+    private UUID creatorId;
 
     @Column(name = "owner_id", nullable = false)
-    private BigInteger ownerId = BigInteger.ZERO;
+    @Type(type="uuid")
+    private UUID ownerId;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
@@ -122,24 +126,26 @@ public class DataObject implements Serializable {
     private String dataObjectUri;
 
     @Column(name = "parent_data_object_id")
-    private BigInteger parentDataObjectId;
+    @Type(type="uuid")
+    private UUID parentDataObjectId;
 
     @Column(name = "linked_data_object_id")
-    private BigInteger linkedDataObjectId;
+    @Type(type="uuid")
+    private UUID linkedDataObjectId;
 
 
     public DataObject() {
     }
 
-    public DataObject(BigInteger dataObjectId) {
+    public DataObject(UUID dataObjectId) {
         this.dataObjectId = dataObjectId;
     }
 
-    public BigInteger getDataObjectId() {
+    public UUID getDataObjectId() {
         return dataObjectId;
     }
 
-    public void setDataObjectId(BigInteger dataObjectId) {
+    public void setDataObjectId(UUID dataObjectId) {
         this.dataObjectId = dataObjectId;
     }
 
@@ -167,19 +173,19 @@ public class DataObject implements Serializable {
         this.creationTime = creationTime;
     }
 
-    public BigInteger getCreatorId() {
+    public UUID getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(BigInteger creatorId) {
+    public void setCreatorId(UUID creatorId) {
         this.creatorId = creatorId;
     }
 
-    public BigInteger getOwnerId() {
+    public UUID getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(BigInteger ownerId) {
+    public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -287,19 +293,19 @@ public class DataObject implements Serializable {
         this.dataObjectUri = dataObjectUri;
     }
 
-    public BigInteger getParentDataObjectId() {
+    public UUID getParentDataObjectId() {
         return parentDataObjectId;
     }
 
-    public void setParentDataObjectId(BigInteger parentDataObjectId) {
+    public void setParentDataObjectId(UUID parentDataObjectId) {
         this.parentDataObjectId = parentDataObjectId;
     }
 
-    public BigInteger getLinkedDataObjectId() {
+    public UUID getLinkedDataObjectId() {
         return linkedDataObjectId;
     }
 
-    public void setLinkedDataObjectId(BigInteger linkedDataObjectId) {
+    public void setLinkedDataObjectId(UUID linkedDataObjectId) {
         this.linkedDataObjectId = linkedDataObjectId;
     }
 

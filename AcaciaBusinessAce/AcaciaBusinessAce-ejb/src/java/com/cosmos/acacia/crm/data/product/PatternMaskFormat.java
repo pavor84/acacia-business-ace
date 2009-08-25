@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.data.product;
 import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  * 
@@ -62,7 +63,8 @@ public class PatternMaskFormat extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "pattern_mask_format_id", nullable = false)
-    private BigInteger patternMaskFormatId;
+    @Type(type="uuid")
+    private UUID patternMaskFormatId;
 
     @Column(name = "pattern_name", nullable = false)
     @Property(title="Name",
@@ -92,27 +94,28 @@ public class PatternMaskFormat extends DataObjectBean implements Serializable {
     private DataObject dataObject;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     public PatternMaskFormat() {
     }
 
-    public PatternMaskFormat(BigInteger patternMaskFormatId) {
+    public PatternMaskFormat(UUID patternMaskFormatId) {
         this.patternMaskFormatId = patternMaskFormatId;
     }
 
-    public PatternMaskFormat(BigInteger patternMaskFormatId, String patternName, char formatType, String format) {
+    public PatternMaskFormat(UUID patternMaskFormatId, String patternName, char formatType, String format) {
         this.patternMaskFormatId = patternMaskFormatId;
         this.patternName = patternName;
         this.formatType = formatType;
         this.format = format;
     }
 
-    public BigInteger getPatternMaskFormatId() {
+    public UUID getPatternMaskFormatId() {
         return patternMaskFormatId;
     }
 
-    public void setPatternMaskFormatId(BigInteger patternMaskFormatId) {
+    public void setPatternMaskFormatId(UUID patternMaskFormatId) {
         this.patternMaskFormatId = patternMaskFormatId;
     }
 
@@ -196,7 +199,7 @@ public class PatternMaskFormat extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPatternMaskFormatId();
     }
 
@@ -206,7 +209,7 @@ public class PatternMaskFormat extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
@@ -216,12 +219,12 @@ public class PatternMaskFormat extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPatternMaskFormatId(id);
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 }

@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -60,38 +60,38 @@ public interface DeliveryCertificatesRemote {
      * @param parentId - identifier of a Warehouse
      * @return list of Entities
      */
-    List<DeliveryCertificate> getDeliveryCertificates(BigInteger parentId);
+    List<DeliveryCertificate> getDeliveryCertificates(UUID parentId);
     
     /**
      * Get DeliveryCertificateItems for a specified DeliveryCertificate 
      * @param parentId - identifier of a DeliveryCertificate
      * @return
      */
-    List<DeliveryCertificateItem> getDeliveryCertificateItems(BigInteger parentId);
+    List<DeliveryCertificateItem> getDeliveryCertificateItems(UUID parentId);
 
     /**
      * 
      * @param itemId
      * @return
      */
-    DeliveryCertificateItem getDeliveryCertificateItemById(BigInteger itemId);
+    DeliveryCertificateItem getDeliveryCertificateItemById(UUID itemId);
     
     /**
      * Get Serial Numbers for a specified Delivery Certificate Item 
      * @param parentId - identifier of a DeliveryCertificateItem
      * @return
      */
-    List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId);
+    List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(UUID parentId);
     
     /**
      * Create a fresh new instance of a DeliveryCertificate. Some of the properties are initialized.
      * @param parentId - identifier of a Warehouse
      * @return new Entity object
      */
-    DeliveryCertificate newDeliveryCertificate(BigInteger parentId);
+    DeliveryCertificate newDeliveryCertificate(UUID parentId);
     
     
-    DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(BigInteger parentId);
+    DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(UUID parentId);
 
     int deleteDeliveryCertificateItemSerialNumber(DeliveryCertificateSerialNumber serialNumber);
     

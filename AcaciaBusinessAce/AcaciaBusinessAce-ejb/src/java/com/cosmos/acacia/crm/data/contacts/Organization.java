@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.data.contacts;
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -132,11 +132,11 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     public Organization() {
     }
 
-    public Organization(BigInteger id) {
+    public Organization(UUID id) {
         setPartnerId(id);
     }
 
-    public Organization(BigInteger organizationId, String organizationName) {
+    public Organization(UUID organizationId, String organizationName) {
         setPartnerId(organizationId);
         setOrganizationName(organizationName);
     }

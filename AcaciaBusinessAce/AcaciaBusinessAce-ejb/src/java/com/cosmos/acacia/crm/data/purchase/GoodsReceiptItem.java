@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -26,6 +26,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -45,7 +46,8 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "receipt_item_id", nullable = false)
-    private BigInteger receiptItemId;
+    @Type(type="uuid")
+    private UUID receiptItemId;
 
     @JoinColumn(name = "goods_receipt_id", referencedColumnName = "goods_receipt_id", nullable = false)
     @ManyToOne(optional = false)
@@ -81,15 +83,15 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
         this.receiptItemType = receiptItemType;
     }
 
-    protected GoodsReceiptItem(String receiptItemType, BigInteger receiptItemId) {
+    protected GoodsReceiptItem(String receiptItemType, UUID receiptItemId) {
         this.receiptItemId = receiptItemId;
     }
 
-    public BigInteger getReceiptItemId() {
+    public UUID getReceiptItemId() {
         return receiptItemId;
     }
 
-    public void setReceiptItemId(BigInteger receiptItemId) {
+    public void setReceiptItemId(UUID receiptItemId) {
         this.receiptItemId = receiptItemId;
     }
 
@@ -178,17 +180,17 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getReceiptItemId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setReceiptItemId(receiptItemId);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         GoodsReceipt receipt;
         if((receipt = getGoodsReceipt()) != null) {
             return receipt.getGoodsReceiptId();
@@ -202,7 +204,7 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         if(dataObject == null) {
             dataObject = new DataObject();
         }

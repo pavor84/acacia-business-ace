@@ -5,13 +5,14 @@
 package com.cosmos.acacia.crm.data.document;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -22,7 +23,8 @@ public class BusinessDocumentStatusLogPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "document_id", nullable = false)
-    private BigInteger documentId;
+    @Type(type="uuid")
+    private UUID documentId;
 
     @Basic(optional = false)
     @Column(name = "document_status_id", nullable = false)
@@ -36,17 +38,17 @@ public class BusinessDocumentStatusLogPK implements Serializable {
     public BusinessDocumentStatusLogPK() {
     }
 
-    public BusinessDocumentStatusLogPK(BigInteger documentId, int documentStatusId, Date actionTime) {
+    public BusinessDocumentStatusLogPK(UUID documentId, int documentStatusId, Date actionTime) {
         this.documentId = documentId;
         this.documentStatusId = documentStatusId;
         this.actionTime = actionTime;
     }
 
-    public BigInteger getDocumentId() {
+    public UUID getDocumentId() {
         return documentId;
     }
 
-    public void setDocumentId(BigInteger documentId) {
+    public void setDocumentId(UUID documentId) {
         this.documentId = documentId;
     }
 

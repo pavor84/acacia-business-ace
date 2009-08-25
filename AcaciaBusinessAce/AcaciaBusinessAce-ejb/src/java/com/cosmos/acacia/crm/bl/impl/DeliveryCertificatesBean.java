@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +48,7 @@ import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateItemValidatorLoc
 import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateSerialNumberValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.DeliveryCertificateValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
 
 /**
  *
@@ -126,7 +127,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<DeliveryCertificate> getDeliveryCertificates(BigInteger parentId) {
+    public List<DeliveryCertificate> getDeliveryCertificates(UUID parentId) {
         Query q = em.createNamedQuery("DeliveryCertificate.findByWarehouse");
         q.setParameter("parentId", parentId);
         List<DeliveryCertificate> result = q.getResultList();
@@ -149,7 +150,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     
     @Override
     @SuppressWarnings("unchecked")
-    public DeliveryCertificate getDeliveryCertificateById(BigInteger deliveryCertificateId) {
+    public DeliveryCertificate getDeliveryCertificateById(UUID deliveryCertificateId) {
     	Query q = em.createNamedQuery("DeliveryCertificate.findByIdAndDeleted");
         q.setParameter("deliveryCertificateId", deliveryCertificateId);
         q.setParameter("deleted", false);
@@ -164,7 +165,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<DeliveryCertificateItem> getDeliveryCertificateItems(BigInteger parentId){
+    public List<DeliveryCertificateItem> getDeliveryCertificateItems(UUID parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateItem.findForCertificate");
         q1.setParameter("parentId", parentId);
          
@@ -172,7 +173,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     }
     
     @Override
-    public DeliveryCertificateItem getDeliveryCertificateItemById(BigInteger itemId){
+    public DeliveryCertificateItem getDeliveryCertificateItemById(UUID itemId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateItem.findById");
         q1.setParameter("itemId", itemId);
          
@@ -181,7 +182,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     
     @Override
     @SuppressWarnings("unchecked")
-    public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(BigInteger parentId){
+    public List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers(UUID parentId){
     	Query q1 = em.createNamedQuery("DeliveryCertificateSerialNumber.findForCertificateItem");
         q1.setParameter("parentId", parentId);
         
@@ -205,13 +206,13 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 				serialNumber.setSerialNumber("enter serial number " + (savedSerialNumersCount + i + 1));
 				serialNumbersList.add(serialNumber);
     		}
-		}
+            }
         
     	return serialNumbersList;
     }
     
     @Override
-    public DeliveryCertificate newDeliveryCertificate(BigInteger parentId) {
+    public DeliveryCertificate newDeliveryCertificate(UUID parentId) {
         DeliveryCertificate ds = new DeliveryCertificate();
         ds.setParentId(parentId);
         
@@ -241,7 +242,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
         return ds;
     }
 
-    public DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(BigInteger parentId){
+    public DeliveryCertificateSerialNumber newDeliveryCertificateSerialNumber(UUID parentId){
     	DeliveryCertificateSerialNumber dcsn = new DeliveryCertificateSerialNumber();
     	DeliveryCertificateSerialNumberPK pk = new DeliveryCertificateSerialNumberPK();
     	pk.setCertificateItemId(parentId);
@@ -293,7 +294,7 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	deliveryCertificate.setDeliveryCertificateDate(now);
     	deliveryCertificate.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
     	
-    	BigInteger assignmentId = assignment.getDocumentId(); 
+    	UUID assignmentId = assignment.getDocumentId(); 
     	Invoice invoice = invoicesBean.getInvoiceById(assignmentId);
     	List<InvoiceItem> invoiceItems = invoicesBean.getInvoiceItems(invoice.getInvoiceId());
     	

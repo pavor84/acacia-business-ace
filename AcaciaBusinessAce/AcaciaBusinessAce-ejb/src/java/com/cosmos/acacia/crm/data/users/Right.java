@@ -21,7 +21,7 @@ import javax.persistence.Transient;
 
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.util.CloneableBean;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -32,6 +32,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
+import org.hibernate.annotations.Type;
 
 
 @Entity
@@ -72,7 +73,8 @@ public abstract class Right implements Serializable, Comparable<Right>, Comparat
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     @Basic(optional = false)
     @Column(name = "owner_type_id", nullable = false, insertable=false, updatable=false)
@@ -85,11 +87,13 @@ public abstract class Right implements Serializable, Comparable<Right>, Comparat
 
     @Basic(optional = false)
     @Column(name = "user_id", nullable = false, insertable=false, updatable=false)
-    private BigInteger userId;
+    @Type(type="uuid")
+    private UUID userId;
 
     @Basic(optional = false)
     @Column(name = "user_group_id", nullable = false, insertable=false, updatable=false)
-    private BigInteger userGroupId;
+    @Type(type="uuid")
+    private UUID userGroupId;
 
     @ManyToOne
     @JoinColumn(name="data_object_type_id", referencedColumnName="data_object_type_id")
@@ -165,11 +169,11 @@ public abstract class Right implements Serializable, Comparable<Right>, Comparat
         this.userRightId = userRightId;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 
@@ -211,19 +215,19 @@ public abstract class Right implements Serializable, Comparable<Right>, Comparat
 
     public abstract String getOwnerName();
 
-    public BigInteger getUserGroupId() {
+    public UUID getUserGroupId() {
         return userGroupId;
     }
 
-    public void setUserGroupId(BigInteger userGroupId) {
+    public void setUserGroupId(UUID userGroupId) {
         this.userGroupId = userGroupId;
     }
 
-    public BigInteger getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(BigInteger userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 

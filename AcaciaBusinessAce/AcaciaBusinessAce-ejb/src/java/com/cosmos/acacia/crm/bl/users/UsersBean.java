@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.bl.users;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -50,11 +49,10 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PositionType;
-import com.cosmos.acacia.crm.data.RegistrationCode;
+import com.cosmos.acacia.crm.data.users.RegistrationCode;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserGroup;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
-import com.cosmos.acacia.crm.data.users.UserOrganizationPK;
 import com.cosmos.acacia.crm.data.assembling.AssemblingMessage;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRatePK;
@@ -64,11 +62,14 @@ import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.UserGroupMember;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.crm.enums.MailType;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.base64.Base64Decoder;
+import com.cosmos.base64.Base64Encoder;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.util.Base64Decoder;
-import com.cosmos.util.Base64Encoder;
+import com.cosmos.mail.MessageParameters;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.TreeSet;
@@ -214,30 +215,47 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public void requestRegistration(String email) {
-        //TODO: better scheme of forming the code
-
-        SecureRandom random = new SecureRandom();
-        BigInteger codeNumber = BigInteger.valueOf(random.nextInt(10000000));
-
-        Query q = em.createNamedQuery("User.findByEmail");
-        q.setParameter("email", email);
-        if (q.getResultList() != null && q.getResultList().size() > 0)
+        Query q = em.createNamedQuery(User.NQ_FIND_BY_EMAIL);
+        q.setParameter("emailAddress", email);
+        try {
+            q.getSingleResult();
             throw new ValidationException("email.taken");
+        } catch(NoResultException ex) {
+        }
 
-        RegistrationCode code = new RegistrationCode();
-        code.setEmail(email);
-        code.setRegistrationCode(codeNumber);
+        UUID codeNumber;
+        q = em.createNamedQuery(RegistrationCode.NQ_FIND_BY_EMAIL);
+        q.setParameter("emailAddress", email);
+        try {
+            codeNumber = (UUID) q.getSingleResult();
+        } catch(NoResultException ex) {
+            codeNumber = UUID.randomUUID();
+            RegistrationCode code = new RegistrationCode(codeNumber);
+            code.setEmailAddress(email);
+            esm.persist(em, code);
+        }
 
         try {
             sendMail(email,
-                    MessageRetriever.get("registrationCodeMessage", locale) + codeNumber.intValue(),
+                    MessageRetriever.get("registrationCodeMessage", locale) + " # " + codeNumber.toString(),
                     MessageRetriever.get("registrationCodeSubject", locale));
         } catch (ValidationException ex){
             throw ex;
         }
+    }
 
-        esm.persist(em, code);
-
+    @Override
+    public String verifyCode(String code) {
+        System.out.println("verifyCode(" + code + ")");
+        Query q = em.createNamedQuery(RegistrationCode.NQ_FIND_BY_CODE);
+        q.setParameter("code", UUID.fromString(code));
+        RegistrationCode rc;
+        try {
+            rc = (RegistrationCode) q.getSingleResult();
+            return rc.getEmailAddress();
+        } catch (NoResultException ex){
+            throw new ValidationException("code.incorrect");
+        }
     }
 
     @SuppressWarnings("null")
@@ -282,11 +300,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         if (organization != null) {
 
-            UserOrganization uo = new UserOrganization();
-            UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
-            uo.setUserOrganizationPK(pk);
+            UserOrganization uo = new UserOrganization(user, organization);
             uo.setBranch(branch);
-            //uo.setUserGroup(branch.getUserGroup());
             uo.setUserActive(false);
 
             esm.persist(em, uo);
@@ -306,29 +321,14 @@ public class UsersBean implements UsersRemote, UsersLocal {
     }
 
     @Override
-    public String verifyCode(String code) {
-        Query q = em.createNamedQuery("RegistrationCode.findByCode");
-        try {
-            q.setParameter("code", new BigInteger(code));
-        } catch (Exception ex){
-            throw new ValidationException("code.incorrect");
+    public User createUser(String emailAddress) {
+        if(emailAddress == null || (emailAddress = emailAddress.trim()).length() == 0) {
+            throw new NullPointerException("The email addesss " + emailAddress + " can not be null or empty.");
         }
+        User user = new User();
+        user.setEmailAddress(emailAddress);
 
-        try {
-            RegistrationCode rc = (RegistrationCode) q.getSingleResult();
-            String email = rc.getEmail();
-            esm.remove(em, rc);
-
-            return email;
-        } catch (NoResultException ex){
-            throw new ValidationException("code.incorrect");
-        }
-    }
-
-
-    @Override
-    public User createUser() {
-        return new User();
+        return user;
     }
 
     @Override
@@ -403,8 +403,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             }
 
             if (organization != null) {
-                UserOrganization uo = em.find(UserOrganization.class,
-                        new UserOrganizationPK(user.getId(), organization.getId()));
+                UserOrganization uo = usersService.getUserOrganization(user, organization);
                 if (uo.isUserActive()){
                     session.setOrganization(organization);
                     session.setBranch(uo.getBranch());
@@ -423,17 +422,15 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
 
     @Override
-    public User activateUser(User user, BigInteger parentId, Boolean active) {
+    public User activateUser(User user, UUID parentId, Boolean active) {
         Organization o = em.find(Organization.class, parentId);
         if (o != null) {
-            UserOrganization uo = em.find(UserOrganization.class,
-                    new UserOrganizationPK(user.getId(), o.getId()));
+            UserOrganization uo = usersService.getUserOrganization(user, o);
 
             uo.setUserActive(active);
             esm.persist(em, uo);
         }
 
-        user.setActive(active);
         return user;
     }
 
@@ -504,32 +501,18 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     private void sendMail(String email, String content, String subject) throws ValidationException {
         try {
-            Properties props = System.getProperties();
-            // -- Attaching to default Session, or we could start a new one --
-            props.put("mail.smtp.host", EMAIL_HOST);
-            javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
-            // -- Create a new message --
-            Message msg = new MimeMessage(session);
-            // -- Set the FROM and TO fields --
-            msg.setFrom(new InternetAddress(FROM));
-            msg.setRecipients(Message.RecipientType.TO,
-            InternetAddress.parse(email, false));
-
-            msg.setSubject(subject);
-            msg.setText(content);
-            // -- Set some other header information --
-            msg.setHeader("X-Mailer", "Acacia email");
-            msg.setSentDate(new Date());
-            // -- Send the message --
-            Transport.send(msg);
+            List<javax.mail.Address> to =
+                    Arrays.<javax.mail.Address>asList(InternetAddress.parse(email, false));
+            MessageParameters messageParameters = new MessageParameters(to, content, subject);
+            session.sendMail(MailType.System, messageParameters);
         }
-        catch (Exception ex)
-        {
-            if (ex instanceof AddressException)
+        catch (Exception ex) {
+            if (ex instanceof AddressException) {
                 throw new ValidationException("email.invalid");
-
-            if (ex instanceof MessagingException)
-                log.error(ex); // throw validation exception
+            }
+            if (ex instanceof MessagingException) {
+                throw new ValidationException(ex);
+            }
         }
      }
 
@@ -565,11 +548,11 @@ public class UsersBean implements UsersRemote, UsersLocal {
         List<User> users = new ArrayList<User>(uoList.size());
         for (UserOrganization userOrganization : uoList) {
             User user = userOrganization.getUser();
-            if (userOrganization.getBranch() != null) {
-                user.setBranchName(userOrganization.getBranch().getAddressName());
-            }
+//            if (userOrganization.getBranch() != null) {
+//                user.setBranchName(userOrganization.getBranch().getAddressName());
+//            }
 
-            user.setActive(userOrganization.isUserActive());
+//            user.setActive(userOrganization.isUserActive());
             users.add(user);
         }
 
@@ -580,11 +563,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
     public void joinOrganization(Organization organization, Address branch) {
         User user = session.getUser();
         if (user != null && organization != null) {
-            UserOrganization uo = new UserOrganization();
-            UserOrganizationPK pk = new UserOrganizationPK(user.getId(), organization.getId());
-            uo.setUserOrganizationPK(pk);
+            UserOrganization uo = new UserOrganization(user, organization);
             uo.setBranch(branch);
-            //uo.setUserGroup(branch.getUserGroup());
             esm.persist(em, uo);
         }
     }
@@ -596,8 +576,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         if (list != null && list.size() == 1)
             throw new ValidationException("Leave.impossible");
 
-        UserOrganization uo = new UserOrganization();
-        uo.setUserOrganizationPK(new UserOrganizationPK(user.getId(), organization.getId()));
+        UserOrganization uo = usersService.getUserOrganization(user, organization);
         esm.remove(em, uo);
     }
 
@@ -628,11 +607,17 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
     }
 
+    private UserOrganization getUserOrganization(Organization organization) {
+        return getUserOrganization(session.getUser(), organization);
+    }
+
+    private UserOrganization getUserOrganization(User user) {
+        return getUserOrganization(user, session.getOrganization());
+    }
+
     @Override
     public UserOrganization getUserOrganization(User user, Organization organization) {
-        UserOrganization uo = em.find(UserOrganization.class,
-                        new UserOrganizationPK(user.getId(), organization.getId()));
-        return uo;
+        return usersService.getUserOrganization(user, organization);
     }
 
     @Override
@@ -679,8 +664,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         q.setParameter("person", person);
 
         try {
-            User u = (User) q.getSingleResult();
-            return getUserOrganization(u, session.getOrganization());
+            User user = (User) q.getSingleResult();
+            return getUserOrganization(user);
         } catch (Exception ex) {
             return null;
         }
@@ -746,8 +731,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         CurrencyExchangeRatePK cerPK = new CurrencyExchangeRatePK(
                 session.getOrganization().getId(),
                 new Date(99, 6, 5),
-                Currency.Euro.getDbResource().getResourceId(),
-                Currency.Leva.getDbResource().getResourceId());
+                Currency.EUR.getDbResource().getResourceId(),
+                Currency.BGN.getDbResource().getResourceId());
         CurrencyExchangeRate cer = em.find(CurrencyExchangeRate.class, cerPK);
         if(cer == null) {
             cer = new CurrencyExchangeRate(cerPK);
@@ -797,8 +782,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public UserGroup getUserGroupByPositionType() {
-        UserOrganization uo = getUserOrganization(session.getUser(),
-                session.getOrganization());
+        UserOrganization uo = session.getUserOrganization();
         
         UserGroup group = null;
         Address branch = uo.getBranch();
@@ -833,9 +817,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
     
     @Override
     public UserGroupMember getUserGroupMember(UserGroup userGroup, User user) {
-        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER_AND_USER_GROUP);
+        Query q = em.createNamedQuery(UserGroupMember.NQ_IS_USER_MEMBER_OF_USER_GROUP);
         q.setParameter("userGroup", userGroup);
-        q.setParameter("user", user);
+        q.setParameter("user", getUserOrganization(user));
 
         try {
             return (UserGroupMember)q.getSingleResult();
@@ -854,9 +838,10 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public List<UserGroupMember> getUserGroupMembers(User user) {
-        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER);
-        q.setParameter("organizationId", session.getOrganization().getId());
-        q.setParameter("user", user);
+        Organization organization = session.getOrganization();
+        UserOrganization userOrganization = getUserOrganization(user, organization);
+        Query q = em.createNamedQuery(UserGroupMember.NQ_FIND_BY_USER_ORGANIZATION);
+        q.setParameter("userOrganization", userOrganization);
 
         return new ArrayList<UserGroupMember>(q.getResultList());
     }
@@ -895,15 +880,16 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public UserGroupMember newUserGroupMember(User user) {
+        UserOrganization userOrganization = getUserOrganization(user);
         UserGroupMember userGroupMember = new UserGroupMember();
-        userGroupMember.setUser(user);
+        userGroupMember.setUserOrganization(userOrganization);
         return userGroupMember;
     }
 
     @Override
     public UserGroupMember saveUserGroupMember(UserGroupMember userGroupMember) {
-        if(userGroupMember.getUser() == null) {
-            userGroupMember.setUser(session.getUser());
+        if(userGroupMember.getUserOrganization() == null) {
+            userGroupMember.setUserOrganization(session.getUserOrganization());
         }
 
         esm.persist(em, userGroupMember);
@@ -945,7 +931,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         TreeSet<User> userGroups = new TreeSet<User>();
         for(UserGroupMember groupMember : groupMembers) {
-            userGroups.add(groupMember.getUser());
+            userGroups.add(groupMember.getUserOrganization().getUser());
         }
 
         return userGroups;

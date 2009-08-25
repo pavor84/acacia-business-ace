@@ -69,7 +69,7 @@
 	<field name="header.executorBankCode" class="java.lang.String"/>
 	<field name="header.executorBank" class="java.lang.String"/>
 	<field name="header.executorMOL" class="java.lang.String"/>
-	<field name="entity.invoiceNumber" class="java.math.BigInteger"/>
+	<field name="entity.invoiceNumber" class="java.util.UUID"/>
 	<field name="entity.branch.city.cityName" class="java.lang.String"/>
 	<field name="entity.invoiceDate" class="java.util.Date"/>
 	<field name="entity.invoiceSubValue" class="java.math.BigDecimal"/>

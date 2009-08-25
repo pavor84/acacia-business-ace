@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -39,7 +39,7 @@ public class ReceiptCertificateSerialNumber implements Serializable {
         this.receiptCertificateSerialNumberPK = receiptCertificateSerialNumberPK;
     }
 
-    public ReceiptCertificateSerialNumber(BigInteger certificateItemId, String serialNumber) {
+    public ReceiptCertificateSerialNumber(UUID certificateItemId, String serialNumber) {
         this.receiptCertificateSerialNumberPK = new ReceiptCertificateSerialNumberPK(certificateItemId, serialNumber);
     }
 

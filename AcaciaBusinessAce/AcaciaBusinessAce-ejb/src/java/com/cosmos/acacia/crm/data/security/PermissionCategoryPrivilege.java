@@ -14,7 +14,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -48,7 +48,7 @@ public class PermissionCategoryPrivilege extends Privilege implements Serializab
     )
     private DbResource permissionCategory;
 
-    public PermissionCategoryPrivilege(BigInteger privilegeId) {
+    public PermissionCategoryPrivilege(UUID privilegeId) {
         super(PERMISSION_CATEGORY_ID, privilegeId);
     }
 

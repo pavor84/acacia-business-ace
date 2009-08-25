@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.users;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,7 +83,7 @@ public interface UsersRemote {
      *
      * @return the user
      */
-    User createUser();
+    User createUser(String emailAddress);
 
 
     /**
@@ -138,7 +138,7 @@ public interface UsersRemote {
      * @param active whether the user should be active or inactive
      * @return the updated User
      */
-    User activateUser(User user, BigInteger parentId, Boolean active);
+    User activateUser(User user, UUID parentId, Boolean active);
 
     /**
      * Makes the specified organization active or inactive

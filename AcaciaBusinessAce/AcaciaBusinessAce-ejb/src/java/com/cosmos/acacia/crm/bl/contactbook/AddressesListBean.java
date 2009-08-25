@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return locationsManager.newAddress();
     }
 
-    public Address saveAddress(Address address, BigInteger parentDataObjectId) {
+    public Address saveAddress(Address address, UUID parentDataObjectId) {
         if (parentDataObjectId != null) {
             address.setParentId(parentDataObjectId);
 //            UserGroup group = groupsManager.newUserGroup(parentDataObjectId);
@@ -113,7 +113,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return esm.remove(em, address);
     }
 
-    public List<Address> getAddresses(BigInteger parentId) {
+    public List<Address> getAddresses(UUID parentId) {
         return locationsManager.getAddresses(parentId);
     }
 
@@ -159,7 +159,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<ContactPerson> getContactPersons(BigInteger parentId) {
+    public List<ContactPerson> getContactPersons(UUID parentId) {
         Query q;
         if (parentId != null) {
             q = em.createNamedQuery("ContactPerson.findByParentDataObjectAndDeleted");
@@ -247,7 +247,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @Override
     public CommunicationContact saveCommunicationContact(
             CommunicationContact communicationContact,
-            BigInteger parentDataObjectId,
+            UUID parentDataObjectId,
             ContactPerson contactPerson) {
 
         communicationContact.setContactPerson(contactPerson);
@@ -262,7 +262,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @Override
-    public ContactPerson saveContactPerson(ContactPerson contactPerson, BigInteger parentDataObjectId) {
+    public ContactPerson saveContactPerson(ContactPerson contactPerson, UUID parentDataObjectId) {
 
         //if (parentDataObjectId != contactPerson.getParentId())
         contactPerson.setParentId(parentDataObjectId);
@@ -274,7 +274,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return contactPerson;
     }
 
-    public List<PositionType> getPositionTypes(DataObject parent, BigInteger parentId) {
+    public List<PositionType> getPositionTypes(DataObject parent, UUID parentId) {
         try {
             return getPositionTypes(
                     Class.forName(parent.getDataObjectType().getDataObjectType()), parentId);
@@ -284,7 +284,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) {
+    public List<PositionType> getPositionTypes(Class ownerClass, UUID parentId) {
         try {
             return positionTypesManager.getPositionTypes(ownerClass, parentId);
         } catch (Exception ex) {

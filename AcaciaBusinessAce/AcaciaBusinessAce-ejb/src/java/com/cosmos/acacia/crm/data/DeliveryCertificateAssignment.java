@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -38,20 +39,22 @@ public class DeliveryCertificateAssignment implements Serializable {
 
     @Id
     @Column(name = "delivery_certificate_id", nullable=false)
-    private BigInteger deliveryCertificateId;
+    @Type(type="uuid")
+    private UUID deliveryCertificateId;
 
     @Column(name = "document_id", nullable=false)
-    private BigInteger documentId;
+    @Type(type="uuid")
+    private UUID documentId;
 
     @Column(name = "document_number", nullable=false)
     @Property(title="Document Number")
     private String documentNumber;
     
-    public BigInteger getDeliveryCertificateId() {
+    public UUID getDeliveryCertificateId() {
         return deliveryCertificateId;
     }
 
-    public void setDeliveryCertificateId(BigInteger deliveryCertificateId) {
+    public void setDeliveryCertificateId(UUID deliveryCertificateId) {
         this.deliveryCertificateId = deliveryCertificateId;
     }
     
@@ -63,11 +66,11 @@ public class DeliveryCertificateAssignment implements Serializable {
         this.documentNumber = documentNumber;
     }
     
-    public BigInteger getDocumentId() {
+    public UUID getDocumentId() {
         return documentId;
     }
 
-    public void setDocumentId(BigInteger documentId) {
+    public void setDocumentId(UUID documentId) {
         this.documentId = documentId;
     }
     

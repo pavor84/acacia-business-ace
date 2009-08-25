@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -29,7 +29,7 @@ public interface PositionTypesListRemote {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    List<PositionType> getPositionTypes(Class ownerClass, BigInteger parentId) throws Exception;
+    List<PositionType> getPositionTypes(Class ownerClass, UUID parentId) throws Exception;
 
     /**
      * Gets the EntityProperties of PositionType
@@ -44,7 +44,7 @@ public interface PositionTypesListRemote {
      * @param parentId the parent
      * @return the newly created position type
      */
-    PositionType newPositionType(BigInteger parentId);
+    PositionType newPositionType(UUID parentId);
 
     /**
      * Saves a PositionType for a owner class (Person or Organization)
@@ -78,7 +78,7 @@ public interface PositionTypesListRemote {
      * Lists all internal organization position types
      * @return
      */
-    List<PositionType> getInternalOrganizationPositionTypes(BigInteger parentId);
+    List<PositionType> getInternalOrganizationPositionTypes(UUID parentId);
     
     
     
