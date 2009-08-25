@@ -7,8 +7,6 @@ package com.cosmos.acacia.crypto;
 import com.cosmos.base64.Base64Decoder;
 import com.cosmos.base64.Base64Encoder;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +30,7 @@ public class CryptoUtils {
     private static final String KEY_STORE_FILE_NAME = "key_store.file_name";
     private static final String KEY_STORE_TYPE = "key_store.type";
     private static final String KEY_STORE_PASSWORD = "key_store.password";
+    private static final String CIPHER_ALGORITHM_NAME = "cipher_algorithm_name";
     //
     private static CryptoUtils instance;
     //
@@ -42,6 +41,7 @@ public class CryptoUtils {
     private X509Certificate certificate;
     private PublicKey publicKey;
     private PrivateKey privateKey;
+    private String cipherAlgorithmName;
 
     private CryptoUtils() {
     }
@@ -113,6 +113,14 @@ public class CryptoUtils {
         return getCryptoProperties().getProperty(KEY_STORE_TYPE);
     }
 
+    private String getCipherAlgorithmName() {
+        if(cipherAlgorithmName == null) {
+            cipherAlgorithmName = getCryptoProperties().getProperty(CIPHER_ALGORITHM_NAME);
+        }
+
+        return cipherAlgorithmName;
+    }
+
     private KeyStore getKeyStore() {
         if (keyStore == null) {
             try {
@@ -161,7 +169,7 @@ public class CryptoUtils {
 
     public byte[] encrypt(byte[] bytes) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance(getCipherAlgorithmName());
             cipher.init(Cipher.ENCRYPT_MODE, getPublicKey());
             return cipher.doFinal(bytes);
         } catch(Exception ex) {
@@ -171,7 +179,7 @@ public class CryptoUtils {
 
     public byte[] decrypt(byte[] bytes) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance(getCipherAlgorithmName());
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey());
             return cipher.doFinal(bytes);
         } catch (Exception ex) {
