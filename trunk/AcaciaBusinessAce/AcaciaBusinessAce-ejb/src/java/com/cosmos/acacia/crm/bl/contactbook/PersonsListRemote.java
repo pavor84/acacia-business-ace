@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -33,7 +33,7 @@ public interface PersonsListRemote {
      * @param parentId
      * @return a list of persons
      */
-    List<Person> getPersons(BigInteger parentId);
+    List<Person> getPersons(UUID parentId);
 
     /**
      * Gets a list of all countries
@@ -63,7 +63,7 @@ public interface PersonsListRemote {
      * @param parentId
      * @return list of addresses
      */
-    List<Address> getAddresses(BigInteger parentId);
+    List<Address> getAddresses(UUID parentId);
 
     /**
      * Gets all the (two) possible genders
@@ -99,7 +99,7 @@ public interface PersonsListRemote {
      * @param parentId the parent
      * @return the newly created Person
      */
-    Person newPerson(BigInteger parentId);
+    Person newPerson(UUID parentId);
 
     /**
      * Saves a Person

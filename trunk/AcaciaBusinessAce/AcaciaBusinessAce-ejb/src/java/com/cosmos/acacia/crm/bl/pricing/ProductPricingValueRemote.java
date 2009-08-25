@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -31,7 +31,7 @@ public interface ProductPricingValueRemote {
      * @param type
      * @return not null list
      */
-    List<ProductPercentValue> listProductPricingValues(BigInteger parentDataObjectId, Type type);
+    List<ProductPercentValue> listProductPricingValues(UUID parentDataObjectId, Type type);
 
     /**
      * Deletes the value, - if the integrity is violated, throws an {@link ValidationException} 
@@ -45,7 +45,7 @@ public interface ProductPricingValueRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    ProductPercentValue newProductPricingValue(BigInteger parentDataObjectId, Type type);
+    ProductPercentValue newProductPricingValue(UUID parentDataObjectId, Type type);
 
     /**
      * Return entity properties for detailed view

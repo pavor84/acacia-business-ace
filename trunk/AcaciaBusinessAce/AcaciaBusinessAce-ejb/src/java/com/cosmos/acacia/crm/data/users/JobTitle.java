@@ -20,7 +20,7 @@ import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +32,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -69,7 +70,8 @@ public class JobTitle extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "job_title_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger jobTitleId;
+    @Type(type="uuid")
+    private UUID jobTitleId;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
@@ -140,20 +142,20 @@ public class JobTitle extends DataObjectBean implements Serializable {
     public JobTitle() {
     }
 
-    public JobTitle(BigInteger jobTitleId) {
+    public JobTitle(UUID jobTitleId) {
         this.jobTitleId = jobTitleId;
     }
 
-    public JobTitle(BigInteger jobTitleId, String jobTitle) {
+    public JobTitle(UUID jobTitleId, String jobTitle) {
         this.jobTitleId = jobTitleId;
         this.jobTitle = jobTitle;
     }
 
-    public BigInteger getJobTitleId() {
+    public UUID getJobTitleId() {
         return jobTitleId;
     }
 
-    public void setJobTitleId(BigInteger jobTitleId) {
+    public void setJobTitleId(UUID jobTitleId) {
         this.jobTitleId = jobTitleId;
     }
 
@@ -205,17 +207,17 @@ public class JobTitle extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getJobTitleId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setJobTitleId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(businessUnit != null) {
             return businessUnit.getBusinessUnitId();
         }

@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.data.product;
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +30,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 
 /**
@@ -71,13 +72,15 @@ public abstract class Product extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "product_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Product Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger productId;
+    private UUID productId;
 
     @Basic(optional = false)
     @Column(name = "parent_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @Basic(optional = false)
     @Column(name = "product_type", nullable = false, length = 2)
@@ -116,7 +119,7 @@ public abstract class Product extends DataObjectBean implements Serializable {
         this.productType = productType;
     }
 
-    public Product(String productType, BigInteger productId) {
+    public Product(String productType, UUID productId) {
         this(productType);
         this.productId = productId;
     }
@@ -168,21 +171,21 @@ public abstract class Product extends DataObjectBean implements Serializable {
         firePropertyChange("currency", oldValue, currency);
     }
 
-    public BigInteger getProductId() {
+    public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(BigInteger productId) {
+    public void setProductId(UUID productId) {
         this.productId = productId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -233,12 +236,12 @@ public abstract class Product extends DataObjectBean implements Serializable {
     // DataObjectBean
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getProductId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setProductId(id);
     }
     

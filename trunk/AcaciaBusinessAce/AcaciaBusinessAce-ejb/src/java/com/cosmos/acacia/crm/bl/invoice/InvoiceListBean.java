@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.invoice;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -128,7 +128,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Invoice> listInvoices(BigInteger parentDataObjectId, Address branch) {
+    public List<Invoice> listInvoices(UUID parentDataObjectId, Address branch) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -149,7 +149,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     
-    public Invoice newInvoice(BigInteger parentDataObjectId) {
+    public Invoice newInvoice(UUID parentDataObjectId) {
         Invoice c = new Invoice();
         
         Address branch = acaciaSession.getBranch();
@@ -158,7 +158,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         c.setBranch(branch);
         c.setBranchName(branch.getAddressName());
         c.setInvoiceType(InvoiceType.VatInvoice.getDbResource());
-        c.setCurrency(Currency.Leva.getDbResource());
+        c.setCurrency(Currency.BGN.getDbResource());
         c.setDiscountPercent(new BigDecimal(0));
         c.setDiscountAmount(new BigDecimal(0));
         c.setTransportationPrice(new BigDecimal(0));
@@ -301,7 +301,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<InvoiceItem> getInvoiceItems(BigInteger parentDataObjectId) {
+    public List<InvoiceItem> getInvoiceItems(UUID parentDataObjectId) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -314,7 +314,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     
-    public InvoiceItem newInvoiceItem(BigInteger parentDataObjectId){
+    public InvoiceItem newInvoiceItem(UUID parentDataObjectId){
         InvoiceItem item = new InvoiceItem();
         item.setParentId(parentDataObjectId);
         Invoice invoice = em.find(Invoice.class, parentDataObjectId);
@@ -323,7 +323,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         return item;
     }
     
-    public Warehouse getInvoiceWarehouse(BigInteger invoiceId){
+    public Warehouse getInvoiceWarehouse(UUID invoiceId){
         Invoice invoice = em.find(Invoice.class, invoiceId);
         return warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
     }
@@ -391,7 +391,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Invoice> listInvoices(BigInteger parentDataObjectId, Boolean proform) {
+    public List<Invoice> listInvoices(UUID parentDataObjectId, Boolean proform) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -895,7 +895,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         return q.getResultList();
     }
     
-    public Invoice getInvoiceById(BigInteger invoiceId){
+    public Invoice getInvoiceById(UUID invoiceId){
     	Query q = em.createNamedQuery("Invoice.findById");
     	q.setParameter("invoiceId", invoiceId);
     	List<Invoice> result = q.getResultList();
@@ -906,7 +906,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     	}
     }
     
-    public InvoiceItem getInvoiceItemById(BigInteger invoiceItemId){
+    public InvoiceItem getInvoiceItemById(UUID invoiceItemId){
     	
     	Query q = em.createNamedQuery("InvoiceItem.findByIdAndDeleted");
     	q.setParameter("invoiceItemId", invoiceItemId);

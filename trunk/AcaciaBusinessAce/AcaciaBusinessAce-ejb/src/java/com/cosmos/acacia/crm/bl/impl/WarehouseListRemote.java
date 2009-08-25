@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +30,10 @@ public interface WarehouseListRemote {
 
     /**
      * All warehouses sorted by name
-     * @param bigInteger 
+     * @param UUID 
      * @return not-empty list
      */
-    List<Warehouse> listWarehousesByName(BigInteger bigInteger);
+    List<Warehouse> listWarehousesByName(UUID UUID);
 
     /**
      * Remove the object.
@@ -47,7 +47,7 @@ public interface WarehouseListRemote {
      * @param parentId
      * @return not null Warehouse
      */
-    Warehouse newWarehouse(BigInteger parentId);
+    Warehouse newWarehouse(UUID parentId);
 
     /**
      * Save operation.
@@ -66,7 +66,7 @@ public interface WarehouseListRemote {
      * Return all warehouse products
      * @return not null list
      */
-    List<WarehouseProduct> listWarehouseProducts(BigInteger parentId);
+    List<WarehouseProduct> listWarehouseProducts(UUID parentId);
 
     /**
      * Remove the supplied product.
@@ -80,7 +80,7 @@ public interface WarehouseListRemote {
      * @param parentId - the organization
      * @return not null
      */
-    WarehouseProduct newWarehouseProduct(BigInteger parentId, Warehouse warehouse);
+    WarehouseProduct newWarehouseProduct(UUID parentId, Warehouse warehouse);
 
     /**
      * Try to save a given warehouse product. If the entity is invalid,
@@ -96,7 +96,7 @@ public interface WarehouseListRemote {
      * @param dataObjectId
      * @return
      */
-    List<Person> getWarehouseMenForBranch(BigInteger dataObjectId);
+    List<Person> getWarehouseMenForBranch(UUID dataObjectId);
 
     /**
      * List warehouse products for a given warehouse
@@ -119,7 +119,7 @@ public interface WarehouseListRemote {
      * @param parentId - the parent id - shouldn't be null
      * @return not null map
      */
-    Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(BigInteger parentId);
+    Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(UUID parentId);
     
     /**
      * Get the warehouse seated at the specified address

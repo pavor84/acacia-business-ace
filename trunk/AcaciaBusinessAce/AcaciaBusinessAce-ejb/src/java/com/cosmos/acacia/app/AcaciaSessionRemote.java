@@ -1,6 +1,6 @@
 package com.cosmos.acacia.app;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.util.AcaciaProperties;
 
 /**
@@ -28,11 +29,13 @@ public interface AcaciaSessionRemote {
 
 //    DataObject getLoginOrganizationDataObject();
 
-    DataObject getDataObject(BigInteger dataObjectId);
+    DataObject getDataObject(UUID dataObjectId);
 
     User getUser();
 
     Organization getOrganization();
+
+    UserOrganization getUserOrganization();
 
     /**
      * Retrieve the login branch of the current user.

@@ -6,11 +6,11 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import com.cosmos.acacia.annotation.Property;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -20,7 +20,8 @@ import com.cosmos.acacia.annotation.Property;
 public class DeliveryCertificateSerialNumberPK implements Serializable {
 
     @Column(name = "certificate_item_id", nullable = false)
-    private BigInteger certificateItemId;
+    @Type(type="uuid")
+    private UUID certificateItemId;
 
     @Column(name = "serial_number", nullable = false)
     private String serialNumber;
@@ -28,16 +29,16 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     public DeliveryCertificateSerialNumberPK() {
     }
 
-    public DeliveryCertificateSerialNumberPK(BigInteger certificateItemId, String serialNumber) {
+    public DeliveryCertificateSerialNumberPK(UUID certificateItemId, String serialNumber) {
         this.certificateItemId = certificateItemId;
         this.serialNumber = serialNumber;
     }
 
-    public BigInteger getCertificateItemId() {
+    public UUID getCertificateItemId() {
         return certificateItemId;
     }
 
-    public void setCertificateItemId(BigInteger certificateItemId) {
+    public void setCertificateItemId(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
@@ -52,7 +53,7 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += certificateItemId.intValue();
+        hash += certificateItemId.hashCode();
         hash += (serialNumber != null ? serialNumber.hashCode() : 0);
         return hash;
     }

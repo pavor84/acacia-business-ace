@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,6 +30,8 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import java.math.BigInteger;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -209,15 +211,17 @@ public class Invoice extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "invoice_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Invoice Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger invoiceId;
+    private UUID invoiceId;
     
     @Column(name = "proforma", nullable=false)
     private Boolean proformaInvoice;
     
     @Column(name = "parent_id")
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -448,23 +452,23 @@ public class Invoice extends DataObjectBean implements Serializable {
     public Invoice() {
     }
 
-    public Invoice(BigInteger invoiceId) {
+    public Invoice(UUID invoiceId) {
         this.invoiceId = invoiceId;
     }
 
-    public BigInteger getInvoiceId() {
+    public UUID getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(BigInteger invoiceId) {
+    public void setInvoiceId(UUID invoiceId) {
         this.invoiceId = invoiceId;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -736,12 +740,12 @@ public class Invoice extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getInvoiceId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setInvoiceId(id);
     }
 

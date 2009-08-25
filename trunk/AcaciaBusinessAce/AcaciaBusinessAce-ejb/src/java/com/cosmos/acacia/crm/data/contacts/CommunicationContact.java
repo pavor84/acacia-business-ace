@@ -12,7 +12,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,6 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -73,11 +74,13 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     @Id
     @Column(name = "communication_contact_id", nullable = false)
     @Property(title="Communication Contact Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger communicationContactId;
+    @Type(type="uuid")
+    private UUID communicationContactId;
 
     @Column(name = "address_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "communication_type_id", referencedColumnName = "resource_id", nullable=false)
     @ManyToOne
@@ -102,15 +105,15 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     public CommunicationContact() {
     }
 
-    public CommunicationContact(BigInteger communicationContactId) {
+    public CommunicationContact(UUID communicationContactId) {
         this.communicationContactId = communicationContactId;
     }
 
-    public BigInteger getCommunicationContactId() {
+    public UUID getCommunicationContactId() {
         return communicationContactId;
     }
 
-    public void setCommunicationContactId(BigInteger communicationContactId) {
+    public void setCommunicationContactId(UUID communicationContactId) {
         this.communicationContactId = communicationContactId;
     }
 
@@ -131,12 +134,12 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
         super.setParentId(parentId);
     }
@@ -185,12 +188,12 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getCommunicationContactId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setCommunicationContactId(id);
     }
 

@@ -10,13 +10,22 @@ import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.enums.MailType;
 import com.cosmos.acacia.util.AcaciaProperties;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -34,11 +43,25 @@ import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
+import com.cosmos.mail.MailServer;
+import com.cosmos.mail.MailUtils;
+import com.cosmos.mail.MessageParameters;
+import com.cosmos.util.NumberUtils;
+import java.beans.XMLDecoder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.ejb.EJB;
+import javax.jms.MapMessage;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 /**
  * Created	:	19.05.2008
@@ -57,6 +80,12 @@ import org.apache.log4j.Logger;
 @Stateless
 public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLocal {
 
+    @Resource(name = "jms/emailQueue")
+    private Queue emailQueue;
+
+    @Resource(name = "jms/emailQueueFactory")
+    private ConnectionFactory emailQueueFactory;
+
     private static final Logger logger =
         Logger.getLogger(AcaciaSessionBean.class);
 
@@ -70,6 +99,8 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private ClassifiersLocal classifiersManager;
     @EJB
     private AddressesListLocal addressService;
+
+    private static MailUtils systemMailUtils;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
@@ -95,7 +126,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public DataObject getDataObject(BigInteger dataObjectId)
+    public DataObject getDataObject(UUID dataObjectId)
     {
         return em.find(DataObject.class, dataObjectId);
     }
@@ -109,6 +140,16 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public Organization getOrganization() {
         return (Organization) SessionRegistry.getSession().getValue(SessionContext.ORGANIZATION_KEY);
+    }
+
+    @Override
+    public UserOrganization getUserOrganization() {
+        return (UserOrganization) SessionRegistry.getSession().getValue(SessionContext.USER_ORGANIZATION_KEY);
+    }
+
+    @Override
+    public void setUserOrganization(UserOrganization userOrganization) {
+        SessionRegistry.getSession().setValue(SessionContext.USER_ORGANIZATION_KEY, userOrganization);
     }
 
     @Override
@@ -211,7 +252,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionRegistry.getSession().setValue(key, value);
     }
 
-    private BigInteger getRelatedObjectId(
+    private UUID getRelatedObjectId(
             BusinessPartner client,
             AccessLevel level)
     {
@@ -220,7 +261,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             case System:
             case ParentChildOrganization:
                 // ToDo: Put some real object because of FK constraint
-                return BigInteger.ZERO;
+                return NumberUtils.ZERO_UUID;
 
             case Organization:
                 return getOrganization().getId();
@@ -254,7 +295,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                 (AcaciaPropertiesImpl)get(SessionContext.ACACIA_PROPERTIES);
         if(properties == null)
         {
-            properties = new AcaciaPropertiesImpl(AccessLevel.Session, BigInteger.ZERO);
+            properties = new AcaciaPropertiesImpl(AccessLevel.Session, NumberUtils.ZERO_UUID);
             put(SessionContext.ACACIA_PROPERTIES, properties);
         }
 
@@ -262,7 +303,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         Query q = em.createNamedQuery("DbProperty.findByLevelAndRelatedObjectId");
         for(AccessLevel accessLevel : AccessLevel.PropertyLevels)
         {
-            BigInteger relatedObjectId = getRelatedObjectId(client, accessLevel);
+            UUID relatedObjectId = getRelatedObjectId(client, accessLevel);
             if(relatedObjectId == null)
                 continue;
             q.setParameter("accessLevel", accessLevel.name());
@@ -285,7 +326,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             if(AccessLevel.PropertyLevels.contains(props.getAccessLevel()) && props.isChanged())
             {
                 AccessLevel accessLevel = props.getAccessLevel();
-                BigInteger relatedObjectId = props.getRelatedObjectId();
+                UUID relatedObjectId = props.getRelatedObjectId();
                 Query q = em.createNamedQuery("DbProperty.removeByLevelAndRelatedObjectIdAndPropertyKeys");
                 q.setParameter("accessLevel", accessLevel.name());
                 q.setParameter("relatedObjectId", relatedObjectId);
@@ -437,5 +478,109 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         }
 
         deleteExpression(expressionKey);
+    }
+
+    private Message createJMSMessage(
+            Session session,
+            MailType mailType,
+            MessageParameters messageParameters) throws JMSException {
+        MapMessage mapMessage = session.createMapMessage();
+        mapMessage.setString("MailType", mailType.name());
+        mapMessage.setBytes("MessageParameters", toByteArray(messageParameters));
+
+        return mapMessage;
+    }
+
+    private byte[] toByteArray(Serializable serializable) {
+        try {
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(outStream);
+            oos.writeObject(serializable);
+            return outStream.toByteArray();
+        } catch(IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void sendMail(MailType mailType, MessageParameters messageParameters) {
+        Connection connection = null;
+        Session session = null;
+        try {
+            connection = emailQueueFactory.createConnection();
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            MessageProducer messageProducer = session.createProducer(emailQueue);
+            Message message = createJMSMessage(session, mailType, messageParameters);
+            messageProducer.send(message);
+        } catch(JMSException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException ex) {
+                    logger.log(Priority.WARN, "Cannot close session", ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException ex) {
+                    logger.log(Priority.WARN, "Cannot close connection", ex);
+                }
+            }
+        }
+    }
+
+
+
+    @Override
+    public MailUtils getSystemMailUtils() {
+        if(systemMailUtils == null) {
+            try {
+                InputStream inStream = getClass().getResourceAsStream("/mail-server/mail_config.xml");
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                int size = 2048;
+                byte[] buffer = new byte[size];
+                int read;
+                while((read = inStream.read(buffer)) > 0) {
+                    outStream.write(buffer, 0, read);
+                }
+                inStream.close();
+                inStream = new ByteArrayInputStream(outStream.toByteArray());
+                outStream.close();
+                XMLDecoder decoder = new XMLDecoder(inStream);
+                MailServer outgoingServer = (MailServer) decoder.readObject();
+                decoder.close();
+
+                outStream = new ByteArrayOutputStream();
+                inStream = getClass().getResourceAsStream("/mail-server/from_address.xml");
+                while((read = inStream.read(buffer)) > 0) {
+                    outStream.write(buffer, 0, read);
+                }
+                inStream.close();
+                inStream = new ByteArrayInputStream(outStream.toByteArray());
+                outStream.close();
+                decoder = new XMLDecoder(inStream);
+                InternetAddress fromAddress = (InternetAddress) decoder.readObject();
+                decoder.close();
+
+                systemMailUtils = MailUtils.getInstance(outgoingServer, fromAddress);
+            } catch(Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        return systemMailUtils;
+    }
+
+    @Override
+    public MailUtils getOrganizationMailUtils() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public MailUtils getUserMailUtils() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

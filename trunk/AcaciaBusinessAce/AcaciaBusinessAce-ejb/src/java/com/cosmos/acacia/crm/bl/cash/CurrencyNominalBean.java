@@ -81,11 +81,11 @@ public class CurrencyNominalBean implements CurrencyNominalRemote, CurrencyNomin
             Map<Currency, Collection<? extends CurrencyNominal>> defaultNominals = 
                 new HashMap<Currency,Collection<? extends CurrencyNominal>>();
             //BGN
-            defaultNominals.put(Currency.Leva, createNominals(Currency.Leva, new BigDecimal("100")));
+            defaultNominals.put(Currency.BGN, createNominals(Currency.BGN, new BigDecimal("100")));
             //EUR
-            defaultNominals.put(Currency.Euro, createNominals(Currency.Euro, new BigDecimal("500")));
+            defaultNominals.put(Currency.EUR, createNominals(Currency.EUR, new BigDecimal("500")));
             //USD
-            defaultNominals.put(Currency.Dollar, createNominals(Currency.Dollar, new BigDecimal("100")));
+            defaultNominals.put(Currency.USD, createNominals(Currency.USD, new BigDecimal("100")));
             
             //init nominals
             initNominals(defaultNominals);

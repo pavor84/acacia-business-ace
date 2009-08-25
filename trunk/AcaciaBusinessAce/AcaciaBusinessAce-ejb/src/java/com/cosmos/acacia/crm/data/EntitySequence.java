@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -59,7 +59,7 @@ public class EntitySequence implements Serializable {
         this.entitySequencePK = entitySequencePK;
     }
 
-    public EntitySequence(BigInteger entityId, int dataObjectTypeId) {
+    public EntitySequence(UUID entityId, int dataObjectTypeId) {
         this.entitySequencePK = new EntitySequencePK(entityId, dataObjectTypeId);
     }
 
@@ -94,7 +94,7 @@ public class EntitySequence implements Serializable {
         return null;
     }
 
-    public BigInteger getDataObjectId() {
+    public UUID getDataObjectId() {
         if(entitySequencePK != null)
             return entitySequencePK.getEntityId();
 

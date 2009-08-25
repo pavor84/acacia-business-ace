@@ -14,7 +14,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -48,7 +48,7 @@ public class SpecialPermissionPrivilege extends Privilege implements Serializabl
     )
     private DbResource specialPermission;
 
-    public SpecialPermissionPrivilege(BigInteger privilegeId) {
+    public SpecialPermissionPrivilege(UUID privilegeId) {
         super(ENTITY_DATA_OBJECT_TYPE_ID, privilegeId);
     }
 

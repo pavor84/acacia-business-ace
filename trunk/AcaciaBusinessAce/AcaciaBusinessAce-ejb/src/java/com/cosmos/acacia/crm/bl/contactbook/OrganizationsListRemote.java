@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -26,7 +26,7 @@ public interface OrganizationsListRemote {
      * @param parentId
      * @return list of organizations
      */
-    List<Organization> getOrganizations(BigInteger parentId);
+    List<Organization> getOrganizations(UUID parentId);
 
     /**
      * Lists all currencies
@@ -41,7 +41,7 @@ public interface OrganizationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(BigInteger parentId);
+    List<Address> getAddresses(UUID parentId);
 
     /**
      * Lists all organization types
@@ -77,7 +77,7 @@ public interface OrganizationsListRemote {
      * @param parentId the parent
      * @return the newly created organization
      */
-    Organization newOrganization(BigInteger parentId);
+    Organization newOrganization(UUID parentId);
 
     /**
      * Saves an Organization

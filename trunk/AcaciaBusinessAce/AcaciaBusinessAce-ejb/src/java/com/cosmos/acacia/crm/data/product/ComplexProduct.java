@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.product;
 import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class ComplexProduct extends Product implements Serializable {
         super(DISCRIMINATOR_COMPLEX_PRODUCT);
     }
 
-    public ComplexProduct(BigInteger productId) {
+    public ComplexProduct(UUID productId) {
         super(DISCRIMINATOR_COMPLEX_PRODUCT, productId);
     }
 

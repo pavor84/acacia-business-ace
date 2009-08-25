@@ -23,7 +23,7 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -43,6 +43,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -103,7 +104,8 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "privilege_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger privilegeId;
+    @Type(type="uuid")
+    private UUID privilegeId;
 
     @Basic(optional = false)
     @Column(name = "discriminator_id", nullable = false, length = 4, insertable=false, updatable=false)
@@ -196,16 +198,16 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
         this.discriminatorId = discriminatorId;
     }
 
-    public Privilege(String discriminatorId, BigInteger privilegeId) {
+    public Privilege(String discriminatorId, UUID privilegeId) {
         this(discriminatorId);
         this.privilegeId = privilegeId;
     }
 
-    public BigInteger getPrivilegeId() {
+    public UUID getPrivilegeId() {
         return privilegeId;
     }
 
-    public void setPrivilegeId(BigInteger privilegeId) {
+    public void setPrivilegeId(UUID privilegeId) {
         this.privilegeId = privilegeId;
     }
 
@@ -281,17 +283,17 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getPrivilegeId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPrivilegeId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(securityRole != null) {
             return securityRole.getSecurityRoleId();
         }

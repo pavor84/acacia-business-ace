@@ -10,7 +10,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -187,12 +188,14 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
 
     @Id
     @Column(name = "classifier_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger classifierId;
+    private UUID classifierId;
 
     @Column(name = "parent_id")
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @Column(name = "classifier_code", nullable = false)
     @Property(title="Code", propertyValidator=
@@ -224,31 +227,31 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     public Classifier() {
     }
 
-    public Classifier(BigInteger classifierId) {
+    public Classifier(UUID classifierId) {
         this.classifierId = classifierId;
     }
 
-    public Classifier(BigInteger classifierId, String classifierCode, String classifierName) {
+    public Classifier(UUID classifierId, String classifierCode, String classifierName) {
         this.classifierId = classifierId;
         this.classifierCode = classifierCode;
         this.classifierName = classifierName;
     }
 
-    public BigInteger getClassifierId() {
+    public UUID getClassifierId() {
         return classifierId;
     }
 
-    public void setClassifierId(BigInteger classifierId) {
+    public void setClassifierId(UUID classifierId) {
         this.classifierId = classifierId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -322,12 +325,12 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return classifierId;
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         this.classifierId = id;
     }
 

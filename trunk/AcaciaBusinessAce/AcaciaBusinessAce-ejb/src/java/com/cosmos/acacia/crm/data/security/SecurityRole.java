@@ -21,7 +21,7 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +33,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -58,14 +59,14 @@ import javax.persistence.UniqueConstraint;
                 " ORDER BY t.securityRoleName"
     ),
     @NamedQuery(
-        name = SecurityRole.NQ_FIND_BY_USER,
+        name = SecurityRole.NQ_FIND_BY_USER_ORGANIZATION,
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.organization = :organization" +
                 "  and t.securityRoleId not in (" +
                 "   SELECT t1.securityRole.securityRoleId FROM UserSecurityRole t1" +
                 "    WHERE" +
-                "     t1.user = :user" +
+                "     t1.userOrganization = :userOrganization" +
                 "  )" +
                 " ORDER BY t.securityRoleName"
     )
@@ -92,12 +93,13 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     protected static final String CLASS_NAME = "SecurityRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_BUSINESS_UNIT = CLASS_NAME + ".findByBusinessUnit";
-    public static final String NQ_FIND_BY_USER = CLASS_NAME + ".findByUser";
+    public static final String NQ_FIND_BY_USER_ORGANIZATION = CLASS_NAME + ".findByUserOrganization";
 
     @Id
     @Basic(optional = false)
     @Column(name = "security_role_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger securityRoleId;
+    @Type(type="uuid")
+    private UUID securityRoleId;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
@@ -145,20 +147,20 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     public SecurityRole() {
     }
 
-    public SecurityRole(BigInteger securityRoleId) {
+    public SecurityRole(UUID securityRoleId) {
         this.securityRoleId = securityRoleId;
     }
 
-    public SecurityRole(BigInteger securityRoleId, String securityRoleName) {
+    public SecurityRole(UUID securityRoleId, String securityRoleName) {
         this.securityRoleId = securityRoleId;
         this.securityRoleName = securityRoleName;
     }
 
-    public BigInteger getSecurityRoleId() {
+    public UUID getSecurityRoleId() {
         return securityRoleId;
     }
 
-    public void setSecurityRoleId(BigInteger securityRoleId) {
+    public void setSecurityRoleId(UUID securityRoleId) {
         this.securityRoleId = securityRoleId;
     }
 
@@ -202,17 +204,17 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getSecurityRoleId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setSecurityRoleId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(organization != null) {
             return organization.getId();
         }

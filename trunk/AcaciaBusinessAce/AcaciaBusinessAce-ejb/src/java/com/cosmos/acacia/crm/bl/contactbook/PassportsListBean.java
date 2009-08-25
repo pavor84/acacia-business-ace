@@ -23,7 +23,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.Passport;
 import com.cosmos.acacia.crm.enums.PassportType;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * The implementation of handling passports (see interface for more info)
@@ -43,7 +43,7 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
     private PassportValidatorLocal validator;
 
     @SuppressWarnings("unchecked")
-    public List<Passport> getPassports(BigInteger parentDataObjectId)
+    public List<Passport> getPassports(UUID parentDataObjectId)
     {
         Query q;
         if(parentDataObjectId != null)
@@ -72,7 +72,7 @@ public class PassportsListBean implements PassportsListRemote, PassportsListLoca
         return new Passport();
     }
 
-    public Passport savePassport(Passport passport, BigInteger parentDataObjectId)
+    public Passport savePassport(Passport passport, UUID parentDataObjectId)
     {
         validator.validate(passport);
         passport.setParentId(parentDataObjectId);

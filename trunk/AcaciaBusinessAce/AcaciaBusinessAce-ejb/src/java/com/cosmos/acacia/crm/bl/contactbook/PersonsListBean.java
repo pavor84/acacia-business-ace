@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,7 +63,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     private UsersLocal usersManager;
     
     @SuppressWarnings("unchecked")
-    public List<Person> getPersons(BigInteger parentId)
+    public List<Person> getPersons(UUID parentId)
     {
 
         Query q;
@@ -98,7 +98,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return entityProperties;
     }
 
-    public Person newPerson(BigInteger parentId) {
+    public Person newPerson(UUID parentId) {
         Person p = new Person();
         p.setParentId(parentId);
         return p;
@@ -155,7 +155,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return esm.remove(em, person);
     }
 
-    public List<Address> getAddresses(BigInteger parentId) {
+    public List<Address> getAddresses(UUID parentId) {
        return locationsManager.getAddresses(parentId);
     }
 

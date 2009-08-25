@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -22,7 +22,7 @@ public interface PatternMaskListRemote {
      * @param parentDataObjectId 
      * @return
      */
-    List<PatternMaskFormat> listPatternsByName(BigInteger parentDataObjectId);
+    List<PatternMaskFormat> listPatternsByName(UUID parentDataObjectId);
 
     /**
      * Entity properties for the mask type
@@ -32,10 +32,10 @@ public interface PatternMaskListRemote {
 
     /**
      * Create new empty instance
-     * @param bigInteger 
+     * @param UUID 
      * @return
      */
-    PatternMaskFormat newPatternMaskFormat(BigInteger bigInteger);
+    PatternMaskFormat newPatternMaskFormat(UUID UUID);
 
     /**
      * Save a pattern mask format instance

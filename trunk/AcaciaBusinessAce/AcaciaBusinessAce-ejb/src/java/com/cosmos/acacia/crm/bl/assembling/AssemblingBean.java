@@ -32,7 +32,7 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -341,7 +341,7 @@ public class AssemblingBean
 
             // check cyclic parents
             AssemblingCategory ancestor = newParent;
-            BigInteger parentId;
+            UUID parentId;
             while(ancestor != null)
             {
                 if(ancestor.equals(newChild))
@@ -379,7 +379,7 @@ public class AssemblingBean
     @Override
     public AssemblingCategory getParentCategory(AssemblingCategory child)
     {
-        BigInteger parentId;
+        UUID parentId;
         if((parentId = child.getParentId()) == null)
             return null;
 
@@ -390,7 +390,7 @@ public class AssemblingBean
     public List<AssemblingSchema> getAssemblingSchemas(boolean applicable)
     {
         Organization organization = acaciaSessionLocal.getOrganization();
-        BigInteger parentId;
+        UUID parentId;
         if(organization == null || (parentId = organization.getId()) == null)
             return Collections.emptyList();
 
@@ -459,7 +459,7 @@ public class AssemblingBean
     {
         logger.info("AssemblingBean.getVirtualProducts()");
         Organization organization = acaciaSession.getOrganization();
-        BigInteger parentId;
+        UUID parentId;
         if(organization == null || (parentId = organization.getId()) == null)
             return Collections.emptyList();
 
@@ -470,7 +470,7 @@ public class AssemblingBean
         return new ArrayList<VirtualProduct>(q.getResultList());
     }
 
-    private void synchronizeRealProducts(BigInteger parentId)
+    private void synchronizeRealProducts(UUID parentId)
     {
         logger.info("AssemblingBean.synchronizeRealProducts(" + parentId + ")");
         Query q = em.createNamedQuery("RealProduct.findNewSimpleProducts");
@@ -673,7 +673,7 @@ public class AssemblingBean
     @Override
     public DataObjectBean getParentProduct(Product product)
     {
-        BigInteger parentId = product.getParentId();
+        UUID parentId = product.getParentId();
         if(parentId == null)
             return null;
 

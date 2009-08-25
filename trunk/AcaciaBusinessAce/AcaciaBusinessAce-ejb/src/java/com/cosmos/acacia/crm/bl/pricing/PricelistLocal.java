@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.Local;
 
@@ -17,5 +17,5 @@ public interface PricelistLocal extends PricelistRemote{
      * Create entry for every product if some products are not included.
      * @param parentDataObjectId - the parent organization
      */
-    public void updateGeneralPricelist(BigInteger parentDataObjectId);
+    public void updateGeneralPricelist(UUID parentDataObjectId);
 }

@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +24,7 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -84,7 +85,8 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     
     @Id
     @Column(name = "warehouse_product_id", nullable = false)
-    private BigInteger id;
+    @Type(type="uuid")
+    private UUID id;
 
     @Property(title="Warehouse", propertyValidator=@PropertyValidator(required=true), customDisplay="${warehouse.address.addressName}")
     @JoinColumn(name = "warehouse_id", referencedColumnName = "warehouse_id", nullable=false)
@@ -160,7 +162,8 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     private DataObject dataObject;
     
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     public WarehouseProduct() {
     }
@@ -367,7 +370,7 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
@@ -377,17 +380,17 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return id;
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -57,11 +58,13 @@ public class Address
     @Id
     @Column(name = "address_id", nullable = false)
     @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger addressId;
+    @Type(type="uuid")
+    private UUID addressId;
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Column(name = "address_name", nullable = false)
     @Property(title="Name",
@@ -103,25 +106,25 @@ public class Address
     public Address() {
     }
 
-    public Address(BigInteger addressId) {
+    public Address(UUID addressId) {
         this.addressId = addressId;
     }
 
-    public BigInteger getAddressId() {
+    public UUID getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(BigInteger addressId) {
+    public void setAddressId(UUID addressId) {
         this.addressId = addressId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -217,12 +220,12 @@ public class Address
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getAddressId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setAddressId(id);
     }
 

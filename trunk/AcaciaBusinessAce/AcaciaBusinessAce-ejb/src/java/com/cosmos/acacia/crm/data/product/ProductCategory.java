@@ -12,7 +12,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -53,7 +54,7 @@ import javax.persistence.Table;
             ),
         /**
          * Parameters:
-         * - parentIds: Collection<BigInteger>
+         * - parentIds: Collection<UUID>
          */
         @NamedQuery
             (
@@ -67,11 +68,13 @@ public class ProductCategory extends DataObjectBean implements Serializable, Tex
 
     @Id
     @Column(name = "product_category_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Product Category Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger productCategoryId;
+    private UUID productCategoryId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Column(name = "category_name", nullable = false)
     @Property(title="Category Name", propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
@@ -131,30 +134,30 @@ public class ProductCategory extends DataObjectBean implements Serializable, Tex
     public ProductCategory() {
     }
 
-    public ProductCategory(BigInteger productCategoryId) {
+    public ProductCategory(UUID productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 
-    public ProductCategory(BigInteger productCategoryId, String categoryName) {
+    public ProductCategory(UUID productCategoryId, String categoryName) {
         this.productCategoryId = productCategoryId;
         this.categoryName = categoryName;
     }
 
-    public BigInteger getProductCategoryId() {
+    public UUID getProductCategoryId() {
         return productCategoryId;
     }
 
-    public void setProductCategoryId(BigInteger productCategoryId) {
+    public void setProductCategoryId(UUID productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -221,12 +224,12 @@ public class ProductCategory extends DataObjectBean implements Serializable, Tex
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getProductCategoryId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setProductCategoryId(id);
     }
 

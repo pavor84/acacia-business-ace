@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.data.cash;
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +19,8 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.enums.Currency;
+import java.math.BigInteger;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "banknote_quantity")
@@ -54,7 +56,8 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "banknote_amt_id", nullable = false)
-    private BigInteger banknoteAmountId;
+    @Type(type="uuid")
+    private UUID banknoteAmountId;
     
     @ManyToOne
     @Property(title="Currency Nominal", propertyValidator=@PropertyValidator(required=true,
@@ -67,17 +70,18 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
     private BigInteger quantity;
     
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
     
     @JoinColumn(name = "banknote_amt_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -112,7 +116,7 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return banknoteAmountId;
     }
 
@@ -127,15 +131,15 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setBanknoteAmountId(id);
     }
 
-    public BigInteger getBanknoteAmountId() {
+    public UUID getBanknoteAmountId() {
         return banknoteAmountId;
     }
 
-    public void setBanknoteAmountId(BigInteger banknoteAmountId) {
+    public void setBanknoteAmountId(UUID banknoteAmountId) {
         this.banknoteAmountId = banknoteAmountId;
     }
 

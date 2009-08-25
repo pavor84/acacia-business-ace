@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -135,7 +135,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Classifier> getClassifiers(ClassifierGroup classifierGroup, // BigInteger parentDataObjectId,
+    public List<Classifier> getClassifiers(ClassifierGroup classifierGroup, // UUID parentDataObjectId,
             DataObjectType dataObjectType) {
 
         List<Classifier> result = null;
@@ -203,7 +203,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public Classifier saveClassifier(Classifier classifier, BigInteger groupId) {
+    public Classifier saveClassifier(Classifier classifier, UUID groupId) {
         if (classifier.getClassifierGroup().getIsSystemGroup()) {
             if (!session.isAdministrator()) {
                 throw new ValidationException("Classifier.err.systemGroupForbidden");
@@ -214,7 +214,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public Classifier saveClassifierLocal(Classifier classifier, BigInteger groupId) {
+    public Classifier saveClassifierLocal(Classifier classifier, UUID groupId) {
         if (classifier.getParentId() == null) {
             classifier.setParentId(session.getOrganization().getId());
         }
@@ -479,7 +479,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }*/
 
     /*@Override
-    public Classifier saveInitialClassifier(Classifier classifier, BigInteger parentDataObjectId) {
+    public Classifier saveInitialClassifier(Classifier classifier, UUID parentDataObjectId) {
 
     classifier.setParentId(parentDataObjectId);
 

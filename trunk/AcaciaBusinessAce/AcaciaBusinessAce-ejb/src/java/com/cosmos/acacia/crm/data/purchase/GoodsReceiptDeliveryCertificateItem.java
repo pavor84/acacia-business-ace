@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.data.purchase;
 
 import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -41,7 +41,7 @@ public class GoodsReceiptDeliveryCertificateItem extends GoodsReceiptItem implem
         super(DISCRIMINATOR_VALUE);
     }
 
-    public GoodsReceiptDeliveryCertificateItem(BigInteger receiptItemId) {
+    public GoodsReceiptDeliveryCertificateItem(UUID receiptItemId) {
         super(DISCRIMINATOR_VALUE, receiptItemId);
     }
 

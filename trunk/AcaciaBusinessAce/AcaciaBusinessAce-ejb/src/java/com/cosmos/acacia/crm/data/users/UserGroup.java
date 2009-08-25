@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.data.users;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +19,7 @@ import javax.persistence.Basic;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "user_groups", catalog = "acacia", schema = "public",
@@ -41,8 +42,9 @@ public class UserGroup extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "user_group_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="User Group ID", visible=false, hidden=true)
-    private BigInteger userGroupId;
+    private UUID userGroupId;
 
     @Basic(optional = false)
     @Column(name = "user_group_name", nullable = false, length = 50)
@@ -60,21 +62,22 @@ public class UserGroup extends DataObjectBean implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false)
+    @Type(type="uuid")
     @Property(title="Organization Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger organizationId;
+    private UUID organizationId;
 
     public UserGroup() {
     }
 
-    public UserGroup(BigInteger userGroupId) {
+    public UserGroup(UUID userGroupId) {
         this.userGroupId = userGroupId;
     }
 
-    public BigInteger getUserGroupId() {
+    public UUID getUserGroupId() {
         return userGroupId;
     }
 
-    public void setUserGroupId(BigInteger userGroupId) {
+    public void setUserGroupId(UUID userGroupId) {
         this.userGroupId = userGroupId;
     }
 
@@ -86,22 +89,22 @@ public class UserGroup extends DataObjectBean implements Serializable {
         this.name = name;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
         super.setParentId(organizationId);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return getOrganizationId();
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         setOrganizationId(parentId);
     }
 
@@ -121,12 +124,12 @@ public class UserGroup extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setUserGroupId(id);
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getUserGroupId();
     }
 

@@ -8,11 +8,12 @@ package com.cosmos.acacia.crm.data;
 
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -26,7 +27,8 @@ public class DataObjectDetail implements Serializable {
 
     @Id
     @Column(name = "data_object_id", nullable = false)
-    private BigInteger dataObjectId;
+    @Type(type="uuid")
+    private UUID dataObjectId;
 
     @Column(name = "detail_code", nullable = false)
     private String detailCode;
@@ -41,15 +43,15 @@ public class DataObjectDetail implements Serializable {
     public DataObjectDetail() {
     }
 
-    public DataObjectDetail(BigInteger dataObjectId) {
+    public DataObjectDetail(UUID dataObjectId) {
         this.dataObjectId = dataObjectId;
     }
 
-    public BigInteger getDataObjectId() {
+    public UUID getDataObjectId() {
         return dataObjectId;
     }
 
-    public void setDataObjectId(BigInteger dataObjectId) {
+    public void setDataObjectId(UUID dataObjectId) {
         this.dataObjectId = dataObjectId;
     }
 

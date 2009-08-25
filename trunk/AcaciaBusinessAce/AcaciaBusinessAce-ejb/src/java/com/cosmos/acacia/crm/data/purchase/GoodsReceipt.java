@@ -11,7 +11,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,6 +25,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -42,7 +43,8 @@ public class GoodsReceipt implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "goods_receipt_id", nullable = false)
-    private BigInteger goodsReceiptId;
+    @Type(type="uuid")
+    private UUID goodsReceiptId;
 
     @Column(name = "receipt_number")
     private Long receiptNumber;
@@ -85,7 +87,8 @@ public class GoodsReceipt implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "related_document_id", nullable = false)
-    private BigInteger relatedDocumentId;
+    @Type(type="uuid")
+    private UUID relatedDocumentId;
 
     @JoinColumn(name = "goods_receipt_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
@@ -94,20 +97,20 @@ public class GoodsReceipt implements Serializable {
     public GoodsReceipt() {
     }
 
-    public GoodsReceipt(BigInteger goodsReceiptId) {
+    public GoodsReceipt(UUID goodsReceiptId) {
         this.goodsReceiptId = goodsReceiptId;
     }
 
-    public GoodsReceipt(BigInteger goodsReceiptId, BigInteger relatedDocumentId) {
+    public GoodsReceipt(UUID goodsReceiptId, UUID relatedDocumentId) {
         this.goodsReceiptId = goodsReceiptId;
         this.relatedDocumentId = relatedDocumentId;
     }
 
-    public BigInteger getGoodsReceiptId() {
+    public UUID getGoodsReceiptId() {
         return goodsReceiptId;
     }
 
-    public void setGoodsReceiptId(BigInteger goodsReceiptId) {
+    public void setGoodsReceiptId(UUID goodsReceiptId) {
         this.goodsReceiptId = goodsReceiptId;
     }
 
@@ -127,11 +130,11 @@ public class GoodsReceipt implements Serializable {
         this.receiptDate = receiptDate;
     }
 
-    public BigInteger getRelatedDocumentId() {
+    public UUID getRelatedDocumentId() {
         return relatedDocumentId;
     }
 
-    public void setRelatedDocumentId(BigInteger relatedDocumentId) {
+    public void setRelatedDocumentId(UUID relatedDocumentId) {
         this.relatedDocumentId = relatedDocumentId;
     }
 

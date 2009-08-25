@@ -16,12 +16,13 @@ import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByCategory;
 import com.cosmos.acacia.crm.data.customer.CustomerDiscountItemByProduct;
 import com.cosmos.beansbinding.EntityProperties;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -172,7 +173,8 @@ public class CustomerDiscountBean implements CustomerDiscountRemote, CustomerDis
     }
 
     public List<CustomerDiscountItem> getCustomerDiscountItemsTest(CustomerDiscount customerDiscount) {
-        Connection conn = getConnection();
+        return Collections.emptyList();
+        /*Connection conn = getConnection();
         BigDecimal customerDiscountId = new BigDecimal(customerDiscount.getCustomerDiscountId());
         try {
             PreparedStatement pstmt =
@@ -181,26 +183,26 @@ public class CustomerDiscountBean implements CustomerDiscountRemote, CustomerDis
             pstmt.setBigDecimal(2, customerDiscountId);
             ResultSet rs = pstmt.executeQuery();
             List<CustomerDiscountItem> items = new ArrayList<CustomerDiscountItem>();
-            BigInteger itemId;
-            BigInteger id;
+            UUID itemId;
+            UUID id;
             CustomerDiscountItem item;
             CustomerDiscountItemByCategory categoryItem;
             CustomerDiscountItemByProduct productItem;
             while (rs.next()) {
-                itemId = rs.getBigDecimal("customer_discount_item_id").toBigInteger();
+                itemId = rs.getBigDecimal("customer_discount_item_id").toUUID();
                 BigDecimal discountPercent = rs.getBigDecimal("discount_percent");
                 String discriminatorId = rs.getString("discriminator_id");
                 switch (rs.getInt("clazz_")) {
                     case 1:
                         item = categoryItem = new CustomerDiscountItemByCategory(itemId);
-                        id = rs.getBigDecimal("category_id").toBigInteger();
+                        id = rs.getBigDecimal("category_id").toUUID();
                         categoryItem.setCategory(em.find(ProductCategory.class, id));
                         categoryItem.setIncludeHeirs(rs.getBoolean("include_heirs"));
                         break;
 
                     case 2:
                         item = productItem = new CustomerDiscountItemByProduct(itemId);
-                        id = rs.getBigDecimal("product_id").toBigInteger();
+                        id = rs.getBigDecimal("product_id").toUUID();
                         productItem.setProduct(em.find(Product.class, id));
                         break;
 
@@ -216,6 +218,6 @@ public class CustomerDiscountBean implements CustomerDiscountRemote, CustomerDis
             return items;
         } catch (SQLException ex) {
             throw new PersistenceException(ex);
-        }
+        }*/
     }
 }

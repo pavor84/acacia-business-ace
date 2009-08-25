@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -93,7 +93,7 @@ public class ClassifierAppliedForDot implements Serializable {
         this.classifierAppliedForDotPK = classifierAppliedForDotPK;
     }
 
-    public ClassifierAppliedForDot(BigInteger classifierId, Integer dataObjectTypeId) {
+    public ClassifierAppliedForDot(UUID classifierId, Integer dataObjectTypeId) {
         this.classifierAppliedForDotPK =
             new ClassifierAppliedForDotPK(classifierId, dataObjectTypeId);
     }

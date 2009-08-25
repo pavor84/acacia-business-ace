@@ -17,7 +17,7 @@ import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -36,14 +37,14 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "user_security_roles", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "security_role_id"})
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_organization_id", "security_role_id"})
 })
 @NamedQueries({
     @NamedQuery(
         name = UserSecurityRole.NQ_FIND_ALL,
         query = "SELECT t FROM UserSecurityRole t" +
                 " WHERE" +
-                "  t.user = :user"
+                "  t.userOrganization = :userOrganization"
     )
 })
 @Form(
@@ -59,12 +60,13 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "user_security_role_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger userSecurityRoleId;
+    @Type(type="uuid")
+    private UUID userSecurityRoleId;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_organization_id", referencedColumnName = "user_organization_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="User")
-    private User user;
+    private UserOrganization userOrganization;
 
     @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
     @ManyToOne(optional = false)
@@ -96,15 +98,15 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
     public UserSecurityRole() {
     }
 
-    public UserSecurityRole(BigInteger userSecurityRoleId) {
+    public UserSecurityRole(UUID userSecurityRoleId) {
         this.userSecurityRoleId = userSecurityRoleId;
     }
 
-    public BigInteger getUserSecurityRoleId() {
+    public UUID getUserSecurityRoleId() {
         return userSecurityRoleId;
     }
 
-    public void setUserSecurityRoleId(BigInteger userSecurityRoleId) {
+    public void setUserSecurityRoleId(UUID userSecurityRoleId) {
         this.userSecurityRoleId = userSecurityRoleId;
     }
 
@@ -126,28 +128,28 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
         this.securityRole = securityRole;
     }
 
-    public User getUser() {
-        return user;
+    public UserOrganization getUserOrganization() {
+        return userOrganization;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserOrganization(UserOrganization userOrganization) {
+        this.userOrganization = userOrganization;
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getUserSecurityRoleId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setUserSecurityRoleId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
-        if(user != null) {
-            return user.getId();
+    public UUID getParentId() {
+        if(userOrganization != null) {
+            return userOrganization.getId();
         }
 
         return null;
@@ -156,8 +158,8 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         StringBuilder sb = new StringBuilder();
-        if(user != null) {
-            sb.append(user.getUserName());
+        if(userOrganization != null) {
+            sb.append(userOrganization);
         }
         sb.append(':');
         if(securityRole != null) {

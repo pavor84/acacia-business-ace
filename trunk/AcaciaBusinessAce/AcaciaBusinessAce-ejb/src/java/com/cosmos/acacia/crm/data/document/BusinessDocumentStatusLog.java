@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.document;
 import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -56,7 +56,7 @@ public class BusinessDocumentStatusLog implements Serializable {
         this.businessDocumentStatusLogPK = businessDocumentStatusLogPK;
     }
 
-    public BusinessDocumentStatusLog(BigInteger documentId, int documentStatusId, Date actionTime) {
+    public BusinessDocumentStatusLog(UUID documentId, int documentStatusId, Date actionTime) {
         this.businessDocumentStatusLogPK = new BusinessDocumentStatusLogPK(documentId, documentStatusId, actionTime);
     }
 

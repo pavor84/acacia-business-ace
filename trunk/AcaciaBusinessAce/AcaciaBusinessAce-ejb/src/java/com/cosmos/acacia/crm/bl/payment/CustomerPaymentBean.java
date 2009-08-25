@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.payment;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +70,7 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
     }
 
     @SuppressWarnings("unchecked")
-    public List<CustomerPayment> listCustomerPayments(BigInteger parentDataObjectId) {
+    public List<CustomerPayment> listCustomerPayments(UUID parentDataObjectId) {
         if (parentDataObjectId == null)
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -87,10 +87,10 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
         esm.remove(em, customerPayment);
     }
 
-    public CustomerPayment newCustomerPayment(BigInteger parentDataObjectId) {
+    public CustomerPayment newCustomerPayment(UUID parentDataObjectId) {
         CustomerPayment c = new CustomerPayment();
         c.setParentId(parentDataObjectId);
-        c.setCurrency(Currency.Leva.getDbResource());
+        c.setCurrency(Currency.BGN.getDbResource());
         c.setBranch(acaciaSession.getBranch());
         c.setStatus(CustomerPaymentStatus.Open.getDbResource());
         c.setPaymentReturn(Boolean.FALSE);

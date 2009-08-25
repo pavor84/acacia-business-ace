@@ -11,7 +11,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,6 +28,8 @@ import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import java.math.BigInteger;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -111,10 +113,12 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "purchase_order_id", nullable = false)
-    private BigInteger purchaseOrderId;
+    @Type(type="uuid")
+    private UUID purchaseOrderId;
 
     @Column(name = "parent_id", precision=0, length=18)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Property(title="Order Number", editable=false)
     @Column(name = "order_number", nullable = false)
@@ -218,23 +222,23 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     public PurchaseOrder() {
     }
 
-    public PurchaseOrder(BigInteger purchaseOrderId) {
+    public PurchaseOrder(UUID purchaseOrderId) {
         this.purchaseOrderId = purchaseOrderId;
     }
 
-    public BigInteger getPurchaseOrderId() {
+    public UUID getPurchaseOrderId() {
         return purchaseOrderId;
     }
 
-    public void setPurchaseOrderId(BigInteger purchaseOrderId) {
+    public void setPurchaseOrderId(UUID purchaseOrderId) {
         this.purchaseOrderId = purchaseOrderId;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -393,7 +397,7 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return purchaseOrderId;
     }
 
@@ -403,7 +407,7 @@ public class PurchaseOrder extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         purchaseOrderId = id;
     }
 

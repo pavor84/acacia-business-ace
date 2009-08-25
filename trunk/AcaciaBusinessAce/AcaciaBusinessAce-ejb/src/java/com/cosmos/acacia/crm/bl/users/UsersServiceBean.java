@@ -22,10 +22,8 @@ import com.cosmos.acacia.crm.enums.FunctionalHierarchy;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
@@ -40,53 +38,44 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     public static final String BUSINESS_UNIT_KEY = "businessUnit";
     public static final String TEAM_KEY = "team";
     public static final String USER_KEY = "user";
+    public static final String PK_USER_ORGANIZATION = "userOrganization";
     public static final String ADDRESS_TYPE_KEY = "addressType";
     public static final String PK_BUSINESS_UNITS = "businessUnits";
     public static final String PK_FUNCTIONAL_HIERARCHIES = "functionalHierarchies";
 
     @Override
-    public List<User> getUsers(Organization organization) {
-        if (organization == null || organization.getId() == null) {
-            Query q = em.createNamedQuery("User.findAll");
-            return new ArrayList<User>(q.getResultList());
-        }
-
+    public List<UserOrganization> getUserOrganizations(Organization organization) {
         Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_ORGANIZATION);
         q.setParameter(ORGANIZATION_KEY, organization);
-        return getUsers((List<UserOrganization>) q.getResultList());
-    }
-
-    private List<User> getUsers(List<UserOrganization> userOrganizations) {
-        int size;
-        if((size = userOrganizations.size()) == 0) {
-            return new ArrayList<User>();
-        }
-
-        List<User> users = new ArrayList<User>(size);
-        for (UserOrganization userOrganization : userOrganizations) {
-            User user = userOrganization.getUser();
-            if (userOrganization.getBranch() != null) {
-                user.setBranchName(userOrganization.getBranch().getAddressName());
-            }
-
-            user.setActive(userOrganization.isUserActive());
-            users.add(user);
-        }
-
-        return users;
+        return new ArrayList<UserOrganization>(q.getResultList());
     }
 
     @Override
-    public List<User> getPossibleManagers(User user) {
+    public List<UserOrganization> getUserOrganizations(User user) {
+        Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_USER);
+        q.setParameter(USER_KEY, user);
+        return new ArrayList<UserOrganization>(q.getResultList());
+    }
+
+    @Override
+    public UserOrganization getUserOrganization(User user, Organization organization) {
+        Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_USER_AND_ORGANIZATION);
+        q.setParameter(USER_KEY, user);
+        q.setParameter(ORGANIZATION_KEY, organization);
+        return (UserOrganization) q.getSingleResult();
+    }
+
+    @Override
+    public List<UserOrganization> getPossibleManagers(UserOrganization userOrganization) {
         BusinessUnit businessUnit;
-        if((businessUnit = user.getBusinessUnit()) == null) {
+        if((businessUnit = userOrganization.getBusinessUnit()) == null) {
             return Collections.emptyList();
         }
         List<BusinessUnit> parentalBusinessUnits = getParentalBusinessUnits(businessUnit);
 
         JobTitle jobTitle;
         DbResource dbResource;
-        if((jobTitle = user.getJobTitle()) == null || (dbResource = jobTitle.getFunctionalHierarchy()) == null) {
+        if((jobTitle = userOrganization.getJobTitle()) == null || (dbResource = jobTitle.getFunctionalHierarchy()) == null) {
             return Collections.emptyList();
         }
         List<DbResource> parentalHierarchies = getParentalHierarchy(dbResource);
@@ -94,7 +83,11 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         q.setParameter(ORGANIZATION_KEY, session.getOrganization());
         q.setParameter(PK_BUSINESS_UNITS, parentalBusinessUnits);
         q.setParameter(PK_FUNCTIONAL_HIERARCHIES, parentalHierarchies);
-        return getUsers((List<UserOrganization>) q.getResultList());
+        List<UserOrganization> userOrganizations = new ArrayList<UserOrganization>(q.getResultList());
+        if(userOrganizations.contains(userOrganization)) {
+            userOrganizations.remove(userOrganization);
+        }
+        return userOrganizations;
     }
 
     private List<BusinessUnit> getParentalBusinessUnits(BusinessUnit businessUnit) {
@@ -134,9 +127,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public List<UserSecurityRole> getUserSecurityRoles(User user) {
+    public List<UserSecurityRole> getUserSecurityRoles(UserOrganization userOrganization) {
         Query q = em.createNamedQuery(UserSecurityRole.NQ_FIND_ALL);
-        q.setParameter(USER_KEY, user);
+        q.setParameter(PK_USER_ORGANIZATION, userOrganization);
 
         return new ArrayList<UserSecurityRole>(q.getResultList());
     }
@@ -197,11 +190,15 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         if (entityClass == User.class) {
             Object parameter;
             if(extraParameters.length > 0) {
-                if((parameter = extraParameters[0]) instanceof User) {
-                    return (List<E>) getPossibleManagers((User) parameter);
+                if((parameter = extraParameters[0]) instanceof UserOrganization) {
+                    return (List<E>) getPossibleManagers((UserOrganization) parameter);
+                } else if(parameter instanceof Organization) {
+                    return (List<E>) getUserOrganizations((Organization) parameter);
+                } else if(parameter instanceof User) {
+                    return (List<E>) getUserOrganizations((User) parameter);
                 }
             } else {
-                return (List<E>) getUsers(session.getOrganization());
+                return (List<E>) getUserOrganizations(session.getOrganization());
             }
         } else if (entityClass == Team.class) {
             if (extraParameters.length == 0) {
@@ -234,8 +231,8 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             if(entity instanceof Team) {
                 q = em.createNamedQuery(TeamMember.NQ_FIND_BY_TEAM);
                 q.setParameter(TEAM_KEY, entity);
-            } else if(entity instanceof User) {
-                q = em.createNamedQuery(TeamMember.NQ_FIND_BY_USER);
+            } else if(entity instanceof UserOrganization) {
+                q = em.createNamedQuery(TeamMember.NQ_FIND_BY_USER_ORGANIZATION);
                 q.setParameter(USER_KEY, entity);
             } else {
                 throw new UnsupportedOperationException("Not supported parent entity: " + entity);
@@ -248,9 +245,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             } else if(JobTitle.class == itemClass) {
                 return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
             }
-        } else if(entity instanceof User) {
+        } else if(entity instanceof UserOrganization) {
             if(UserSecurityRole.class == itemClass) {
-                return (List<I>) getUserSecurityRoles((User) entity);
+                return (List<I>) getUserSecurityRoles((UserOrganization) entity);
             }
         }
 

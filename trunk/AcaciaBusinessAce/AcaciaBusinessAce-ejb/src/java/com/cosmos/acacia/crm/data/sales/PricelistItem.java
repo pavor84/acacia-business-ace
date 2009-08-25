@@ -7,7 +7,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.math.MathContext;
 
 import javax.persistence.Column;
@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  * Created	:	28.12.2008
@@ -84,20 +85,22 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     
     @Id
     @Column(name = "item_id", nullable = false)
-    private BigInteger itemId;
+    @Type(type="uuid")
+    private UUID itemId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -132,7 +135,7 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return itemId;
     }
 
@@ -147,23 +150,23 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setItemId(id);
     }
 
-    public BigInteger getPricelistItemId() {
+    public UUID getPricelistItemId() {
         return itemId;
     }
 
-    public void setPricelistItemId(BigInteger itemId) {
+    public void setPricelistItemId(UUID itemId) {
         this.itemId = itemId;
     }
 
-    public BigInteger getItemId() {
+    public UUID getItemId() {
         return itemId;
     }
 
-    public void setItemId(BigInteger itemId) {
+    public void setItemId(UUID itemId) {
         this.itemId = itemId;
     }
 

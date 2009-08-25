@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,7 +77,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     private AcaciaSessionLocal session;
 
     @SuppressWarnings("unchecked")
-    public List<SimpleProduct> getProducts(BigInteger parentId)
+    public List<SimpleProduct> getProducts(UUID parentId)
     {
         Query q;
         if(parentId != null)
@@ -140,7 +140,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         product.setParentId(session.getOrganization().getId());
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         product.setListPrice(BigDecimal.valueOf(0));
-        product.setCurrency(Currency.Leva.getDbResource());
+        product.setCurrency(Currency.BGN.getDbResource());
 
         return product;
     }
@@ -262,13 +262,13 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     }
 
     @Override
-    public List<SimpleProduct> getProductsForCategory(BigInteger categoryId, Boolean includeHeirs) {
+    public List<SimpleProduct> getProductsForCategory(UUID categoryId, Boolean includeHeirs) {
         if ( includeHeirs==null && categoryId==null )
             throw new IllegalArgumentException("Null parameters not allowed ("+categoryId+", "+includeHeirs+")");
-        Set<BigInteger> parentIds = new HashSet<BigInteger>();
+        Set<UUID> parentIds = new HashSet<UUID>();
         parentIds.add(categoryId);
         
-        Set<BigInteger> categoriesAllIds = new HashSet<BigInteger>();
+        Set<UUID> categoriesAllIds = new HashSet<UUID>();
         categoriesAllIds.add(categoryId);
         //get all sub categories if includeHeirs
         if (includeHeirs){
@@ -277,7 +277,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
                 q.setParameter("parentIds", parentIds);
                 List<ProductCategory> categories = q.getResultList();
                 
-                parentIds = new HashSet<BigInteger>();
+                parentIds = new HashSet<UUID>();
                 for (ProductCategory cat : categories) {
                     parentIds.add(cat.getId());
                     categoriesAllIds.add(cat.getId());

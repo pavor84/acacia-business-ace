@@ -9,7 +9,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -51,11 +52,13 @@ public abstract class VirtualProduct
 
     @Id
     @Column(name = "product_id", nullable = false)
-    private BigInteger productId;
+    @Type(type="uuid")
+    private UUID productId;
 
     @Column(name = "parent_id")
+    @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    private UUID parentId;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -82,15 +85,15 @@ public abstract class VirtualProduct
     {
     }
 
-    public VirtualProduct(BigInteger productId) {
+    public VirtualProduct(UUID productId) {
         this.productId = productId;
     }
 
-    public BigInteger getProductId() {
+    public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(BigInteger productId) {
+    public void setProductId(UUID productId) {
         this.productId = productId;
     }
 
@@ -133,25 +136,25 @@ public abstract class VirtualProduct
 
 
     @Override
-    public BigInteger getParentId()
+    public UUID getParentId()
     {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
+    public void setParentId(UUID parentId)
     {
         this.parentId = parentId;
     }
 
     @Override
-    public BigInteger getId()
+    public UUID getId()
     {
         return getProductId();
     }
 
     @Override
-    public void setId(BigInteger id)
+    public void setId(UUID id)
     {
         setProductId(id);
     }

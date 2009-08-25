@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.bl.contactbook;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.data.contacts.BasicOrganization;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
 
     @Override
-    public List<Organization> getOrganizations(BigInteger parentId)
+    public List<Organization> getOrganizations(UUID parentId)
     {
         Query q;
         if(parentId != null)
@@ -110,17 +110,17 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     @Override
-    public Organization newOrganization(BigInteger parentId) {
+    public Organization newOrganization(UUID parentId) {
         Organization org = new Organization();
         org.setParentId(parentId);
-        org.setDefaultCurrency(Currency.Leva.getDbResource());
+        org.setDefaultCurrency(Currency.BGN.getDbResource());
         return org;
     }
 
     @Override
     public BasicOrganization newBasicOrganization() {
         BasicOrganization basicOrganization = new BasicOrganization();
-        basicOrganization.setDefaultCurrency(Currency.Leva.getDbResource());
+        basicOrganization.setDefaultCurrency(Currency.BGN.getDbResource());
         return basicOrganization;
     }
 
@@ -208,7 +208,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     @Override
-    public List<Address> getAddresses(BigInteger parentId) {
+    public List<Address> getAddresses(UUID parentId) {
        return locationsManager.getAddresses(parentId);
     }
 

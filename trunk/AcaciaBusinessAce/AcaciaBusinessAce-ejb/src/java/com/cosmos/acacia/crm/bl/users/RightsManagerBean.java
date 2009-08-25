@@ -23,7 +23,7 @@ import com.cosmos.acacia.crm.data.permission.DataObjectPermission;
 import com.cosmos.acacia.crm.data.permission.DataObjectTypePermission;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessRight;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.TreeSet;
@@ -305,7 +305,7 @@ public class RightsManagerBean
                 }
             }
 
-            BigInteger parentDataObjectId;
+            UUID parentDataObjectId;
             if ((parentDataObjectId = tmpDataObject.getParentDataObjectId()) != null)
                 tmpDataObject = em.find(DataObject.class, parentDataObjectId);
             else

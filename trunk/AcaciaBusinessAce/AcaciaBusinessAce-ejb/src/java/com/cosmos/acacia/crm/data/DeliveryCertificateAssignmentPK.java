@@ -6,9 +6,10 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -18,39 +19,41 @@ import javax.persistence.Embeddable;
 public class DeliveryCertificateAssignmentPK implements Serializable{
     
     @Column(name = "delivery_certificate_id", nullable = false)
-    private BigInteger deliveryCertificateId;
+    @Type(type="uuid")
+    private UUID deliveryCertificateId;
 
     @Column(name = "document_id", nullable = false)
-    private BigInteger documentId;
+    @Type(type="uuid")
+    private UUID documentId;
 
     public DeliveryCertificateAssignmentPK() {
     }
 
-    public DeliveryCertificateAssignmentPK(BigInteger deliveryCertificateId, BigInteger documentId) {
+    public DeliveryCertificateAssignmentPK(UUID deliveryCertificateId, UUID documentId) {
         this.deliveryCertificateId = deliveryCertificateId;
         this.documentId = documentId;
     }
 
-    public BigInteger getDeliveryCertificateId() {
+    public UUID getDeliveryCertificateId() {
         return deliveryCertificateId;
     }
 
-    public void setDeliveryCertificateId(BigInteger deliveryCertificateId) {
+    public void setDeliveryCertificateId(UUID deliveryCertificateId) {
         this.deliveryCertificateId = deliveryCertificateId;
     }
 
-    public BigInteger getDocumentId() {
+    public UUID getDocumentId() {
         return documentId;
     }
 
-    public void setDocumentId(BigInteger documentId) {
+    public void setDocumentId(UUID documentId) {
         this.documentId = documentId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += deliveryCertificateId.intValue();
+        hash += deliveryCertificateId.hashCode();
         hash += (documentId != null ? documentId.hashCode() : 0);
         return hash;
     }

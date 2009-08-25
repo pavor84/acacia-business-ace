@@ -11,7 +11,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -58,7 +59,8 @@ public class City
     @Id
     @Column(name = "city_id", nullable = false)
     @Property(title="City Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger cityId;
+    @Type(type="uuid")
+    private UUID cityId;
 
     @Column(name = "city_name", nullable = false)
     @Property(title="Name", propertyValidator=
@@ -96,20 +98,20 @@ public class City
     public City() {
     }
 
-    public City(BigInteger cityId) {
+    public City(UUID cityId) {
         this.cityId = cityId;
     }
 
-    public City(BigInteger cityId, String cityName) {
+    public City(UUID cityId, String cityName) {
         this.cityId = cityId;
         this.cityName = cityName;
     }
 
-    public BigInteger getCityId() {
+    public UUID getCityId() {
         return cityId;
     }
 
-    public void setCityId(BigInteger cityId) {
+    public void setCityId(UUID cityId) {
         this.cityId = cityId;
     }
 
@@ -206,22 +208,22 @@ public class City
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getCityId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setCityId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return null; //TODO
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         //TODO
     }
 

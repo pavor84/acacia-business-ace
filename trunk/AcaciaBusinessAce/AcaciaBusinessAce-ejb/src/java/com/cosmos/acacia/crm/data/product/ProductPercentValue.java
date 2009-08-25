@@ -3,10 +3,9 @@
  */
 package com.cosmos.acacia.crm.data.product;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +19,8 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 
 /**
  * Created	:	04.01.2009
@@ -76,7 +77,8 @@ public class ProductPercentValue extends DataObjectBean implements Serializable{
     
     @Id
     @Column(name = "percent_value_id", nullable = false)
-    private BigInteger valueId;
+    @org.hibernate.annotations.Type(type="uuid")
+    private UUID valueId;
     
     @Column(name = "value_name", nullable = false)
     @Property(title="Value Name",
@@ -93,28 +95,29 @@ public class ProductPercentValue extends DataObjectBean implements Serializable{
     private Type type;
     
     @Column(name = "organization_id")
-    private BigInteger organizationId;
+    @org.hibernate.annotations.Type(type="uuid")
+    private UUID organizationId;
 
     @JoinColumn(name = "percent_value_id", referencedColumnName = "data_object_id",
         insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return getOrganizationId();
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         setOrganizationId(parentId);
     }
 
@@ -147,7 +150,7 @@ public class ProductPercentValue extends DataObjectBean implements Serializable{
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return valueId;
     }
 
@@ -162,15 +165,15 @@ public class ProductPercentValue extends DataObjectBean implements Serializable{
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setValueId(id);
     }
 
-    public BigInteger getValueId() {
+    public UUID getValueId() {
         return valueId;
     }
 
-    public void setValueId(BigInteger valueId) {
+    public void setValueId(UUID valueId) {
         this.valueId = valueId;
     }
 

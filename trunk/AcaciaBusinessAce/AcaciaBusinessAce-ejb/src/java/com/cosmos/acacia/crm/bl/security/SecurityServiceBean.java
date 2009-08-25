@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
@@ -34,6 +35,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public static final String PK_PRIVILEGE_TYPE = "privilegeType";
     public static final String PK_BUSINESS_UNIT = "businessUnit";
     public static final String PK_USER = "user";
+    public static final String PK_USER_ORGANIZATION = "userOrganization";
     public static final String PK_SECURITY_ROLE = "securityRole";
     public static final String PK_EXPIRES = "expires";
     //
@@ -53,10 +55,10 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         return new ArrayList<SecurityRole>(q.getResultList());
     }
 
-    public List<SecurityRole> getSecurityRoles(User user, UserSecurityRole userSecurityRole) {
-        Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_USER);
+    public List<SecurityRole> getSecurityRoles(UserOrganization userOrganization, UserSecurityRole userSecurityRole) {
+        Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_USER_ORGANIZATION);
         q.setParameter(PK_ORGANIZATION, session.getOrganization());
-        q.setParameter(PK_USER, user);
+        q.setParameter(PK_USER_ORGANIZATION, userOrganization);
         List<SecurityRole> securityRoles = new ArrayList<SecurityRole>(q.getResultList());
         SecurityRole securityRole;
         if(userSecurityRole != null && (securityRole = userSecurityRole.getSecurityRole()) != null
@@ -109,8 +111,8 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
                 return (List<E>) getSecurityRoles();
             } else if((parameter = extraParameters[0]) instanceof BusinessUnit) {
                 return (List<E>) getSecurityRoles((BusinessUnit) parameter);
-            } else if(parameter instanceof User) {
-                return (List<E>) getSecurityRoles((User) parameter, (UserSecurityRole) extraParameters[1]);
+            } else if(parameter instanceof UserOrganization) {
+                return (List<E>) getSecurityRoles((UserOrganization) parameter, (UserSecurityRole) extraParameters[1]);
             }
         } else if(PrivilegeCategory.class == entityClass) {
             if(extraParameters.length == 0) {

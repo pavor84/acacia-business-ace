@@ -14,7 +14,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,6 +26,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -53,7 +54,8 @@ public class AssemblingSchemaItem
     @Id
     @Property(title="Item Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Column(name = "item_id", nullable = false)
-    private BigInteger itemId;
+    @Type(type="uuid")
+    private UUID itemId;
 
     @JoinColumn(name = "assembling_schema_id", referencedColumnName = "product_id", nullable=false)
     @ManyToOne
@@ -121,15 +123,15 @@ public class AssemblingSchemaItem
     public AssemblingSchemaItem() {
     }
 
-    public AssemblingSchemaItem(BigInteger itemId) {
+    public AssemblingSchemaItem(UUID itemId) {
         this.itemId = itemId;
     }
 
-    public BigInteger getItemId() {
+    public UUID getItemId() {
         return itemId;
     }
 
-    public void setItemId(BigInteger itemId) {
+    public void setItemId(UUID itemId) {
         this.itemId = itemId;
     }
 
@@ -260,7 +262,7 @@ public class AssemblingSchemaItem
     }
 
     @Override
-    public BigInteger getParentId()
+    public UUID getParentId()
     {
         if(assemblingSchema != null)
             return assemblingSchema.getProductId();
@@ -269,19 +271,19 @@ public class AssemblingSchemaItem
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
+    public void setParentId(UUID parentId)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public BigInteger getId()
+    public UUID getId()
     {
         return getItemId();
     }
 
     @Override
-    public void setId(BigInteger id)
+    public void setId(UUID id)
     {
         setItemId(id);
     }

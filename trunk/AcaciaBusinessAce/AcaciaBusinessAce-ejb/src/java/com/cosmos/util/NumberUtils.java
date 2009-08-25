@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.util;
 
 import java.math.BigInteger;
@@ -12,36 +11,32 @@ import java.util.UUID;
  *
  * @author Miro
  */
-public class NumberUtils
-{
-    public static byte[] toByteArray(short value)
-    {
+public class NumberUtils {
+
+    public static final UUID ZERO_UUID = new UUID(0, 0);
+
+    public static byte[] toByteArray(short value) {
         return toByteArray(value, 2);
     }
 
-    public static byte[] toByteArray(int value)
-    {
+    public static byte[] toByteArray(int value) {
         return toByteArray(value, 4);
     }
 
-    public static byte[] toByteArray(long value)
-    {
+    public static byte[] toByteArray(long value) {
         return toByteArray(value, 8);
     }
 
-    public static byte[] toByteArray(UUID uuid)
-    {
+    public static byte[] toByteArray(UUID uuid) {
         byte[] firstBytes = toByteArray(uuid.getMostSignificantBits());
         byte[] secondBytes = toByteArray(uuid.getLeastSignificantBits());
         return append(firstBytes, secondBytes);
     }
 
-    private static byte[] toByteArray(long value, int length)
-    {
+    private static byte[] toByteArray(long value, int length) {
         byte[] result = new byte[length];
-        for(int i = 0; i < length; i++)
-        {
-            result[i] = (byte)(value & 0xFF);
+        for (int i = 0; i < length; i++) {
+            result[i] = (byte) (value & 0xFF);
             value >>>= 8;
         }
 
@@ -55,101 +50,92 @@ public class NumberUtils
      * @param b A byte[].
      * @return A byte[].
      */
-    public static byte[] append(byte[] a, byte[] b)
-    {
+    public static byte[] append(byte[] a, byte[] b) {
         byte[] z = new byte[a.length + b.length];
         System.arraycopy(a, 0, z, 0, a.length);
         System.arraycopy(b, 0, z, a.length, b.length);
         return z;
     }
 
-    public static short toShort(byte[] value)
-    {
+    public static short toShort(byte[] value) {
         return toShort(value, 0);
     }
 
-    public static short toShort(byte[] value, int beginPos)
-    {
-        return (short)toNumber(value, beginPos, 2);
+    public static short toShort(byte[] value, int beginPos) {
+        return (short) toNumber(value, beginPos, 2);
     }
 
-    public static int toInt(byte[] value)
-    {
+    public static int toInt(byte[] value) {
         return toInt(value, 0);
     }
 
-    public static int toInt(byte[] value, int beginPos)
-    {
-        return (int)toNumber(value, beginPos, 4);
+    public static int toInt(byte[] value, int beginPos) {
+        return (int) toNumber(value, beginPos, 4);
     }
 
-    public static long toLong(byte[] value)
-    {
+    public static long toLong(byte[] value) {
         return toLong(value, 0);
     }
 
-    public static long toLong(byte[] value, int beginPos)
-    {
+    public static long toLong(byte[] value, int beginPos) {
         return toNumber(value, beginPos, 8);
     }
 
-    private static long toNumber(byte[] value, int beginPos, int length)
-    {
-        if(value == null || value.length == 0)
+    private static long toNumber(byte[] value, int beginPos, int length) {
+        if (value == null || value.length == 0) {
             return 0;
+        }
 
-        if(length > 8)
+        if (length > 8) {
             length = 8;
+        }
 
-        if((beginPos + length) > value.length)
+        if ((beginPos + length) > value.length) {
             length = value.length - beginPos;
+        }
 
-        if(length == 0)
+        if (length == 0) {
             return 0;
+        }
 
         int endPos = beginPos + length;
         long result = 0;
-        for(int i = (endPos - 1); i >= beginPos; i--)
-        {
+        for (int i = (endPos - 1); i >= beginPos; i--) {
             int b = value[i] & 0xFF;
             result |= b;
-            if(i > beginPos)
+            if (i > beginPos) {
                 result <<= 8;
+            }
         }
 
         return result;
     }
 
-    public static UUID toUUID(byte[] value)
-    {
+    public static UUID toUUID(byte[] value) {
         return toUUID(value, 0);
     }
 
-    public static UUID toUUID(byte[] value, int beginPos)
-    {
-        if(value.length < beginPos + 16)
+    public static UUID toUUID(byte[] value, int beginPos) {
+        if (value.length < beginPos + 16) {
             throw new IllegalArgumentException("The length (" + value.length +
                     ") of bytes is less than required (" + beginPos + 16 + ").");
+        }
 
         long mostSigBits = toLong(value, beginPos);
         long leastSigBits = toLong(value, beginPos + 8);
         return new UUID(mostSigBits, leastSigBits);
     }
 
-    public static UUID toUUID(BigInteger intValue)
-    {
+    public static UUID toUUID(BigInteger intValue) {
         return toUUID(intValue.toByteArray());
     }
 
-    public static BigInteger toBigInteger(UUID uuid)
-    {
+    public static BigInteger toBigInteger(UUID uuid) {
         return new BigInteger(toByteArray(uuid));
     }
 
-    public static void main(String[] args)
-    {
-        try
-        {
+    public static void main(String[] args) {
+        try {
             long l = 123456;
             System.out.println("l: " + l);
             byte[] ba = toByteArray(l);
@@ -198,11 +184,8 @@ public class NumberUtils
             System.out.println("uuid1.equals(uuid2): " + uuid1.equals(uuid2));
             BigInteger intValue2 = toBigInteger(uuid2);
             System.out.println("intValue1.equals(intValue2): " + intValue1.equals(intValue2));
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 }

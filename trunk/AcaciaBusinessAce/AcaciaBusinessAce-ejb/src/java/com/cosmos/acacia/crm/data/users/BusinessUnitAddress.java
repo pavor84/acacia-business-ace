@@ -20,7 +20,7 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +32,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -77,7 +78,8 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
     @Id
     @Basic(optional = false)
     @Column(name = "business_unit_address_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger businessUnitAddressId;
+    @Type(type="uuid")
+    private UUID businessUnitAddressId;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
@@ -197,15 +199,15 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
     public BusinessUnitAddress() {
     }
 
-    public BusinessUnitAddress(BigInteger businessUnitAddressId) {
+    public BusinessUnitAddress(UUID businessUnitAddressId) {
         this.businessUnitAddressId = businessUnitAddressId;
     }
 
-    public BigInteger getBusinessUnitAddressId() {
+    public UUID getBusinessUnitAddressId() {
         return businessUnitAddressId;
     }
 
-    public void setBusinessUnitAddressId(BigInteger businessUnitAddressId) {
+    public void setBusinessUnitAddressId(UUID businessUnitAddressId) {
         this.businessUnitAddressId = businessUnitAddressId;
     }
 
@@ -268,17 +270,17 @@ public class BusinessUnitAddress extends DataObjectBean implements Serializable 
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getBusinessUnitAddressId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setBusinessUnitAddressId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(businessUnit != null) {
             return businessUnit.getId();
         }

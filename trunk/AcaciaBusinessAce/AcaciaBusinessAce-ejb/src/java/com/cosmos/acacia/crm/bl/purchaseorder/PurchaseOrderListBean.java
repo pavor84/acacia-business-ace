@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.purchaseorder;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +37,8 @@ import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.validation.impl.PurchaseOrderItemValidatorLocal;
 import com.cosmos.acacia.crm.validation.impl.PurchaseOrderValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
+import java.math.BigInteger;
+import javax.persistence.NoResultException;
 
 /**
  * Created	:	04.05.2008
@@ -167,7 +169,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     public PurchaseOrder savePurchaseOrder(PurchaseOrder po) {
 
         //if new order - set some numbers
-        if (po.getOrderNumber() == null || po.getOrderNumber().equals(new BigInteger("0"))) {
+        if (po.getOrderNumber() == null || po.getOrderNumber().equals(BigInteger.ZERO)) {
             documentNumberLocal.setDocumentNumber(po);
             BigInteger sequenceNumber = getNextSequenceNumber(po);
             po.setSupplierOrderNumber(sequenceNumber);
@@ -185,11 +187,12 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         q.setParameter("parentDataObjectId", po.getParentId());
         q.setParameter("supplier", po.getSupplier());
 
-        BigInteger n = (BigInteger) q.getSingleResult();
-        if (n == null) {
-            return new BigInteger("1");
-        } else {
-            return n.add(new BigInteger("1"));
+        BigInteger number;
+        try {
+            number = (BigInteger) q.getSingleResult();
+            return number.add(BigInteger.ONE);
+        } catch(NoResultException ex) {
+            return BigInteger.ONE;
         }
     }
 
@@ -222,7 +225,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<PurchaseOrderItem> getOrderItems(BigInteger parentDataObjectId) {
+    public List<PurchaseOrderItem> getOrderItems(UUID parentDataObjectId) {
         if (parentDataObjectId == null) {
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         }
@@ -236,10 +239,10 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     }
 
     @Override
-    public PurchaseOrderItem newOrderItem(BigInteger parentDataObjectId) {
+    public PurchaseOrderItem newOrderItem(UUID parentDataObjectId) {
         PurchaseOrderItem item = new PurchaseOrderItem();
         item.setParentId(parentDataObjectId);
-        item.setCurrency(Currency.Leva.getDbResource());
+        item.setCurrency(Currency.BGN.getDbResource());
         item.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         return item;
     }
@@ -337,7 +340,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     }
 
     @Override
-    public PurchaseOrder getPurchaseOrder(BigInteger id) {
+    public PurchaseOrder getPurchaseOrder(UUID id) {
         if (id == null) {
             throw new IllegalArgumentException("Please provide 'id' parameter");
         }
@@ -345,7 +348,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         return result;
     }
 
-    private BigInteger getOrganizationId() {
+    private UUID getOrganizationId() {
         return acaciaSession.getOrganization().getId();
     }
 

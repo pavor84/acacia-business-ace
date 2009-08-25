@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.data.sales;
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -24,6 +24,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import org.hibernate.annotations.Type;
 
 /**
  * Created	:	28.12.2008
@@ -123,20 +124,22 @@ public class Pricelist extends DataObjectBean implements Serializable {
     
     @Id
     @Column(name = "pricelist_id", nullable = false)
-    private BigInteger pricelistId;
+    @Type(type="uuid")
+    private UUID pricelistId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "pricelist_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -171,7 +174,7 @@ public class Pricelist extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return pricelistId;
     }
 
@@ -186,15 +189,15 @@ public class Pricelist extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPricelistId(id);
     }
 
-    public BigInteger getPricelistId() {
+    public UUID getPricelistId() {
         return pricelistId;
     }
 
-    public void setPricelistId(BigInteger pricelistId) {
+    public void setPricelistId(UUID pricelistId) {
         this.pricelistId = pricelistId;
     }
 

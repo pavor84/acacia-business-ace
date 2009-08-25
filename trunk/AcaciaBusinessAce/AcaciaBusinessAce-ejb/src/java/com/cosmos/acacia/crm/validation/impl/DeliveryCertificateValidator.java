@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.validation.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class DeliveryCertificateValidator implements DeliveryCertificateValidato
 	public void validate(DeliveryCertificate entity, DeliveryCertificateAssignment assignment, List<DeliveryCertificateItem> items) throws ValidationException {
 		
 		ValidationException ve = new ValidationException();
-		BigInteger assignmentId = assignment.getDocumentId(); 
+		UUID assignmentId = assignment.getDocumentId(); 
     	Invoice invoice = invoicesBean.getInvoiceById(assignmentId);
     	
     	if(DeliveryStatus.Delivered.equals(invoice.getDeliveryStatus().getEnumValue()))

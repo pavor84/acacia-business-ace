@@ -18,7 +18,7 @@ import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +30,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -37,7 +38,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "team_members", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"team_id", "user_id"})
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"team_id", "user_organization_id"})
 })
 @NamedQueries({
     @NamedQuery(
@@ -47,11 +48,11 @@ import javax.persistence.UniqueConstraint;
                 "  t.team = :team"
     ),
     @NamedQuery(
-        name = TeamMember.NQ_FIND_BY_USER,
+        name = TeamMember.NQ_FIND_BY_USER_ORGANIZATION,
         query = "SELECT t FROM TeamMember t" +
                 " WHERE" +
                 "  t.team.organization = :organization" +
-                "  and t.user = :user"
+                "  and t.userOrganization = :userOrganization"
     )
 })
 @Form(
@@ -63,23 +64,24 @@ public class TeamMember extends DataObjectBean implements Serializable {
     //
     protected static final String CLASS_NAME = "TeamMember";
     public static final String NQ_FIND_BY_TEAM = CLASS_NAME + ".findByTeam";
-    public static final String NQ_FIND_BY_USER = CLASS_NAME + ".findByUser";
+    public static final String NQ_FIND_BY_USER_ORGANIZATION = CLASS_NAME + ".findByUserOrganization";
     //
     @Id
     @Basic(optional = false)
     @Column(name = "team_member_id", nullable = false, precision = 19, scale = 0)
-    private BigInteger teamMemberId;
+    @Type(type="uuid")
+    private UUID teamMemberId;
 
     @JoinColumn(name = "team_id", referencedColumnName = "team_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Team")
     private Team team;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_organization_id", referencedColumnName = "user_organization_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="User",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.users.UserListPanel"
+            className="com.cosmos.acacia.crm.gui.users.UserOrganizationListPanel"
         ),
         formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
@@ -92,7 +94,7 @@ public class TeamMember extends DataObjectBean implements Serializable {
             )
         )
     )
-    private User user;
+    private UserOrganization userOrganization;
 
     @JoinColumn(name = "status_id", referencedColumnName = "resource_id", nullable = false)
     @ManyToOne(optional = false)
@@ -123,15 +125,15 @@ public class TeamMember extends DataObjectBean implements Serializable {
     public TeamMember() {
     }
 
-    public TeamMember(BigInteger teamMemberId) {
+    public TeamMember(UUID teamMemberId) {
         this.teamMemberId = teamMemberId;
     }
 
-    public BigInteger getTeamMemberId() {
+    public UUID getTeamMemberId() {
         return teamMemberId;
     }
 
-    public void setTeamMemberId(BigInteger teamMemberId) {
+    public void setTeamMemberId(UUID teamMemberId) {
         this.teamMemberId = teamMemberId;
     }
 
@@ -153,12 +155,12 @@ public class TeamMember extends DataObjectBean implements Serializable {
         this.team = team;
     }
 
-    public User getUser() {
-        return user;
+    public UserOrganization getUserOrganization() {
+        return userOrganization;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserOrganization(UserOrganization userOrganization) {
+        this.userOrganization = userOrganization;
     }
 
     public DbResource getStatus() {
@@ -170,17 +172,17 @@ public class TeamMember extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getTeamMemberId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setTeamMemberId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(team != null) {
             return team.getId();
         }
@@ -190,12 +192,12 @@ public class TeamMember extends DataObjectBean implements Serializable {
 
     @Override
     public String getInfo() {
-        if(team == null && user == null) {
+        if(team == null && userOrganization == null) {
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(team).append(":").append(user);
+        sb.append(team).append(":").append(userOrganization);
 
         return sb.toString();
     }

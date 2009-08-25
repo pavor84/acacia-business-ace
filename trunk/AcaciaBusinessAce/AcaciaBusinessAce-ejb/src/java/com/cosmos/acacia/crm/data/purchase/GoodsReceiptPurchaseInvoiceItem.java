@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.data.purchase;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -40,7 +40,7 @@ public class GoodsReceiptPurchaseInvoiceItem extends GoodsReceiptItem implements
         super(DISCRIMINATOR_VALUE);
     }
 
-    public GoodsReceiptPurchaseInvoiceItem(BigInteger receiptItemId) {
+    public GoodsReceiptPurchaseInvoiceItem(UUID receiptItemId) {
         super(DISCRIMINATOR_VALUE, receiptItemId);
     }
 

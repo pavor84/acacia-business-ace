@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -30,7 +30,7 @@ public interface PricelistRemote {
      * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<Pricelist> listPricelists(BigInteger parentDataObjectId);
+    List<Pricelist> listPricelists(UUID parentDataObjectId);
 
     /**
      * Deletes the pricelist, - if the integrity is violated, throws an {@link ValidationException} 
@@ -44,7 +44,7 @@ public interface PricelistRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    Pricelist newPricelist(BigInteger parentDataObjectId);
+    Pricelist newPricelist(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view
@@ -70,7 +70,7 @@ public interface PricelistRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<PricelistItem> getPricelistItems(BigInteger parentDataObjectId);
+    List<PricelistItem> getPricelistItems(UUID parentDataObjectId);
 
     /**
      * Delete pricelist item.
@@ -84,7 +84,7 @@ public interface PricelistRemote {
      * @param parentDataObjectId
      * @return
      */
-    PricelistItem newPricelistItem(BigInteger parentDataObjectId);
+    PricelistItem newPricelistItem(UUID parentDataObjectId);
 
     /**
      * Save an item

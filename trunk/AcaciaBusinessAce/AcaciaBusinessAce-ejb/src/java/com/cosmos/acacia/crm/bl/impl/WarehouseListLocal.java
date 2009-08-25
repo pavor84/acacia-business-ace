@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.impl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.Local;
 

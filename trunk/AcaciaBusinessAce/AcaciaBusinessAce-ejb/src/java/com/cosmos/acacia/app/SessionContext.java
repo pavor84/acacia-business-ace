@@ -12,23 +12,32 @@ import java.util.Map;
 public interface SessionContext {
 
     /** Login organization */
-    static String ORGANIZATION_KEY = "ORGANIZATION_KEY";
+    static final String ORGANIZATION_KEY = "ORGANIZATION_KEY";
     /** Logged user */
-    static String USER_KEY = "USER_KEY";
+    static final String USER_KEY = "USER_KEY";
+    /** Login organization */
+    static final String USER_ORGANIZATION_KEY = "USER_ORGANIZATION_KEY";
     /** Current user's locale */
-    static String USER_LOCALE = "LOCALE_KEY";
+    static final String USER_LOCALE = "LOCALE_KEY";
     /** Current user's login branch */
-    static String BRANCH_KEY = "BRANCH_KEY";
+    static final String BRANCH_KEY = "BRANCH_KEY";
     /** Currently logged person */
-    static String PERSON_KEY = "PERSON_KEY";
+    static final String PERSON_KEY = "PERSON_KEY";
     /** Currently logged contact person */
-    static String CONTACT_PERSON_KEY = "CONTACT_PERSON_KEY";
+    static final String CONTACT_PERSON_KEY = "CONTACT_PERSON_KEY";
     /** Whether data from all branches should be presented */
-    static String VIEW_DATA_FROM_ALL_BRANCHES_KEY = "VIEW_DATA_FROM_ALL_BRANCHES_KEY";
+    static final String VIEW_DATA_FROM_ALL_BRANCHES_KEY = "VIEW_DATA_FROM_ALL_BRANCHES_KEY";
     /** Currently logged person */
-    static String GENERAL_RIGHTS_KEY = "GENERAL_RIGHTS_KEY";
+    static final String GENERAL_RIGHTS_KEY = "GENERAL_RIGHTS_KEY";
     /** Currently logged person */
-    static String SPECIAL_PERMISSIONS_KEY = "SPECIAL_PERMISSIONS_KEY";
+    static final String SPECIAL_PERMISSIONS_KEY = "SPECIAL_PERMISSIONS_KEY";
+    /** The System Mail Utils */
+    static final String SYSTEM_MAIL_UTILS_KEY = "SYSTEM_MAIL_UTILS_KEY";
+    /** The Organization Mail Utils */
+    static final String ORGANIZATION_MAIL_UTILS_KEY = "ORGANIZATION_MAIL_UTILS_KEY";
+    /** The User Mail Utils */
+    static final String USER_MAIL_UTILS_KEY = "USER_MAIL_UTILS_KEY";
+    
 
     /** Acacia Properties */
     static String ACACIA_PROPERTIES = "ACACIA_PROPERTIES";

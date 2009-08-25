@@ -4,7 +4,6 @@
  */
 package com.cosmos.acacia.crm.data.test;
 
-import com.cosmos.persistence.hibernate.usertype.UuidUserType;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -15,7 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 /**
  *

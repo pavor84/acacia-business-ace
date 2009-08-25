@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.purchaseorder;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -39,7 +39,7 @@ public interface OrderConfirmationListRemote {
      * @param parentDataObjectId - mandatory
      * @return not null list
      */
-    List<OrderConfirmation> listOrderConfirmations(BigInteger parentDataObjectId);
+    List<OrderConfirmation> listOrderConfirmations(UUID parentDataObjectId);
 
     /**
      * Deletes the order, - if the integrity is violated, throws an {@link ValidationException} 
@@ -53,7 +53,7 @@ public interface OrderConfirmationListRemote {
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    OrderConfirmation newOrderConfirmation(BigInteger parentDataObjectId);
+    OrderConfirmation newOrderConfirmation(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view
@@ -86,7 +86,7 @@ public interface OrderConfirmationListRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<OrderConfirmationItem> getOrderItems(BigInteger parentDataObjectId);
+    List<OrderConfirmationItem> getOrderItems(UUID parentDataObjectId);
 
     /**
      * Delete order item
@@ -99,7 +99,7 @@ public interface OrderConfirmationListRemote {
      * @param parentDataObjectId
      * @return
      */
-    OrderConfirmationItem newOrderItem(BigInteger parentDataObjectId);
+    OrderConfirmationItem newOrderItem(UUID parentDataObjectId);
 
     /**
      * Save an item
@@ -138,7 +138,7 @@ public interface OrderConfirmationListRemote {
      * @param parentId
      * @return
      */
-    List<OrderConfirmationItem> getPendingItems(BigInteger parentId);
+    List<OrderConfirmationItem> getPendingItems(UUID parentId);
 
     /**
      * Return all order confirmations that have free items for matching.
@@ -146,7 +146,7 @@ public interface OrderConfirmationListRemote {
      * @param forBranch 
      * @return
      */
-    List<OrderConfirmation> getPendingConfirmations(BigInteger parentDataObjectId, Address branch);
+    List<OrderConfirmation> getPendingConfirmations(UUID parentDataObjectId, Address branch);
 
     /**
      * Match {@link OrderConfirmationItem} with {@link PurchaseOrderItem}

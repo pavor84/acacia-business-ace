@@ -1,7 +1,6 @@
 package com.cosmos.acacia.crm.security;
 
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -150,7 +149,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
 
             allowed = isAllowedToViewAll
             || dob.getDataObject().getOwnerId().equals(session.getBranch().getId())
-            || dob.getDataObject().getOwnerId().equals(BigInteger.ZERO);
+            /*|| dob.getDataObject().getOwnerId().equals(BigInteger.ZERO)*/;
 
             if (allowed)
                 allowed = manager.isAllowed(
@@ -194,7 +193,7 @@ public class PermissionsManager implements PermissionsManagerLocal {
                     DataObjectBean dob = ((DataObjectBean) obj);
                     boolean isBranchMember = isAllowedToViewAll
                     || dob.getDataObject().getOwnerId().equals(session.getBranch().getId())
-                    || dob.getDataObject().getOwnerId().equals(BigInteger.ZERO);
+                    /*|| dob.getDataObject().getOwnerId().equals(BigInteger.ZERO)*/;
 
                     if (!isBranchMember) {
                         tmpCollection.remove(obj);

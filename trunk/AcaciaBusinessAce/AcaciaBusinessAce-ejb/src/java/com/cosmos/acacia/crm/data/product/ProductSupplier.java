@@ -13,7 +13,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.util.CloneableBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -124,7 +124,7 @@ public class ProductSupplier implements Serializable, CloneableBean<ProductSuppl
         this.productSupplierPK = productSupplierPK;
     }
 
-    public ProductSupplier(BigInteger productId, BigInteger supplierId) {
+    public ProductSupplier(UUID productId, UUID supplierId) {
         this.productSupplierPK = new ProductSupplierPK(productId, supplierId);
     }
 

@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -32,10 +33,12 @@ public class DataObjectLink
 
     @Id
     @Column(name = "data_object_link_id", nullable = false)
-    private BigInteger dataObjectLinkId;
+    @Type(type="uuid")
+    private UUID dataObjectLinkId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "linked_data_object_id", referencedColumnName = "data_object_id")
     @ManyToOne
@@ -55,28 +58,28 @@ public class DataObjectLink
     public DataObjectLink() {
     }
 
-    public DataObjectLink(BigInteger dataObjectLinkId) {
+    public DataObjectLink(UUID dataObjectLinkId) {
         this.dataObjectLinkId = dataObjectLinkId;
     }
 
-    public DataObjectLink(BigInteger dataObjectLinkId, String linkName) {
+    public DataObjectLink(UUID dataObjectLinkId, String linkName) {
         this.dataObjectLinkId = dataObjectLinkId;
         this.linkName = linkName;
     }
 
-    public BigInteger getDataObjectLinkId() {
+    public UUID getDataObjectLinkId() {
         return dataObjectLinkId;
     }
 
-    public void setDataObjectLinkId(BigInteger dataObjectLinkId) {
+    public void setDataObjectLinkId(UUID dataObjectLinkId) {
         this.dataObjectLinkId = dataObjectLinkId;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -152,12 +155,12 @@ public class DataObjectLink
 
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getDataObjectLinkId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setDataObjectLinkId(id);
     }
     

@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.bl.reports;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -382,7 +382,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
                     if (DbResource.class.isAssignableFrom(field.getValueClass()))
                         expr.setText("ReportsUtil.getEnumText($F{" + field.getName() + "})");
 
-                } else if (field.getValueClass() == BigInteger.class
+                } else if (field.getValueClass() == UUID.class
                         || field.getValueClass() == BigDecimal.class
                         || field.getValueClass() == Integer.class) {
 
@@ -515,7 +515,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         {
             textFieldClassNames = (new String[] {
                 (java.lang.Boolean.class).getName(), (java.lang.Byte.class).getName(), (java.util.Date.class).getName(), (java.sql.Timestamp.class).getName(), (java.sql.Time.class).getName(), (java.lang.Double.class).getName(), (java.lang.Float.class).getName(), (java.lang.Integer.class).getName(), (java.lang.Long.class).getName(), (java.lang.Short.class).getName(),
-                (java.math.BigDecimal.class).getName(), (java.math.BigInteger.class).getName(), (java.lang.Number.class).getName(), (java.lang.String.class).getName()
+                (java.math.BigDecimal.class).getName(), (java.util.UUID.class).getName(), (java.lang.Number.class).getName(), (java.lang.String.class).getName()
             });
             Arrays.sort(textFieldClassNames);
         }

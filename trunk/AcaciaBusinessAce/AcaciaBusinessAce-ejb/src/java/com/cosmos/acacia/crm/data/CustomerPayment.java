@@ -7,7 +7,7 @@ import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,6 +25,8 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import java.math.BigInteger;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "customer_payments")
@@ -109,7 +111,8 @@ import com.cosmos.acacia.annotation.ValidationType;
 public class CustomerPayment extends DataObjectBean implements Serializable {
     @Id
     @Column(name = "payment_id", nullable = false)
-    private BigInteger paymentId;
+    @Type(type="uuid")
+    private UUID paymentId;
     
     @Property(title="Doc. Number", editable=false)
     @Column(name = "document_number")
@@ -165,7 +168,8 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     private Date transactionDate;
     
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
     
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -214,11 +218,11 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     @OneToOne
     private DataObject dataObject;
     
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -253,7 +257,7 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return paymentId;
     }
 
@@ -268,15 +272,15 @@ public class CustomerPayment extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setPaymentId(id);
     }
 
-    public BigInteger getPaymentId() {
+    public UUID getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(BigInteger paymentId) {
+    public void setPaymentId(UUID paymentId) {
         this.paymentId = paymentId;
     }
 

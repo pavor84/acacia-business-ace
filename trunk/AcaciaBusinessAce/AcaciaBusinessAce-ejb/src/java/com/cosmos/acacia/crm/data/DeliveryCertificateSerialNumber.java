@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -60,7 +60,7 @@ public class DeliveryCertificateSerialNumber implements Serializable, CloneableB
         this.deliveryCertificateSerialNumberPK = deliveryCertificateSerialNumberPK;
     }
 
-    public DeliveryCertificateSerialNumber(BigInteger certificateItemId, String serialNumber) {
+    public DeliveryCertificateSerialNumber(UUID certificateItemId, String serialNumber) {
         this.deliveryCertificateSerialNumberPK = new DeliveryCertificateSerialNumberPK(certificateItemId, serialNumber);
     }
 

@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.math.MathContext;
 
 import javax.persistence.Column;
@@ -74,7 +74,7 @@ import javax.persistence.Transient;
             (
                 /**
                  * Parameters:
-                 * - categoryIds - Collection<BigInteger>
+                 * - categoryIds - Collection<UUID>
                  */
                 name = "SimpleProduct.findByCategories",
                 query = "select p from SimpleProduct p where p.dataObject.deleted = false and p.category.id in (:categoryIds)"
@@ -288,7 +288,7 @@ public class SimpleProduct extends Product implements Serializable
         super(DISCRIMINATOR_SIMPLE_PRODUCT);
     }
 
-    public SimpleProduct(BigInteger productId) {
+    public SimpleProduct(UUID productId) {
         super(DISCRIMINATOR_SIMPLE_PRODUCT, productId);
     }
 
@@ -546,7 +546,7 @@ public class SimpleProduct extends Product implements Serializable
         SimpleProduct product = new SimpleProduct();
         product.setProductName(productName);
         product.setProductCode(productCode);
-        //product.setCategory(BigInteger.ONE);
+        //product.setCategory(UUID.ONE);
         product.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
 
         return product;

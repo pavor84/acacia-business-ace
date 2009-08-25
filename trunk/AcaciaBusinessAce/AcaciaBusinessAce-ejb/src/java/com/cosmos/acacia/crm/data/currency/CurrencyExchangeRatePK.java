@@ -5,13 +5,14 @@
 package com.cosmos.acacia.crm.data.currency;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -22,7 +23,8 @@ public class CurrencyExchangeRatePK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     @Basic(optional = false)
     @Column(name = "valid_from", nullable = false)
@@ -40,18 +42,18 @@ public class CurrencyExchangeRatePK implements Serializable {
     public CurrencyExchangeRatePK() {
     }
 
-    public CurrencyExchangeRatePK(BigInteger organizationId, Date validFrom, int fromCurrencyId, int toCurrencyId) {
+    public CurrencyExchangeRatePK(UUID organizationId, Date validFrom, int fromCurrencyId, int toCurrencyId) {
         this.organizationId = organizationId;
         this.validFrom = validFrom;
         this.fromCurrencyId = fromCurrencyId;
         this.toCurrencyId = toCurrencyId;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 

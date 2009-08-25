@@ -7,7 +7,7 @@ import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.resource.TextResource;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -47,7 +48,8 @@ public class BankDetail
     @Id
     @Column(name = "bank_detail_id", nullable = false)
     @Property(title="Bank Detail ID", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger bankDetailId;
+    @Type(type="uuid")
+    private UUID bankDetailId;
 
     @Column(name = "bank_account")
     @Property(title="Bank Account", propertyValidator=
@@ -96,7 +98,8 @@ public class BankDetail
 
     @Column(name = "parent_id")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @JoinColumn(name = "bank_detail_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -105,21 +108,21 @@ public class BankDetail
     public BankDetail() {
     }
 
-    public BankDetail(BigInteger bankDetailId) {
+    public BankDetail(UUID bankDetailId) {
         this.bankDetailId = bankDetailId;
     }
 
-    public BankDetail(BigInteger bankDetailId, boolean isDefault, String bankAccount) {
+    public BankDetail(UUID bankDetailId, boolean isDefault, String bankAccount) {
         this.bankDetailId = bankDetailId;
         this.isDefault = isDefault;
         this.bankAccount = bankAccount;
     }
 
-    public BigInteger getBankDetailId() {
+    public UUID getBankDetailId() {
         return bankDetailId;
     }
 
-    public void setBankDetailId(BigInteger bankDetailId) {
+    public void setBankDetailId(UUID bankDetailId) {
         this.bankDetailId = bankDetailId;
     }
 
@@ -157,12 +160,12 @@ public class BankDetail
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
     @Override
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -259,12 +262,12 @@ public class BankDetail
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getBankDetailId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setBankDetailId(id);
     }
     

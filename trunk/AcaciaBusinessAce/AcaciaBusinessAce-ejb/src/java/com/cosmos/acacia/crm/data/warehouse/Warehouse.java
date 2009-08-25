@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,6 +22,7 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -95,10 +96,12 @@ public class Warehouse extends DataObjectBean implements Serializable {
 
     @Id
     @Column(name = "warehouse_id", nullable = false)
-    private BigInteger warehouseId;
+    @Type(type="uuid")
+    private UUID warehouseId;
 
     @Column(name = "parent_id")
-    private BigInteger parentId;
+    @Type(type="uuid")
+    private UUID parentId;
 
     @Property(title="Location", customDisplay="${address.addressName}", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -130,23 +133,23 @@ public class Warehouse extends DataObjectBean implements Serializable {
     public Warehouse() {
     }
 
-    public Warehouse(BigInteger warehouseId) {
+    public Warehouse(UUID warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    public BigInteger getWarehouseId() {
+    public UUID getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(BigInteger warehouseId) {
+    public void setWarehouseId(UUID warehouseId) {
         this.warehouseId = warehouseId;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -204,12 +207,12 @@ public class Warehouse extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getWarehouseId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setWarehouseId(id);
     }
     

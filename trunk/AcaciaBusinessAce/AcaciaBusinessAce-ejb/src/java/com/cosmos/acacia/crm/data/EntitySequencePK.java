@@ -5,10 +5,11 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -19,7 +20,8 @@ public class EntitySequencePK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "entity_id", nullable = false)
-    private BigInteger entityId;
+    @Type(type="uuid")
+    private UUID entityId;
 
     @Basic(optional = false)
     @Column(name = "data_object_type_id", nullable = false)
@@ -28,16 +30,16 @@ public class EntitySequencePK implements Serializable {
     public EntitySequencePK() {
     }
 
-    public EntitySequencePK(BigInteger entityId, int dataObjectTypeId) {
+    public EntitySequencePK(UUID entityId, int dataObjectTypeId) {
         this.entityId = entityId;
         this.dataObjectTypeId = dataObjectTypeId;
     }
 
-    public BigInteger getEntityId() {
+    public UUID getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(BigInteger entityId) {
+    public void setEntityId(UUID entityId) {
         this.entityId = entityId;
     }
 

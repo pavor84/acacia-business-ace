@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.data.cash;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -117,7 +117,7 @@ public class CashReconcile extends BusinessDocument implements Serializable {
         super(CASH_RECONCILE);
     }
 
-    public CashReconcile(BigInteger invoiceId) {
+    public CashReconcile(UUID invoiceId) {
         super(CASH_RECONCILE, invoiceId);
     }
 

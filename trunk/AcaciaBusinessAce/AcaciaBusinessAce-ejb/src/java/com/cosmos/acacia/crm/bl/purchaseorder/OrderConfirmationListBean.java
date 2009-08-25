@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.purchaseorder;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -91,7 +91,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     @SuppressWarnings("unchecked")
-    public List<OrderConfirmation> listOrderConfirmations(BigInteger parentDataObjectId, Address branch) {
+    public List<OrderConfirmation> listOrderConfirmations(UUID parentDataObjectId, Address branch) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -112,7 +112,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     
-    public OrderConfirmation newOrderConfirmation(BigInteger parentDataObjectId) {
+    public OrderConfirmation newOrderConfirmation(UUID parentDataObjectId) {
         
         OrderConfirmation c = new OrderConfirmation();
         
@@ -120,7 +120,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
         
         c.setParentId(parentDataObjectId);
         c.setBranch(branch);
-        c.setCurrency(Currency.Leva.getDbResource());
+        c.setCurrency(Currency.BGN.getDbResource());
         c.setDocumentDate(new Date());
         c.setDocumentType(OrderConfirmationType.VatInvoice.getDbResource());
         c.setVat(new BigDecimal(20));
@@ -178,7 +178,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
 
     @SuppressWarnings("unchecked")
     
-    public List<OrderConfirmationItem> getOrderItems(BigInteger parentDataObjectId) {
+    public List<OrderConfirmationItem> getOrderItems(UUID parentDataObjectId) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -191,10 +191,10 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     
-    public OrderConfirmationItem newOrderItem(BigInteger parentDataObjectId){
+    public OrderConfirmationItem newOrderItem(UUID parentDataObjectId){
         OrderConfirmationItem item = new OrderConfirmationItem();
         item.setParentId(parentDataObjectId);
-        item.setCurrency(Currency.Leva.getDbResource());
+        item.setCurrency(Currency.BGN.getDbResource());
         item.setMeasureUnit(MeasurementUnit.Piece.getDbResource());
         return item;
     }
@@ -245,7 +245,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     @Override
-    public List<OrderConfirmationItem> getPendingItems(BigInteger parentId) {
+    public List<OrderConfirmationItem> getPendingItems(UUID parentId) {
         List<OrderConfirmationItem> items = getOrderItems(parentId);
         List<OrderConfirmationItem> result = new ArrayList<OrderConfirmationItem>();
         
@@ -261,7 +261,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     @Override
-    public List<OrderConfirmation> getPendingConfirmations(BigInteger parentDataObjectId, Address branch) {
+    public List<OrderConfirmation> getPendingConfirmations(UUID parentDataObjectId, Address branch) {
         return listOrderConfirmations(parentDataObjectId, branch);
     }
 
@@ -362,7 +362,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     }
 
     @Override
-    public List<OrderConfirmation> listOrderConfirmations(BigInteger parentDataObjectId) {
+    public List<OrderConfirmation> listOrderConfirmations(UUID parentDataObjectId) {
         return getPendingConfirmations(parentDataObjectId, null);
     }
 }

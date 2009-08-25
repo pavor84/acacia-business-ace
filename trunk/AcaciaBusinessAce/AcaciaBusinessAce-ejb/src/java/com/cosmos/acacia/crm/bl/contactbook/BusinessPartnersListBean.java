@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -130,7 +130,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
 
 
     @Override
-    public List<BusinessPartner> getBusinessPartners(BigInteger parentDataObjectId) {
+    public List<BusinessPartner> getBusinessPartners(UUID parentDataObjectId) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId is required!");
         Query q = em.createNamedQuery("BusinessPartner.findForParentAndDeletedById");

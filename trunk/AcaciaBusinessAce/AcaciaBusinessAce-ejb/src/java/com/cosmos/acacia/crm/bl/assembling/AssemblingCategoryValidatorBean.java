@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.bl.assembling;
 import com.cosmos.acacia.crm.data.assembling.AssemblingCategory;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationUtil;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +31,7 @@ public class AssemblingCategoryValidatorBean
     {
         ValidationException ve = new ValidationException();
         
-        /*BigInteger parentId = entity.getParentId();
+        /*UUID parentId = entity.getParentId();
         if(parentId != null)
         {
             //unique code

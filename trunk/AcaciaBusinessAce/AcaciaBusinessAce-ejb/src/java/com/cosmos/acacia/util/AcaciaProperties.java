@@ -7,7 +7,7 @@ package com.cosmos.acacia.util;
 
 import com.cosmos.acacia.security.AccessLevel;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public interface AcaciaProperties
     List<AcaciaProperties> getPropertiesStartsWith(String keyPrefix);
     List<AcaciaProperties> getPropertiesEndsWith(String keySuffix);
     List<AcaciaProperties> getPropertiesContains(String keyValue);
-    BigInteger getRelatedObjectId();
+    UUID getRelatedObjectId();
     AcaciaProperties getParentProperties();
     AcaciaProperties getProperties(AccessLevel accessLevel);
     AcaciaProperties getProperties(String key);

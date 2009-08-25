@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.impl;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,7 +60,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Warehouse> listWarehousesByName(BigInteger parentId) {
+    public List<Warehouse> listWarehousesByName(UUID parentId) {
         Query q = em.createNamedQuery("Warehouse.findByAddressName");
         q.setParameter("parentDataObjectId", parentId);
 
@@ -75,7 +75,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     }
 
     @Override
-    public Warehouse newWarehouse(BigInteger parentId) {
+    public Warehouse newWarehouse(UUID parentId) {
         Warehouse w = new Warehouse();
         w.setParentId(parentId);
         return w;
@@ -138,7 +138,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
         return entity;
     }
 
-    private long getMaxWarehouseIndex(BigInteger parentId) {
+    private long getMaxWarehouseIndex(UUID parentId) {
         Query q = em.createNamedQuery("Warehouse.getMaxIndex");
         q.setParameter("parentDataObjectId", parentId);
         
@@ -164,7 +164,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<WarehouseProduct> listWarehouseProducts(BigInteger parentId) {
+    public List<WarehouseProduct> listWarehouseProducts(UUID parentId) {
         Query q = em.createNamedQuery("WarehouseProduct.findAll");
         q.setParameter("parentDataObjectId", parentId);
  
@@ -174,7 +174,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     }
 
     @Override
-    public WarehouseProduct newWarehouseProduct(BigInteger parentId, Warehouse warehouse) {
+    public WarehouseProduct newWarehouseProduct(UUID parentId, Warehouse warehouse) {
         WarehouseProduct wp = new WarehouseProduct();
         wp.setParentId(parentId);
         wp.setQuantityInStock(BigDecimal.ZERO);
@@ -197,7 +197,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     /**
      * @see com.cosmos.acacia.crm.bl.impl.WarehouseListRemote#getWarehouseProductsTotals()
      */
-    public Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(BigInteger parentId){
+    public Map<WarehouseProduct, List<WarehouseProduct>> getWarehouseProductsTotals(UUID parentId){
        List<WarehouseProduct> products = listWarehouseProducts(parentId);
        
        Map<WarehouseProduct, List<WarehouseProduct>> result = new HashMap<WarehouseProduct, List<WarehouseProduct>>();
@@ -313,7 +313,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     }
 
     @Override
-    public List<Person> getWarehouseMenForBranch(BigInteger dataObjectId) {
+    public List<Person> getWarehouseMenForBranch(UUID dataObjectId) {
         Set<Person> persons = new HashSet<Person>();
         List<ContactPerson> contactPersons = addressesList.getContactPersons(dataObjectId);
         for (ContactPerson contactPerson : contactPersons) {
@@ -337,7 +337,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
         return result;
     }
     
-    public WarehouseProduct getWarehouseProduct(Warehouse warehouse, BigInteger productId) {
+    public WarehouseProduct getWarehouseProduct(Warehouse warehouse, UUID productId) {
         if ( warehouse==null)
             throw new IllegalArgumentException("Please supply not null warehouse!");
         

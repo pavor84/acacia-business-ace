@@ -31,7 +31,7 @@ import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -445,7 +445,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
         super(PURCHASE_INVOICE);
     }
 
-    public PurchaseInvoice(BigInteger invoiceId) {
+    public PurchaseInvoice(UUID invoiceId) {
         super(PURCHASE_INVOICE, invoiceId);
     }
 

@@ -5,11 +5,12 @@
 package com.cosmos.acacia.crm.data.permission;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -21,7 +22,8 @@ public class DataObjectTypePermissionPK
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     @Basic(optional = false)
     @Column(name = "data_object_type_id", nullable = false)
@@ -38,18 +40,18 @@ public class DataObjectTypePermissionPK
     public DataObjectTypePermissionPK() {
     }
 
-    public DataObjectTypePermissionPK(BigInteger organizationId, int dataObjectTypeId, int userRightTypeId, int permissionId) {
+    public DataObjectTypePermissionPK(UUID organizationId, int dataObjectTypeId, int userRightTypeId, int permissionId) {
         this.organizationId = organizationId;
         this.dataObjectTypeId = dataObjectTypeId;
         this.userRightTypeId = userRightTypeId;
         this.permissionId = permissionId;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 

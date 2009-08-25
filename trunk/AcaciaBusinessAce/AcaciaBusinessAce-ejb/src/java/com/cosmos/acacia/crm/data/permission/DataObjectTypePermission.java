@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.permission;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -91,7 +91,7 @@ public class DataObjectTypePermission
         this.dataObjectTypePermissionPK = dataObjectTypePermissionPK;
     }
 
-    public DataObjectTypePermission(BigInteger organizationId, int dataObjectTypeId, int userRightTypeId, int permissionId) {
+    public DataObjectTypePermission(UUID organizationId, int dataObjectTypeId, int userRightTypeId, int permissionId) {
         this.dataObjectTypePermissionPK = new DataObjectTypePermissionPK(organizationId, dataObjectTypeId, userRightTypeId, permissionId);
     }
 

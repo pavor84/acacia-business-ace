@@ -6,9 +6,10 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -18,7 +19,8 @@ import javax.persistence.Embeddable;
 public class ClassifierAppliedForDotPK implements Serializable {
 
     @Column(name = "classifier_id", nullable = false)
-    private BigInteger classifierId;
+    @Type(type="uuid")
+    private UUID classifierId;
 
     @Column(name = "data_object_type_id", nullable = false)
     private Integer dataObjectTypeId;
@@ -26,16 +28,16 @@ public class ClassifierAppliedForDotPK implements Serializable {
     public ClassifierAppliedForDotPK() {
     }
 
-    public ClassifierAppliedForDotPK(BigInteger classifierId, Integer dataObjectTypeId) {
+    public ClassifierAppliedForDotPK(UUID classifierId, Integer dataObjectTypeId) {
         this.classifierId = classifierId;
         this.dataObjectTypeId = dataObjectTypeId;
     }
 
-    public BigInteger getClassifierId() {
+    public UUID getClassifierId() {
         return classifierId;
     }
 
-    public void setClassifierId(BigInteger classifierId) {
+    public void setClassifierId(UUID classifierId) {
         this.classifierId = classifierId;
     }
 
@@ -50,8 +52,8 @@ public class ClassifierAppliedForDotPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += classifierId.intValue();
-        hash += dataObjectTypeId.intValue();
+        hash += classifierId.hashCode();
+        hash += dataObjectTypeId.hashCode();
         return hash;
     }
 

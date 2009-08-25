@@ -5,11 +5,12 @@
 package com.cosmos.acacia.crm.data;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Comparator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -20,7 +21,8 @@ public class ExpressionPK implements Serializable, Comparable<ExpressionPK>, Com
 
     @Basic(optional = false)
     @Column(name = "organization_id", nullable = false, precision = 18, scale = 0)
-    private BigInteger organizationId;
+    @Type(type="uuid")
+    private UUID organizationId;
 
     @Basic(optional = false)
     @Column(name = "expression_key", nullable = false, length = 255)
@@ -29,16 +31,16 @@ public class ExpressionPK implements Serializable, Comparable<ExpressionPK>, Com
     public ExpressionPK() {
     }
 
-    public ExpressionPK(BigInteger organizationId, String expressionKey) {
+    public ExpressionPK(UUID organizationId, String expressionKey) {
         this.organizationId = organizationId;
         this.expressionKey = expressionKey;
     }
 
-    public BigInteger getOrganizationId() {
+    public UUID getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(BigInteger organizationId) {
+    public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
 

@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.data.properties;
 
 import com.cosmos.acacia.crm.data.DataObject;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -88,7 +88,7 @@ public class DbProperty
         this.dbPropertyPK = dbPropertyPK;
     }
 
-    public DbProperty(String accessLevel, BigInteger relatedObjectId, String propertyKey)
+    public DbProperty(String accessLevel, UUID relatedObjectId, String propertyKey)
     {
         this.dbPropertyPK = new DbPropertyPK(accessLevel, relatedObjectId, propertyKey);
     }

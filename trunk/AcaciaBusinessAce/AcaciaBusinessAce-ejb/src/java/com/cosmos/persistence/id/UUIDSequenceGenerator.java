@@ -5,9 +5,9 @@
 package com.cosmos.persistence.id;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.UUID;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.Dialect;
@@ -36,8 +36,8 @@ public class UUIDSequenceGenerator extends SequenceGenerator {
     @Override
     public synchronized Serializable generate(SessionImplementor session, Object obj)
             throws HibernateException {
-        //return UUID.randomUUID();
-        return BigInteger.valueOf(System.currentTimeMillis() + (++counter));
+        return UUID.randomUUID();
+        //return BigInteger.valueOf(System.currentTimeMillis() + (++counter));
     }
 
     @Override

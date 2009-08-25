@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -49,7 +50,8 @@ public class AssemblingSchemaItemValue
     @Id
     @Column(name = "item_value_id", nullable = false)
     //@Property(title="Item Value Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private BigInteger itemValueId;
+    @Type(type="uuid")
+    private UUID itemValueId;
 
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     @ManyToOne
@@ -93,15 +95,15 @@ public class AssemblingSchemaItemValue
     public AssemblingSchemaItemValue() {
     }
 
-    public AssemblingSchemaItemValue(BigInteger itemValueId) {
+    public AssemblingSchemaItemValue(UUID itemValueId) {
         this.itemValueId = itemValueId;
     }
 
-    public BigInteger getItemValueId() {
+    public UUID getItemValueId() {
         return itemValueId;
     }
 
-    public void setItemValueId(BigInteger itemValueId) {
+    public void setItemValueId(UUID itemValueId) {
         this.itemValueId = itemValueId;
     }
 
@@ -188,7 +190,7 @@ public class AssemblingSchemaItemValue
     }
 
     @Override
-    public BigInteger getParentId()
+    public UUID getParentId()
     {
         if(assemblingSchemaItem != null)
             return assemblingSchemaItem.getItemId();
@@ -197,19 +199,19 @@ public class AssemblingSchemaItemValue
     }
 
     @Override
-    public void setParentId(BigInteger parentId)
+    public void setParentId(UUID parentId)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public BigInteger getId()
+    public UUID getId()
     {
         return getItemValueId();
     }
 
     @Override
-    public void setId(BigInteger id)
+    public void setId(UUID id)
     {
         setItemValueId(id);
     }

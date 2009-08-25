@@ -5,109 +5,122 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.resource.TextResource;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
+import java.util.UUID;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 /**
  *
  * @author Miro
  */
 @Entity
-@Table(name = "countries")
-@NamedQueries(
-	{
-		@NamedQuery
-         	(
-         		name = "Country.fetchAll",
-         		query = "from Country order by countryName"
-         	),
-                @NamedQuery
-                (
-                        name = "Country.findByCountryName",
-                        query = "select c from Country c where c.countryName=:countryName"
-                )
-	}
+@Table(name = "countries", catalog = "acacia", schema = "public"
+/*CREATE UNIQUE INDEX uix_countries_country_name
+  ON countries
+  USING btree
+  (lower(country_name::text));*/
 )
-public class Country implements TextResource, CloneableBean<Country>, Serializable {
+@NamedQueries({
+    @NamedQuery(
+        name = Country.NQ_FIND_ALL,
+        query = "from Country order by countryName"
+    ),
+    @NamedQuery(
+        name = Country.NQ_COUNT_COUNTRIES,
+        query = "select count(t) from Country t"
+    )
+})
+public class Country extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    //
+    protected static final String CLASS_NAME = "Country";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_COUNT_COUNTRIES = CLASS_NAME + ".countCountries";
 
     @Id
-    @SequenceGenerator(name="CountrySequenceGenerator", sequenceName="countries_seq", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CountrySequenceGenerator")
+    @Basic(optional = false)
+    @Type(type="uuid")
     @Column(name = "country_id", nullable = false)
     @Property(title="Country Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private Integer countryId;
+    private UUID countryId;
 
-    @Column(name = "country_name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "country_name", nullable = false, length = 64)
     @Property(title = "Name", propertyValidator=
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=64))
     private String countryName;
 
-    @Column(name = "country_code_a2")
+    @Basic(optional = false)
+    @Column(name = "country_code_a2", nullable = false, length = 2)
     @Property(title = "Country Code (A2)", propertyValidator=
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=2))
     private String countryCodeA2;
 
-    @Column(name = "country_code_a3")
+    @Basic(optional = false)
+    @Column(name = "country_code_a3", nullable = false, length = 3)
     @Property(title = "Country Code (A3)", propertyValidator=
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
     private String countryCodeA3;
 
-    @Column(name = "country_code_n3")
+    @Column(name = "country_code_n3", length = 3)
     @Property(title = "Country Code (N3)", propertyValidator=
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
     private String countryCodeN3;
 
-    @Column(name = "country_phone_code")
+    @Column(name = "country_phone_code", length = 6)
     @Property(title = "Phone Code", propertyValidator=
         @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=6))
     private String countryPhoneCode;
 
-    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
+    @Basic(optional = false)
+    @JoinColumn(name = "currency_id", nullable = false, referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title = "Currency", resourceDisplayInTable=ResourceDisplay.ShortName)
     private DbResource currency;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 2147483647)
     @Property(title = "Description")
     private String description;
 
+    @JoinColumn(name = "country_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private DataObject dataObject;
 
     public Country() {
     }
 
-    public Country(Integer countryId) {
+    public Country(UUID countryId) {
         this.countryId = countryId;
     }
 
-    public Country(Integer countryId, String countryName) {
+    public Country(UUID countryId, String countryName) {
         this.countryId = countryId;
         this.countryName = countryName;
     }
 
-    public Integer getCountryId() {
+    public UUID getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(Integer countryId) {
+    public void setCountryId(UUID countryId) {
         this.countryId = countryId;
     }
 
@@ -167,46 +180,37 @@ public class Country implements TextResource, CloneableBean<Country>, Serializab
         this.currency = currencyId;
     }
 
-
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (countryId != null ? countryId.hashCode() : 0);
-        return hash;
+    public DataObject getDataObject() {
+        return dataObject;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Country)) {
-            return false;
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
+    }
+
+    @Override
+    public UUID getId() {
+        return getCountryId();
+    }
+
+    @Override
+    public void setId(UUID id) {
+        setCountryId(id);
+    }
+
+    @Override
+    public UUID getParentId() {
+        if((dataObject != null)) {
+            return dataObject.getParentDataObjectId();
         }
-        Country other = (Country) object;
-        if ((this.countryId == null && other.countryId != null) || (this.countryId != null && !this.countryId.equals(other.countryId))) {
-            return false;
-        }
-        return true;
-    }
 
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.Country[countryId=" + countryId + "]";
-    }
-
-    public String toShortText() {
-        return getCountryName();
-    }
-
-    public String toText() {
         return null;
     }
 
     @Override
-    public Country clone() {
-        try {
-            return (Country) super.clone();
-        } catch(CloneNotSupportedException ex) {
-            throw new RuntimeException(ex);
-        }
+    public String getInfo() {
+        return getCountryName();
     }
 }

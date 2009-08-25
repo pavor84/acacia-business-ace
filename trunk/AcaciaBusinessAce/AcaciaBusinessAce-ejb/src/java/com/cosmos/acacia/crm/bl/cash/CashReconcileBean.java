@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.bl.cash;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -88,12 +88,12 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
     }
 
     @SuppressWarnings("unchecked")
-    public List<CashReconcile> listCashReconciles(BigInteger parentId) {
+    public List<CashReconcile> listCashReconciles(UUID parentId) {
         if (parentId == null)
             throw new IllegalArgumentException("parentId can't be null");
         
         Query q = em.createNamedQuery(CashReconcile.NQ_FIND_ALL);
-        BigInteger branchId = session.getBranch().getId();
+        UUID branchId = session.getBranch().getId();
         q.setParameter("branchId", branchId);
 
         List<CashReconcile> result = q.getResultList();
@@ -106,7 +106,7 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         esm.remove(em, cashReconcile);
     }
 
-    public CashReconcile newCashReconcile(BigInteger parentDataObjectId) {
+    public CashReconcile newCashReconcile(UUID parentDataObjectId) {
         CashReconcile c = esm.newBusinessDocument(DocumentType.CashReconcile);
         c.setParentId(parentDataObjectId);
         c.setCurrency(session.getOrganization().getDefaultCurrency());
@@ -143,7 +143,7 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         for (CashReconcilePaymentSummary paymentSummary : paymentSummaries) {
             CustomerPaymentType type = (CustomerPaymentType) paymentSummary.getPaymentType().getEnumValue();
             
-            BigDecimal convertedAmount = convertAmount(Currency.Leva, (Currency) paymentSummary.getCurrency().getEnumValue(), 
+            BigDecimal convertedAmount = convertAmount(Currency.BGN, (Currency) paymentSummary.getCurrency().getEnumValue(), 
                 paymentSummary.getAmount());
             if ( CustomerPaymentType.Cash.equals(type) )
                 revenueCash = revenueCash.add(convertedAmount);

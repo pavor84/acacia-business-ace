@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.data.cash;
 import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +21,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.resource.TextResource;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "currency_nominal")
@@ -69,7 +70,8 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
 
     @Id
     @Column(name = "nominal_id", nullable = false)
-    private BigInteger nominalId;
+    @Type(type="uuid")
+    private UUID nominalId;
     
     @Property(title="Nominal", propertyValidator=@PropertyValidator(required=true,
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
@@ -86,7 +88,7 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
     private DataObject dataObject;
     
     @Transient
-    private BigInteger parentId;
+    private UUID parentId;
     
     public CurrencyNominal(BigDecimal nominal, DbResource currency) {
         super();
@@ -94,11 +96,11 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
         this.currency = currency;
     }
 
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
     }
 
@@ -133,7 +135,7 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return nominalId;
     }
 
@@ -148,15 +150,15 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setNominalId(id);
     }
 
-    public BigInteger getNominalId() {
+    public UUID getNominalId() {
         return nominalId;
     }
 
-    public void setNominalId(BigInteger nominalId) {
+    public void setNominalId(UUID nominalId) {
         this.nominalId = nominalId;
     }
 

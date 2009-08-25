@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -29,14 +29,14 @@ public interface BankDetailsListRemote {
      * @param parentId
      * @return list of bank details
      */
-    List<BankDetail> getBankDetails(BigInteger parentId);
+    List<BankDetail> getBankDetails(UUID parentId);
     
     /**
      * Returns all bank details for the given organization.
      * @param organizationDataObjectId
      * @return
      */
-    List<BankDetail> getBankDetailsForOrganization(BigInteger organizationDataObjectId);
+    List<BankDetail> getBankDetailsForOrganization(UUID organizationDataObjectId);
 
     /**
      * Gets the EntithyProperties of BankDetail
@@ -60,7 +60,7 @@ public interface BankDetailsListRemote {
      * @param parentDataObjectId
      * @return the saved BankDetail
      */
-    BankDetail saveBankDetail(BankDetail bankDetail, BigInteger parentDataObjectIdd);
+    BankDetail saveBankDetail(BankDetail bankDetail, UUID parentDataObjectIdd);
 
     /**
      * Deletes a BankDetail
@@ -78,7 +78,7 @@ public interface BankDetailsListRemote {
      * @param parentDataObjectId
      * @return list of persons
      */
-    List<Person> getBankContacts(BigInteger parentDataObjectId);
+    List<Person> getBankContacts(UUID parentDataObjectId);
 
     /**
      * Lists all currencies

@@ -26,7 +26,7 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +38,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -170,7 +171,8 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     @Id
     @Basic(optional = false)
     @Column(name = "invoice_item_id", nullable = false)
-    private BigInteger invoiceItemId;
+    @Type(type="uuid")
+    private UUID invoiceItemId;
 
     @JoinColumn(name = "invoice_id", referencedColumnName = "invoice_id", nullable = false)
     @ManyToOne(optional = false)
@@ -349,16 +351,16 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     public PurchaseInvoiceItem() {
     }
 
-    public PurchaseInvoiceItem(BigInteger invoiceItemId) {
+    public PurchaseInvoiceItem(UUID invoiceItemId) {
         this();
         this.invoiceItemId = invoiceItemId;
     }
 
-    public BigInteger getInvoiceItemId() {
+    public UUID getInvoiceItemId() {
         return invoiceItemId;
     }
 
-    public void setInvoiceItemId(BigInteger invoiceItemId) {
+    public void setInvoiceItemId(UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }
 
@@ -495,17 +497,17 @@ public class PurchaseInvoiceItem extends DataObjectBean implements Serializable 
     }
 
     @Override
-    public BigInteger getId() {
+    public UUID getId() {
         return getInvoiceItemId();
     }
 
     @Override
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         setInvoiceItemId(id);
     }
 
     @Override
-    public BigInteger getParentId() {
+    public UUID getParentId() {
         if(invoice != null)
             invoice.getId();
 

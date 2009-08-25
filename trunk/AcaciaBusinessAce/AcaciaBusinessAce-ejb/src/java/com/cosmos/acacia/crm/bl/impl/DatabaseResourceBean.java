@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.impl;
 
+import com.cosmos.acacia.app.AcaciaSessionLocal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,9 +20,11 @@ import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
+import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
+import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
@@ -61,6 +64,7 @@ import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import com.cosmos.util.ClassHelper;
 import java.lang.reflect.Modifier;
+import java.util.Locale;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -74,55 +78,102 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     private static boolean initialized = false;
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
-    @EJB
-    private CurrencyNominalLocal currencyNominalManager;
+
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private EntityStoreManagerLocal esm;
+
+    @EJB
+    private CurrencyNominalLocal currencyNominalManager;
+
+    @EJB
+    private LocationsListLocal locationsService;
+
+    @EJB
+    private AcaciaSessionLocal session;
 
     @Override
     public synchronized void initDatabaseResource() {
         if (!initialized) {
             System.out.println("initDatabaseResource()");
-            getDbResources(Gender.class);
-            getDbResources(MeasurementUnit.class);
-            getDbResources(OrganizationType.class);
-            getDbResources(ProductColor.class);
-            getDbResources(CommunicationType.class);
-            getDbResources(Currency.class);
-            getDbResources(PassportType.class);
-            getDbResources(Algorithm.Type.class);
-            getDbResources(DataType.class);
-            getDbResources(DeliveryCertificateMethodType.class);
-            getDbResources(DeliveryCertificateReason.class);
-            getDbResources(DeliveryCertificateStatus.class);
-            getDbResources(InvoiceType.class);
-            getDbResources(DocumentDeliveryMethod.class);
-            getDbResources(TransportationMethod.class);
-            getDbResources(PaymentType.class);
-            getDbResources(PaymentTerm.class);
-            getDbResources(DeliveryType.class);
-            getDbResources(VatCondition.class);
-            getDbResources(InvoiceStatus.class);
-            getDbResources(DeliveryStatus.class);
-            getDbResources(PurchaseOrderStatus.class);
-            getDbResources(OrderConfirmationType.class);
-            getDbResources(SpecialPermission.class);
-            getDbResources(CustomerPaymentStatus.class);
-            getDbResources(CustomerPaymentType.class);
-            getDbResources(DocumentType.class);
-            getDbResources(DocumentStatus.class);
-            getDbResources(AccessRight.class);
-            getDbResources(PermissionCategory.class);
-            getDbResources(AccessRight.class);
-            getDbResources(AccessLevel.class);
-            getDbResources(PrivilegeType.class);
-            getDbResources(BusinessActivity.class);
-            getDbResources(BusinessUnitType.class);
-            getDbResources(BusinessUnitAddressType.class);
-            getDbResources(AccountStatus.class);
-            getDbResources(FunctionalHierarchy.class);
+            initDbResources();
+            initCountries();
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
+        }
+    }
+
+    private void initDbResources() {
+        getDbResources(Gender.class);
+        getDbResources(MeasurementUnit.class);
+        getDbResources(OrganizationType.class);
+        getDbResources(ProductColor.class);
+        getDbResources(CommunicationType.class);
+        getDbResources(Currency.class);
+        getDbResources(PassportType.class);
+        getDbResources(Algorithm.Type.class);
+        getDbResources(DataType.class);
+        getDbResources(DeliveryCertificateMethodType.class);
+        getDbResources(DeliveryCertificateReason.class);
+        getDbResources(DeliveryCertificateStatus.class);
+        getDbResources(InvoiceType.class);
+        getDbResources(DocumentDeliveryMethod.class);
+        getDbResources(TransportationMethod.class);
+        getDbResources(PaymentType.class);
+        getDbResources(PaymentTerm.class);
+        getDbResources(DeliveryType.class);
+        getDbResources(VatCondition.class);
+        getDbResources(InvoiceStatus.class);
+        getDbResources(DeliveryStatus.class);
+        getDbResources(PurchaseOrderStatus.class);
+        getDbResources(OrderConfirmationType.class);
+        getDbResources(SpecialPermission.class);
+        getDbResources(CustomerPaymentStatus.class);
+        getDbResources(CustomerPaymentType.class);
+        getDbResources(DocumentType.class);
+        getDbResources(DocumentStatus.class);
+        getDbResources(AccessRight.class);
+        getDbResources(PermissionCategory.class);
+        getDbResources(AccessRight.class);
+        getDbResources(AccessLevel.class);
+        getDbResources(PrivilegeType.class);
+        getDbResources(BusinessActivity.class);
+        getDbResources(BusinessUnitType.class);
+        getDbResources(BusinessUnitAddressType.class);
+        getDbResources(AccountStatus.class);
+        getDbResources(FunctionalHierarchy.class);
+    }
+
+    private void initCountries() {
+        Long count;
+        if((count = locationsService.getCountriesCount()) != null && count > 0) {
+            return;
+        }
+
+        Map<String, Country> countryMap = new TreeMap<String, Country>();
+
+        for(Locale locale : Locale.getAvailableLocales()) {
+            try {
+                java.util.Currency utilCurrency = java.util.Currency.getInstance(locale);
+                String countryName = locale.getDisplayCountry(Locale.ENGLISH);
+                if(countryMap.containsKey(countryName)) {
+                    continue;
+                }
+                Country country = new Country();
+                country.setCountryName(countryName);
+                country.setCountryCodeA2(locale.getCountry());
+                country.setCountryCodeA3(locale.getISO3Country());
+                country.setCurrency(Currency.valueOf(utilCurrency.getCurrencyCode()).getDbResource());
+                countryMap.put(countryName, country);
+            } catch(IllegalArgumentException ex) {
+            } catch(NullPointerException ex) {
+            }
+        }
+
+        for(Country country : countryMap.values()) {
+            esm.persist(em, country);
         }
     }
 

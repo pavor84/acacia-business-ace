@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +50,16 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     @EJB
     private CityValidatorLocal cityValidator;
 
-    @SuppressWarnings("unchecked")
-    public List<Country> getCountries()
-    {
-
-        Query q = em.createNamedQuery("Country.fetchAll");
-
+    @Override
+    public List<Country> getCountries() {
+        Query q = em.createNamedQuery(Country.NQ_FIND_ALL);
         return new ArrayList<Country>(q.getResultList());
+    }
+
+    @Override
+    public Long getCountriesCount() {
+        Query q = em.createNamedQuery(Country.NQ_COUNT_COUNTRIES);
+        return (Long) q.getSingleResult();
     }
 
     public EntityProperties getCountryEntityProperties()
@@ -113,7 +116,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     @SuppressWarnings("unchecked")
-    public List<Address> getAddresses(BigInteger parentId) {
+    public List<Address> getAddresses(UUID parentId) {
         if (parentId == null) {
             return new ArrayList<Address>();
         }

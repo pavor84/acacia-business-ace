@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.bl.invoice;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.Local;
 
@@ -24,14 +24,14 @@ public interface InvoiceListLocal extends InvoiceListRemote{
 	 * @param invoiceId
 	 * @return
 	 */
-	Invoice getInvoiceById(BigInteger invoiceId);
+	Invoice getInvoiceById(UUID invoiceId);
 	
 	/**
 	 * Get the InvoiceItem by its ID
 	 * @param invoiceItemId
 	 * @return
 	 */
-	InvoiceItem getInvoiceItemById(BigInteger invoiceItemId);
+	InvoiceItem getInvoiceItemById(UUID invoiceItemId);
 	
 	/**
      * Get warehouse product for a given simple product and warehouse
