@@ -11,7 +11,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  *
@@ -30,7 +30,7 @@ public class UserGroupPanel extends BaseEntityPanel {
     }
 
     /** Creates new form ContactPersonPanel */
-    public UserGroupPanel(BigInteger parentDataObjectId) {
+    public UserGroupPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }

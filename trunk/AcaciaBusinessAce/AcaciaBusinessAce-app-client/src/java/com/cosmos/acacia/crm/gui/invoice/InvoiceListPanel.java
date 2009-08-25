@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.invoice;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -34,11 +34,11 @@ public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
     private List<Invoice> list;
     private boolean proform;
 
-    public InvoiceListPanel(BigInteger parentDataObjectId, boolean proform) {
+    public InvoiceListPanel(UUID parentDataObjectId, boolean proform) {
         this(parentDataObjectId, null, proform);
     }
 
-    public InvoiceListPanel(BigInteger parentDataObjectId, List<Invoice> list, boolean proform) {
+    public InvoiceListPanel(UUID parentDataObjectId, List<Invoice> list, boolean proform) {
         super(parentDataObjectId);
         this.list = list;
         this.proform = proform;

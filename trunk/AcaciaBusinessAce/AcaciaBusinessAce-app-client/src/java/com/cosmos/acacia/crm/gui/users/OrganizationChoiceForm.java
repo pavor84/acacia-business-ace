@@ -9,7 +9,7 @@ package com.cosmos.acacia.crm.gui.users;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import org.jdesktop.application.Action;
 
@@ -21,7 +21,7 @@ public class OrganizationChoiceForm extends AcaciaPanel {
 
     /** Creates new form OrganizationChoiceForm */
     public OrganizationChoiceForm(List<Organization> organizations) {
-        super((BigInteger) null);
+        super((UUID) null);
         this.organizations = organizations;
         initComponents();
         if (organizations != null)

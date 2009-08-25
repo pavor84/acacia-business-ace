@@ -21,7 +21,7 @@ import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.BorderLayout;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.ejb.EJB;
 import org.apache.log4j.Logger;
@@ -40,14 +40,14 @@ public class BasicOrganizationPanel
     private static OrganizationsListRemote formSession;
 
     /** Creates new form organizationPanel */
-    public BasicOrganizationPanel(BigInteger parentDataObjectId, Classifier classifier) {
+    public BasicOrganizationPanel(UUID parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         this.classifier = classifier;
         init();
     }
 
     public BasicOrganizationPanel() {
-        super((BigInteger) null);
+        super((UUID) null);
         init();
     }
 

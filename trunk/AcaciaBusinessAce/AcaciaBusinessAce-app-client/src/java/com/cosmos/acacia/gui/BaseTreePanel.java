@@ -40,7 +40,7 @@ import com.cosmos.swingb.JBTree;
 import com.cosmos.swingb.listeners.TableModificationListener;
 import com.cosmos.util.Lister;
 import java.awt.Component;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * A base panel for all tree panels.
@@ -50,7 +50,7 @@ import java.math.BigInteger;
 public abstract class BaseTreePanel<E extends DataObjectBean> extends AcaciaPanel {
 
     /** Creates new form BaseTreePanel */
-    public BaseTreePanel(BigInteger parentDataObjectId) {
+    public BaseTreePanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initComponents();
         initData();

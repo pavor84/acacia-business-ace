@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 
@@ -32,7 +32,7 @@ public class PositionTypePanel extends BaseEntityPanel {
     }
 
     /** Creates new form PositionTypePanel */
-    public PositionTypePanel(BigInteger parentDataObjectId, Class ownerClass) {
+    public PositionTypePanel(UUID parentDataObjectId, Class ownerClass) {
         super(parentDataObjectId);
         this.ownerClass = ownerClass;
         init();

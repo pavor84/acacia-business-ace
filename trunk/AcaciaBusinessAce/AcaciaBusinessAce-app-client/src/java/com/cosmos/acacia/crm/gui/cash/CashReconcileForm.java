@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.cash;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1033,7 +1033,7 @@ public class CashReconcileForm extends BaseEntityPanel {
                             return false;
                         }
 
-                        BigInteger doId = getDataObject().getDataObjectId();
+                        UUID doId = getDataObject().getDataObjectId();
                         table.setParentDataObjectId(doId);
                         table.setParentDataObjectToAssociatedTables(doId);
                         return true;

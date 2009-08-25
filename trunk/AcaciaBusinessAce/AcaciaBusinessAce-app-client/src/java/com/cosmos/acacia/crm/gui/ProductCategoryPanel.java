@@ -5,7 +5,7 @@
  */
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 
@@ -47,7 +47,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     private BindingGroup bindingGroup;
 
     /** Creates new form ProductCategoryPanel */
-    public ProductCategoryPanel(ProductCategory category, BigInteger parentId) {
+    public ProductCategoryPanel(ProductCategory category, UUID parentId) {
         super(parentId);
         this.productCategory = category;
         init();
@@ -60,7 +60,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
     }
 
     public ProductCategoryPanel() {
-        super((BigInteger)null);
+        super((UUID)null);
     }
 
     /** This method is called from within the constructor to

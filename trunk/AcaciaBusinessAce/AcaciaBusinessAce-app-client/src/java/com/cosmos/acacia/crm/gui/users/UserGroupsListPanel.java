@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.users;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -28,7 +28,7 @@ import com.cosmos.swingb.DialogResponse;
 public class UserGroupsListPanel extends AbstractTablePanel<UserGroup> {
 
     /** Creates new form BankDetailsListPanel */
-    public UserGroupsListPanel(BigInteger parentDataObjectId) {
+    public UserGroupsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

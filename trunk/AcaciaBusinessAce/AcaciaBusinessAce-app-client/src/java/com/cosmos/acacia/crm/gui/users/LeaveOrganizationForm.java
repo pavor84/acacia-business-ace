@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
@@ -22,7 +22,7 @@ import org.jdesktop.application.Action;
 public class LeaveOrganizationForm extends AcaciaPanel {
 
     /** Creates new form OrganizationChoiceForm */
-    public LeaveOrganizationForm(BigInteger parentId) {
+    public LeaveOrganizationForm(UUID parentId) {
         super(parentId);
         initComponents();
         initData();

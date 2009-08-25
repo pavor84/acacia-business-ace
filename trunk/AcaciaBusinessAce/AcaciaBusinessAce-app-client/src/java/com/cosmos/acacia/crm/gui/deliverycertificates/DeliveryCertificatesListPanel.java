@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -42,7 +42,7 @@ public class DeliveryCertificatesListPanel extends AbstractTablePanel<DeliveryCe
      * 
      * @param parentDataObjectId - Id of a Warehouse
      */
-    public DeliveryCertificatesListPanel(BigInteger parentDataObjectId) {
+    public DeliveryCertificatesListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

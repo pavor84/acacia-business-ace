@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -29,7 +29,7 @@ import com.cosmos.swingb.DialogResponse;
 public class PassportsListPanel extends AbstractTablePanel<Passport> {
 
     /** Creates new form BankDetailsListPanel */
-    public PassportsListPanel(BigInteger parentDataObjectId) {
+    public PassportsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

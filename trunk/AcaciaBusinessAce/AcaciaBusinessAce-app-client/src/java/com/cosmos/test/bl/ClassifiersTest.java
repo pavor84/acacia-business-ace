@@ -1,6 +1,6 @@
 package com.cosmos.test.bl;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -63,7 +63,7 @@ public class ClassifiersTest {
 
         LoginResult loginResult = TestUtils.login();
 
-        BigInteger parentId = loginResult.getOrganization().getId();
+        UUID parentId = loginResult.getOrganization().getId();
 
         // Creating a classifier group
         ClassifierGroup group = formSession.newClassifierGroup();

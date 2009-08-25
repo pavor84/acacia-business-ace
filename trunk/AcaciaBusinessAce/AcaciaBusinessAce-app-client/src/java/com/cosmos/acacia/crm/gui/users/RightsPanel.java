@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.beansbinding.BindingGroup;
@@ -36,7 +36,7 @@ public class RightsPanel extends BaseEntityPanel {
 
     /** Creates new form RightsPanel */
     public RightsPanel(Right right) {
-        super((BigInteger) null);
+        super((UUID) null);
         this.right = right;
         init();
     }

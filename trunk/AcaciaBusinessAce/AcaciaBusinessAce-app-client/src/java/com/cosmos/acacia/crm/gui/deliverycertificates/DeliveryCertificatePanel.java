@@ -9,7 +9,7 @@ package com.cosmos.acacia.crm.gui.deliverycertificates;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -329,7 +329,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     	//the organization
     	if(DeliveryCertificateReason.Invoice.equals(entity.getDeliveryCertificateReason().getEnumValue())){
     		
-	    	BigInteger invoicesParentId = entity.getCreatorOrganization().getId();
+	    	UUID invoicesParentId = entity.getCreatorOrganization().getId();
 	    	List<Invoice> invoices = getInvoicesSession().listInvoices(invoicesParentId, false);
 	    	CollectionUtils.filter(invoices, new ValidDeliveryCertificateAssignmentPredicate());
 	
@@ -383,7 +383,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     	}
     }
  
-    protected void bindDeliveryCertificateItems(BigInteger invoiceId){
+    protected void bindDeliveryCertificateItems(UUID invoiceId){
     	 List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(invoiceId);
          if(invoiceItems != null){
          	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
@@ -413,7 +413,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     
     protected Object onChooseForwarderBranch() {
 
-        BigInteger organizationId = entity.getForwarder() != null ?  entity.getForwarder().getId() : null;
+        UUID organizationId = entity.getForwarder() != null ?  entity.getForwarder().getId() : null;
         AddressListPanel listPanel = new AddressListPanel(organizationId);
         
         DialogResponse dResponse = listPanel.showDialog(this);

@@ -11,7 +11,7 @@ import static com.cosmos.acacia.util.AcaciaUtils.getDecimalFormat;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.text.Format;
 
 import javax.ejb.EJB;
@@ -50,7 +50,7 @@ public class WarehouseProductPanel extends BaseEntityPanel {
     private EntityProperties entProps;
 
     /** Creates new form WarehouseProductPanel */
-    public WarehouseProductPanel(WarehouseProduct warehouseProduct, BigInteger parentId) {
+    public WarehouseProductPanel(WarehouseProduct warehouseProduct, UUID parentId) {
         super(parentId);
         this.entity = warehouseProduct;
         init();

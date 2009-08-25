@@ -1,7 +1,7 @@
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel<Deliver
     private EntityProperties entityProps;
     AcaciaTable table = null;
 
-    public DeliveryCertificateItemListPanel(BigInteger parentDataObjectId) {
+    public DeliveryCertificateItemListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 
@@ -96,7 +96,7 @@ public class DeliveryCertificateItemListPanel extends AbstractTablePanel<Deliver
 
             if (canNestedOperationProceed()) {
                 //ID of the delivery certificate
-                BigInteger deliveryCertificateId = getParentDataObjectId();
+                UUID deliveryCertificateId = getParentDataObjectId();
 
                 if (item.getCertificateItemId() == null) {
                     //new certificate is just created and get the fully instantiated certificate item (with ID etc)

@@ -8,7 +8,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  *
@@ -26,7 +26,7 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
     }
 
     /** Creates new form ContactPersonPanel */
-    public ClassifierGroupPanel(BigInteger parentDataObjectId) {
+    public ClassifierGroupPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }

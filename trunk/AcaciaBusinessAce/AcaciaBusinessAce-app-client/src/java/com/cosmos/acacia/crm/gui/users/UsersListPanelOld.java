@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.users;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -31,11 +31,11 @@ import com.cosmos.swingb.DialogResponse;
 public class UsersListPanelOld extends AbstractTablePanel<User> {
 
     /** Creates new form OrganizationsListPanel */
-    public UsersListPanelOld(BigInteger parentDataObjectId) {
+    public UsersListPanelOld(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 
-    public UsersListPanelOld(BigInteger parentDataObjectId, Classifier classifier) {
+    public UsersListPanelOld(UUID parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
     }
@@ -97,7 +97,8 @@ public class UsersListPanelOld extends AbstractTablePanel<User> {
         user = getAdminSession().activateUser(
                 user,
                 getAcaciaSession().getOrganization().getId(),
-                new Boolean(!user.isActive()));
+                //new Boolean(!user.isActive()));
+                true);
 
         getDataTable().replaceSelectedRow(user);
         fireModify(user);
@@ -119,7 +120,7 @@ public class UsersListPanelOld extends AbstractTablePanel<User> {
     private void updateButtonCaption() {
         User user = (User) getDataTable().getSelectedRowObject();
         if (user != null) {
-            if (user.isActive()) {
+            if (true) {//user.isActive()) {
                 setSpecialCaption("deactivateUser.Action.text");
             } else {
                 setSpecialCaption("activateUser.Action.text");

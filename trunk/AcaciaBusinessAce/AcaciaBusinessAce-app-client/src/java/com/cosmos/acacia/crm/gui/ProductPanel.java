@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     /** Creates new form ProductPanel */
-    public ProductPanel(BigInteger parentDataObjectId) {
+    public ProductPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }

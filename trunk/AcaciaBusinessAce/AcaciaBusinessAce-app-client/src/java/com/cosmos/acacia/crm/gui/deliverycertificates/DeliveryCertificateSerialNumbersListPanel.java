@@ -5,7 +5,7 @@
  */
 package com.cosmos.acacia.crm.gui.deliverycertificates;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
      * Creates new form DeliveryCertificateSerialNumbers
      * @param parentDataObjectId - ID of a DeliveryCertificateItem
      */
-    public DeliveryCertificateSerialNumbersListPanel(BigInteger deliveryCertificateItemId) {
+    public DeliveryCertificateSerialNumbersListPanel(UUID deliveryCertificateItemId) {
         super(deliveryCertificateItemId);
         this.setVisibleButtons(8 + 32);
     }
@@ -131,7 +131,7 @@ public class DeliveryCertificateSerialNumbersListPanel extends AbstractTablePane
 
     private List<DeliveryCertificateSerialNumber> getDeliveryCertificateItemSerialNumbers() {
 
-        BigInteger certificateItemId = this.getParentDataObjectId();
+        UUID certificateItemId = this.getParentDataObjectId();
         List<DeliveryCertificateSerialNumber> list = getFormSession().getDeliveryCertificateItemSerialNumbers(certificateItemId);
         return list;
     }

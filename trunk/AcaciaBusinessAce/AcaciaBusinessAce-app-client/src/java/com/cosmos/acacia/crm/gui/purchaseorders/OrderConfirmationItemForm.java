@@ -12,7 +12,7 @@ import static com.cosmos.acacia.util.AcaciaUtils.getIntegerFormat;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +36,7 @@ import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * 

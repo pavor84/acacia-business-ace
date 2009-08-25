@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -53,7 +53,7 @@ public class AddressPanel extends BaseEntityPanel {
     }
 
     /** Creates new form AddressPanel */
-    public AddressPanel(BigInteger parentDataObjectId) {
+    public AddressPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
@@ -374,7 +374,7 @@ public class AddressPanel extends BaseEntityPanel {
 
         descriptionTextPane.bind(bg, address, entityProps.getPropertyDetails("description"));
 
-        BigInteger dataObjectId;
+        UUID dataObjectId;
         DataObject dataObject;
         if (address != null && (dataObject = address.getDataObject()) != null) {
             dataObjectId = dataObject.getDataObjectId();

@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -44,7 +44,7 @@ public class ProductCategoryListPanel extends AbstractTreeEnabledTablePanel<Prod
     private EntityProperties entityProps;
 
     /** Creates new form ProductCategoryListPanel */
-    public ProductCategoryListPanel(BigInteger parentDataObjectId, boolean removeTableContainerGaps) {
+    public ProductCategoryListPanel(UUID parentDataObjectId, boolean removeTableContainerGaps) {
         super(parentDataObjectId);
 
         initComponentsCustom(removeTableContainerGaps);

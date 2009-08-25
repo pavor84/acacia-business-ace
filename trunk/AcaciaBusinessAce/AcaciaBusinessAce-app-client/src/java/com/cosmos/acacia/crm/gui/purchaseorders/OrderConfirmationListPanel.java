@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -35,7 +35,7 @@ public class OrderConfirmationListPanel extends AbstractTablePanel<OrderConfirma
      * @param pendingConfirmations 
      * @param parentDataObject
      */
-    public OrderConfirmationListPanel(BigInteger parentDataObjectId) {
+    public OrderConfirmationListPanel(UUID parentDataObjectId) {
         this(parentDataObjectId, null);
     }
 
@@ -43,7 +43,7 @@ public class OrderConfirmationListPanel extends AbstractTablePanel<OrderConfirma
      * @param pendingConfirmations 
      * @param parentDataObject
      */
-    public OrderConfirmationListPanel(BigInteger parentDataObjectId, List<OrderConfirmation> list) {
+    public OrderConfirmationListPanel(UUID parentDataObjectId, List<OrderConfirmation> list) {
         super(parentDataObjectId);
         this.list = list;
         bindComponents();

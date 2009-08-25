@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -30,7 +30,7 @@ public class PositionsHierarchyTreePanel extends BaseTreePanel<PositionType> {
 
 
     /** Creates new form ProductCategoriesPanel */
-    public PositionsHierarchyTreePanel(BigInteger parentDataObjectId) {
+    public PositionsHierarchyTreePanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

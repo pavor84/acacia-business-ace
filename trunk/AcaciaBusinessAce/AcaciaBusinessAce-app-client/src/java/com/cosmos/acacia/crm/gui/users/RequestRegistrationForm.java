@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
@@ -20,7 +20,7 @@ public class RequestRegistrationForm extends AcaciaPanel {
 
     /** Creates new form RequestRegistrationForm */
     public RequestRegistrationForm() {
-        super((BigInteger) null);
+        super((UUID) null);
         initComponents();
     }
 
@@ -154,9 +154,8 @@ public class RequestRegistrationForm extends AcaciaPanel {
         if (formSession == null) {
             try {
                 formSession = getBean(UsersRemote.class);
-//                UserUtils.updateUserLocale(formSession);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                handleException(ex);
             }
         }
 
@@ -176,14 +175,16 @@ public class RequestRegistrationForm extends AcaciaPanel {
 
     @Action
     public void proceed() {
+        String email = null;
         try {
-            String email = getFormSession().verifyCode(codeTextField.getText());
+            email = getFormSession().verifyCode(codeTextField.getText());
 
             RegistrationForm regForm = new RegistrationForm(email);
             regForm.showDialog(this.getParent());
             this.close();
         } catch (Exception ex){
-            handleBusinessException(ex);
+            ex.printStackTrace();
+            handleException(email, ex);
         }
         
     }

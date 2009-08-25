@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -36,7 +36,7 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel<PatternMaskFo
     private PatternMaskListRemote formSession;
 
     /** Creates new form PersonsListPanel */
-    public PatternMaskFormatListPanel(BigInteger parentDataObjectId){
+    public PatternMaskFormatListPanel(UUID parentDataObjectId){
         super(parentDataObjectId);
     }
 

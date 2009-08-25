@@ -28,7 +28,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 import org.jdesktop.application.Task;
 
 /**
@@ -43,12 +43,12 @@ public class OrganizationsListPanel extends AbstractTablePanel<Organization> {
     }
 
     /** Creates new form OrganizationsListPanel */
-    public OrganizationsListPanel(BigInteger parentDataObjectId) {
+    public OrganizationsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initComponentsCustom();
     }
 
-    public OrganizationsListPanel(BigInteger parentDataObjectId, Classifier classifier) {
+    public OrganizationsListPanel(UUID parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         setClassifier(classifier);
         initComponentsCustom();

@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.warehouse;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class ProductsTotalsPanel extends AcaciaPanel {
     private Map<WarehouseProduct, List<WarehouseProduct>> warehouseProductsData;
 
     /** Creates new form ProductsTotalsPanel */
-    public ProductsTotalsPanel(BigInteger parentId) {
+    public ProductsTotalsPanel(UUID parentId) {
         super(parentId);
         initComponents();
         initComponentsCustom();

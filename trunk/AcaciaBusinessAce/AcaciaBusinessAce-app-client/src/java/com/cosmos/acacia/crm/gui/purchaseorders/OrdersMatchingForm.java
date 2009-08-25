@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
 
     /** Creates new form OrdersMatchingForm
      * @param parentId */
-    public OrdersMatchingForm(BigInteger parentId) {
+    public OrdersMatchingForm(UUID parentId) {
         super(parentId);
         initComponents();
         initData();
@@ -227,7 +227,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         });
 
         //purchase order items panel
-        orderItemsListPanel = new PurchaseOrderItemListPanel((BigInteger)null);
+        orderItemsListPanel = new PurchaseOrderItemListPanel((UUID)null);
         orderItemsListPanel.setVisibleButtons(0);
         orderItemsHolderPanel.add(orderItemsListPanel);
         orderItemsListPanel.getDataTable().addListSelectionListener(new ListSelectionListener() {
@@ -238,7 +238,7 @@ public class OrdersMatchingForm extends AcaciaPanel {
         });
 
         //confirmation items list panel
-        confirmationItemsListPanel = new OrderConfirmationItemListPanel((BigInteger)null);
+        confirmationItemsListPanel = new OrderConfirmationItemListPanel((UUID)null);
         confirmationItemsListPanel.setVisibleButtons(0);
         confirmationItemsListPanel.setEditable(false);
         confirmationItemsHolderPanel.add(confirmationItemsListPanel);

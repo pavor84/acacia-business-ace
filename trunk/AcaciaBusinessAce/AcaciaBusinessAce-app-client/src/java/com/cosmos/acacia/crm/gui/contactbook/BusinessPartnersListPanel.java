@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -242,7 +242,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel<BusinessPartne
             propDetails.setColumnName("classifier");
 
             if (comboListPanel == null) {
-                comboListPanel = new ClassifiersListPanel((BigInteger) null);
+                comboListPanel = new ClassifiersListPanel((UUID) null);
             }
             comboList.bind(comboListBindingGroup, comboListPanel, classifiedObject,
                     propDetails, "${classifierName}", UpdateStrategy.READ_WRITE);

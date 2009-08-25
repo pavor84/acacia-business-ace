@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 
@@ -27,7 +27,7 @@ import com.cosmos.swingb.DialogResponse;
 public class ClassifierGroupsListPanel extends AbstractTablePanel<ClassifierGroup> {
 
     /** Creates new form ClassifierGroupsListPanel */
-    public ClassifierGroupsListPanel(BigInteger parentDataObjectId)
+    public ClassifierGroupsListPanel(UUID parentDataObjectId)
     {
         super(parentDataObjectId);
     }

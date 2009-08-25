@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +35,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * 
@@ -48,8 +49,8 @@ public class PaymentMatchingPanel extends AcaciaPanel {
     private InvoiceListRemote invoiceManager = getBean(InvoiceListRemote.class);
 
     /** Creates new form PaymentMatchingPanel 
-     * @param bigInteger */
-    public PaymentMatchingPanel(BigInteger parentId) {
+     * @param UUID */
+    public PaymentMatchingPanel(UUID parentId) {
         super(parentId);
         initComponents();
         initComponentsCustom();

@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -34,7 +34,7 @@ public class BankDetailsListPanel extends AbstractTablePanel<BankDetail> {
     }
 
     /** Creates new form BankDetailsListPanel */
-    public BankDetailsListPanel(BigInteger parentDataObjectId) {
+    public BankDetailsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

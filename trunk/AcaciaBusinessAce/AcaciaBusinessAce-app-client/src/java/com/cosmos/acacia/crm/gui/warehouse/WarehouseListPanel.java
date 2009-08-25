@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.warehouse;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -35,7 +35,7 @@ public class WarehouseListPanel extends AbstractTablePanel<Warehouse> {
     /**
      * @param parentDataObject
      */
-    public WarehouseListPanel(BigInteger parentDataObjectId) {
+    public WarehouseListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

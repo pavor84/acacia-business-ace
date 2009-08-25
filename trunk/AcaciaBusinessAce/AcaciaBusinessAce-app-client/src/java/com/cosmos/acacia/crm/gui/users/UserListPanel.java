@@ -4,8 +4,6 @@
  */
 package com.cosmos.acacia.crm.gui.users;
 
-import com.cosmos.acacia.crm.data.users.BusinessUnit;
-import com.cosmos.acacia.crm.data.users.JobTitle;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;

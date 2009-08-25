@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +48,8 @@ import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import com.cosmos.util.NumberUtils;
+import java.math.BigInteger;
 
 /**
  * 
@@ -638,7 +640,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         }, true);
         
         //if once saved - the supplier is not changeable
-        if ( entity.getId()!=null && entity.getId().compareTo(new BigInteger("0"))>0 ){
+        if ( entity.getId()!=null && !entity.getId().equals(NumberUtils.ZERO_UUID)){
             supplierField.setEditable(false);
             supplierField.setEnabled(false);
         }

@@ -39,7 +39,8 @@ public class JobTitleListPanel extends DetailEntityListPanel<DataObjectBean, Job
         if((mainEntityPanel = getMainEntityPanel()) instanceof BusinessUnitPanel) {
             return super.getMainEntity();
         } else if(mainEntityPanel instanceof UserPanel) {
-            return ((UserPanel) mainEntityPanel).getEntity().getBusinessUnit();
+            //return ((UserPanel) mainEntityPanel).getEntity().getBusinessUnit();
+            throw new UnsupportedOperationException("TODO");
         }
 
         throw new UnsupportedOperationException("Unsupported mainEntityPanel=" + mainEntityPanel);

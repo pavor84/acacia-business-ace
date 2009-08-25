@@ -6,7 +6,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -31,7 +31,7 @@ public class ProductCategoriesTreePanel extends BaseTreePanel<ProductCategory> i
 
 
     /** Creates new form ProductCategoriesPanel */
-    public ProductCategoriesTreePanel(BigInteger parentDataObjectId) {
+    public ProductCategoriesTreePanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
     

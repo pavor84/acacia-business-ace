@@ -19,7 +19,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 import org.jdesktop.application.Task;
 
 /**
@@ -38,7 +38,7 @@ public class AddressListPanel extends AbstractTablePanel<Address> {
     }
 
     /** Creates new form AddresssListPanel */
-    public AddressListPanel(BigInteger parentDataObjectId) {
+    public AddressListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
     //

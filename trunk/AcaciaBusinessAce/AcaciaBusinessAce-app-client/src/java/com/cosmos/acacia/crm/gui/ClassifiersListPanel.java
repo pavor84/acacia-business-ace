@@ -5,7 +5,7 @@
 
 package com.cosmos.acacia.crm.gui;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +39,14 @@ public class ClassifiersListPanel extends AbstractTablePanel<Classifier> {
     }
 
       /** Creates new form ClassifiersListPanel */
-    public ClassifiersListPanel(BigInteger parentDataObjectId, DataObjectType dot)
+    public ClassifiersListPanel(UUID parentDataObjectId, DataObjectType dot)
     {
         super(parentDataObjectId);
         this.dataObjectType = dot;
         postInitData();
     }
 
-    public ClassifiersListPanel(BigInteger parentId) {
+    public ClassifiersListPanel(UUID parentId) {
         super(parentId);
         postInitData();
     }
