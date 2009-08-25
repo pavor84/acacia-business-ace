@@ -25,13 +25,13 @@ public class BeanUtils extends BeanUtilsBean {
     }
 
     public static BeanUtils getInstance() {
-        BeanUtils beanUtils;
-        if ((beanUtils = instance.get()) == null) {
-            beanUtils = new BeanUtils();
-            instance.set(beanUtils);
+        BeanUtils utils;
+        if ((utils = instance.get()) == null) {
+            utils = new BeanUtils();
+            instance.set(utils);
         }
 
-        return beanUtils;
+        return utils;
     }
 
     public static void removeInstance() {
