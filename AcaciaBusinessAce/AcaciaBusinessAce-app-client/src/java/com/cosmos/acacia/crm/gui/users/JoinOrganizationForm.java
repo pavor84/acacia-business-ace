@@ -15,7 +15,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
@@ -26,7 +26,7 @@ import org.jdesktop.application.Action;
 public class JoinOrganizationForm extends AcaciaPanel{
 
     /** Creates new form JoinOrganizationForm */
-    public JoinOrganizationForm(BigInteger parentId) {
+    public JoinOrganizationForm(UUID parentId) {
         super(parentId);
         initComponents();
         initData();

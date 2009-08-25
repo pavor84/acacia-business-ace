@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -31,11 +31,11 @@ public class PricelistListPanel extends AbstractTablePanel<Pricelist> {
     private BindingGroup bindingGroup;
     private List<Pricelist> list;
 
-    public PricelistListPanel(BigInteger parentDataObjectId) {
+    public PricelistListPanel(UUID parentDataObjectId) {
         this(parentDataObjectId, null);
     }
 
-    public PricelistListPanel(BigInteger parentDataObjectId, List<Pricelist> list) {
+    public PricelistListPanel(UUID parentDataObjectId, List<Pricelist> list) {
         super(parentDataObjectId);
         this.setList(list);
         bindComponents();

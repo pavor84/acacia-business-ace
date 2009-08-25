@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 
@@ -32,7 +32,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     }
 
     /** Creates new form ContactPersonPanel */
-    public ContactPersonPanel(BigInteger parentDataObjectId) {
+    public ContactPersonPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }

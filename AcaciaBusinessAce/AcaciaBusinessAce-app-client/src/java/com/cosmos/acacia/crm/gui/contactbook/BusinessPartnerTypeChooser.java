@@ -11,7 +11,7 @@ import static com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.P
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class BusinessPartnerTypeChooser extends AcaciaPanel {
 
     /** Creates new form BusinessPartnerTypeChooser */
     public BusinessPartnerTypeChooser() {
-        super((BigInteger)null);
+        super((UUID)null);
         initComponents();
         initData();
     }

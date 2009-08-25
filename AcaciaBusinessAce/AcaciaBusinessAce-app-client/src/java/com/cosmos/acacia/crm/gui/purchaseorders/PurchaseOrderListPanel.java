@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -40,7 +40,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel<PurchaseOrder> {
      * @param pendingOrders 
      * @param parentDataObject
      */
-    public PurchaseOrderListPanel(BigInteger parentDataObjectId) {
+    public PurchaseOrderListPanel(UUID parentDataObjectId) {
         this(parentDataObjectId, null);
     }
 
@@ -48,7 +48,7 @@ public class PurchaseOrderListPanel extends AbstractTablePanel<PurchaseOrder> {
      * @param pendingOrders 
      * @param parentDataObject
      */
-    public PurchaseOrderListPanel(BigInteger parentDataObjectId, List<PurchaseOrder> pendingOrders) {
+    public PurchaseOrderListPanel(UUID parentDataObjectId, List<PurchaseOrder> pendingOrders) {
         super(parentDataObjectId);
         this.list = pendingOrders;
         bindComponents();

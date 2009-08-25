@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.cash;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -34,15 +34,15 @@ public class CashReconcileListPanel extends AbstractTablePanel<CashReconcile> {
     
     private List<CashReconcile> list;
     
-    public CashReconcileListPanel(BigInteger parentDataObjectId) {
+    public CashReconcileListPanel(UUID parentDataObjectId) {
         this ( parentDataObjectId, null );
     }
     
-    public CashReconcileListPanel(BigInteger parentDataObjectId, List<CashReconcile> list) {
+    public CashReconcileListPanel(UUID parentDataObjectId, List<CashReconcile> list) {
         this(parentDataObjectId, list, null);
     }
     
-    public CashReconcileListPanel(BigInteger parentDataObjectId, List<CashReconcile> list, EntityProperties entProperties) {
+    public CashReconcileListPanel(UUID parentDataObjectId, List<CashReconcile> list, EntityProperties entProperties) {
         super(parentDataObjectId);
         this.entityProps = entProperties;
         this.list=list;

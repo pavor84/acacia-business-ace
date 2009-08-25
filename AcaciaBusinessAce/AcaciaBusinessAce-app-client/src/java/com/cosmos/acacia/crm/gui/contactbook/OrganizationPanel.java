@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -52,13 +52,13 @@ public class OrganizationPanel extends BaseEntityPanel {
     }
 
     /** Creates new form organizationPanel */
-    public OrganizationPanel(BigInteger parentDataObjectId) {
+    public OrganizationPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
 
     public OrganizationPanel() {
-        super((BigInteger) null);
+        super((UUID) null);
         isInternal = true;
         this.organization = getAcaciaSession().getOrganization();
         init();

@@ -134,14 +134,14 @@ public abstract class TestUtils {
                 branch = orgSession.getAddresses(org.getId()).get(0);
                 searchMore = false;
 
-                user = usersSession.createUser();
+                user = usersSession.createUser("");
 
                 user.setUserName(TestUtils.getRandomString(10));
                 user.setUserPassword("asd");
                 user.setEmailAddress(TestUtils.getRandomEmail());
-                user.setBranchName(branch.getAddressName());
+                //user.setBranchName(branch.getAddressName());
                 user.setPerson(person);
-                user.setActive(true);
+                //user.setActive(true);
 
                 user = usersSession.signup(user, org, branch, person);
                 usersSession.activateUser(user, org.getId(), true);

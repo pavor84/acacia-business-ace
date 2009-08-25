@@ -11,7 +11,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import java.util.Locale;
 import java.util.prefs.Preferences;
@@ -45,7 +45,7 @@ public class LoginForm extends AcaciaPanel {
     protected static Logger log = Logger.getLogger(LoginForm.class);
 
     /** Creates new form LoginForm */
-    public LoginForm(BigInteger parentId) {
+    public LoginForm(UUID parentId) {
         super(parentId);
         initComponents();
         initData();
@@ -53,7 +53,7 @@ public class LoginForm extends AcaciaPanel {
 
     /** Creates new form LoginForm */
     public LoginForm() {
-        super((BigInteger) null);
+        super((UUID) null);
         initComponents();
         initData();
     }

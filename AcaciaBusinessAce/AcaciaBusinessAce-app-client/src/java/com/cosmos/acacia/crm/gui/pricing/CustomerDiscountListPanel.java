@@ -31,7 +31,7 @@ import com.cosmos.swingb.JBTextField;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.swing.border.TitledBorder;
@@ -53,7 +53,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
     }
 
     public CustomerDiscountListPanel() {
-        super((BigInteger)null);
+        super((UUID)null);
         init();
     }
 

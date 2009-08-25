@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.io.File;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.util.ArrayList;
@@ -73,32 +73,32 @@ public class AcaciaPanel extends JBPanel {
     private static RightsManagerRemote rightsManager;
     @EJB
     private static ClassifiersRemote classifiersManager;
-    private BigInteger parentDataObjectId;
+    private UUID parentDataObjectId;
     private DataObjectBean mainDataObject;
-    private BigInteger organizationDataObjectId;
+    private UUID organizationDataObjectId;
 
     public AcaciaPanel() {
     }
 
-    public AcaciaPanel(BigInteger parentDataObjectId) {
+    public AcaciaPanel(UUID parentDataObjectId) {
         this();
         this.parentDataObjectId = parentDataObjectId;
     }
 
     public AcaciaPanel(DataObjectBean mainDataObject) {
-        this(mainDataObject != null ? mainDataObject.getParentId() : (BigInteger) null);
+        this(mainDataObject != null ? mainDataObject.getParentId() : (UUID) null);
         this.mainDataObject = mainDataObject;
     }
 
     protected void initData() {
     }
 
-    public BigInteger getParentDataObjectId() {
+    public UUID getParentDataObjectId() {
         //log.info("Parent data object id (" + getClass().getName() + ") is: " + (parentDataObjectId != null ? parentDataObjectId.longValue() : "null"));
         return parentDataObjectId;
     }
 
-    public void setParentDataObjectId(BigInteger parentDataObjectId) {
+    public void setParentDataObjectId(UUID parentDataObjectId) {
         this.parentDataObjectId = parentDataObjectId;
     }
 
@@ -123,7 +123,7 @@ public class AcaciaPanel extends JBPanel {
         return null;
     }
 
-    public BigInteger getOrganizationDataObjectId() {
+    public UUID getOrganizationDataObjectId() {
 
         // Quitting in case there is no organization data object
 

@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.users;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +37,7 @@ import com.cosmos.swingb.DialogResponse;
 public class RightsListPanel extends AbstractTablePanel<Right> {
 
     /** Creates new form OrganizationsListPanel */
-    public RightsListPanel(BigInteger parentDataObjectId) {
+    public RightsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

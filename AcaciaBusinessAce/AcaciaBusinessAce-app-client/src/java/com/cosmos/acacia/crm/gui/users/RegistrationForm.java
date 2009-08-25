@@ -5,8 +5,6 @@
  */
 package com.cosmos.acacia.crm.gui.users;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JOptionPane;
 
@@ -18,13 +16,10 @@ import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
-import com.cosmos.acacia.crm.gui.contactbook.AddressListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
-import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  *
@@ -34,7 +29,8 @@ public class RegistrationForm extends BaseEntityPanel {
 
     /** Creates new form RegistrationForm */
     public RegistrationForm(String email) {
-        super((BigInteger) null);
+        super((UUID) null);
+        System.out.println("RegistrationForm(" + email + ")");
         this.email = email;
         init();
     }
@@ -267,19 +263,16 @@ public class RegistrationForm extends BaseEntityPanel {
         setResizable(false);
 
         if (user == null) {
-            user = getFormSession().createUser();
+            user = getFormSession().createUser(email);
         }
 
         BindingGroup bg = getBindingGroup();
-
-        // Setting the email address to the verified one from the code-verification step
-        user.setEmailAddress(email);
 
         EntityProperties entityProps = getFormSession().getUserEntityProperties();
         usernameTextField.bind(bg, user, entityProps.getPropertyDetails("userName"));
         passwordTextField.bind(bg, user, entityProps.getPropertyDetails("userPassword"));
 
-        OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
+        /*OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
         organizationComboList.initUnbound(organizationsTable, "${organizationName}");
 
         organizationComboList.addItemListener(new ItemListener() {
@@ -300,7 +293,7 @@ public class RegistrationForm extends BaseEntityPanel {
             }
         });
 
-        branchComboList.setEnabled(false);
+        branchComboList.setEnabled(false);*/
         bg.bind();
     }
 

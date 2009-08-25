@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import com.cosmos.swingb.DialogResponse;
 public class OrderConfirmationItemListPanel extends AbstractTablePanel<OrderConfirmationItem> {
 
     /** Creates new form AddresssListPanel */
-    public OrderConfirmationItemListPanel(BigInteger parentDataObjectId) {
+    public OrderConfirmationItemListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.invoice;
 
-import java.math.BigInteger;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 
@@ -34,7 +34,7 @@ public class ComplexProductSelectionPanel extends AcaciaPanel {
     }
 
     /** Creates new form VirtualProductSelectionPanel */
-    public ComplexProductSelectionPanel(BigInteger parentDataObjectId) {
+    public ComplexProductSelectionPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initComponents();
     }

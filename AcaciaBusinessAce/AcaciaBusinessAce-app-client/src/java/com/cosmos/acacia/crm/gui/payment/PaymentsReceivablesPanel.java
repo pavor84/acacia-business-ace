@@ -10,7 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
     private Map<BusinessPartner, BigDecimal> prepaidMap;
     
     /** Creates new form PaymentsReceivablesPanel */
-    public PaymentsReceivablesPanel(BigInteger parentDataObjectId) {
+    public PaymentsReceivablesPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initComponents();
         initComponentsCustom();

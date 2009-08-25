@@ -6,7 +6,6 @@
 package com.cosmos.acacia.crm.reports;
 
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.resource.BeanResource;
 import java.math.BigDecimal;

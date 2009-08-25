@@ -4,14 +4,16 @@ import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.util.AcaciaProperties;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.DeferredListServerRemote;
+import com.cosmos.acacia.app.SessionContext;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -20,6 +22,7 @@ import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
+import java.util.UUID;
 
 /**
  * Singleton client session. Caches results from the remote session
@@ -77,7 +80,7 @@ public class LocalSession implements AcaciaSessionRemote {
     }
 
     @Override
-    public DataObject getDataObject(BigInteger dataObjectId) {
+    public DataObject getDataObject(UUID dataObjectId) {
        return remoteSession.getDataObject(dataObjectId);
     }
 
@@ -95,6 +98,17 @@ public class LocalSession implements AcaciaSessionRemote {
         }
 
         return org;
+    }
+
+    @Override
+    public UserOrganization getUserOrganization() {
+        UserOrganization userOrganization;
+        if ((userOrganization = (UserOrganization) sessionCache.get(SessionContext.USER_ORGANIZATION_KEY)) == null) {
+            userOrganization = remoteSession.getUserOrganization();
+            sessionCache.put(SessionContext.USER_ORGANIZATION_KEY, userOrganization);
+        }
+
+        return userOrganization;
     }
 
     @Override

@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -39,7 +39,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
     protected static Logger log = Logger.getLogger(PositionTypesListPanel.class);
 
     /** Creates new form AddresssListPanel */
-    public PositionTypesListPanel(BigInteger parentDataObjectId, boolean isInternal) {
+    public PositionTypesListPanel(UUID parentDataObjectId, boolean isInternal) {
         super(parentDataObjectId);
         try {
             if (getAcaciaSession().getOrganization().getId().equals(parentDataObjectId)) {
@@ -59,7 +59,7 @@ public class PositionTypesListPanel extends AbstractTreeEnabledTablePanel<Positi
         postInitData();
     }
 
-    public PositionTypesListPanel(Class ownerClass, BigInteger parentDataObjectId) {
+    public PositionTypesListPanel(Class ownerClass, UUID parentDataObjectId) {
         super(parentDataObjectId);
         this.ownerClass = ownerClass;
         postInitData();

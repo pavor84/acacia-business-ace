@@ -5,7 +5,7 @@
 package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.crm.gui.product.ProductPanel;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class ProductsListPanel
         this(getAcaciaSession().getOrganization().getId());
     }
 
-    public ProductsListPanel(BigInteger parentDataObjectId) {
+    public ProductsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

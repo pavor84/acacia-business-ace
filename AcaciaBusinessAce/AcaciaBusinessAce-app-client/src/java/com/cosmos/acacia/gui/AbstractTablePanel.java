@@ -9,7 +9,7 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -82,7 +82,7 @@ public abstract class AbstractTablePanel<E extends CloneableBean>
     }
 
     public AbstractTablePanel() {
-        this((BigInteger) null);
+        this((UUID) null);
     }
 
     /** Creates new form AbstractTablePanel */
@@ -91,7 +91,7 @@ public abstract class AbstractTablePanel<E extends CloneableBean>
         init();
     }
 
-    public AbstractTablePanel(BigInteger parentDataObjectId) {
+    public AbstractTablePanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
@@ -1225,7 +1225,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
         }
     }
 
-    public void setParentDataObjectToAssociatedTables(BigInteger parentDataObjectId) {
+    public void setParentDataObjectToAssociatedTables(UUID parentDataObjectId) {
         for (AbstractTablePanel table : associatedTables) {
             table.setParentDataObjectId(parentDataObjectId);
         }

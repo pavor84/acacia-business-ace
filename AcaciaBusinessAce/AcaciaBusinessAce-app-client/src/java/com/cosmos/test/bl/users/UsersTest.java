@@ -53,7 +53,7 @@ public class UsersTest implements Serializable {
         if (formSession == null)
             formSession = AcaciaPanel.getBean(UsersRemote.class, false);
 
-        user = formSession.createUser();
+        user = formSession.createUser("");
         password = TestUtils.getRandomString(15);
         user.setUserName(TestUtils.getRandomString(10));
         user.setUserPassword(password);
@@ -134,7 +134,7 @@ public class UsersTest implements Serializable {
 
     @Test
     public void signupExceptionsTest() {
-        User newUser = formSession.createUser();
+        User newUser = formSession.createUser("");
         newUser.setUserName(user.getUserName());
         newUser.setUserPassword(TestUtils.getRandomString(10));
         try {

@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,6 +69,7 @@ import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.listeners.TableModificationListener;
+import com.cosmos.util.NumberUtils;
 
 /**
  * Created : 10.09.2008
@@ -1263,7 +1264,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // if once saved - the recipient is not changeable
-        if (entity.getId() != null && entity.getId().compareTo(new BigInteger("0")) > 0) {
+        if (entity.getId() != null && !entity.getId().equals(NumberUtils.ZERO_UUID)) {
             recipientField.setEditable(false);
             recipientField.setEnabled(false);
         }

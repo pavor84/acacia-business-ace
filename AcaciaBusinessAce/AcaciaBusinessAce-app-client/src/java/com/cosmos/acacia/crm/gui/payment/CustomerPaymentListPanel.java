@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.payment;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -32,15 +32,15 @@ public class CustomerPaymentListPanel extends AbstractTablePanel<CustomerPayment
     private BindingGroup bindingGroup;
     private List<CustomerPayment> list;
 
-    public CustomerPaymentListPanel(BigInteger parentDataObjectId) {
+    public CustomerPaymentListPanel(UUID parentDataObjectId) {
         this(parentDataObjectId, null);
     }
 
-    public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list) {
+    public CustomerPaymentListPanel(UUID parentDataObjectId, List<CustomerPayment> list) {
         this(parentDataObjectId, list, null);
     }
 
-    public CustomerPaymentListPanel(BigInteger parentDataObjectId, List<CustomerPayment> list, EntityProperties entProperties) {
+    public CustomerPaymentListPanel(UUID parentDataObjectId, List<CustomerPayment> list, EntityProperties entProperties) {
         super(parentDataObjectId);
         this.entityProps = entProperties;
         this.list = list;

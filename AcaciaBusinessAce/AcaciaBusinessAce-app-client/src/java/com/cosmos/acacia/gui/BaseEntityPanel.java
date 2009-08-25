@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,7 +63,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
         initConstructor();
     }
 
-    public BaseEntityPanel(BigInteger parentDataObjectId) {
+    public BaseEntityPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initConstructor();
     }
@@ -258,7 +258,7 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
                             return false;
                         }
 
-                        BigInteger doId = getDataObject().getDataObjectId();
+                        UUID doId = getDataObject().getDataObjectId();
                         table.setParentDataObjectId(doId);
                         table.setParentDataObjectToAssociatedTables(doId);
                         return true;

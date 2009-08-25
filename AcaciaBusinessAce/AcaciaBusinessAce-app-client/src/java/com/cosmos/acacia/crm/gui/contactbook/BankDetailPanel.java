@@ -1,6 +1,6 @@
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class BankDetailPanel extends BaseEntityPanel {
     }
 
     /** Creates new form ContactPersonPanel */
-    public BankDetailPanel(BigInteger parentDataObjectId) {
+    public BankDetailPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
@@ -420,7 +420,7 @@ public class BankDetailPanel extends BaseEntityPanel {
         if (selectedObject == null)
             return new ArrayList<Person>();
 
-        BigInteger parentId = ((DataObjectBean) selectedObject).getParentId();
+        UUID parentId = ((DataObjectBean) selectedObject).getParentId();
         List<Person> contacts = getFormSession().getBankContacts(parentId);
 
         log.info("Persons: " + contacts.size());

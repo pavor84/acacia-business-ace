@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +30,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
+import java.math.BigInteger;
 
 /**
  * 
@@ -54,7 +55,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
     private Random r = new Random();
 
     /** Creates new form AddresssListPanel */
-    public PurchaseOrderItemListPanel(BigInteger parentDataObjectId) {
+    public PurchaseOrderItemListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 
@@ -218,7 +219,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         
         //invoice
         Invoice i = new Invoice();
-        i.setId(new BigInteger(""+sequence++));
+        i.setId(UUID.randomUUID());
         DummyInvoice di = new DummyInvoice();
         di.invoice = i;
         if ( !recipients.isEmpty() )
@@ -231,7 +232,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         
         //invoice
         i = new Invoice();
-        i.setId(new BigInteger(""+sequence++));
+        i.setId(UUID.randomUUID());
         di = new DummyInvoice();
         di.invoice = i;
         if ( !recipients.isEmpty() )
@@ -244,7 +245,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         
         //invoice
         i = new Invoice();
-        i.setId(new BigInteger(""+sequence++));
+        i.setId(UUID.randomUUID());
         di = new DummyInvoice();
         di.invoice = i;
         if ( !recipients.isEmpty() )
@@ -274,7 +275,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         
         for (int j = 0; j < howMuch; j++) {
             InvoiceItem item = new InvoiceItem();
-            item.setId(new BigInteger(""+sequence++));
+            item.setId(UUID.randomUUID());
             item.setMeasureUnit(getRandomMeasureUnit());
             int ordered = r.nextInt(10)+1;
             ordered*=10;

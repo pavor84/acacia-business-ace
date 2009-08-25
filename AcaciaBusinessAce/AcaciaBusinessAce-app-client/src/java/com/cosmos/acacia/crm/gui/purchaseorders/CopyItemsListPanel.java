@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class CopyItemsListPanel extends AbstractTablePanel<InvoiceItem> {
     private BindingGroup bindGroup;
     private List<?> items;
     
-    public CopyItemsListPanel(BigInteger parentDataObject) {
+    public CopyItemsListPanel(UUID parentDataObject) {
         super(parentDataObject);
     }
     

@@ -20,7 +20,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  *
@@ -30,7 +30,7 @@ public class UserPanelOld extends BaseEntityPanel {
 
     /** Creates new form UserPenl */
     public UserPanelOld(UserOrganization uo) {
-        super((BigInteger) null);
+        super((UUID) null);
         this.userOrganization = uo;
         init();
     }
@@ -275,14 +275,14 @@ public class UserPanelOld extends BaseEntityPanel {
         specialPermissionsTable.setUser(u);
 
         if (userOrganization.getBranch() != null) {
-            u.setBranchName(userOrganization.getBranch().getAddressName());
+            //u.setBranchName(userOrganization.getBranch().getAddressName());
         }
 
         if (!userOrganization.getBranch().equals(branch)) {
             getFormSession().changeBranch(u, branch, userOrganization.getBranch());
         }
 
-        u.setActive(userOrganization.isUserActive());
+        //u.setActive(userOrganization.isUserActive());
 
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(userOrganization.getUser());

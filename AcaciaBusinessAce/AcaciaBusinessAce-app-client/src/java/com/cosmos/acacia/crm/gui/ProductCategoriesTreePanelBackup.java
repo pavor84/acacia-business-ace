@@ -13,7 +13,7 @@ import java.awt.dnd.DropTargetContext;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class ProductCategoriesTreePanelBackup extends AcaciaPanel {
 //    private JBPopupMenu treeContextMenu;
 
     /** Creates new form ProductCategoriesPanel */
-    public ProductCategoriesTreePanelBackup(BigInteger parentDataObjectId) {
+    public ProductCategoriesTreePanelBackup(UUID parentDataObjectId) {
         super(parentDataObjectId);
         initComponents();
         initComponentsCustom();

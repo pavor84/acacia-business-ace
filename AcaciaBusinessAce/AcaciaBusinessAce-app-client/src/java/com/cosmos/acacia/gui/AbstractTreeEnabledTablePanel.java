@@ -11,7 +11,7 @@ import javax.swing.tree.TreeNode;
 
 import com.cosmos.swingb.JBTree;
 import com.cosmos.util.Lister;
-import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * Base panel for table panels that will have associated trees
@@ -27,7 +27,7 @@ public abstract class AbstractTreeEnabledTablePanel<E extends DataObjectBean>
         super(dataObjectBean);
     }
 
-    public AbstractTreeEnabledTablePanel(BigInteger parentDataObjectId) {
+    public AbstractTreeEnabledTablePanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
 

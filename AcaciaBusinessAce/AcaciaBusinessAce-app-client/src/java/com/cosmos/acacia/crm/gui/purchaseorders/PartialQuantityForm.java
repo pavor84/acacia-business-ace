@@ -9,7 +9,7 @@ package com.cosmos.acacia.crm.gui.purchaseorders;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.text.NumberFormat;
 
 import org.jdesktop.beansbinding.AbstractBindingListener;
@@ -38,7 +38,7 @@ public class PartialQuantityForm extends AcaciaPanel {
     
     /** Creates new form ParitalQuantityForm 
      * @param maxQuantityToMatch */
-    public PartialQuantityForm(BigInteger parentId, BigDecimal maxQuantityToMatch) {
+    public PartialQuantityForm(UUID parentId, BigDecimal maxQuantityToMatch) {
         super(parentId);
         this.maxQuantityToMatch = maxQuantityToMatch;
         initComponents();

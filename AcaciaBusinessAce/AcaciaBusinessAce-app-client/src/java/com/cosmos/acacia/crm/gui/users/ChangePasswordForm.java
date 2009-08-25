@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
@@ -20,7 +20,7 @@ import org.jdesktop.application.Action;
 public class ChangePasswordForm extends AcaciaPanel {
 
     /** Creates new form ChangePasswordForm */
-    public ChangePasswordForm(BigInteger parentId) {
+    public ChangePasswordForm(UUID parentId) {
         super(parentId);
         initComponents();
     }

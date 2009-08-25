@@ -5,7 +5,7 @@ package com.cosmos.test.bl;
 
 import static com.cosmos.acacia.gui.AcaciaPanel.getBean;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class BaseTest {
         return result;
     }
 
-    public BigInteger getOrganizationId(){
+    public UUID getOrganizationId(){
         return getOrganization().getId();
     }
 

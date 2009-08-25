@@ -8,7 +8,7 @@ package com.cosmos.acacia.crm.gui;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.beansbinding.BindingGroup;
@@ -27,7 +27,7 @@ import com.cosmos.acacia.gui.AcaciaTable;
 public class ClassifiedObjectsPanel extends AcaciaPanel {
 
     /** Creates new form ClassifiedObjectsPanel */
-    public ClassifiedObjectsPanel(BigInteger parentId) {
+    public ClassifiedObjectsPanel(UUID parentId) {
         super(parentId);
         initComponents();
         initData();
@@ -125,7 +125,7 @@ public class ClassifiedObjectsPanel extends AcaciaPanel {
     class ClassifiedObjectBeansListPanel extends AbstractTablePanel<ClassifiedObjectBean> {
         BindingGroup objectsBindingGroup;
 
-        public ClassifiedObjectBeansListPanel(BigInteger parentId) {
+        public ClassifiedObjectBeansListPanel(UUID parentId) {
             super(parentId);
         }
 

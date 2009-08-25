@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.gui;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -52,7 +52,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     }
 
     /** Creates new form ContactPersonPanel */
-    public ClassifierPanel(BigInteger parentDataObjectId) {
+    public ClassifierPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }
@@ -61,7 +61,7 @@ public class ClassifierPanel extends BaseEntityPanel {
      * indicating that the form has been opened while classifying an object
      */
     public ClassifierPanel() {
-        super((BigInteger)null);
+        super((UUID)null);
         init();
         addObjectTypeButton.setEnabled(false);
     }

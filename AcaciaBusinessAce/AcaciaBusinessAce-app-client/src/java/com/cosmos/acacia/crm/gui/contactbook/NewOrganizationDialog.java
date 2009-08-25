@@ -13,7 +13,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.xhtml.XHTMLDialog;
 import com.cosmos.swingb.xhtml.XHTMLUtils;
 import java.awt.Component;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.ResourceMap;
 
@@ -25,11 +25,11 @@ public class NewOrganizationDialog extends AcaciaPanel {
 
     private Classifier classifier;
 
-    /*public NewOrganizationDialog(BigInteger parentDataObjectId) {
+    /*public NewOrganizationDialog(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }*/
 
-    public NewOrganizationDialog(BigInteger parentDataObjectId, Classifier classifier) {
+    public NewOrganizationDialog(UUID parentDataObjectId, Classifier classifier) {
         super(parentDataObjectId);
         this.classifier = classifier;
     }

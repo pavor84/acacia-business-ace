@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.gui.pricing;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import org.jdesktop.application.Task;
@@ -35,7 +35,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel<ProductPerc
 
     private ProductPercentValue.Type type;
     
-    public ProductPricingValueListPanel(BigInteger parentDataObjectId, ProductPercentValue.Type type) {
+    public ProductPricingValueListPanel(UUID parentDataObjectId, ProductPercentValue.Type type) {
         super(parentDataObjectId);
         this.type = type;
         if (type != null) {

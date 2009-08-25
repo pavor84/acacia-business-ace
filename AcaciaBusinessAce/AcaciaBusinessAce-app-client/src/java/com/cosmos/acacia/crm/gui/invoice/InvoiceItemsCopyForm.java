@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -60,7 +60,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     /** Creates new form InsertFromDocumentForm 
      * @param invoice 
      * @param templateDocuments */
-    public InvoiceItemsCopyForm(BigInteger parentId, InvoiceItemListPanel invoiceItemsPanel, Invoice invoice) {
+    public InvoiceItemsCopyForm(UUID parentId, InvoiceItemListPanel invoiceItemsPanel, Invoice invoice) {
         super(parentId);
         if ( invoiceItemsPanel==null )
             throw new IllegalArgumentException("cant be null: 'invoiceItemsPanel'");
@@ -356,14 +356,14 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         if ( allItemsLinks==null )
             allItemsLinks = getAllItemsLinks();
         
-        Set<BigInteger> alreadyAddedIds = new HashSet<BigInteger>();
+        Set<UUID> alreadyAddedIds = new HashSet<UUID>();
         for (InvoiceItemLink itemLink : allItemsLinks) {
             alreadyAddedIds.add(itemLink.getTemplateItemId());
         }
         boolean alreadyAddedPresent = false;
         for (Iterator iterator = itemsToCopy.iterator(); iterator.hasNext();) {
             Object item = (Object) iterator.next();
-            BigInteger selectedItemId = ((DataObjectBean) item).getId();
+            UUID selectedItemId = ((DataObjectBean) item).getId();
             if (alreadyAddedIds.contains(selectedItemId)) {
                 alreadyAddedPresent = true;
                 iterator.remove();

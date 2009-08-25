@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.contactbook;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -29,13 +29,13 @@ import com.cosmos.swingb.DialogResponse;
 public class ContactPersonsListPanel extends AbstractTablePanel<ContactPerson> {
 
     public ContactPersonsListPanel(Address address) {
-        this(address != null ? address.getId() : (BigInteger)null);
+        this(address != null ? address.getId() : (UUID)null);
         this.address = address;
     }
 
 
     /** Creates new form AddresssListPanel */
-    public ContactPersonsListPanel(BigInteger parentDataObjectId) {
+    public ContactPersonsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
     }
     //

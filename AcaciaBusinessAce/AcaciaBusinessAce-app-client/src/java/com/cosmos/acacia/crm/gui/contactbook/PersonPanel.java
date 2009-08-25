@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -54,7 +54,7 @@ public class PersonPanel extends BaseEntityPanel {
     }
 
     /** Creates new form PersonPanel */
-    public PersonPanel(BigInteger parentDataObjectId) {
+    public PersonPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
     }

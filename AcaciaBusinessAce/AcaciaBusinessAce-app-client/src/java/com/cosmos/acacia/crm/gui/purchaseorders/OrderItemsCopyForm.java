@@ -9,7 +9,7 @@ package com.cosmos.acacia.crm.gui.purchaseorders;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +42,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
 
     /** Creates new form InsertFromDocumentForm 
      * @param dummyInvoices */
-    public OrderItemsCopyForm(BigInteger parentId, PurchaseOrderItemListPanel orderItemsPanel, List<DummyInvoice> dummyInvoices) {
+    public OrderItemsCopyForm(UUID parentId, PurchaseOrderItemListPanel orderItemsPanel, List<DummyInvoice> dummyInvoices) {
         super(parentId);
         if ( orderItemsPanel==null )
             throw new IllegalArgumentException("cant be null: 'orderItemsPanel'");

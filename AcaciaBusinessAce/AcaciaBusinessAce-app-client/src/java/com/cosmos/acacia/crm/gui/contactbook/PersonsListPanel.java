@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.gui.contactbook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -39,14 +39,14 @@ public class PersonsListPanel extends AbstractTablePanel<Person> {
     }
 
     /** Creates new form PersonsListPanel */
-    public PersonsListPanel(BigInteger parentDataObjectId) {
+    public PersonsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         postInitData();
         initComponentsCustom();
     }
 
     /** Creates new form PersonsListPanel */
-    public PersonsListPanel(BigInteger parentDataObjectId, boolean staff) {
+    public PersonsListPanel(UUID parentDataObjectId, boolean staff) {
         super(parentDataObjectId);
         this.staff = staff;
         postInitData();

@@ -5,7 +5,7 @@ package com.cosmos.acacia.crm.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -119,7 +119,7 @@ public class AcaciaApplicationView extends FrameView {
         LoginForm loginForm = new LoginForm();
         loginForm.showFrame();
     }
-    private BigInteger parentId;
+    private UUID parentId;
     private AcaciaSessionRemote acaciaSession;
 
     private AcaciaSessionRemote getSession() {
@@ -131,7 +131,7 @@ public class AcaciaApplicationView extends FrameView {
         return acaciaSession;
     }
 
-    private BigInteger getParentId() {
+    private UUID getParentId() {
         if (parentId == null) {
             try {
                 parentId = getSession().getOrganization().getId();
@@ -350,7 +350,7 @@ public class AcaciaApplicationView extends FrameView {
 //    }
     @Action
     public void deliveryCertificatesAction(ActionEvent e) {
-        BigInteger warehouseId = new BigInteger(e.getActionCommand());
+        UUID warehouseId = UUID.fromString(e.getActionCommand());
         log.info("Displaying delivery certificates for warehouse: " + warehouseId);
         DeliveryCertificatesListPanel listPanel = new DeliveryCertificatesListPanel(warehouseId);
         listPanel.showFrame();
@@ -570,21 +570,21 @@ public class AcaciaApplicationView extends FrameView {
 
     @Action
     public void purchaseOrdersAction() {
-        BigInteger parentId = getParentId();
+        UUID parentId = getParentId();
         PurchaseOrderListPanel panel = new PurchaseOrderListPanel(parentId);
         panel.showFrame();
     }
 
     @Action
     public void ordersMatchingAction() {
-        BigInteger parentId = getParentId();
+        UUID parentId = getParentId();
         OrdersMatchingForm panel = new OrdersMatchingForm(parentId);
         panel.showFrame();
     }
 
     @Action
     public void orderConfirmationsAction() {
-        BigInteger parentId = getParentId();
+        UUID parentId = getParentId();
         OrderConfirmationListPanel panel = new OrderConfirmationListPanel(parentId);
         panel.showFrame();
     }

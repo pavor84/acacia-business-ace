@@ -16,7 +16,7 @@ import com.cosmos.acacia.crm.data.assembling.VirtualProduct;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.ejb.EJB;
 import org.jdesktop.application.Action;
 
@@ -125,7 +125,7 @@ public class VirtualProductSelectionPanel
     @Action
     public void productSelectionAction()
     {
-        BigInteger organizationId =
+        UUID organizationId =
                 LocalSession.instance().getOrganization().getId();
         ProductsListPanel productsPanel = new ProductsListPanel(organizationId);
         DialogResponse response = productsPanel.showDialog(this);

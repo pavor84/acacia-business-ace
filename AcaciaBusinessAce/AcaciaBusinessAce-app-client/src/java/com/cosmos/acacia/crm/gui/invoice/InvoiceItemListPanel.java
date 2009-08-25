@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.gui.invoice;
 
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
     private Invoice invoice;
 
     /** Creates new form AddresssListPanel */
-    public InvoiceItemListPanel(BigInteger parentDataObjectId, Invoice invoice) {
+    public InvoiceItemListPanel(UUID parentDataObjectId, Invoice invoice) {
         super(parentDataObjectId);
         this.invoice = invoice;
     }

@@ -13,7 +13,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
-import java.math.BigInteger;
+import java.util.UUID;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -33,7 +33,7 @@ public class AssemblingCategoryPanel
 
     /** Creates new form AssemblingCategoryPanel */
     public AssemblingCategoryPanel() {
-        super((BigInteger) null);
+        super((UUID) null);
         initComponents();
     }
 

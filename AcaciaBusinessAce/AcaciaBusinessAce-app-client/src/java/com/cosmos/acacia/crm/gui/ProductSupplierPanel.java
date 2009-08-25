@@ -25,7 +25,7 @@ import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
-import java.math.BigInteger;
+import java.util.UUID;
 import java.util.List;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -58,7 +58,7 @@ public class ProductSupplierPanel extends BaseEntityPanel {
     }
 
     public ProductSupplierPanel(ProductSupplier productSupplier) {
-        super((BigInteger)null);
+        super((UUID)null);
         this.productSupplier = productSupplier;
         initComponents();
         initData();
