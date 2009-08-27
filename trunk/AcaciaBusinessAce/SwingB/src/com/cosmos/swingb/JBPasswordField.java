@@ -6,14 +6,20 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.resource.BeanResource;
+import com.cosmos.resource.EnumResource;
+import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import javax.swing.JPasswordField;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.Binding;
@@ -26,10 +32,7 @@ import org.jdesktop.beansbinding.Validator;
  *
  * @author Bozhidar Bozhanov
  */
-public class JBPasswordField
-    extends JPasswordField
-    implements Validatable
-{
+public class JBPasswordField extends JPasswordField implements Validatable, EntityBinder {
 
     private Application application;
     private ApplicationContext applicationContext;
@@ -39,6 +42,7 @@ public class JBPasswordField
     private Binding binding;
     private String propertyName;
     private Object beanEntity;
+    private BeanResource beanResource;
 
     private boolean maskable;
 
@@ -228,5 +232,67 @@ public class JBPasswordField
     public void setStyleNormal() {
         setToolTipText(null);
         setBackground(getResourceMap().getColor("validation.field.normal.background"));
+    }
+
+    protected BeanResource getBeanResource() {
+        if(beanResource == null) {
+            beanResource = new BeanResource(getApplication());
+        }
+
+        return beanResource;
+    }
+
+    protected String getPropertyValue() {
+        return getPropertyValue(beanEntity);
+    }
+
+    protected String getPropertyValue(Object beanEntity) {
+        try {
+            Object propertyValue;
+            if ((propertyValue = PropertyUtils.getProperty(beanEntity, propertyName)) != null) {
+                if(propertyValue instanceof EnumResource) {
+                    return getBeanResource().getName((EnumResource)propertyValue);
+                } else if(propertyValue instanceof TextResource) {
+                    return getBeanResource().getName((TextResource)propertyValue);
+                } else {
+                    return String.valueOf(propertyValue);
+                }
+            }
+
+            return null;
+        } catch(Exception ex) {
+            throw new RuntimeException("beanEntity=" + beanEntity + ", propertyName=" + propertyName, ex);
+        }
+    }
+
+    @Override
+    public Binding getBinding() {
+        return binding;
+    }
+
+    @Override
+    public Task refresh() {
+        RefreshTask task = new RefreshTask();
+        task.run();
+        return task;
+    }
+
+    @Override
+    public void clear() {
+        setText(null);
+    }
+
+    private class RefreshTask extends Task<Object, Void> {
+
+        public RefreshTask() {
+            super(Application.getInstance());
+        }
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            String value = getPropertyValue();
+            setText(value);
+            return value;
+        }
     }
 }
