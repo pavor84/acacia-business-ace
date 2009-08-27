@@ -80,6 +80,7 @@ public class EntityFormProcessor {
     private Map<String, Set<String>> containerDependenciesMap;
     private Map<UnitType, List<Unit>> entityListLogicUnitsMap;
     private Map<UnitType, List<Unit>> entityLogicUnitsMap;
+    private int componentIndexCounter = INITIAL_INDEX_VALUE;
 
     public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
         this.entityClass = entityClass;
@@ -123,8 +124,8 @@ public class EntityFormProcessor {
             throw new EntityFormException("The Entity Service for entity '" + entityClass + "' is not initialized.");
         }
 
-        List<FormContainer> formContainers = getAnnotations(forms);
-        for (FormContainer formContainer : formContainers) {
+        Map<Integer, FormContainer> formContainersMap = getAnnotations(forms);
+        for (FormContainer formContainer : formContainersMap.values()) {
             JComponent container = getContainer(formContainer);
             String containerName = container.getName();
             getContainerType(container); // Check for compatibility
@@ -137,55 +138,85 @@ public class EntityFormProcessor {
             throw new EntityFormException("The mainContainer can not be null. The com.cosmos.acacia.annotation.Form is required.");
         }
 
-        if (containersMap.size() > 0) {
-            for (FormContainer formContainer : formContainers) {
-                Component component = formContainer.container();
-                String componentConstraints = component.componentConstraints();
-                String containerName = formContainer.name();
-                String parentContainerName = formContainer.parentContainerName();
-                JComponent jContainer = containersMap.get(containerName);
-                JComponent parentContainer = containersMap.get(parentContainerName);
-                if (parentContainer == null) {
-                    throw new EntityFormException("Missing container with name: " + parentContainerName);
-                }
-                if(parentContainer instanceof JTabbedPane) {
-                    String title;
-                    String name = jContainer.getName();
-                    if((title = resourceMap.getString(name + ".TabConstraints.tabTitle")) == null ||
-                            title.trim().length() == 0) {
-                        title = formContainer.title();
+        Map<StringIntegerComparator, Field> fieldsMap = getAnnotatedFields(entityClass);
+        Map<Integer, Object> indexedComponents = getIndexedComponents(formContainersMap, fieldsMap);
+        for(Object object : indexedComponents.values()) {
+            if(object instanceof FormContainer) {
+                addFormContainer((FormContainer) object);
+            } else {
+                Object[] params = (Object[]) object;
+                addFormComponent((Annotation) params[0], (Field) params[1]);
+            }
+        }
+    }
+
+    protected Map<Integer, Object> getIndexedComponents(
+            Map<Integer, FormContainer> formContainersMap,
+            Map<StringIntegerComparator, Field> fieldsMap) {
+        TreeMap<Integer, Object> indexedComponents = new TreeMap<Integer, Object>();
+        indexedComponents.putAll(formContainersMap);
+        for(StringIntegerComparator strInt : fieldsMap.keySet()) {
+            Integer index = strInt.getIntValue();
+            Field field = fieldsMap.get(strInt);
+            for (Annotation annotation : getAnnotations(field)) {
+                if (annotation instanceof FormComponent || annotation instanceof FormComponentPair) {
+                    if(indexedComponents.containsKey(index)) {
+                        throw new EntityFormException("There is another component with index=" + index +
+                                ", existing=" + indexedComponents.get(index) +
+                                ", current=" + annotation);
                     }
-                    Icon icon = null;
-                    String tooltip = null;
-                    ((JTabbedPane)parentContainer).addTab(title, jContainer);
-                } else if ("".equals(componentConstraints)) {
-                    parentContainer.add(jContainer);
-                } else {
-                    parentContainer.add(jContainer, componentConstraints);
+                    indexedComponents.put(index, new Object[] {annotation, field});
+                    break;
                 }
             }
         }
 
-        List<Field> fields = getAnnotatedFields(entityClass);
-        for (Field field : fields) {
-            for (Annotation annotation : getAnnotations(field)) {
-                if (annotation instanceof FormComponent) {
-                    FormComponent formComponent = (FormComponent) annotation;
-                    String parentContainerName = formComponent.parentContainerName();
+        return indexedComponents;
+    }
 
-                    Component component = formComponent.component();
-                    getJComponent(component, parentContainerName, field);
-                } else if (annotation instanceof FormComponentPair) {
-                    FormComponentPair componentPair = (FormComponentPair) annotation;
-                    String parentContainerName = componentPair.parentContainerName();
-
-                    Component component = componentPair.firstComponent();
-                    getJComponent(component, parentContainerName, field);
-
-                    component = componentPair.secondComponent();
-                    getJComponent(component, parentContainerName, field);
-                }
+    protected void addFormContainer(FormContainer formContainer) {
+        Component component = formContainer.container();
+        String componentConstraints = component.componentConstraints();
+        String containerName = formContainer.name();
+        String parentContainerName = formContainer.parentContainerName();
+        JComponent jContainer = containersMap.get(containerName);
+        JComponent parentContainer = containersMap.get(parentContainerName);
+        if (parentContainer == null) {
+            throw new EntityFormException("Missing container with name: " + parentContainerName);
+        }
+        if(parentContainer instanceof JTabbedPane) {
+            String title;
+            String name = jContainer.getName();
+            if((title = resourceMap.getString(name + ".TabConstraints.tabTitle")) == null ||
+                    title.trim().length() == 0) {
+                title = formContainer.title();
             }
+            Icon icon = null;
+            String tooltip = null;
+            ((JTabbedPane)parentContainer).addTab(title, jContainer);
+        } else if ("".equals(componentConstraints)) {
+            parentContainer.add(jContainer);
+        } else {
+            parentContainer.add(jContainer, componentConstraints);
+        }
+    }
+
+    protected void addFormComponent(Annotation annotation, Field field) {
+        if (annotation instanceof FormComponent) {
+            FormComponent formComponent = (FormComponent) annotation;
+            String parentContainerName = formComponent.parentContainerName();
+
+            Component component = formComponent.component();
+            getJComponent(component, parentContainerName, field);
+        } else if (annotation instanceof FormComponentPair) {
+            FormComponentPair componentPair = (FormComponentPair) annotation;
+            String parentContainerName = componentPair.parentContainerName();
+
+            Component component = componentPair.firstComponent();
+            getJComponent(component, parentContainerName, field);
+
+            component = componentPair.secondComponent();
+            getJComponent(component, parentContainerName, field);
         }
     }
 
@@ -757,16 +788,14 @@ public class EntityFormProcessor {
         return annotations;
     }
 
-    private List<FormContainer> getAnnotations(List<Form> forms) {
+    private Map<Integer, FormContainer> getAnnotations(List<Form> forms) {
         Map<Integer, FormContainer> map = new TreeMap<Integer, FormContainer>();
-        int counter = INITIAL_INDEX_VALUE;
         for (Form form : forms) {
             for (FormContainer formContainer : form.formContainers()) {
                 int index;
                 if ((index = formContainer.componentIndex()) < 0) {
-                    map.put(++counter, formContainer);
+                    map.put(++componentIndexCounter, formContainer);
                 } else {
-                    
                     if(map.containsKey(index)) {
                         if(!formContainer.name().equals(map.get(index).name())) {
                             throw new DuplicateComponentIndexException(index,
@@ -780,11 +809,10 @@ public class EntityFormProcessor {
             }
         }
 
-        return new ArrayList<FormContainer>(map.values());
+        return map;
     }
 
-    private List<Field> getAnnotatedFields(Class entityClass) {
-        int counter = INITIAL_INDEX_VALUE;
+    private Map<StringIntegerComparator, Field> getAnnotatedFields(Class entityClass) {
         Map<StringIntegerComparator, Field> map = new TreeMap<StringIntegerComparator, Field>();
         do {
             Field[] declaredFields = entityClass.getDeclaredFields();
@@ -807,7 +835,7 @@ public class EntityFormProcessor {
                             }
                             StringIntegerComparator key;
                             if (index < 0) {
-                                key = new StringIntegerComparator(str, ++counter);
+                                key = new StringIntegerComparator(str, ++componentIndexCounter);
                             } else {
                                 key = new StringIntegerComparator(str, index);
                             }
@@ -821,7 +849,7 @@ public class EntityFormProcessor {
             entityClass = entityClass.getSuperclass();
         } while (entityClass != null && !OBJECT_CLASS_NAME.equals(entityClass.getName()));
 
-        return new ArrayList<Field>(map.values());
+        return map;
     }
 
     private List<Annotation> getAnnotations(Field field) {
@@ -884,6 +912,14 @@ public class EntityFormProcessor {
         public StringIntegerComparator(String strValue, Integer intValue) {
             this.strValue = strValue;
             this.intValue = intValue;
+        }
+
+        public Integer getIntValue() {
+            return intValue;
+        }
+
+        public String getStrValue() {
+            return strValue;
         }
 
         @Override
