@@ -841,7 +841,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         if (supplierContact == null) {
             entity.setSupplierContactName(null);
         } else {
-            entity.setSupplierContactName(supplierContact.getContact().getDisplayName());
+            entity.setSupplierContactName(supplierContact.getPerson().getDisplayName());
         }
     }
 

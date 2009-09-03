@@ -11,7 +11,6 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
@@ -34,6 +33,7 @@ import com.cosmos.swingb.binding.EnumerationBinder;
 import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
+import com.cosmos.util.PersistentEntity;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -69,7 +69,7 @@ import org.jdesktop.swingx.JXNumericField;
  *
  * @author Miro
  */
-public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
+public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
 
     //
     private static final String ON_ENTITY_CHANGE_FUNCTION = "onEntityChange";
@@ -77,7 +77,6 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private static final Object[] EMPTY_ARRAY = new Object[0];
     //
     private AbstractEntityListPanel entityListPanel;
-    private E entity;
     private Class<E> entityClass;
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;
@@ -88,17 +87,16 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private ELContext elContext;
     protected DataMode dataMode;
 
-    public EntityPanel(AbstractEntityListPanel entityListPanel, E entity) {
-        super(entity);
+    public EntityPanel(AbstractEntityListPanel entityListPanel, E entity, Object... parameters) {
+        super(entity, parameters);
         this.entityListPanel = entityListPanel;
-        this.entity = entity;
-        this.entityClass = (Class<E>) entity.getClass();
+        this.entityClass = (Class<E>) getEntity().getClass();
         init();
     }
 
     @Override
     public E getEntity() {
-        return entity;
+        return (E) super.getEntity();
     }
 
     protected Class<E> getEntityClass() {
@@ -140,6 +138,8 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     @Override
     protected void initData() {
         super.initData();
+
+        E entity = getEntity();
 
         EntityProperties entityProps = getEntityProperties();
         BindingGroup bg = getBindingGroup();
@@ -650,7 +650,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
             return getELPropertyValue(propertyName);
         }
 
-        return getPropertyValue(entity, propertyName);
+        return getPropertyValue(getEntity(), propertyName);
     }
 
     protected Object getPropertyValue(Object bean, String propertyName) {
@@ -663,7 +663,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     private PropertyChangeHandler propertyChangeHandler;
 
     private PropertyChangeHandler getPropertyChangeHandler() {
-        if (propertyChangeHandler == null && entity instanceof PropertyChangeNotificationBroadcaster) {
+        if (propertyChangeHandler == null && getEntity() instanceof PropertyChangeNotificationBroadcaster) {
             propertyChangeHandler = new PropertyChangeHandler();
         }
 
@@ -672,7 +672,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
 
     @Override
     public void performSave(boolean closeAfter) {
-        entity = save();
+        setEntity(save());
         //entity = confirm();
         if (closeAfter) {
             setDialogResponse(DialogResponse.SAVE);
@@ -683,6 +683,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     public E save() {
+        E entity = getEntity();
         try {
             E result = getEntityService().save(entity);
             setSelectedValue(result);
@@ -696,6 +697,7 @@ public class EntityPanel<E extends DataObjectBean> extends BaseEntityPanel {
     }
 
     public E confirm() {
+        E entity = getEntity();
         try {
             E result = getEntityService().confirm(entity);
             setSelectedValue(result);

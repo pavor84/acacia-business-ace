@@ -120,7 +120,7 @@ public class OrderConfirmationListTest extends BaseTest{
         result.setSupplier(o);
         result.setSupplierName(o.getDisplayName());
         result.setSupplierContact(persons.get(0));
-        result.setSupplierContactName(persons.get(0).getContact().getDisplayName());
+        result.setSupplierContactName(persons.get(0).getPerson().getDisplayName());
 
         result.setDocumentNumber(""+random.nextInt(1000000000));
 

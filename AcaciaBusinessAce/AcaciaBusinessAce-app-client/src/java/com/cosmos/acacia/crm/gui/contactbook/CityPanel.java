@@ -230,9 +230,8 @@ public class CityPanel extends BaseEntityPanel {
         setResizable(false);
 
         log.info("initData().city: " + city);
-        if(city == null)
-        {
-            city = getFormSession().newCity();
+        if(city == null) {
+            city = getFormSession().newCity(null);
         }
 
         BindingGroup bg = getBindingGroup();

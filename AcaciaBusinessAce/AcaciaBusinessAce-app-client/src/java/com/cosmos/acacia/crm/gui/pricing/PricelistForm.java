@@ -388,7 +388,7 @@ public class PricelistForm extends BaseEntityPanel {
         }
         if ( entity.getMinTurnover()==null ){
             entity.setCurrency(null);
-            entity.setMonths(null);
+            entity.setTurnoverMonths(null);
         }
         
         entity = formSession.savePricelist(entity);
@@ -432,7 +432,7 @@ public class PricelistForm extends BaseEntityPanel {
         }
 
         if ( entity.isGeneralPricelist() )
-            entity.setName(getResourceMap().getString("Pricelist.generalPricelist.name"));
+            entity.setPricelistName(getResourceMap().getString("Pricelist.generalPricelist.name"));
         
         // name 
         nameField.bind(bindGroup, entity, entProps.getPropertyDetails("name"));

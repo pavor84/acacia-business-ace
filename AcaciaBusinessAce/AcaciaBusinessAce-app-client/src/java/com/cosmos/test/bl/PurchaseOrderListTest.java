@@ -125,7 +125,7 @@ public class PurchaseOrderListTest extends BaseTest{
         result.setSupplier(o);
         result.setSupplierName(o.getDisplayName());
         result.setSupplierContact(persons.get(0));
-        result.setSupplierContactName(persons.get(0).getContact().getDisplayName());
+        result.setSupplierContactName(persons.get(0).getPerson().getDisplayName());
 
         //mean while do unrelated to createNew test, but do it here, because we found a supplier
         Assert.assertNotNull(formSession.getPendingPurchaseOrders(o));

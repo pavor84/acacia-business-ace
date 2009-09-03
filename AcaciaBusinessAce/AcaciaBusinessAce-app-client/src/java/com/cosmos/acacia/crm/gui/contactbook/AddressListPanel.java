@@ -101,7 +101,7 @@ public class AddressListPanel extends AbstractTablePanel<Address> {
     }
 
     protected List<City> getCities() {
-        return getFormSession().getCities();
+        return getFormSession().getCities(null);
     }
 
     protected EntityProperties getAddressEntityProperties() {

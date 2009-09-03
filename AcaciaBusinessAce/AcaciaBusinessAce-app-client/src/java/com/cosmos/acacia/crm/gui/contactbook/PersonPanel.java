@@ -587,10 +587,6 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         return getFormSession().getCountries();
     }
 
-    private List<City> getCities() {
-        return getFormSession().getCities();
-    }
-
     private List<City> getCities(Country country) {
         return getFormSession().getCities(country);
     }

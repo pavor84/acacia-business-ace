@@ -4,8 +4,8 @@
  */
 package com.cosmos.acacia.gui.entity;
 
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.entity.EntityService;
+import com.cosmos.util.PersistentEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +13,18 @@ import java.util.List;
  *
  * @author Miro
  */
-public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjectBean>
+public class DetailEntityListPanel<E extends PersistentEntity, I extends PersistentEntity>
         extends AbstractEntityListPanel<I> {
 
-    public DetailEntityListPanel(EntityPanel<E> mainEntityPanel, Class<I> itemEntityClass, Object... parameters) {
-        super(mainEntityPanel, itemEntityClass, parameters);
+    public DetailEntityListPanel(
+            EntityPanel<E> mainEntityPanel,
+            Class<I> itemEntityClass,
+            Object... parameters) {
+        super(mainEntityPanel, null, itemEntityClass, parameters);
     }
 
-    public E getMainEntity() {
-        return (E) getMainEntityPanel().getEntity();
-    }
-
-    protected EntityService getMainEntityService() {
-        return getMainEntityPanel().getEntityService();
+    public DetailEntityListPanel(E mainEntity, Class<I> itemEntityClass, Object... parameters) {
+        super(null, mainEntity, itemEntityClass, parameters);
     }
 
     @Override
@@ -38,9 +37,14 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
         return new ArrayList<I>();
     }
 
+    @Override
     protected E saveMainEntity() {
-        getMainEntityPanel().performSave(false);
-        return getMainEntity();
+        return (E) super.getMainEntity();
+    }
+
+    @Override
+    protected E getMainEntity() {
+        return (E) super.getMainEntity();
     }
 
     @Override
@@ -61,5 +65,4 @@ public class DetailEntityListPanel<E extends DataObjectBean, I extends DataObjec
     public boolean isDetailEntity() {
         return true;
     }
-
 }

@@ -424,9 +424,9 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
         List<BigDecimal> nominalValues = new ArrayList<BigDecimal>();
         for (CurrencyNominal currencyNominal : nominals) {
             if (currencyNominal.equals(entity.getCurrencyNominal())) {
-                this.nominal = currencyNominal.getNominal();
+                this.nominal = currencyNominal.getNominalValue();
             }
-            nominalValues.add(currencyNominal.getNominal());
+            nominalValues.add(currencyNominal.getNominalValue());
         }
         return nominalValues;
     }

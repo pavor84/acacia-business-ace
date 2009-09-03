@@ -2154,7 +2154,7 @@ public class InvoiceForm extends BaseEntityPanel {
         if (recipientContact == null) {
             entity.setRecipientContactName(null);
         } else {
-            entity.setRecipientContactName(recipientContact.getContact().getDisplayName());
+            entity.setRecipientContactName(recipientContact.getPerson().getDisplayName());
         }
 
         BusinessPartner recipient = entity.getRecipient();

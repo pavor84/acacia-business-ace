@@ -249,7 +249,7 @@ public class BanknoteQuantityListPanel extends AbstractTablePanel<BanknoteQuanti
             int curr = c1.getResourceId().compareTo(c2.getResourceId());
             if ( curr!=0 ) 
                 return curr;
-            return o1.getCurrencyNominal().getNominal().compareTo(o2.getCurrencyNominal().getNominal());
+            return o1.getCurrencyNominal().getNominalValue().compareTo(o2.getCurrencyNominal().getNominalValue());
         }
     }
     

@@ -433,7 +433,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
             ContactPerson selectedContactPerson = (ContactPerson) listPanel.getSelectedRowObject();
-            return selectedContactPerson.getContact();
+            return selectedContactPerson.getPerson();
         } else {
             return null;
         }
