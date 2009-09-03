@@ -109,18 +109,18 @@ public class CurrencyNominalBean implements CurrencyNominalRemote, CurrencyNomin
 //    }
 //    
     private void initNominals(Map<Currency, Collection<? extends CurrencyNominal>> defaultNominals) {
-        throw new UnsupportedOperationException("ToDO");
-//        for (Map.Entry<Currency, Collection<? extends CurrencyNominal>> nominalsEntry : defaultNominals.entrySet()) {
-//            for (CurrencyNominal currencyNominal : nominalsEntry.getValue()) {
-//                DbResource currency = nominalsEntry.getKey().getDbResource();
-//                CurrencyNominal existing = (CurrencyNominal) AcaciaUtils.getSingleResult(em,
-//                    CurrencyNominal.NQ_FIND_BY_NOM_AND_CURR,
-//                    "currency", currency,
-//                    "nominal", currencyNominal.getNominal());
-//                if ( existing==null )
-//                    esm.persist(em, currencyNominal);
-//            }
-//        }
+        //throw new UnsupportedOperationException("ToDO");
+        for (Map.Entry<Currency, Collection<? extends CurrencyNominal>> nominalsEntry : defaultNominals.entrySet()) {
+            for (CurrencyNominal currencyNominal : nominalsEntry.getValue()) {
+                DbResource currency = nominalsEntry.getKey().getDbResource();
+                CurrencyNominal existing = (CurrencyNominal) AcaciaUtils.getSingleResult(em,
+                    CurrencyNominal.NQ_FIND_BY_CURRENCY_AND_NOMINAL_VALUE,
+                    "currency", currency,
+                    "nominalValue", currencyNominal.getNominalValue());
+                if ( existing==null )
+                    esm.persist(em, currencyNominal);
+            }
+        }
     }
 
     private Collection<? extends CurrencyNominal> createNominals(Currency currency, BigDecimal biggestNominal) {

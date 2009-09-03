@@ -24,9 +24,15 @@ import javax.persistence.EntityManager;
  * @author miro
  */
 @Local
-public interface EntityStoreManagerLocal
-    extends EntityStoreManagerRemote
-{
+public interface EntityStoreManagerLocal extends EntityStoreManagerRemote {
+
+    DataObject saveDataObject(EntityManager em, Class entityClass);
+
+    DataObject saveDataObject(
+            EntityManager em,
+            DataObject dataObject,
+            String entityClassName,
+            UUID parentId);
 
     void persist(EntityManager entityManager, Object entity);
     

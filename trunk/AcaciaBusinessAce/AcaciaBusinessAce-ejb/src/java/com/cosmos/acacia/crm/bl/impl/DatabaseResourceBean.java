@@ -21,10 +21,12 @@ import javax.persistence.Query;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
+import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
@@ -67,6 +69,7 @@ import java.lang.reflect.Modifier;
 import java.util.Locale;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.UUID;
 
 /**
  *
@@ -255,10 +258,32 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         return dbResource;
     }
 
+    private void initContacts() {
+        Query q = em.createQuery("select count(t) from Organization t");
+        Long count;
+        if((count = (Long) q.getSingleResult()) != null && count > 0) {
+            return;
+        }
+
+        DataObject dataObject = esm.saveDataObject(em, Organization.class);
+        UUID organizationId = dataObject.getDataObjectId();
+        dataObject.setParentDataObjectId(organizationId);
+        dataObject.setDataObjectVersion(1);
+        dataObject.setOrderPosition(1);
+        em.persist(dataObject);
+
+        Organization organization = new Organization(organizationId, organizationId.toString());
+        organization.setDataObject(dataObject);
+        organization.setParentId(organizationId);
+        organization.setDefaultCurrency(Currency.EUR.getDbResource());
+        organization.setActive(true);
+
+        em.persist(organization);
+    }
+
     @Override
     public void initSecurityAccess() {
-
-        // Check for Supervisor user
+        initContacts();
 
         try {
             TreeMap<String, TreeSet<String>> classesMap = new TreeMap<String, TreeSet<String>>();
