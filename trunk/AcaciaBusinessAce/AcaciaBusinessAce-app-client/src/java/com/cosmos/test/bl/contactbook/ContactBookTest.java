@@ -94,7 +94,7 @@ public class ContactBookTest {
         List<DbResource> ct = addressFormSession.getCommunicationTypes();
         Assert.assertNotNull(ct);
 
-        List<City> cities = addressFormSession.getCities();
+        List<City> cities = addressFormSession.getCities(null);
         Assert.assertNotNull(cities);
 
         List<Organization> organizations = organizationFormSession.getOrganizations(null);
@@ -138,7 +138,7 @@ public class ContactBookTest {
         person.setExtraName(TestUtils.getRandomString(5));
         person = personFormSession.savePerson(person);
 
-        contactPerson.setContact(person);
+        contactPerson.setPerson(person);
         contactPerson.setDataObject(addressDataObject);
 
         contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject.getDataObjectId());
@@ -155,10 +155,10 @@ public class ContactBookTest {
         person.setFirstName(TestUtils.getRandomString(6));
         person = personFormSession.savePerson(person);
 
-        person.setDescription(TestUtils.getRandomString(6));
+        //person.setDescription(TestUtils.getRandomString(6));
         person = personFormSession.savePerson(person);
 
-        contactPerson.setContact(person);
+        contactPerson.setPerson(person);
         contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject().getDataObjectId());
 
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
@@ -194,7 +194,7 @@ public class ContactBookTest {
 //            Assert.assertTrue(vex.getMessages().size() > 0);
 //        }
 
-        City city = locationFormSession.newCity();
+        City city = locationFormSession.newCity(country);
         city.setCountry(country);
         city.setCityName(TestUtils.getRandomString(10));
 

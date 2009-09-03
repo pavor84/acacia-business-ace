@@ -409,7 +409,7 @@ public class BankDetailPanel extends BaseEntityPanel {
         DialogResponse dResponse = listPanel.showDialog(this);
         if ( DialogResponse.SELECT.equals(dResponse) ){
            ContactPerson selected = (ContactPerson) listPanel.getSelectedRowObject();
-           return selected.getContact();
+           return selected.getPerson();
         } else {
             return null;
         }

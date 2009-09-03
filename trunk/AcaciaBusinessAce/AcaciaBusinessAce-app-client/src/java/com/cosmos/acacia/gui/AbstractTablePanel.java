@@ -48,7 +48,7 @@ import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.SelectableListDialog;
 import com.cosmos.swingb.listeners.TableModificationListener;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -59,7 +59,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  *
  * @author  Miro
  */
-public abstract class AbstractTablePanel<E extends CloneableBean>
+public abstract class AbstractTablePanel<E extends PersistentEntity>
         extends AcaciaPanel
         implements SelectableListDialog {
 
@@ -71,11 +71,16 @@ public abstract class AbstractTablePanel<E extends CloneableBean>
     }
 
     protected AbstractTablePanel(JBPanel parentPanel) {
-        this(parentPanel, null);
+        this(parentPanel, null, null);
     }
 
-    protected AbstractTablePanel(JBPanel parentPanel, Class entityClass, Object... parameters) {
+    protected AbstractTablePanel(
+            JBPanel parentPanel,
+            Object mainEntity,
+            Class entityClass,
+            Object... parameters) {
         this.parentPanel = parentPanel;
+        this.mainEntity = mainEntity;
         this.entityClass = entityClass;
         this.parameters = parameters;
         init();
@@ -263,7 +268,12 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private com.cosmos.swingb.JBButton specialFunctionalityButton;
     private com.cosmos.swingb.JBButton unselectButton;
     // End of variables declaration//GEN-END:variables
+    //
     private JBPanel parentPanel;
+    private Object mainEntity;
+    private Class entityClass;
+    protected Object[] parameters;
+    //
     private Map<Button, JBButton> buttonsMap;
     private boolean editable = true;
     private boolean visibilitySetChanged = false;
@@ -272,8 +282,6 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private Classifier classifier;
     private boolean allowClassifierChange;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
-    private Class entityClass;
-    protected Object[] parameters;
     private DataMode dataMode;
     private BindingGroup bindingGroup;
     /**
@@ -300,6 +308,14 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     protected JBPanel getParentPanel() {
         return parentPanel;
+    }
+
+    protected Object getMainEntity() {
+        return mainEntity;
+    }
+
+    protected void setMainEntity(Object mainEntity) {
+        this.mainEntity = mainEntity;
     }
 
     public final BindingGroup getBindingGroup() {

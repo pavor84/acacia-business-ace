@@ -50,8 +50,6 @@ import com.cosmos.acacia.crm.gui.assembling.ProductAssemblerPanel;
 import com.cosmos.acacia.crm.gui.cash.CashReconcileListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BranchSelectionPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.CitiesListPanel;
-import com.cosmos.acacia.crm.gui.contactbook.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel;
 import com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.PersonPanel;
@@ -61,6 +59,7 @@ import com.cosmos.acacia.crm.gui.contactbook.PositionsHierarchyTreePanel;
 import com.cosmos.acacia.crm.gui.currency.CurrencyExchangeRateListPanel;
 import com.cosmos.acacia.crm.gui.deliverycertificates.DeliveryCertificatesListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
+import com.cosmos.acacia.crm.gui.location.CountriesListPanel;
 import com.cosmos.acacia.crm.gui.payment.PaymentMatchingPanel;
 import com.cosmos.acacia.crm.gui.payment.PaymentsReceivablesPanel;
 import com.cosmos.acacia.crm.gui.pricing.PricelistListPanel;
@@ -472,17 +471,10 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     @Action
-    public void citiesListAction() {
-        log.debug("citiesList");
-        CitiesListPanel citiesListPanel = new CitiesListPanel();
-        citiesListPanel.showFrame();
-    }
-
-    @Action
     public void countriesListAction() {
         log.debug("cointriesList");
-        CountriesListPanel countriesListPanel = new CountriesListPanel();
-        countriesListPanel.showFrame();
+        CountriesListPanel panel = new CountriesListPanel();
+        panel.showFrame();
     }
 
     @Action
@@ -677,7 +669,6 @@ public class AcaciaApplicationView extends FrameView {
         JBMenuItem organizationsListMenuItem = new JBMenuItem();
         JBMenuItem personPositionTypesListMenuItem = new JBMenuItem();
         JBMenuItem organizationPositionTypesListMenuItem = new JBMenuItem();
-        JBMenuItem citiesListMenuItem = new JBMenuItem();
         JBMenuItem countriesListMenuItem = new JBMenuItem();
         JBMenuItem joinOrganizationMenuItem = new JBMenuItem();
         JBMenuItem leaveOrganizationMenuItem = new JBMenuItem();
@@ -945,8 +936,6 @@ public class AcaciaApplicationView extends FrameView {
 
         contactBook.add(new Separator());
 
-        citiesListMenuItem.setAction(actionMap.get("citiesListAction"));
-        contactBook.add(citiesListMenuItem);
         countriesListMenuItem.setAction(actionMap.get("countriesListAction"));
         contactBook.add(countriesListMenuItem);
 
@@ -1133,10 +1122,6 @@ public class AcaciaApplicationView extends FrameView {
         JButton personsImageButton = new JButton(actionMap.get("personsListAction"));
         personsImageButton.setText("");
         toolBar.add(personsImageButton);
-
-        JButton citiesImageButton = new JButton(actionMap.get("citiesListAction"));
-        citiesImageButton.setText("");
-        toolBar.add(citiesImageButton);
 
         JButton countriesImageButton = new JButton(actionMap.get("countriesListAction"));
         countriesImageButton.setText("");

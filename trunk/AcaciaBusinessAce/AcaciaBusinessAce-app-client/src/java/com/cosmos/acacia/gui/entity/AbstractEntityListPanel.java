@@ -22,6 +22,7 @@ import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.util.BeanUtils;
 import com.cosmos.util.BooleanUtils;
+import com.cosmos.util.PersistentEntity;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -37,8 +38,7 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public abstract class AbstractEntityListPanel<E extends DataObjectBean>
-        extends AbstractTablePanel<E>
+public abstract class AbstractEntityListPanel<E extends PersistentEntity> extends AbstractTablePanel<E>
         implements Refreshable {
 
     private EntityFormProcessor entityFormProcessor;
@@ -47,11 +47,15 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
     private E entity;
 
     protected AbstractEntityListPanel(Class<E> entityClass, Object... parameters) {
-        super(null, entityClass, parameters);
+        super(null, null, entityClass, parameters);
     }
 
-    protected AbstractEntityListPanel(EntityPanel mainEntityPanel, Class<E> itemEntityClass, Object... parameters) {
-        super(mainEntityPanel, itemEntityClass, parameters);
+    protected AbstractEntityListPanel(
+            EntityPanel mainEntityPanel,
+            Object mainEntity,
+            Class<E> itemEntityClass,
+            Object... parameters) {
+        super(mainEntityPanel, mainEntity, itemEntityClass, parameters);
     }
 
     protected EntityPanel getMainEntityPanel() {
@@ -129,8 +133,7 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
                             setEntity(null);
                         }
                         if (variableExpression.startsWith("mainEntity.")) {
-                            EntityPanel entityPanel = getMainEntityPanel();
-                            entityPanel.performSave(false);
+                            saveMainEntity();
                         } else {
                             // To Do
                         }
@@ -138,6 +141,15 @@ public abstract class AbstractEntityListPanel<E extends DataObjectBean>
                 }
             }
         }
+    }
+
+    protected Object saveMainEntity() {
+        EntityPanel entityPanel;
+        if((entityPanel = getMainEntityPanel()) != null) {
+            entityPanel.performSave(false);
+        }
+
+        return getMainEntity();
     }
 
     protected boolean evaluateBooleanExpression(String expression) {

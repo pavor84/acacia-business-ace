@@ -51,9 +51,11 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     protected DialogResponse modifiedResponse = null;
     private EntityBindingListener entityBindingListener;
     private boolean editable = true;
+    private Object entity;
     protected Object[] parameters;
 
-    public BaseEntityPanel(Object[] parameters) {
+    public BaseEntityPanel(Object entity, Object... parameters) {
+        this.entity = entity;
         this.parameters = parameters;
         initConstructor();
     }
@@ -82,9 +84,15 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     public abstract BindingGroup getBindingGroup();
 
-    public abstract Object getEntity();
-
     public abstract EntityFormButtonPanel getButtonPanel();
+
+    public Object getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Object entity) {
+        this.entity = entity;
+    }
 
     protected void init() {
         entityBindingListener = new EntityBindingListener();

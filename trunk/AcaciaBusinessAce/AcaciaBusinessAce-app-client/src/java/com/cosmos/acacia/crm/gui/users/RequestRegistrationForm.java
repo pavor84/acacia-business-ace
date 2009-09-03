@@ -7,6 +7,7 @@ package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
+import com.cosmos.acacia.crm.data.users.UserRegistration;
 import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
@@ -15,7 +16,6 @@ import org.jdesktop.application.Action;
  *
  * @author  Bozhidar Bozhanov
  */
-
 public class RequestRegistrationForm extends AcaciaPanel {
 
     /** Creates new form RequestRegistrationForm */
@@ -131,7 +131,6 @@ public class RequestRegistrationForm extends AcaciaPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.cosmos.swingb.JBLabel codeLabel;
     private com.cosmos.swingb.JBTextField codeTextField;
@@ -166,7 +165,7 @@ public class RequestRegistrationForm extends AcaciaPanel {
     public void sendCode() {
         try {
             getFormSession().requestRegistration(emailTextField.getText());
-        
+
             JOptionPane.showMessageDialog(this, getResourceMap().getString("request.successful"));
         } catch (Exception ex) {
             handleBusinessException(ex);
@@ -179,13 +178,15 @@ public class RequestRegistrationForm extends AcaciaPanel {
         try {
             email = getFormSession().verifyCode(codeTextField.getText());
 
-            RegistrationForm regForm = new RegistrationForm(email);
-            regForm.showDialog(this.getParent());
-            this.close();
-        } catch (Exception ex){
+            //RegistrationForm regForm = new RegistrationForm(email);
+            //regForm.showDialog(this.getParent());
+            UserRegistration userRegistration = new UserRegistration(email);
+            UserRegistrationPanel userRegistrationPanel = new UserRegistrationPanel(userRegistration);
+            userRegistrationPanel.showDialog(this.getParent());
+            close();
+        } catch (Exception ex) {
             ex.printStackTrace();
             handleException(email, ex);
         }
-        
     }
 }

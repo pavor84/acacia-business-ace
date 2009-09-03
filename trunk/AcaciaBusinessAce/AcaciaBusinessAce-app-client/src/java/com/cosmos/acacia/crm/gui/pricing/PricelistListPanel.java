@@ -172,7 +172,7 @@ public class PricelistListPanel extends AbstractTablePanel<Pricelist> {
         if (list != null) {
             for (Pricelist pricelist : list) {
                 if (pricelist.isGeneralPricelist()) {
-                    pricelist.setName(getResourceMap().getString("Pricelist.generalPricelist.name"));
+                    pricelist.setPricelistName(getResourceMap().getString("Pricelist.generalPricelist.name"));
                 }
             }
         }

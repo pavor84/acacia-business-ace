@@ -1016,7 +1016,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         if ( supplierContact==null )
             entity.setSupplierContactName(null);
         else
-            entity.setSupplierContactName(supplierContact.getContact().getDisplayName());
+            entity.setSupplierContactName(supplierContact.getPerson().getDisplayName());
         
         BusinessPartner supplier = entity.getSupplier();
         if ( supplier!=null )

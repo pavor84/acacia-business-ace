@@ -140,11 +140,7 @@ public class CitiesListPanel extends AbstractTablePanel<City> {
     }
 
     protected List<City> getCities() {
-        if (country == null) {
-            return getFormSession().getCities();
-        } else {
-            return getFormSession().getCities(country);
-        }
+        return getFormSession().getCities(country);
     }
 
     protected EntityProperties getCityEntityProperties()

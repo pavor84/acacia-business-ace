@@ -6,13 +6,14 @@ package com.cosmos.acacia.gui.entity;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.util.PersistentEntity;
 import java.util.List;
 
 /**
  *
  * @author Miro
  */
-public class EntityListPanel<E extends DataObjectBean> extends AbstractEntityListPanel<E> {
+public class EntityListPanel<E extends PersistentEntity> extends AbstractEntityListPanel<E> {
 
     public EntityListPanel(Class<E> entityClass, Object... parameters) {
         super(entityClass, parameters);
