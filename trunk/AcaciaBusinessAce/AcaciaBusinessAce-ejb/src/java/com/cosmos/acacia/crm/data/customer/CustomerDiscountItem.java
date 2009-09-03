@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /*
 select
@@ -109,6 +110,7 @@ public abstract class CustomerDiscountItem extends DataObjectBean implements Ser
 
     @Id
     @Basic(optional = false)
+    @Type(type="uuid")
     @Column(name = "customer_discount_item_id", nullable = false)
     protected UUID customerDiscountItemId;
 

@@ -3,24 +3,15 @@ package com.cosmos.acacia.crm.data.cash;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -39,50 +30,47 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 @Entity
 @Table(name = "cash_reconcile", catalog = "acacia", schema = "public")
 @DiscriminatorValue(value = BusinessDocument.CASH_RECONCILE)
-@PrimaryKeyJoinColumn(name="reconcile_id",referencedColumnName="document_id")
+@PrimaryKeyJoinColumn(name="cash_reconcile_id", referencedColumnName="document_id")
 @NamedQueries({
     @NamedQuery(
         name = CashReconcile.NQ_FIND_ALL,
-        query = "SELECT e FROM CashReconcile e" +
-            " where" +
-            "  e.publisherBranch.id = :branchId " +
-            "  and e.dataObject.deleted = false " +
-            " order by e.documentNumber"),
+        query = "SELECT t FROM CashReconcile t" +
+                " where" +
+                "  t.publisherBranch = :publisherBranch " +
+                " order by t.documentNumber"
+    ),
     @NamedQuery(
         name = CashReconcile.NQ_FIND_PREVIOUS,
-        query = "SELECT e FROM CashReconcile e" +
-            " where" +
-            "  e.publisherBranch = :branch " +
-            "  and e.dataObject.deleted = false " +
-            "  and e.documentDate < :currentDate" +
-            " order by e.documentDate desc"),
-    /**
-     * Parameters:
-     *  - branch
-     */
-    @NamedQuery
-        (
-            name = CashReconcile.NQ_MAX_NUMBER,
-            query = "select max(e.documentNumber) from CashReconcile e " +
-            		"where e.publisherBranch = :branch"
-        )
+        query = "SELECT t FROM CashReconcile t" +
+                " where" +
+                "  t.publisherBranch = :publisherBranch " +
+                "  and t.documentNumber < :documentNumber" +
+                " order by t.documentNumber desc"
+    ),
+    @NamedQuery(
+        name = CashReconcile.NQ_MAX_NUMBER,
+        query = "select max(t.documentNumber) from CashReconcile t" +
+                " where" +
+                "  t.publisherBranch = :publisherBranch"
+    )
 })
 public class CashReconcile extends BusinessDocument implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //
-    public static final String NQ_FIND_ALL = "CashReconcile.findAll";
-    public static final String NQ_FIND_PREVIOUS = "CashReconcile.findPrevious";
+    private static final String CLASS_NAME = "CashReconcile";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_PREVIOUS = CLASS_NAME + ".findPrevious";
     public static final String NQ_MAX_NUMBER = "NQ_MAX_NUMBER";
 
-    @JoinColumn(name = "cashier_id", referencedColumnName = "partner_id", nullable = false)
-    @ManyToOne
+    @JoinColumn(name = "cashier_id", referencedColumnName = "person_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Cashier", propertyValidator=@PropertyValidator(required=true), customDisplay="${cashier.displayName}")
     private Person cashier;
     
-    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
     private DbResource currency;
 
     @Column(name = "initial_cash_balance", precision = 19, scale = 4)
@@ -109,9 +97,6 @@ public class CashReconcile extends BusinessDocument implements Serializable {
     @Property(title="Period Bank Expenses", editable=false)
     private BigDecimal periodBankExpenses;
     
-    @OneToMany (cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn (name = "cash_reconcile_id")
-    private Set<CashReconcilePaymentSummary> payments;
     
     public CashReconcile() {
         super(CASH_RECONCILE);
@@ -143,14 +128,6 @@ public class CashReconcile extends BusinessDocument implements Serializable {
 
     public void setInitialBankBalance(BigDecimal initialBankBalance) {
         this.initialBankBalance = initialBankBalance;
-    }
-
-    public Set<CashReconcilePaymentSummary> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Set<CashReconcilePaymentSummary> payments) {
-        this.payments = payments;
     }
 
     public DbResource getCurrency() {
@@ -256,7 +233,8 @@ public class CashReconcile extends BusinessDocument implements Serializable {
     }
     
     private List<CashReconcilePaymentSummary> getPaymentSummaries(boolean revenue) {
-        Set<CashReconcilePaymentSummary> payments = new HashSet<CashReconcilePaymentSummary>(getPayments());
+        throw new UnsupportedOperationException("ToDo");
+        /*Set<CashReconcilePaymentSummary> payments = new HashSet<CashReconcilePaymentSummary>(getPayments());
         if ( payments==null )
             return new ArrayList<CashReconcilePaymentSummary>();
         for (Iterator iterator = payments.iterator(); iterator.hasNext();) {
@@ -280,6 +258,6 @@ public class CashReconcile extends BusinessDocument implements Serializable {
                 return result;
             }
         });
-        return result;
+        return result;*/
     }
 }

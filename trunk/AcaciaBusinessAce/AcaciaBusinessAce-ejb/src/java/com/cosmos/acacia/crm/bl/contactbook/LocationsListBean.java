@@ -17,7 +17,6 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.CityValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntitySequenceServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
@@ -46,9 +45,6 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     private BankDetailsListLocal bankDetailsManager;
     @EJB
     private GenericUniqueValidatorLocal<Country> validator;
-
-    @EJB
-    private CityValidatorLocal cityValidator;
 
     @Override
     public List<Country> getCountries() {
@@ -86,13 +82,6 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return esm.remove(em, country);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<City> getCities() {
-        Query q = em.createNamedQuery("City.fetchAll");
-
-        return new ArrayList<City>(q.getResultList());
-    }
-
     public EntityProperties getCityEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(City.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
@@ -100,13 +89,12 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return entityProperties;
     }
 
-    public City newCity() {
-        return new City();
+    @Override
+    public City newCity(Country country) {
+        return new City(country);
     }
 
     public City saveCity(City city) {
-        cityValidator.validate(city);
-
         esm.persist(em, city);
         return city;
     }
@@ -152,7 +140,6 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return bankDetailsManager.getCurrencies();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<City> getCities(Country country) {
         Query q = em.createNamedQuery("City.findByCountry");

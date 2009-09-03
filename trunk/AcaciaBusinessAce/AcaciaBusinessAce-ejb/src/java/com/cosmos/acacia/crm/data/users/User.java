@@ -196,7 +196,7 @@ public class User extends DataObjectBean implements Serializable {
     )
     private String userName;
 
-    @JoinColumn(name = "person_id", referencedColumnName = "partner_id")
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     @ManyToOne
     @Property(title="Person",
         customDisplay="${person.displayName}",

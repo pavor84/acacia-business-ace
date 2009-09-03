@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -20,84 +19,90 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.Basic;
+import javax.persistence.DiscriminatorValue;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
-import javax.persistence.Transient;
+import org.hibernate.annotations.Type;
 
 /**
  *
  * @author Miro
  */
 @Entity
-@Table(name = "persons")
-/** Will duplicate the primary key from superclass with this name in the 'persons' table */
-@PrimaryKeyJoinColumn(name="partner_id")
-@NamedQueries(
-    {
-    @NamedQuery
-             (
-                 name = "Person.findByParentDataObjectAndDeleted",
-                 query = "select p from Person p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-            (
-            name = "Person.findByParentDataObjectIsNullAndDeleted",
-            query = "select p from Person p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = :deleted"
-            ),
-        /**
-         * All not deleted persons.
-         */
-        @NamedQuery
-            (
-            name = "Person.getAllNotDeleted",
-            query = "select p from Person p where p.dataObject.deleted = false"
-            ),
-        /**
-         * All persons registered as contacts in a given branch and classified with a classifier.
-         * Parameters:
-         * - branchId
-         * - classifierId
-         */
-        @NamedQuery
-            (
-            name = "Person.getCassifiedFromBranch",
-            query = "select cp.contact from ContactPerson cp, ClassifiedObject co "+
-            " where" +
-            "  cp.contact.partnerId = co.classifiedObjectPK.classifiedObjectId" +
-            "  and cp.parentId = :branchId" +
-            "  and cp.contact.dataObject.deleted = false" +
-            "  and co.classifiedObjectPK.classifierId = :classifierId"
-            )
-    }
+@Table(name = "persons", catalog = "acacia", schema = "public"
+/*
+CONSTRAINT check_persons_country_peronal_unique_id CHECK(
+ personal_unique_id IS NULL
+ OR
+ personal_unique_id IS NOT NULL AND birth_place_country_id IS NOT NULL
 )
+CREATE UNIQUE INDEX uix_persons_personal_unuque_id
+ ON persons
+ USING btree(
+  parent_business_partner_id,
+  birth_place_country_id,
+  lower(personal_unique_id::text)
+);
+CREATE UNIQUE INDEX uix_persons_names_birth_date_city
+ ON persons
+ USING btree(
+  parent_business_partner_id,
+  lower(first_name::text),
+  lower(last_name::text),
+  lower(second_name::text),
+  lower(extra_name::text),
+  birth_date,
+  birth_place_city_id
+);
+*/
+)
+@PrimaryKeyJoinColumn(name="person_id")
+@DiscriminatorValue(value=BusinessPartner.PARTNER_PERSON)
+@NamedQueries({
+    @NamedQuery(
+        name = Person.NQ_FIND_ALL_PERSONS,
+        query = "select t from Person t" +
+                " where" +
+                "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t.dataObject.deleted = :deleted"
+    )
+})
 public class Person extends BusinessPartner implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "Person";
+    public static final String NQ_FIND_ALL_PERSONS = CLASS_NAME + ".findAll";
 
-    @Column(name = "first_name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "first_name", nullable = false, length = 24)
     @Property(title="First Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String firstName;
 
-    @Column(name = "second_name")
+    @Column(name = "second_name", length = 24)
     @Property(title="Second Name",
         propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String secondName;
 
-    @Column(name = "last_name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "last_name", nullable = false, length = 24)
     @Property(title="Last Name",
         propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String lastName;
 
-    @Column(name = "extra_name")
+    @Column(name = "extra_name", length = 24)
     @Property(title="Extra Name",
         propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=24))
     private String extraName;
 
-    @Column(name = "personal_unique_id")
+    @Column(name = "personal_unique_id", length = 16)
     @Property(title="Unique Id")
     private String personalUniqueId;
 
@@ -121,24 +126,18 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
     @Property(title="Gender")
     private DbResource gender;
 
-    @Column(name = "description")
-    @Property(title="Description")
-    private String description;
+    @Basic(optional = false)
+    @Type(type="uuid")
+    @Column(name = "parent_business_partner_id", nullable = false)
+    private UUID parentBusinessPartnerId;
 
     public Person() {
+        super(PARTNER_PERSON);
     }
 
-    public Person(UUID id) {
-        setPartnerId(id);
+    public Person(UUID personId) {
+        super(PARTNER_PERSON, personId);
     }
-
-//    public UUID getPersonId() {
-//        return personId;
-//    }
-//
-//    public void setPersonId(UUID personId) {
-//        this.personId = personId;
-//    }
 
     public String getFirstName() {
         return firstName;
@@ -188,14 +187,6 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
         this.birthDate = birthDate;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public City getBirthPlaceCity() {
         return birthPlaceCity;
     }
@@ -221,50 +212,60 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (getPartnerId()!= null ? getPartnerId().hashCode() : 0);
-        return hash;
+    public UUID getParentBusinessPartnerId() {
+        UUID id;
+        if((id = super.getParentBusinessPartnerId()) == null && parentBusinessPartnerId != null) {
+            super.setParentBusinessPartnerId(parentBusinessPartnerId);
+        } else if(id != null && parentBusinessPartnerId == null) {
+            parentBusinessPartnerId = id;
+        }
+
+        return super.getParentBusinessPartnerId();
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Person)) {
-            return false;
-        }
-        Person other = (Person) object;
-        if ((this.getPartnerId() == null && other.getPartnerId() != null) || (this.getPartnerId() != null && !this.getPartnerId().equals(other.getPartnerId()))) {
-            return false;
-        }
-        return true;
+    public void setParentBusinessPartnerId(UUID parentBusinessPartnerId) {
+        this.parentBusinessPartnerId = parentBusinessPartnerId;
+        super.setParentBusinessPartnerId(parentBusinessPartnerId);
     }
 
     @Override
-    public String toString() {
-        return "Person[parentId=" + getParentId() +
-                "; firstName=" + firstName + ", lastName=" + lastName + "]";
-    }
-
     public String toShortText() {
         return toText();
     }
 
+    @Override
     public String toText() {
-        String firstName = getFirstName() != null ? getFirstName() : "";
-        String secondName = getSecondName() != null ? getSecondName() : "";
-        String lastName = getLastName() != null ? getLastName() : "";
-        String extraName = getExtraName() != null ? getExtraName() : "";
+        StringBuilder sb = new StringBuilder(4 * 24 + 3);
+        if(firstName != null) {
+            sb.append(firstName);
+        }
+        if(sb.length() > 0) {
+            sb.append(' ');
+        }
+        if(secondName != null) {
+            sb.append(secondName);
+        }
+        if(sb.length() > 0) {
+            sb.append(' ');
+        }
+        if(lastName != null) {
+            sb.append(lastName);
+        }
+        if(sb.length() > 0) {
+            sb.append(' ');
+        }
+        if(extraName != null) {
+            sb.append(extraName);
+        }
 
-        return firstName + " " + secondName + " " + lastName + " " + extraName;
+        return sb.toString();
     }
 
-    @SuppressWarnings("unused")
     @Transient
     private String displayName;
 
     public void setDisplayName(String displayName) {
-        //
     }
 
     @Override

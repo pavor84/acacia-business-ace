@@ -9,7 +9,9 @@ package com.cosmos.util;
  *
  * @author Miro
  */
-public interface CloneableBean<T> extends Cloneable {
+public interface PersistentEntity<T, I> extends Cloneable {
 
     T clone();
+
+    I getId();
 }

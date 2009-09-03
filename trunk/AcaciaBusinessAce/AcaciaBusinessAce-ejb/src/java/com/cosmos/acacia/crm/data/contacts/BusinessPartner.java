@@ -1,8 +1,5 @@
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
-import com.cosmos.acacia.crm.data.contacts.Organization;
-import com.cosmos.acacia.crm.data.contacts.Person;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -19,9 +16,14 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import javax.persistence.Basic;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import org.hibernate.annotations.Type;
 
 /**
@@ -31,137 +33,125 @@ import org.hibernate.annotations.Type;
  *
  */
 @Entity
-@Table(name="business_partners")
+@Table(name = "business_partners", catalog = "acacia", schema = "public")
 @Inheritance(strategy=InheritanceType.JOINED)
-@NamedQueries(
-    {
-        /**
-         * Get all not deleted business partners
-         */
-        @NamedQuery
-        (
-            name = "BusinessPartner.getAllNotDeleted",
-            query = "select bp from BusinessPartner bp where bp.dataObject.deleted = false"
-        ),
-        /**
-         * Get all for parent and deleted
-         * Parameters:
-         * - parentDataObjectId - may be null, then all partners are returned
-         * - deleted - not null
-         */
-        @NamedQuery
-            (
-             name = "BusinessPartner.findForParentAndDeletedById",
-             query = "select b from BusinessPartner b where " +
-             		"(b.dataObject.parentDataObjectId = :parentDataObjectId or :parentDataObjectId is null) " +
-             		"and b.dataObject.deleted = :deleted " +
-             		"order by b.partnerId"
-            ),
-        @NamedQuery
-            (
-             name = "BusinessPartner.findByClassifier",
-             query = "select distinct t1" +
-                    " from BusinessPartner t1, ClassifiedObject t2" +
-                    " where" +
-                    "  t1.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
-                    "  and t1.parentId = :parentId" +
-                    "  and t1.dataObject.deleted = :deleted" +
-                    "  and t2.classifiedObjectPK.classifierId = :classifierId"
-            ),
-        @NamedQuery
-        (
-         name = "BusinessPartner.getAll",
-         query = "select distinct t1" +
-                " from BusinessPartner t1" +
+@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING, length=2, name="discriminator_id")
+@NamedQueries({
+    @NamedQuery(
+        name = BusinessPartner.NQ_FIND_ALL_BUSINESS_PARTNERS,
+        query = "select t from BusinessPartner t" +
                 " where" +
-                "  t1.parentId = :parentId" +
-                "  and t1.dataObject.deleted = :deleted"
-        )
-    }
-)
+                "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t.dataObject.deleted = :deleted" +
+                " order by t.discriminatorId, t.businessPartnerId"
+    ),
+    @NamedQuery(
+        name = BusinessPartner.NQ_FIND_ALL_BUSINESS_PARTNERS_BY_CLASSIFIER,
+        query = "select distinct t1" +
+                " from BusinessPartner t1, ClassifiedObject t2" +
+                " where" +
+                "  t1.businessPartnerId = t2.classifiedObjectPK.classifiedObjectId" +
+                "  and t1.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t1.dataObject.deleted = :deleted" +
+                "  and t2.classifiedObjectPK.classifierId = :classifierId" +
+                " order by t1.discriminatorId, t1.businessPartnerId"
+    )
+})
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
 
+    public static final String PARTNER_ORGANIZATION = "O";
+    public static final String PARTNER_PERSON = "P";
+    //
+    private static final String CLASS_NAME = "BusinessPartner";
+    public static final String NQ_FIND_ALL_BUSINESS_PARTNERS =
+            CLASS_NAME + ".findAllBusinessPartners";
+    public static final String NQ_FIND_ALL_BUSINESS_PARTNERS_BY_CLASSIFIER =
+            CLASS_NAME + ".findAllBusinessPartnersByClassifier";
+
     @Id
-    @Column(name = "partner_id", nullable = false)
+    @Basic(optional = false)
+    @Type(type="uuid")
+    @Column(name = "business_partner_id", nullable = false)
     @Property(title="Partner id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
-    private UUID partnerId;
+    private UUID businessPartnerId;
 
-    @Column(name = "parent_id")
+    @Basic(optional = false)
+    @Type(type="uuid")
+    @Column(name = "parent_business_partner_id", nullable = false)
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
-    private UUID parentId;
+    private UUID parentBusinessPartnerId;
 
-    @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id")
-    @ManyToOne(optional=false)
+    @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Default Currency",
         resourceDisplayInTable = ResourceDisplay.FullName, index=Integer.MAX_VALUE)
     private DbResource defaultCurrency;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @Basic(optional = false)
+    @Column(name = "discriminator_id", nullable = false, length = 2)
+    protected String discriminatorId;
+
+    @JoinColumn(name = "business_partner_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
 
-    /**
-     * Getter for parentId
-     * @return UUID
-     */
+    public BusinessPartner() {
+        throw new UnsupportedOperationException();
+    }
+
+    public BusinessPartner(String discriminatorId) {
+        this.discriminatorId = discriminatorId;
+    }
+
+    public BusinessPartner(String discriminatorId, UUID businessPartnerId) {
+        this(discriminatorId);
+        this.businessPartnerId = businessPartnerId;
+    }
+
     @Override
     public UUID getParentId() {
-        return parentId;
+        return getParentBusinessPartnerId();
     }
 
-    /**
-     * Setter for parentId
-     * @param parentId - UUID
-     */
     @Override
     public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+        setParentBusinessPartnerId(parentId);
     }
 
-    /**
-     * Getter for dataObject
-     * @return DataObject
-     */
+    public UUID getParentBusinessPartnerId() {
+        return parentBusinessPartnerId;
+    }
+
+    public void setParentBusinessPartnerId(UUID parentBusinessPartnerId) {
+        this.parentBusinessPartnerId = parentBusinessPartnerId;
+    }
+
     @Override
     public DataObject getDataObject() {
         return dataObject;
     }
 
-    /**
-     * Setter for dataObject
-     * @param dataObject - DataObject
-     */
     @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
-    /**
-     * Getter for partnerId
-     * @return UUID
-     */
-    public UUID getPartnerId() {
-        return partnerId;
+    public UUID getBusinessPartnerId() {
+        return businessPartnerId;
     }
 
-    /**
-     * Setter for partnerId
-     * @param partnerId - UUID
-     */
-    public void setPartnerId(UUID partnerId) {
-        this.partnerId = partnerId;
+    public void setBusinessPartnerId(UUID businessPartnerId) {
+        this.businessPartnerId = businessPartnerId;
     }
 
     @Override
     public UUID getId() {
-        return getPartnerId();
+        return getBusinessPartnerId();
     }
 
     @Override
     public void setId(UUID id) {
-        setPartnerId(id);
+        setBusinessPartnerId(id);
     }
 
     public DbResource getDefaultCurrency() {
@@ -172,17 +162,25 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
         this.defaultCurrency = defaultCurrency;
     }
 
+    public String getDiscriminatorId() {
+        return discriminatorId;
+    }
+
+    public void setDiscriminatorId(String discriminatorId) {
+        this.discriminatorId = discriminatorId;
+    }
+
     public abstract String getDisplayName();
     
     /**
      * Dispatch method that knows the possible sub classes and makes a decision what to
      * return.
      */
-    public String getUniqueCode(){
-        if ( this instanceof Organization ){
-            return ((Organization)this).getUniqueIdentifierCode();
-        }else if ( this instanceof Person ){
-            return ((Person)this).getPersonalUniqueId();
+    public String getUniqueCode() {
+        if (this instanceof Organization) {
+            return ((Organization) this).getUniqueIdentifierCode();
+        } else if (this instanceof Person) {
+            return ((Person) this).getPersonalUniqueId();
         }
         return null;
     }
@@ -191,11 +189,11 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
      * Dispatch method that knows the possible sub classes and makes a decision what to
      * return.
      */
-    public Date getBirthOrRegistration(){
-        if ( this instanceof Organization ){
-            return ((Organization)this).getRegistrationDate();
-        }else if ( this instanceof Person ){
-            return ((Person)this).getBirthDate();
+    public Date getBirthOrRegistration() {
+        if (this instanceof Organization) {
+            return ((Organization) this).getRegistrationDate();
+        } else if (this instanceof Person) {
+            return ((Person) this).getBirthDate();
         }
         return null;
     }

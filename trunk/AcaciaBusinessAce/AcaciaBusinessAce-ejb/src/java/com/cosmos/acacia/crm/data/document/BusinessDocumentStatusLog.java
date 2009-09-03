@@ -40,7 +40,7 @@ public class BusinessDocumentStatusLog implements Serializable {
     @ManyToOne(optional = false)
     private BusinessDocument businessDocument;
 
-    @JoinColumn(name = "officer_id", referencedColumnName = "partner_id", nullable = false)
+    @JoinColumn(name = "officer_id", referencedColumnName = "person_id", nullable = false)
     @ManyToOne(optional = false)
     private Person officer;
 

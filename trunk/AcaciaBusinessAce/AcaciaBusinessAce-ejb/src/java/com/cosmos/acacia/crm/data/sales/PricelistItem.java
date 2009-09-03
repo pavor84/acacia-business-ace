@@ -32,39 +32,51 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "pricelist_items")
-@NamedQueries(
-    {
-        /**
-         * Parameters: 
-         *  - parentDataObjectId - not null, the parent object id
-         *  - deleted - not null - true/false
-         */
-        @NamedQuery
-            (
-                name = "PricelistItem.findForParentAndDeleted",
-                query = "select p from PricelistItem p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
-                        "and p.dataObject.deleted = :deleted " +
-                        "order by p.product.category.categoryName asc, p.product.productName asc, p.minQuantity asc"
-            ),
-        @NamedQuery
-            (
-                name = "PricelistItem.findById",
-                query = "select p from PricelistItem p where p.dataObject.dataObjectId = :pricelistItemId"
-            ),
-        /**
-         * Parameters:
-         * - product - not null
-         * - pricelistParentId - not null the parent of the price-lists to include (usually the organization)
-         */
-        @NamedQuery
-            (
-                name = "PricelistItem.getPricelistItemsForProduct",
-                query = "select i from PricelistItem i where i.product = :product and " +
-                		"i.dataObject.parentDataObjectId in " +
-                		"(select p.id from Pricelist p where p.dataObject.parentDataObjectId = :pricelistParentId and p.active = true)"
-            ) 
-    })
+@NamedQueries({
+    /**
+    * Parameters:
+    *  - parentDataObjectId - not null, the parent object id
+    *  - deleted - not null - true/false
+    */
+    @NamedQuery(
+        name = "PricelistItem.findForParentAndDeleted",
+        query = "select p from PricelistItem p" +
+                " where" +
+                "  p.pricelistId = :pricelistId" +
+                "  and p.dataObject.deleted = :deleted" +
+                " order by p.product.category.categoryName asc, p.product.productName asc, p.minQuantity asc"
+    ),
+    @NamedQuery(
+        name = "PricelistItem.findById",
+        query = "select p from PricelistItem p where p.dataObject.dataObjectId = :pricelistItemId"
+    ),
+    /**
+    * Parameters:
+    * - product - not null
+    * - pricelistParentId - not null the parent of the price-lists to include (usually the organization)
+    */
+    @NamedQuery(
+        name = "PricelistItem.getPricelistItemsForProduct",
+        query = "select i from PricelistItem i" +
+                " where" +
+                "  i.product = :product" +
+                "  and i.pricelistId in (" +
+                "   select p.pricelistId from Pricelist p" +
+                "    where" +
+                "     p.parentId = :parentId" +
+                "     and p.active = true" +
+                "  )"
+    )
+})
 public class PricelistItem extends DataObjectBean implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+    //
+    @Id
+    @Column(name = "item_id", nullable = false)
+    @Type(type="uuid")
+    private UUID itemId;
+
     @Property(title="Product", propertyValidator=@PropertyValidator(required=true), customDisplay="${product.productName}")
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable=false)
     @ManyToOne
@@ -83,25 +95,20 @@ public class PricelistItem extends DataObjectBean implements Serializable{
     @Column(name = "discount_percent", precision=20, scale=4)
     private BigDecimal discountPercent;
     
-    @Id
-    @Column(name = "item_id", nullable = false)
+    @Column(name = "pricelist_id")
     @Type(type="uuid")
-    private UUID itemId;
-
-    @Column(name = "parent_id")
-    @Type(type="uuid")
-    private UUID parentId;
+    private UUID pricelistId;
 
     @JoinColumn(name = "item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
     
     public UUID getParentId() {
-        return parentId;
+        return pricelistId;
     }
 
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+    public void setParentId(UUID pricelistId) {
+        this.pricelistId = pricelistId;
     }
 
     @Override

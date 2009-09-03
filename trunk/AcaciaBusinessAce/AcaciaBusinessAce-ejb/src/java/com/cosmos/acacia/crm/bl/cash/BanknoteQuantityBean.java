@@ -53,14 +53,16 @@ public class BanknoteQuantityBean implements BanknoteQuantityRemote, BanknoteQua
 
     @SuppressWarnings("unchecked")
     public List<BanknoteQuantity> listBanknoteQuantitys(UUID parentDataObjectId) {
-        if (parentDataObjectId == null)
-            return new ArrayList<BanknoteQuantity>();
-        
-        Query q = em.createNamedQuery(BanknoteQuantity.NQ_BY_PARENT);
-        q.setParameter("parentId", parentDataObjectId);
+        throw new UnsupportedOperationException("ToDO");
 
-        List<BanknoteQuantity> result = q.getResultList();
-        return result;
+//        if (parentDataObjectId == null)
+//            return new ArrayList<BanknoteQuantity>();
+//
+//        Query q = em.createNamedQuery(BanknoteQuantity.NQ_BY_PARENT);
+//        q.setParameter("parentId", parentDataObjectId);
+//
+//        List<BanknoteQuantity> result = q.getResultList();
+//        return result;
     }
 
     public void deleteBanknoteQuantity(BanknoteQuantity banknoteQuantity) {

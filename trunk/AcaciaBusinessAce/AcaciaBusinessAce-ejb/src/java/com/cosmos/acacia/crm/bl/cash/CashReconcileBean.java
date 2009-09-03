@@ -129,7 +129,7 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         
         //period balances
         List<CashReconcilePaymentSummary> paymentSummaries = createPaymentSummaries(previous, c);
-        c.setPayments(new HashSet<CashReconcilePaymentSummary>(paymentSummaries));
+        //c.setPayments(new HashSet<CashReconcilePaymentSummary>(paymentSummaries));
         setPeriodAmounts(c, paymentSummaries);
     }
 
@@ -182,8 +182,12 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
                 sumMap = bank;
             
             CashReconcilePaymentSummary summary = sumMap.get(curr);
-            if ( summary == null ){
-                summary = new CashReconcilePaymentSummary(type.getDbResource(), curr.getDbResource(), current, BigDecimal.ZERO);  
+            if (summary == null ){
+                summary = new CashReconcilePaymentSummary();
+                summary.setPaymentType(type.getDbResource());
+                summary.setCurrency(curr.getDbResource());
+                summary.setCashReconcile(current);
+                summary.setAmount(BigDecimal.ZERO);
                 sumMap.put(curr, summary);
             }
             
@@ -197,9 +201,15 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
     }
 
     private CashReconcile getPreivousCashReconcile(CashReconcile c) {
-        CashReconcile result = (CashReconcile) AcaciaUtils.getSingleResult(em, CashReconcile.NQ_FIND_PREVIOUS, 
-            "branch", c.getPublisherBranch(), "currentDate", c.getCreationTime());
-        return result;
+        Query q = em.createNamedQuery(CashReconcile.NQ_FIND_PREVIOUS);
+        q.setParameter("publisherBranch", c.getPublisherBranch());
+        q.setParameter("documentNumber", c.getDocumentNumber());
+        List<CashReconcile> previous;
+        if((previous = q.getResultList()) == null || previous.size() == 0) {
+            return null;
+        }
+
+        return previous.get(0);
     }
 
     public EntityProperties getDetailEntityProperties() {
@@ -267,9 +277,10 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
 
     @Override
     public Set<CashReconcilePaymentSummary> getPaymentSummaries(CashReconcile entity) {
-        List<CashReconcilePaymentSummary> result = (List<CashReconcilePaymentSummary>) 
-            AcaciaUtils.getResultList(em, CashReconcilePaymentSummary.NQ_FIND_FOR_RECONCILE, 
-                "cashReconcile", entity);
-        return new HashSet<CashReconcilePaymentSummary>(result);
+        throw new UnsupportedOperationException("ToDo");
+//        List<CashReconcilePaymentSummary> result = (List<CashReconcilePaymentSummary>)
+//            AcaciaUtils.getResultList(em, CashReconcilePaymentSummary.NQ_FIND_FOR_RECONCILE,
+//                "cashReconcile", entity);
+//        return new HashSet<CashReconcilePaymentSummary>(result);
     }
 }

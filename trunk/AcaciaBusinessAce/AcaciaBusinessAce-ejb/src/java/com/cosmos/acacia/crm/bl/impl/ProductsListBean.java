@@ -391,7 +391,7 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
             
             //skip if doesn't qualify by turnover
             if ( pricelist.getMinTurnover()!=null ){
-                BigDecimal customerTurnover = getCustomerTurnover(customer, pricelist.getMonths());
+                BigDecimal customerTurnover = getCustomerTurnover(customer, pricelist.getTurnoverMonths());
                 if ( pricelist.getMinTurnover().compareTo(customerTurnover)>0 ){
                     continue;
                 }

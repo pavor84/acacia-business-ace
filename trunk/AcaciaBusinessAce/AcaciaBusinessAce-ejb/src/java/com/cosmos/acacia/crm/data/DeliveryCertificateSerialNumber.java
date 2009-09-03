@@ -18,7 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 
 /**
  *
@@ -38,7 +38,8 @@ import com.cosmos.util.CloneableBean;
         query = "select dcsn from DeliveryCertificateSerialNumber dcsn where dcsn.deliveryCertificateItem.certificateItemId=:parentId"
     )
 })
-public class DeliveryCertificateSerialNumber implements Serializable, CloneableBean<DeliveryCertificateSerialNumber> {
+public class DeliveryCertificateSerialNumber
+        implements Serializable, PersistentEntity<DeliveryCertificateSerialNumber, DeliveryCertificateSerialNumberPK> {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,5 +124,10 @@ public class DeliveryCertificateSerialNumber implements Serializable, CloneableB
         } catch(CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public DeliveryCertificateSerialNumberPK getId() {
+        return getDeliveryCertificateSerialNumberPK();
     }
 }

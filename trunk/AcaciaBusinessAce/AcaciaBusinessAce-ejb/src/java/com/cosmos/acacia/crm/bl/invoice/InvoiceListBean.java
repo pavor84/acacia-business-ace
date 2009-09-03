@@ -199,7 +199,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         
         Set<ContactPerson> result = new HashSet<ContactPerson>();
         
-        List<Address> addrs = locationsList.getAddresses(supplier.getPartnerId());
+        List<Address> addrs = locationsList.getAddresses(supplier.getBusinessPartnerId());
         for (Address address : addrs) {
             List<ContactPerson> cPersons = addressesList.getContactPersons(address.getAddressId());
             result.addAll(cPersons);
@@ -414,7 +414,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         
         Set<ContactPerson> result = new HashSet<ContactPerson>();
         
-        List<Address> addrs = locationsList.getAddresses(recipient.getPartnerId());
+        List<Address> addrs = locationsList.getAddresses(recipient.getBusinessPartnerId());
         for (Address address : addrs) {
             List<ContactPerson> cPersons = addressesList.getContactPersons(address.getAddressId());
             result.addAll(cPersons);

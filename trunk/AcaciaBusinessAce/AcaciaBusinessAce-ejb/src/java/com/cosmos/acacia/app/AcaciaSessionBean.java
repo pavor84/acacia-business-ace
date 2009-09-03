@@ -39,6 +39,7 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
@@ -100,9 +101,24 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @EJB
     private AddressesListLocal addressService;
 
+    private static Organization systemOrganization;
+
     private static MailUtils systemMailUtils;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
+
+    @Override
+    public Organization getSystemOrganization() {
+        if(systemOrganization == null) {
+            UUID id = UUID.randomUUID();
+            systemOrganization = new Organization(id, id.toString());
+            systemOrganization.setDefaultCurrency(Currency.EUR.getDbResource());
+            systemOrganization.setParentId(id);
+            systemOrganization.setActive(true);
+        }
+
+        return systemOrganization;
+    }
 
     @Override
     public UUID login(User user) {
@@ -277,7 +293,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             case ClientContact:
                 if(client == null)
                     return null;
-                return client.getPartnerId();
+                return client.getBusinessPartnerId();
 
             case Session:
             case None:

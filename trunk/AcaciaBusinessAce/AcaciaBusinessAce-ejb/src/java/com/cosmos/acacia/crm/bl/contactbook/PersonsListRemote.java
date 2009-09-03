@@ -43,13 +43,6 @@ public interface PersonsListRemote {
     List<Country> getCountries();
 
     /**
-     * Gets a list of all cities
-     *
-     * @return list of cities
-     */
-    List<City> getCities();
-
-    /**
      * Gets a list of all cities for a specified country
      *
      * @param country

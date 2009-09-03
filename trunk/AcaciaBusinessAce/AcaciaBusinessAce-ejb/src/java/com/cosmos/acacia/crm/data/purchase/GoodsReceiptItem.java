@@ -128,7 +128,7 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
     public void setGoodsReceipt(GoodsReceipt goodsReceipt) {
         this.goodsReceipt = goodsReceipt;
         if(goodsReceipt != null) {
-            setParentId(goodsReceipt.getGoodsReceiptId());
+            setParentId(goodsReceipt.getDocumentId());
         } else {
             setParentId(null);
         }
@@ -193,7 +193,7 @@ public class GoodsReceiptItem extends DataObjectBean implements Serializable {
     public UUID getParentId() {
         GoodsReceipt receipt;
         if((receipt = getGoodsReceipt()) != null) {
-            return receipt.getGoodsReceiptId();
+            return receipt.getDocumentId();
         }
 
         if(dataObject != null) {

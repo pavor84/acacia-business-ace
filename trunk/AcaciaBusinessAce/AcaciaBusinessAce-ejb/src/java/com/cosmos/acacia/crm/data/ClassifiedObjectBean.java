@@ -6,21 +6,33 @@
 package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Property;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  *
  * @author Bozhidar Bozhanov
  */
 
-public class ClassifiedObjectBean implements Serializable, CloneableBean<ClassifiedObjectBean> {
+public class ClassifiedObjectBean implements Serializable, PersistentEntity<ClassifiedObjectBean, UUID> {
+
+    private UUID id;
 
     @Property(title="Title")
     private String title;
     
     @Property(title="Type")
     private String type;
+
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

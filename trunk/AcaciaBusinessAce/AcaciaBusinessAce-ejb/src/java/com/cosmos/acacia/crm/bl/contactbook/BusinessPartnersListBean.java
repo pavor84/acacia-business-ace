@@ -164,7 +164,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         
         Set<ContactPerson> result = new HashSet<ContactPerson>();
         
-        List<Address> addrs = locationsList.getAddresses(businessPartner.getPartnerId());
+        List<Address> addrs = locationsList.getAddresses(businessPartner.getBusinessPartnerId());
         for (Address address : addrs) {
             List<ContactPerson> cPersons = addressesList.getContactPersons(address.getAddressId());
             result.addAll(cPersons);

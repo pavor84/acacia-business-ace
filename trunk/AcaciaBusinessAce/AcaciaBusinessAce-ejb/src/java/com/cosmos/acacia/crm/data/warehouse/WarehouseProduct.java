@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.data.warehouse;
 
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,6 +23,8 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import org.hibernate.annotations.Type;
 
 /**

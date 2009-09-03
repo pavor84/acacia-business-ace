@@ -53,7 +53,7 @@ public class CustomerDiscount extends DataObjectBean implements Serializable {
     @Type(type="uuid")
     private UUID customerDiscountId;
 
-    @JoinColumn(name = "customer_id", referencedColumnName = "partner_id", nullable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "business_partner_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Customer",
               propertyValidator=@PropertyValidator(required=true), customDisplay="${customer.displayName}")

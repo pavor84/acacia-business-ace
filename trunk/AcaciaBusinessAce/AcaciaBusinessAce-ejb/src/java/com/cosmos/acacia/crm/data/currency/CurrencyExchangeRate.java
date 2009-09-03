@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.data.currency;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -91,7 +91,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
                 "  and (t1.validUntil >= :validUntil or t1.validUntil is null)"
     )
 })
-public class CurrencyExchangeRate implements Serializable, CloneableBean<CurrencyExchangeRate> {
+public class CurrencyExchangeRate implements Serializable, PersistentEntity<CurrencyExchangeRate, CurrencyExchangeRatePK> {
 
     private static final long serialVersionUID = 1L;
     //
@@ -275,5 +275,10 @@ public class CurrencyExchangeRate implements Serializable, CloneableBean<Currenc
         } catch(CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public CurrencyExchangeRatePK getId() {
+        return getCurrencyExchangeRatePK();
     }
 }

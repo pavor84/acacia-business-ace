@@ -2,14 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.location.LocationsServiceRemote;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -29,67 +37,115 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "cities")
-@NamedQueries(
-    {
-        @NamedQuery
-             (
-                 name = "City.fetchAll",
-                 query = "from City"
-             ),
-         @NamedQuery
-             (
-                 name = "City.findByCountry",
-                 query = "select c from City c where c.country = :country"
-             ),
-         @NamedQuery
-            (
-                name = "City.findByNameAndCountry",
-                query = "select c from City c where c.country = :country and c.cityName=:cityName"
-            )
-    }
+@Table(name = "cities"
+/*CREATE UNIQUE INDEX uix_cities_country_city_name
+  ON cities
+  USING btree
+  (country_id, lower(city_name::text));*/
 )
-public class City
-        extends DataObjectBean
-        implements Serializable, TextResource
-{
+@NamedQueries({
+    @NamedQuery(name = City.NQ_FIND_ALL,
+    query = "select c from City c where c.country = :country")
+})
+@Form(
+    serviceClass = LocationsServiceRemote.class
+)
+public class City extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
-
+    //
+    protected static final String CLASS_NAME = "City";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    //
     @Id
     @Column(name = "city_id", nullable = false)
-    @Property(title="City Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
+    @Property(title = "City Id", editable = false, readOnly = true, visible = false, hidden = true)
+    @Type(type = "uuid")
     private UUID cityId;
 
     @Column(name = "city_name", nullable = false)
-    @Property(title="Name", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=64))
+    @Property(title = "Name",
+        propertyValidator = @PropertyValidator(validationType = ValidationType.LENGTH, maxLength = 64),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Name:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String cityName;
 
-    @JoinColumn(name = "country_id", referencedColumnName = "country_id", nullable=false)
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id", nullable = false)
     @ManyToOne
-    @Property(title="Country", customDisplay="${country.countryName}")
+    @Property(title = "Country", customDisplay = "${country.countryName}",
+        readOnly=true, editable=false,
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Country:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private Country country;
 
     @Column(name = "postal_code")
-    @Property(title="Postal code", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=8))
+    @Property(title = "Postal code",
+        propertyValidator = @PropertyValidator(validationType = ValidationType.LENGTH, maxLength = 8),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Postal Code:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String postalCode;
 
     @Column(name = "city_code")
-    @Property(title="City code", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=3))
+    @Property(title = "City code",
+        propertyValidator=@PropertyValidator(validationType = ValidationType.LENGTH, maxLength = 3),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="City Code:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String cityCode;
 
     @Column(name = "city_phone_code")
-    @Property(title="Phone code", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=6))
+    @Property(title = "Phone code",
+        propertyValidator=@PropertyValidator(validationType = ValidationType.LENGTH, maxLength = 6),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Phone Code:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String cityPhoneCode;
-
-    @Column(name = "description")
-    @Property(title="Description")
-    private String description;
 
     @PrimaryKeyJoinColumn
     @OneToOne
@@ -105,6 +161,10 @@ public class City
     public City(UUID cityId, String cityName) {
         this.cityId = cityId;
         this.cityName = cityName;
+    }
+
+    public City(Country country) {
+        this.country = country;
     }
 
     public UUID getCityId() {
@@ -147,14 +207,6 @@ public class City
         this.cityPhoneCode = cityPhoneCode;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Country getCountry() {
         return country;
     }
@@ -163,34 +215,8 @@ public class City
         this.country = country;
     }
 
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (cityId != null ? cityId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof City)) {
-            return false;
-        }
-        City other = (City) object;
-        if ((this.cityId == null && other.cityId != null) || (this.cityId != null && !this.cityId.equals(other.cityId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.City[cityId=" + cityId + "]";
-    }
-
     public String toShortText() {
-       return null;
+        return null;
     }
 
     public String toText() {
@@ -231,5 +257,4 @@ public class City
     public String getInfo() {
         return getCityName();
     }
-    
 }
