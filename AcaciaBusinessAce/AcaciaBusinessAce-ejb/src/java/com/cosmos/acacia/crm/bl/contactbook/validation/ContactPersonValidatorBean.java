@@ -27,7 +27,7 @@ public class ContactPersonValidatorBean implements ContactPersonValidatorLocal {
 
         //unique name
         Query q = em.createNamedQuery("ContactPerson.findByPersonAndTypeAndParentDataObject");
-        q.setParameter("person", entity.getContact());
+        q.setParameter("person", entity.getPerson());
         q.setParameter("parentDataObjectId", entity.getParentId());
         q.setParameter("positionType", entity.getPositionType());
 

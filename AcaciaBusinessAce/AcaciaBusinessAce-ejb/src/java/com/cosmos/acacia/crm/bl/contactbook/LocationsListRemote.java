@@ -70,13 +70,6 @@ public interface LocationsListRemote {
     // Methods for handling cities
 
     /**
-     * Lists all cities
-     *
-     * @return list of cities
-     */
-    List<City> getCities();
-
-    /**
      * Lists all cities belonging to a specified country
      *
      * @param country
@@ -96,7 +89,7 @@ public interface LocationsListRemote {
      *
      * @return the newly created city
      */
-    City newCity();
+    City newCity(Country country);
 
     /**
      * Saves a City

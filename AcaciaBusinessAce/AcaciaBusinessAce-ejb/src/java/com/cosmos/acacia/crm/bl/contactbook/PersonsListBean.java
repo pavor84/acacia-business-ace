@@ -85,9 +85,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return locationsManager.getCountries();
     }
 
-    public List<City> getCities()
+    public List<City> getCities(Country country)
     {
-        return locationsManager.getCities();
+        return locationsManager.getCities(country);
     }
 
     public EntityProperties getPersonEntityProperties()
@@ -172,11 +172,6 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     public List<DbResource> getGenders() {
         return Gender.getDbResources();
-    }
-
-    @Override
-    public List<City> getCities(Country country) {
-        return locationsManager.getCities(country);
     }
 
     @Override

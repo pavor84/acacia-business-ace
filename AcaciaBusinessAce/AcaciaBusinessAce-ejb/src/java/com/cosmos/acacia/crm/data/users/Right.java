@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.cosmos.acacia.security.AccessRight;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import java.util.UUID;
 import java.util.Comparator;
 import java.util.Set;
@@ -47,7 +47,8 @@ import org.hibernate.annotations.Type;
                 "  t.organizationId = :organizationId"
     )
 })
-public abstract class Right implements Serializable, Comparable<Right>, Comparator<Right>, CloneableBean<Right> {
+public abstract class Right implements Serializable, Comparable<Right>, Comparator<Right>,
+        PersistentEntity<Right, Long> {
 
     protected static final String USER_TYPE_ID = "U";
     protected static final String USER_GROUP_TYPE_ID = "G";
@@ -457,5 +458,10 @@ public abstract class Right implements Serializable, Comparable<Right>, Comparat
         } catch(CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public Long getId() {
+        return getUserRightId();
     }
 }

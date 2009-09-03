@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.data.purchase;
 
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -29,6 +28,9 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import org.hibernate.annotations.Type;
 
 /**

@@ -47,6 +47,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
@@ -132,6 +133,7 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
     //
     @Id
     @Basic(optional = false)
+    @Type(type="uuid")
     @Column(name = "document_id", nullable = false)
     protected UUID documentId;
 
@@ -243,7 +245,7 @@ public abstract class BusinessDocument extends DataObjectBean implements StatusE
     )
     protected Address publisherBranch;
 
-    @JoinColumn(name = "publisher_officer_id", referencedColumnName = "partner_id", nullable = false)
+    @JoinColumn(name = "publisher_officer_id", referencedColumnName = "person_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Publisher Officer",
         customDisplay="${publisherOfficer.firstName} ${publisherOfficer.lastName}",

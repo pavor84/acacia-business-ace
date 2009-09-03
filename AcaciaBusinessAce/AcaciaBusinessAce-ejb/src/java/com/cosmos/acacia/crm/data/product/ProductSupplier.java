@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -36,14 +36,14 @@ import javax.persistence.Table;
         query = "SELECT p FROM ProductSupplier p" +
                 " where p.product = :product")
 })
-public class ProductSupplier implements Serializable, CloneableBean<ProductSupplier> {
+public class ProductSupplier implements Serializable, PersistentEntity<ProductSupplier, ProductSupplierPK> {
 
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     protected ProductSupplierPK productSupplierPK;
 
-    @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "business_partner_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     @Property(title="Supplier", propertyValidator=@PropertyValidator(required=true), customDisplay="${supplier.displayName}")
     private BusinessPartner supplier;
@@ -292,5 +292,10 @@ public class ProductSupplier implements Serializable, CloneableBean<ProductSuppl
         } catch(CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public ProductSupplierPK getId() {
+        return getProductSupplierPK();
     }
 }

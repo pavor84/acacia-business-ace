@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.data.cash;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,96 +17,65 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.enums.Currency;
-import java.math.BigInteger;
+import javax.persistence.Basic;
+import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "banknote_quantity")
+@Table(name = "banknote_quantity", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"cash_reconcile_id", "currency_nominal_id"})
+})
 @NamedQueries({
-    /**
-     * Parameters:
-     * - :parentId
-     */
     @NamedQuery(
-        name = BanknoteQuantity.NQ_BY_PARENT,
-        query = "SELECT e FROM BanknoteQuantity e" +
-            " where" +
-            " e.dataObject.parentDataObjectId = :parentId " +
-            " and e.dataObject.deleted = false " +
-            " order by e.currencyNominal.currency, e.currencyNominal.nominal"),
-    /**
-     * Parameters:
-     * - parentId
-     * - currencyNominal
-     */
-    @NamedQuery(
-        name = BanknoteQuantity.NQ_BY_CURR_NOMINAL,
-        query = "SELECT e FROM BanknoteQuantity e" +
-            " where" +
-            " e.dataObject.parentDataObjectId = :parentId " +
-            " and e.dataObject.deleted = false " +
-            " and e.currencyNominal = :currencyNominal")
+        name = BanknoteQuantity.NQ_FIND_ALL,
+        query = "SELECT t FROM BanknoteQuantity t" +
+                " where" +
+                "  t.cashReconcile = :cashReconcile " +
+                " order by t.currencyNominal.currency, t.currencyNominal.nominalValue"
+    )
 })
 public class BanknoteQuantity extends DataObjectBean implements Serializable {
-    public static final String NQ_BY_PARENT = "BanknoteQuantity.findForParent";
 
-    public static final String NQ_BY_CURR_NOMINAL = "NQ_BY_CURR_NOMINAL";
-
+    private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "BanknoteQuantity";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    //
     @Id
-    @Column(name = "banknote_amt_id", nullable = false)
-    @Type(type="uuid")
-    private UUID banknoteAmountId;
-    
-    @ManyToOne
-    @Property(title="Currency Nominal", propertyValidator=@PropertyValidator(required=true,
-        validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d), editable=false, customDisplay="${currencyNominal.nominal}")
+    @Basic(optional = false)
+    @Type(type = "uuid")
+    @Column(name = "banknote_quantity_id", nullable = false)
+    private UUID banknoteQuantityId;
+
+    @JoinColumn(name = "cash_reconcile_id", referencedColumnName = "cash_reconcile_id", nullable = false)
+    @ManyToOne(optional = false)
+    private CashReconcile cashReconcile;
+
+    @JoinColumn(name = "currency_nominal_id", referencedColumnName = "currency_nominal_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title = "Currency Nominal", propertyValidator = @PropertyValidator(required = true,
+    validationType = ValidationType.NUMBER_RANGE, minValue = 0d, maxValue = 1000000000000d), editable = false, customDisplay = "${currencyNominal.nominal}")
     private CurrencyNominal currencyNominal;
-    
-    @Property(title="Quantity", propertyValidator=@PropertyValidator(required=true,
-        validationType=ValidationType.NUMBER_RANGE, minValue=1d, maxValue=1000000000000d))
-    @Column(name = "quantity", nullable = false)
-    private BigInteger quantity;
-    
-    @Column(name = "parent_id")
-    @Type(type="uuid")
-    private UUID parentId;
-    
-    @JoinColumn(name = "banknote_amt_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
+
+    @Basic(optional = false)
+    @Column(name = "quantity", nullable = false, precision = 19, scale = 4)
+    @Property(title = "Quantity", propertyValidator = @PropertyValidator(required = true,
+    validationType = ValidationType.NUMBER_RANGE, minValue = 1d, maxValue = 1000000000000d))
+    private int quantity;
+
+    @JoinColumn(name = "banknote_quantity_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
-    
-    public UUID getParentId() {
-        return parentId;
+
+    public UUID getBanknoteQuantityId() {
+        return banknoteQuantityId;
     }
 
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (banknoteAmountId != null ? banknoteAmountId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BanknoteQuantity)) {
-            return false;
-        }
-        BanknoteQuantity other = (BanknoteQuantity) object;
-        if ((this.banknoteAmountId == null && other.banknoteAmountId != null) || (this.banknoteAmountId != null && !this.banknoteAmountId.equals(other.banknoteAmountId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.BanknoteAmount[banknoteAmountId=" + banknoteAmountId + "]";
+    public void setBanknoteQuantityId(UUID banknoteQuantityId) {
+        this.banknoteQuantityId = banknoteQuantityId;
     }
 
     @Override
@@ -116,31 +84,43 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public UUID getId() {
-        return banknoteAmountId;
-    }
-
-    @Override
-    public String getInfo() {
-        return toString();
-    }
-
-    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
     }
 
     @Override
+    public UUID getId() {
+        return getBanknoteQuantityId();
+    }
+
+    @Override
     public void setId(UUID id) {
-        setBanknoteAmountId(id);
+        setBanknoteQuantityId(id);
     }
 
-    public UUID getBanknoteAmountId() {
-        return banknoteAmountId;
+    @Override
+    public UUID getParentId() {
+        if (cashReconcile != null) {
+            return cashReconcile.getDocumentId();
+        }
+
+        return null;
     }
 
-    public void setBanknoteAmountId(UUID banknoteAmountId) {
-        this.banknoteAmountId = banknoteAmountId;
+    @Override
+    public String getInfo() {
+        StringBuilder sb = new StringBuilder();
+        if (cashReconcile != null) {
+            sb.append(cashReconcile.getDocumentId());
+        }
+        sb.append(':');
+        if (currencyNominal != null) {
+            sb.append(currencyNominal.getCurrencyNominalId());
+        }
+        sb.append(':');
+        sb.append(quantity);
+
+        return sb.toString();
     }
 
     public CurrencyNominal getCurrencyNominal() {
@@ -151,25 +131,29 @@ public class BanknoteQuantity extends DataObjectBean implements Serializable {
         this.currencyNominal = currencyNominal;
     }
 
-    public BigInteger getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(BigInteger quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     public BigDecimal getAmount() {
-        if ( getCurrencyNominal()!=null && getCurrencyNominal().getNominal()!=null && getQuantity()!=null )
-            return getCurrencyNominal().getNominal().multiply(new BigDecimal(getQuantity()));
+        CurrencyNominal currNominal;
+        if ((currNominal = getCurrencyNominal()) != null && currNominal.getNominalValue() != null) {
+            return currNominal.getNominalValue().multiply(BigDecimal.valueOf(getQuantity()));
+        }
+
         return null;
     }
-    
+
     public BigDecimal getAmount(Currency targetCurrency) {
         BigDecimal valueBase = getAmount();
-        if ( valueBase!=null )
-            return Currency.convertAmount(targetCurrency, 
-                (Currency)getCurrencyNominal().getCurrency().getEnumValue(), valueBase);
+        if (valueBase != null) {
+            return Currency.convertAmount(targetCurrency,
+                    (Currency) getCurrencyNominal().getCurrency().getEnumValue(), valueBase);
+        }
         return null;
     }
 }

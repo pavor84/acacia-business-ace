@@ -22,7 +22,10 @@ import java.util.UUID;
  *
  */
 @Local
-public interface AcaciaSessionLocal extends AcaciaSessionRemote{
+public interface AcaciaSessionLocal extends AcaciaSessionRemote {
+
+    Organization getSystemOrganization();
+
     /**
      * Logs in the user, creates new session and returns the session id.
      * @param user

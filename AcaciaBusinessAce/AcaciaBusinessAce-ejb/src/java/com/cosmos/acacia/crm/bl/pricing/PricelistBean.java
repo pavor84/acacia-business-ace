@@ -113,9 +113,9 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         if ( result.isEmpty() ){
             genPricelist = newPricelist(parentDataObjectId);
             genPricelist.setGeneralPricelist(true);
-            genPricelist.setName("General Pricelist");
+            genPricelist.setPricelistName("General Pricelist");
             while ( true ){
-                genPricelist.setName(genPricelist.getName()+new Random().nextInt(1000));
+                genPricelist.setPricelistName(genPricelist.getPricelistName()+new Random().nextInt(1000));
                 try{
                     genPricelist = savePricelist(genPricelist);
                     break;//if saved - leave

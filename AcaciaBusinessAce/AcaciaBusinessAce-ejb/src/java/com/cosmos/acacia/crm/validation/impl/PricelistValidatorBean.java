@@ -25,7 +25,7 @@ public class PricelistValidatorBean implements PricelistValidatorLocal{
         
         //unique name 
         Query getByName = em.createNamedQuery("Pricelist.findByNameNotDeleted");
-        getByName.setParameter("name", entity.getName());
+        getByName.setParameter("name", entity.getPricelistName());
         getByName.setParameter("parentDataObjectId", entity.getParentId());
         getByName.setParameter("deleted", Boolean.FALSE);
         if ( !ValidationUtil.checkUnique(getByName.getResultList(), entity))
@@ -50,7 +50,7 @@ public class PricelistValidatorBean implements PricelistValidatorLocal{
             if ( entity.getCurrency()==null ){
                 ve.addMessage("currency", "Pricelist.err.currencyNeeded");
             }
-            if ( entity.getMonths()==null ){
+            if ( entity.getTurnoverMonths()==null ){
                 ve.addMessage("months", "Pricelist.err.monthsNeeded");
             }
         }

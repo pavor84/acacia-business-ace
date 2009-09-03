@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.data.cash;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,152 +13,95 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.acacia.util.AcaciaUtils;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
+import javax.persistence.Basic;
+import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "currency_nominal")
+@Table(name = "currency_nominal", catalog = "acacia", schema = "public",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"currency_id", "nominal_value"})
+})
 @NamedQueries({
-    /**
-     * Parameters:
-     * - currency
-     * - nominal
-     */
     @NamedQuery(
-        name = CurrencyNominal.NQ_FIND_BY_CUR,
-        query = "SELECT e FROM CurrencyNominal e" +
-            " where" +
-            " e.dataObject.deleted = false" +
-            " and e.currency = :currency" ),
-    /**
-     * Parameters:
-     * - currency
-     */
+        name = CurrencyNominal.NQ_FIND_BY_CURRENCY,
+        query = "SELECT t FROM CurrencyNominal t" +
+                " where" +
+                "  t.currency = :currency" +
+                "  and t.dataObject.deleted = false" +
+                " order by t.nominalValue"
+    ),
     @NamedQuery(
-        name = CurrencyNominal.NQ_FIND_NOMINAL_VALUES,
-        query = "SELECT e FROM CurrencyNominal e" +
+        name = CurrencyNominal.NQ_FIND_BY_CURRENCY_AND_NOMINAL_VALUE,
+        query = "SELECT t FROM CurrencyNominal t" +
             " where" +
-            " e.currency = :currency" +
-            " order by e.nominal "),
-    /**
-     * Parameters:
-     * - currency
-     * - nominal
-     */
-    @NamedQuery(
-        name = CurrencyNominal.NQ_FIND_BY_NOM_AND_CURR,
-        query = "SELECT e FROM CurrencyNominal e" +
-            " where" +
-            " e.dataObject.deleted = false" +
-            " and e.dataObject.parentDataObjectId is null " +
-            " and e.currency = :currency" +
-            " and e.nominal = :nominal ")
+            "  t.currency = :currency" +
+            "  and t.nominalValue = :nominalValue"
+    )
 })
 public class CurrencyNominal extends DataObjectBean implements Serializable, TextResource {
-    public static final String NQ_FIND_BY_CUR = "CurrencyNominal.findByCurrency";
 
-    public static final String NQ_FIND_NOMINAL_VALUES = "CurrencyNominal.findNominalValues";
-
-    public static final String NQ_FIND_BY_NOM_AND_CURR = "NQ_FIND_BY_NOM_AND_CURR";
+    private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "CurrencyNominal";
+    public static final String NQ_FIND_BY_CURRENCY = CLASS_NAME + ".findByCurrency";
+    public static final String NQ_FIND_BY_CURRENCY_AND_NOMINAL_VALUE =
+            CLASS_NAME + ".findByCurrencyAndNominalValue";
 
     @Id
-    @Column(name = "nominal_id", nullable = false)
+    @Basic(optional = false)
     @Type(type="uuid")
-    private UUID nominalId;
+    @Column(name = "currency_nominal_id", nullable = false)
+    private UUID currencyNominalId;
     
+    @Basic(optional = false)
+    @Column(name = "nominal_value", nullable = false, precision = 19, scale = 4)
     @Property(title="Nominal", propertyValidator=@PropertyValidator(required=true,
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "nominal", nullable = false, precision=20, scale=2)
-    private BigDecimal nominal;
+    private BigDecimal nominalValue;
     
+    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Currency", propertyValidator=@PropertyValidator(required=true))
-    @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
-    @ManyToOne
     private DbResource currency;
     
-    @JoinColumn(name = "nominal_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
+    @JoinColumn(name = "currency_nominal_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
     
-    @Transient
-    private UUID parentId;
-    
-    public CurrencyNominal(BigDecimal nominal, DbResource currency) {
-        super();
-        this.nominal = nominal;
+    public CurrencyNominal() {
+    }
+
+    public CurrencyNominal(UUID currencyNominalId) {
+        this.currencyNominalId = currencyNominalId;
+    }
+
+    public CurrencyNominal(BigDecimal nominalValue, DbResource currency) {
+        this.nominalValue = nominalValue;
         this.currency = currency;
     }
 
-    public UUID getParentId() {
-        return parentId;
+    public UUID getCurrencyNominalId() {
+        return currencyNominalId;
     }
 
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+    public void setCurrencyNominalId(UUID currencyNominalId) {
+        this.currencyNominalId = currencyNominalId;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (nominalId != null ? nominalId.hashCode() : 0);
-        return hash;
+    public BigDecimal getNominalValue() {
+        return nominalValue;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CurrencyNominal)) {
-            return false;
-        }
-        CurrencyNominal other = (CurrencyNominal) object;
-        if ((this.nominalId == null && other.nominalId != null) || (this.nominalId != null && !this.nominalId.equals(other.nominalId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.CurrencyNominal[nominalId=" + nominalId + "]";
-    }
-
-    @Override
-    public DataObject getDataObject() {
-        return dataObject;
-    }
-
-    @Override
-    public UUID getId() {
-        return nominalId;
-    }
-
-    @Override
-    public String getInfo() {
-        return toString();
-    }
-
-    @Override
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-    }
-
-    @Override
-    public void setId(UUID id) {
-        setNominalId(id);
-    }
-
-    public UUID getNominalId() {
-        return nominalId;
-    }
-
-    public void setNominalId(UUID nominalId) {
-        this.nominalId = nominalId;
+    public void setNominalValue(BigDecimal nominalValue) {
+        this.nominalValue = nominalValue;
     }
 
     public DbResource getCurrency() {
@@ -170,29 +112,52 @@ public class CurrencyNominal extends DataObjectBean implements Serializable, Tex
         this.currency = currency;
     }
 
-    public BigDecimal getNominal() {
-        return nominal;
+    @Override
+    public DataObject getDataObject() {
+        return dataObject;
     }
 
-    public void setNominal(BigDecimal nominal) {
-        this.nominal = nominal;
+    @Override
+    public void setDataObject(DataObject dataObject) {
+        this.dataObject = dataObject;
     }
 
-    public CurrencyNominal() {
-        super();
+    @Override
+    public UUID getId() {
+        return getCurrencyNominalId();
+    }
+
+    @Override
+    public void setId(UUID id) {
+        setCurrencyNominalId(id);
+    }
+
+    @Override
+    public UUID getParentId() {
+        return null;
+    }
+
+    @Override
+    public String getInfo() {
+        StringBuilder sb = new StringBuilder();
+        if(currency != null) {
+            sb.append(currency.getEnumValue().name());
+        }
+        sb.append(':');
+        if(nominalValue != null) {
+            sb.append(nominalValue);
+        }
+
+        return sb.toString();
     }
 
     @Override
     public String toShortText() {
-        if ( nominal!=null )
-            return AcaciaUtils.getDecimalFormat().format(nominal);
-        return "";
+        return getInfo();
     }
 
     @Override
     public String toText() {
-        if ( nominal!=null )
-            return AcaciaUtils.getDecimalFormat().format(nominal);
-        return "";
+        return getInfo();
     }
 }

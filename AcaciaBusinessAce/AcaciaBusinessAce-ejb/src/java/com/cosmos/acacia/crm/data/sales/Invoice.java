@@ -241,7 +241,7 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Date", editable=false)
     private Date invoiceDate;
 
-    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
+    @JoinColumn(name = "recipient_id", referencedColumnName = "business_partner_id", nullable=false)
     @ManyToOne
     @Property(title="Recipient",
               propertyValidator=@PropertyValidator(required=true), customDisplay="${recipient.displayName}")

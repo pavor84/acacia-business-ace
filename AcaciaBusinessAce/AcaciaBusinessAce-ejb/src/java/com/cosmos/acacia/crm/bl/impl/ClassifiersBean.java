@@ -413,6 +413,7 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
                 ClassifiedObjectBean cob = new ClassifiedObjectBean();
                 String type = dob.getClass().getName().replaceAll(dob.getClass().getPackage().getName() + "\\.", "");
 
+                cob.setId(dob.getId());
                 cob.setTitle(dob.getInfo());
                 cob.setType(type);
                 result.add(cob);

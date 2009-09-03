@@ -4,9 +4,12 @@
  */
 package com.cosmos.acacia.crm.bl.users;
 
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.JobTitle;
@@ -14,6 +17,7 @@ import com.cosmos.acacia.crm.data.users.Team;
 import com.cosmos.acacia.crm.data.users.TeamMember;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.data.users.UserRegistration;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
@@ -24,6 +28,7 @@ import com.cosmos.acacia.entity.Operation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
@@ -42,6 +47,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     public static final String ADDRESS_TYPE_KEY = "addressType";
     public static final String PK_BUSINESS_UNITS = "businessUnits";
     public static final String PK_FUNCTIONAL_HIERARCHIES = "functionalHierarchies";
+    //
+    @EJB
+    private ContactsServiceLocal contactsService;
 
     @Override
     public List<UserOrganization> getUserOrganizations(Organization organization) {
@@ -215,6 +223,8 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             } else {
                 return (List<E>) getBusinessUnits((BusinessUnit) extraParameters[0]);
             }
+        } else if (entityClass == UserRegistration.class) {
+            return new ArrayList<E>(2);
         }
 
         return super.getEntities(entityClass, extraParameters);
@@ -290,6 +300,40 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
                 member.setStatus(AccountStatus.Enabled.getDbResource());
             }
         }
+    }
+
+    @Override
+    public <E> E save(E entity) {
+        if(!(entity instanceof UserRegistration)) {
+            return super.save(entity);
+        }
+
+        UserRegistration userRegistration = (UserRegistration) entity;
+
+        Person person = new Person(); //contactsService.new
+        person.setDefaultCurrency(userRegistration.getDefaultCurrency());
+        person.setGender(userRegistration.getGender());
+        person.setPersonalUniqueId(userRegistration.getPersonalUniqueId());
+        person.setFirstName(userRegistration.getFirstName());
+        person.setSecondName(userRegistration.getSecondName());
+        person.setLastName(userRegistration.getLastName());
+        person.setExtraName(userRegistration.getExtraName());
+        person.setBirthDate(userRegistration.getBirthDate());
+        person.setBirthPlaceCity(userRegistration.getBirthPlaceCity());
+        person.setBirthPlaceCountry(userRegistration.getBirthPlaceCountry());
+        person = super.save(person);
+
+        Address address = new Address();
+
+        User user = new User();
+        user.setEmailAddress(userRegistration.getEmailAddress());
+        user.setUserName(userRegistration.getUsername());
+        user.setUserPassword(userRegistration.getPassword());
+        user.setPerson(person);
+        user = super.save(user);
+
+        userRegistration.setUserId(user.getUserId());
+        return (E) userRegistration;
     }
 
     @Override

@@ -93,7 +93,7 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
         ArrayList<Person> persons = new ArrayList<Person>(contactPersons.size());
 
         for (ContactPerson contactPerson: contactPersons) {
-            persons.add(contactPerson.getContact());
+            persons.add(contactPerson.getPerson());
         }
 
         return persons;

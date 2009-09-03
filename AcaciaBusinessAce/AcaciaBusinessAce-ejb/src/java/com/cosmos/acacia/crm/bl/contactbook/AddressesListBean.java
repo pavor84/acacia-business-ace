@@ -81,8 +81,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
      * @param parent
      * @return the city-list
      */
-    public List<City> getCities() {
-        return locationsManager.getCities();
+    public List<City> getCities(Country country) {
+        return locationsManager.getCities(country);
     }
 
     public Address newAddress() {
@@ -200,7 +200,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     @Override
     public int deleteContactPerson(ContactPerson contactPerson) {
 //        UserOrganization uo =
-//            usersManager.getUserOrganization(contactPerson.getContact());
+//            usersManager.getUserOrganization(contactPerson.getPerson());
 //
 //        // clean group only if the group is underscored (a branch group)
 //        if (uo.getUserGroup().getName().indexOf("_") > -1)
@@ -299,9 +299,5 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     public List<DbResource> getCommunicationTypes() {
         return CommunicationType.getDbResources();
-    }
-
-    public List<City> getCities(Country country) {
-        return locationsManager.getCities(country);
     }
 }

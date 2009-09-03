@@ -5,9 +5,6 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
-import com.cosmos.acacia.crm.data.contacts.Organization;
-import com.cosmos.acacia.crm.data.contacts.Address;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -26,6 +23,9 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import org.hibernate.annotations.Type;
 
 /**

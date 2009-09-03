@@ -3,7 +3,6 @@
  */
 package com.cosmos.acacia.crm.data.sales;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -15,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +22,10 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
+import javax.persistence.Basic;
 import org.hibernate.annotations.Type;
 
 /**
@@ -32,7 +34,7 @@ import org.hibernate.annotations.Type;
  *
  */
 @Entity
-@Table(name = "pricelists")
+@Table(name = "pricelists", catalog = "acacia", schema = "public")
 @NamedQueries(
     {
         /**
@@ -40,7 +42,7 @@ import org.hibernate.annotations.Type;
          *  - parentDataObjectId - not null, the parent object id
          *  - deleted - not null - true/false
          */
-        @NamedQuery
+        /*@NamedQuery
             (
                 name = "Pricelist.findForParentAndDeleted",
                 query = "select p from Pricelist p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
@@ -50,7 +52,7 @@ import org.hibernate.annotations.Type;
             (
                 name = "Pricelist.findById",
                 query = "select p from Pricelist p where p.dataObject.dataObjectId = :pricelistId"
-            ),
+            ),*/
         /**
          * Parameters:
          *  - parentDataObjectId - not null
@@ -58,114 +60,103 @@ import org.hibernate.annotations.Type;
          *  - name - not null
          *  
          */
-        @NamedQuery
+        /*@NamedQuery
             (
                 name = "Pricelist.findByNameNotDeleted",
                 query = "select p from Pricelist p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
                 "and p.dataObject.deleted = :deleted and p.name like :name"
-            ),
+            ),*/
         /**
          * Parameters:
          *  - parentDataObjectId - not null, the organization
          */
-        @NamedQuery
+        /*@NamedQuery
             (
                 name = "Pricelist.findGeneralPricelistForParent",
                 query = "select p from Pricelist p where p.dataObject.parentDataObjectId = :parentDataObjectId " +
                 "and p.dataObject.deleted = false and p.generalPricelist = true"
-            )  
+            )  */
     })
 public class Pricelist extends DataObjectBean implements Serializable {
     
-    @Column(name = "name", nullable = false)
-    @Property(title="Pricelist Name", propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.LENGTH, minLength=2, maxLength=50))
-    private String name;
+    @Id
+    @Basic(optional = false)
+    @Type(type="uuid")
+    @Column(name = "pricelist_id", nullable = false)
+    private UUID pricelistId;
+
+    @Basic(optional = false)
+    @Column(name = "pricelist_name", nullable = false, length = 128)
+    @Property(title="Pricelist Name",
+        propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.LENGTH, minLength=2, maxLength=128)
+    )
+    private String pricelistName;
     
-    @Column(name = "forPeriod" )
+    @Column(name = "active")
+    @Property(title="Active")
+    private boolean active;
+
+    @Column(name = "for_period")
     @Property(title="For Period")
     private boolean forPeriod;
     
-    @Property(title="Valid From")
-    @Column(name = "active_from")
+    @Column(name = "valid_from")
     @Temporal(TemporalType.TIMESTAMP)
+    @Property(title="Valid From")
     private Date activeFrom;
     
-    @Property(title="Valid To")
-    @Column(name = "active_to")
+    @Column(name = "valid_to")
     @Temporal(TemporalType.TIMESTAMP)
+    @Property(title="Valid To")
     private Date activeTo;
     
+    @Column(name = "min_turnover", precision = 19, scale = 4)
     @Property(title="Min. Turnover", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
-    @Column(name = "min_turnover", precision=20, scale=4)
     private BigDecimal minTurnover;
     
-    @Property(title="Currency", editable=false)
     @JoinColumn(name = "currency_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Currency", editable=false)
     private DbResource currency;
     
+    @Column(name = "turnover_months")
     @Property(title="Turnover Months", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=1d, maxValue=36d))
-    @Column(name = "months")
-    private Integer months;
+    private Integer turnoverMonths;
     
-    @Column(name = "Active" )
-    @Property(title="Active")
-    private boolean active;
-    
+    @Column(name = "default_discount", precision = 19, scale = 4)
     @Property(title="Def. Discount", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=100d))
-    @Column(name = "default_discount", precision=20, scale=4)
     private BigDecimal defaultDiscount;
     
+    @Column(name = "general_pricelist")
     @Property(title="General Pricelist")
     private boolean generalPricelist;
     
-    @Id
-    @Column(name = "pricelist_id", nullable = false)
     @Type(type="uuid")
-    private UUID pricelistId;
-
     @Column(name = "parent_id")
-    @Type(type="uuid")
     private UUID parentId;
 
-    @JoinColumn(name = "pricelist_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
+    @JoinColumn(name = "pricelist_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
-    
+
+    public Pricelist() {
+    }
+
+    public Pricelist(UUID pricelistId) {
+        this.pricelistId = pricelistId;
+    }
+
+    @Override
     public UUID getParentId() {
         return parentId;
     }
 
+    @Override
     public void setParentId(UUID parentId) {
         this.parentId = parentId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (pricelistId != null ? pricelistId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pricelist)) {
-            return false;
-        }
-        Pricelist other = (Pricelist) object;
-        if ((this.pricelistId == null && other.pricelistId != null) || (this.pricelistId != null && !this.pricelistId.equals(other.pricelistId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.Pricelist[pricelistId=" + pricelistId + "]";
     }
 
     @Override
@@ -174,18 +165,13 @@ public class Pricelist extends DataObjectBean implements Serializable {
     }
 
     @Override
-    public UUID getId() {
-        return pricelistId;
-    }
-
-    @Override
-    public String getInfo() {
-        return toString();
-    }
-
-    @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
+    }
+
+    @Override
+    public UUID getId() {
+        return pricelistId;
     }
 
     @Override
@@ -201,12 +187,12 @@ public class Pricelist extends DataObjectBean implements Serializable {
         this.pricelistId = pricelistId;
     }
 
-    public String getName() {
-        return name;
+    public String getPricelistName() {
+        return pricelistName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPricelistName(String pricelistName) {
+        this.pricelistName = pricelistName;
     }
 
     public boolean isForPeriod() {
@@ -249,12 +235,12 @@ public class Pricelist extends DataObjectBean implements Serializable {
         this.minTurnover = minTurnover;
     }
 
-    public Integer getMonths() {
-        return months;
+    public Integer getTurnoverMonths() {
+        return turnoverMonths;
     }
 
-    public void setMonths(Integer months) {
-        this.months = months;
+    public void setTurnoverMonths(Integer months) {
+        this.turnoverMonths = months;
     }
 
     public BigDecimal getDefaultDiscount() {
@@ -279,5 +265,10 @@ public class Pricelist extends DataObjectBean implements Serializable {
 
     public void setGeneralPricelist(boolean generalPricelist) {
         this.generalPricelist = generalPricelist;
+    }
+
+    @Override
+    public String getInfo() {
+        return toString();
     }
 }

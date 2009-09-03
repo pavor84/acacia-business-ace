@@ -5,22 +5,22 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
@@ -30,43 +30,39 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "addresses")
-@NamedQueries(
-    {
-        @NamedQuery
-             (
-                name = "Address.findByParentDataObjectAndDeleted",
-                query = "select a from Address a where a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-             (
-                name = "Address.findByParentDataObjectIsNullAndDeleted",
-                query = "select a from Address a where a.dataObject.parentDataObjectId is null and a.dataObject.deleted = :deleted"
-              ),
-        @NamedQuery
-            (
-                name = "Address.findByNameAndParentDataObject",
-                query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObjectId = :parentDataObjectId"
-            )
-    }
-)
-public class Address
-        extends DataObjectBean
-        implements Serializable, TextResource {
+@NamedQueries({
+    /*@NamedQuery(
+        name = "Address.findByParentDataObjectAndDeleted",
+        query = "select a from Address a where a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = "Address.findByParentDataObjectIsNullAndDeleted",
+        query = "select a from Address a where a.dataObject.parentDataObjectId is null and a.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = "Address.findByNameAndParentDataObject",
+        query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObjectId = :parentDataObjectId"
+    )*/
+})
+public class Address extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Basic(optional = false)
+    @Type(type="uuid")
     @Column(name = "address_id", nullable = false)
     @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
     private UUID addressId;
 
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
+    @Basic(optional = false)
     @Type(type="uuid")
-    private UUID parentId;
+    @Column(name = "business_partner_id", nullable = false)
+    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
+    private UUID businessPartnerId;
 
-    @Column(name = "address_name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "address_name", nullable = false, length = 64)
     @Property(title="Name",
             propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, required = true))
     private String addressName;
@@ -81,26 +77,16 @@ public class Address
     @Property(title="City", customDisplay="${city.cityName}")
     private City city;
 
-    @Column(name = "postal_code")
+    @Column(name = "postal_code", length = 16)
     @Property(title="Postcal Code")
     private String postalCode;
 
-    @Column(name = "postal_address")
+    @Column(name = "postal_address", length = 128)
     @Property(title="Postal Address")
     private String postalAddress;
 
-    @Column(name = "description")
-    @Property(title="Description", hidden=true)
-    private String description;
-
-
-//    @JoinColumn(name = "user_group_id", referencedColumnName = "user_group_id")
-//    @OneToOne
-//    @Property(title="User Group", customDisplay="${userGroup.name}")
-//    private UserGroup userGroup;
-
-    @PrimaryKeyJoinColumn
-    @OneToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
 
     public Address() {
@@ -118,14 +104,22 @@ public class Address
         this.addressId = addressId;
     }
 
+    public UUID getBusinessPartnerId() {
+        return businessPartnerId;
+    }
+
+    public void setBusinessPartnerId(UUID businessPartnerId) {
+        this.businessPartnerId = businessPartnerId;
+    }
+
     @Override
     public UUID getParentId() {
-        return parentId;
+        return getBusinessPartnerId();
     }
 
     @Override
     public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+        setBusinessPartnerId(parentId);
     }
 
     public String getAddressName() {
@@ -152,14 +146,6 @@ public class Address
         this.postalAddress = postalAddress;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public City getCity() {
         return city;
     }
@@ -176,14 +162,6 @@ public class Address
         this.country = country;
     }
 
-//    public UserGroup getUserGroup() {
-//        return userGroup;
-//    }
-//
-//    public void setUserGroup(UserGroup userGroup) {
-//        this.userGroup = userGroup;
-//    }
-
     @Override
     public DataObject getDataObject() {
         return dataObject;
@@ -192,31 +170,6 @@ public class Address
     @Override
     public void setDataObject(DataObject dataObject) {
         this.dataObject = dataObject;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (addressId != null ? addressId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Address)) {
-            return false;
-        }
-        Address other = (Address) object;
-        if ((this.addressId == null && other.addressId != null) || (this.addressId != null && !this.addressId.equals(other.addressId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.Address[addressId=" + addressId + "]";
     }
 
     @Override

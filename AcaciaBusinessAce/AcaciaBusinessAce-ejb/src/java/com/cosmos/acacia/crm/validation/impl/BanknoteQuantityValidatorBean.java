@@ -26,12 +26,12 @@ public class BanknoteQuantityValidatorBean implements BanknoteQuantityValidatorL
         ValidationException ve = new ValidationException();
         
         //unique name
-        List<BanknoteQuantity> banknoteList = (List<BanknoteQuantity>) AcaciaUtils.getResultList(em, 
-            BanknoteQuantity.NQ_BY_CURR_NOMINAL, 
-            "parentId", entity.getParentId(),
-            "currencyNominal", entity.getCurrencyNominal());
-        if ( !ValidationUtil.checkUnique(banknoteList, entity))
-            ve.addMessage("name", "BanknoteQuantity.err.currencyNominalUsed");
+//        List<BanknoteQuantity> banknoteList = (List<BanknoteQuantity>) AcaciaUtils.getResultList(em,
+//            BanknoteQuantity.NQ_BY_CURR_NOMINAL,
+//            "parentId", entity.getParentId(),
+//            "currencyNominal", entity.getCurrencyNominal());
+//        if ( !ValidationUtil.checkUnique(banknoteList, entity))
+//            ve.addMessage("name", "BanknoteQuantity.err.currencyNominalUsed");
         
         //if we have validation messages - throw the exception since not everything is OK
         if ( !ve.getMessages().isEmpty() )

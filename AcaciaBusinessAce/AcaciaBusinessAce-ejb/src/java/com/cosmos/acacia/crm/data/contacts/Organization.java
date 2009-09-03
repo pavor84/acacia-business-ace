@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
-import com.cosmos.acacia.crm.data.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -27,62 +26,66 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
+import javax.persistence.Basic;
+import javax.persistence.DiscriminatorValue;
+import org.hibernate.annotations.Type;
 
 /**
  *
  * @author Miro
  */
 @Entity
-@Table(name = "organizations")
-/** Will duplicate the primary key from superclass with this name in the 'organizations' table */
-@PrimaryKeyJoinColumn(name="organization_id")
-@NamedQueries(
-    {
-        @NamedQuery
-            (
-             name = "Organization.findByParentDataObjectAndDeleted",
-             query = "select o from Organization o where o.dataObject.parentDataObjectId = :parentDataObjectId and o.dataObject.deleted = :deleted"
-            ),
-        @NamedQuery
-            (
-            name = "Organization.findByParentDataObjectIsNullAndDeleted",
-            query = "select o from Organization o where o.dataObject.parentDataObjectId is null and o.dataObject.deleted = :deleted"
-            ),
-        /**
-         * All not deleted organizations.
-         */
-        @NamedQuery
-            (
-            name = "Organization.getAllNotDeleted",
-            query = "select o from Organization o where o.dataObject.deleted = false"
-            ),
-        @NamedQuery
-            (
-            name = "Organization.findByName",
-            query = "select o from Organization o where o.organizationName=:organizationName"
-            )
-    }
+@Table(name = "organizations", catalog = "acacia", schema = "public"
+/*CREATE UNIQUE INDEX uix_organizations_parent_business_partner_organization_name
+ON organizations
+USING btree
+(parent_business_partner_id, lower(organization_name::text));*/
 )
+@DiscriminatorValue(value=BusinessPartner.PARTNER_ORGANIZATION)
+@PrimaryKeyJoinColumn(name="organization_id")
+@NamedQueries({
+    @NamedQuery(
+        name = Organization.NQ_FIND_ALL_ORGANIZATIONS,
+        query = "select t from Organization t" +
+                " where" +
+                "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = Organization.NQ_FIND_ORGANIZATION_BY_NAME,
+        query = "select t from Organization t" +
+                " where" +
+                "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t.dataObject.deleted = :deleted" +
+                "  and lower(t.organizationName) = lower(:organizationName)"
+    )
+})
 public class Organization extends BusinessPartner implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "Organization";
+    public static final String NQ_FIND_ALL_ORGANIZATIONS = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_ORGANIZATION_BY_NAME = CLASS_NAME + ".findByName";
 
-    @Column(name = "organization_name", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "organization_name", nullable = false, length = 128)
     @Property(title="Organization Name",
-        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=120))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=1, maxLength=128))
     private String organizationName;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", length = 32)
     @Property(title="Nickname")
     private String nickname;
 
-    @Column(name = "vat_number")
+    @Column(name = "vat_number", length = 32)
     @Property(title="VAT Number")
     private String vatNumber;
 
-    @Column(name = "unique_identifier_code")
-    @Property(title="Unique Identifier Code")
+    @Column(name = "unique_identifier_code", length = 32)
+    @Property(title="Unique Id Code")
     private String uniqueIdentifierCode;
 
     @Column(name = "registration_date")
@@ -90,13 +93,9 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     @Property(title="Registration Date")
     private Date registrationDate;
 
-    @Column(name = "share_capital")
+    @Column(name = "share_capital", precision = 19, scale = 4)
     @Property(title="Share Capital")
     private BigDecimal shareCapital;
-
-    @Column(name = "description")
-    @Property(title="Description")
-    private String description;
 
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -123,22 +122,29 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     @Property(title="Organization Type")
     private DbResource organizationType;
 
-    @Column(name = "is_active")
+    @Basic(optional = false)
+    @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    @Basic(optional = false)
+    @Type(type="uuid")
+    @Column(name = "parent_business_partner_id", nullable = false)
+    private UUID parentBusinessPartnerId;
 
     @Transient
     private boolean isOwn;
 
     public Organization() {
+        super(PARTNER_ORGANIZATION);
     }
 
-    public Organization(UUID id) {
-        setPartnerId(id);
+    public Organization(UUID organizationId) {
+        super(PARTNER_ORGANIZATION, organizationId);
     }
 
     public Organization(UUID organizationId, String organizationName) {
-        setPartnerId(organizationId);
-        setOrganizationName(organizationName);
+        this(organizationId);
+        this.organizationName = organizationName;
     }
 
     public String getOrganizationName() {
@@ -191,14 +197,6 @@ public class Organization extends BusinessPartner implements Serializable, TextR
         this.shareCapital = shareCapital;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Address getRegistrationAddress() {
         return registrationAddress;
     }
@@ -239,7 +237,6 @@ public class Organization extends BusinessPartner implements Serializable, TextR
         this.organizationType = organizationType;
     }
 
-
     public boolean isActive() {
         return isActive;
     }
@@ -248,31 +245,22 @@ public class Organization extends BusinessPartner implements Serializable, TextR
         this.isActive = isActive;
     }
 
-
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (getPartnerId() != null ? getPartnerId().hashCode() : 0);
-        return hash;
+    public UUID getParentBusinessPartnerId() {
+        UUID id;
+        if((id = super.getParentBusinessPartnerId()) == null && parentBusinessPartnerId != null) {
+            super.setParentBusinessPartnerId(parentBusinessPartnerId);
+        } else if(id != null && parentBusinessPartnerId == null) {
+            parentBusinessPartnerId = id;
+        }
+
+        return super.getParentBusinessPartnerId();
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Organization)) {
-            return false;
-        }
-        Organization other = (Organization) object;
-        if ((this.getPartnerId() == null && other.getPartnerId() != null) || (this.getPartnerId() != null && !this.getPartnerId().equals(other.getPartnerId()))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Organization[organizationId=" + getPartnerId() +
-                "; name=" + organizationName + "]";
+    public void setParentBusinessPartnerId(UUID parentBusinessPartnerId) {
+        this.parentBusinessPartnerId = parentBusinessPartnerId;
+        super.setParentBusinessPartnerId(parentBusinessPartnerId);
     }
 
     @Override

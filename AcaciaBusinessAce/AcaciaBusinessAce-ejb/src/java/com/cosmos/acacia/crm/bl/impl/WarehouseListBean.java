@@ -317,7 +317,7 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
         Set<Person> persons = new HashSet<Person>();
         List<ContactPerson> contactPersons = addressesList.getContactPersons(dataObjectId);
         for (ContactPerson contactPerson : contactPersons) {
-            persons.add(contactPerson.getContact());
+            persons.add(contactPerson.getPerson());
         }
         List<Person> result = new ArrayList<Person>(persons);
         return result;

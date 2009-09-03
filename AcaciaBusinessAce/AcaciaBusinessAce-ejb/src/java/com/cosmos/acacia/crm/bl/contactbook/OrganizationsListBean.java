@@ -157,7 +157,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         address = addressesManager.saveAddress(address, organization.getId());
 
         ContactPerson contactPerson = addressesManager.newContactPerson();
-        contactPerson.setContact(person);
+        contactPerson.setPerson(person);
         contactPerson = addressesManager.saveContactPerson(contactPerson, address.getId());
 
         organization.setRegistrationAddress(address);

@@ -312,7 +312,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             if (branch != null) {
                 ContactPerson cp = new ContactPerson();
                 cp.setParentId(branch.getId());
-                cp.setContact(person);
+                cp.setPerson(person);
                 esm.persist(em,cp);
             }
         }

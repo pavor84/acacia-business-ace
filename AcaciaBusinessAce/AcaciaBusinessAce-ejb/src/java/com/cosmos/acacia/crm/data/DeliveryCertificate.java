@@ -92,7 +92,7 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
     @Property(title="Certificate date", editable=false, propertyValidator=@PropertyValidator(required=false))
     private Date deliveryCertificateDate;
 
-    @JoinColumn(name = "recipient_id", referencedColumnName = "partner_id", nullable=false)
+    @JoinColumn(name = "recipient_id", referencedColumnName = "business_partner_id", nullable=false)
     @ManyToOne
     private BusinessPartner recipient;
 
@@ -378,8 +378,8 @@ public class DeliveryCertificate extends DataObjectBean implements Serializable 
 
     public void setRecipientContact(ContactPerson recipientContact) {
         this.recipientContact = recipientContact;
-        if(recipientContact != null && recipientContact.getContact() != null){
-            this.setRecipientContactName(recipientContact.getContact().getDisplayName());
+        if(recipientContact != null && recipientContact.getPerson() != null){
+            this.setRecipientContactName(recipientContact.getPerson().getDisplayName());
         }
     }
 

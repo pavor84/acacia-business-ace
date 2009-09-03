@@ -33,13 +33,6 @@ public interface AddressesListRemote {
     List<Country> getCountries();
 
     /**
-     * Fetches all cities
-     *
-     * @return list of cities
-     */
-    List<City> getCities();
-
-    /**
      * Fetches all the cities in the specified country
      *
      * @param country

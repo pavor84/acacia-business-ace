@@ -14,7 +14,7 @@ import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextPane;
-import com.cosmos.util.CloneableBean;
+import com.cosmos.util.PersistentEntity;
 import com.cosmos.util.ImageUtils;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -60,7 +60,7 @@ import javax.persistence.Transient;
         )
     }
 )
-public abstract class DataObjectBean implements CloneableBean<DataObjectBean>,
+public abstract class DataObjectBean implements PersistentEntity<DataObjectBean, UUID>,
         PropertyChangeNotificationBroadcaster, Comparable<DataObjectBean> {
 
     public static final String MAIN_TABBED_PANE = "mainTabbedPane";

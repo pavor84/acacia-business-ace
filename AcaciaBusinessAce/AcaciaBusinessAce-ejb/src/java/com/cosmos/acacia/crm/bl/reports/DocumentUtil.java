@@ -149,7 +149,7 @@ public class DocumentUtil implements DocumentUtilLocal, DocumentUtilRemote {
         }
 
 
-        List<Passport> passports = passportsSession.getPassports(contact.getContact().getId());
+        List<Passport> passports = passportsSession.getPassports(contact.getPerson().getId());
         Passport recipientPassport = null;
         for (Passport passport : passports) {
             if (passport.getPassportType().getEnumValue() == PassportType.National)

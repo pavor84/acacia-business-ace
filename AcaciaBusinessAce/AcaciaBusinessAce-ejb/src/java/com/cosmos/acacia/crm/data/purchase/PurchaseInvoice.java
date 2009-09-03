@@ -55,14 +55,14 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = BusinessDocument.PURCHASE_INVOICE)
 @PrimaryKeyJoinColumn(name="invoice_id",referencedColumnName="document_id")
 @NamedQueries({
-    @NamedQuery(
+    /*@NamedQuery(
         name = PurchaseInvoice.NQ_FIND_ALL,
         query = "SELECT p FROM PurchaseInvoice p" +
             " where" +
             "  p.publisher = :publisher" +
             "  and p.publisherBranch = :publisherBranch" +
             "  and p.dataObject.deleted = false" +
-            " order by p.documentNumber")
+            " order by p.documentNumber")*/
 })
 @Form(
     formContainers={
@@ -171,7 +171,7 @@ public class PurchaseInvoice extends BusinessDocument implements Serializable {
     //
     public static final String NQ_FIND_ALL = "PurchaseInvoice.findAll";
 
-    @JoinColumn(name = "supplier_id", referencedColumnName = "partner_id", nullable = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "business_partner_id", nullable = false)
     @ManyToOne(optional = false)
     @Property(title="Supplier",
         selectableList=@SelectableList(

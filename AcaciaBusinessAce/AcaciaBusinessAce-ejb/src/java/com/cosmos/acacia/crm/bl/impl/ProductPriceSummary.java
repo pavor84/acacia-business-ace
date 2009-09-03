@@ -77,13 +77,13 @@ public class ProductPriceSummary extends ProductPrice {
     }
 
     public String toString(NumberFormat format) {
-        return toMediumString(format) + " pricelist: " + getPriceList().getName() + " item: "
+        return toMediumString(format) + " pricelist: " + getPriceList().getPricelistName() + " item: "
                 + getPriceListItem().getId();
     }
 
     public String toLongString(NumberFormat format) {
         return toString(format) + " min.turnover: " + getPriceList().getMinTurnover() + " per "
-                + getPriceList().getMonths() + "m min.qty: "
+                + getPriceList().getTurnoverMonths() + "m min.qty: "
                 + format(format, getPriceListItem().getMinQuantity());
     }
     

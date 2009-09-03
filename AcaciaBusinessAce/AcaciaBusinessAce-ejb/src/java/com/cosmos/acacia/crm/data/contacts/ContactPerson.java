@@ -5,11 +5,10 @@ package com.cosmos.acacia.crm.data.contacts;
  * and open the template in the editor.
  */
 
-
-
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.util.UUID;
@@ -32,40 +31,47 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "contact_persons",
     uniqueConstraints=@UniqueConstraint(
-        columnNames={"parent_id", "contact_id"}
+        columnNames={"address_id", "person_id"}
     )
 )
-@NamedQueries(
-    {
-        @NamedQuery(
-           name = "ContactPerson.findByParentDataObjectAndDeleted",
-           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId = :parentDataObjectId and cp.dataObject.deleted = :deleted"
-        ),
-        @NamedQuery(
-           name = "ContactPerson.findByParentDataObjectIsNullAndDeleted",
-           query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId is null and cp.dataObject.deleted = :deleted"
-        ),
-        @NamedQuery(
-            name = "ContactPerson.findByPersonAndTypeAndParentDataObject",
-            query = "select cp from ContactPerson cp where cp.contact=:person and " +
-                    "cp.dataObject.parentDataObjectId = :parentDataObjectId and " +
-                    "cp.positionType=:positionType"
-        ),
-        @NamedQuery(
-            name = "ContactPerson.findByPersonAndParentDataObject",
-            query = "select cp from ContactPerson cp where cp.contact=:person" +
-                    " and cp.dataObject.parentDataObjectId=:parentDataObjectId"
-        ),
-        @NamedQuery(
-            name = "ContactPerson.findByAddressIdAndPerson",
-            query = "select cp from ContactPerson cp" +
-                    " where" +
-                    "  cp.parentId=:addressId" +
-                    "  and cp.contact=:person" +
-                    "  and cp.dataObject.deleted = false"
-        )
-    }
-)
+@NamedQueries({
+    /*@NamedQuery(
+       name = "ContactPerson.findByParentDataObjectAndDeleted",
+       query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId = :parentDataObjectId and cp.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+       name = "ContactPerson.findByParentDataObjectIsNullAndDeleted",
+       query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId is null and cp.dataObject.deleted = :deleted"
+    ),
+    @NamedQuery(
+        name = "ContactPerson.findByPersonAndTypeAndParentDataObject",
+        query = "select cp from ContactPerson cp where cp.contact=:person and " +
+                "cp.dataObject.parentDataObjectId = :parentDataObjectId and " +
+                "cp.positionType=:positionType"
+    ),
+    @NamedQuery(
+        name = "ContactPerson.findByPersonAndParentDataObject",
+        query = "select cp from ContactPerson cp where cp.contact=:person" +
+                " and cp.dataObject.parentDataObjectId=:parentDataObjectId"
+    ),
+    @NamedQuery(
+        name = "ContactPerson.findByAddressIdAndPerson",
+        query = "select cp from ContactPerson cp" +
+                " where" +
+                "  cp.parentId=:addressId" +
+                "  and cp.contact=:person" +
+                "  and cp.dataObject.deleted = false"
+    ),
+    @NamedQuery(
+        name = "ContactPerson.getCassifiedFromBranch",
+        query = "select t1.contact from ContactPerson t1, ClassifiedObject t2 "+
+        " where" +
+        "  t1.contact.partnerId = t2.classifiedObjectPK.classifiedObjectId" +
+        "  and t1.parentId = :branchId" +
+        "  and t1.contact.dataObject.deleted = false" +
+        "  and t2.classifiedObjectPK.classifierId = :classifierId"
+    )*/
+})
 public class ContactPerson extends DataObjectBean implements TextResource, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -76,29 +82,26 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     @Type(type="uuid")
     private UUID contactPersonId;
 
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
+    @Column(name = "address_id")
+    @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Type(type="uuid")
-    private UUID parentId;
+    private UUID addressId;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
     @Property(title="Position Type", customDisplay="${positionType.positionTypeName}")
     private PositionType positionType;
 
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "person_id")
     @ManyToOne
     @Property(title="Person", propertyValidator=
         @PropertyValidator(required=true),
         customDisplay="${contact.displayName}")
-    private Person contact;
+    private Person person;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
-
-
-
 
     public ContactPerson() {
     }
@@ -117,12 +120,12 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
 
     @Override
     public UUID getParentId() {
-        return parentId;
+        return addressId;
     }
 
     @Override
     public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+        this.addressId = parentId;
     }
 
     @Override
@@ -135,12 +138,12 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
         this.dataObject = dataObject;
     }
 
-    public Person getContact() {
-        return contact;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setContact(Person contact) {
-        this.contact = contact;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public PositionType getPositionType() {
@@ -152,43 +155,18 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (contactPersonId != null ? contactPersonId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContactPerson)) {
-            return false;
-        }
-        ContactPerson other = (ContactPerson) object;
-        if ((this.contactPersonId == null && other.contactPersonId != null) || (this.contactPersonId != null && !this.contactPersonId.equals(other.contactPersonId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.ContactPerson[contactPersonId=" + contactPersonId + "]";
-    }
-
-    @Override
     public UUID getId() {
         return getContactPersonId();
     }
 
     @Override
     public void setId(UUID id) {
-        contactPersonId = id;
+        setContactPersonId(id);
     }
 
     @Override
     public String toShortText() {
-        return getContact().toShortText();
+        return getPerson().toShortText();
     }
 
     @Override
@@ -198,6 +176,6 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
 
     @Override
     public String getInfo() {
-        return getContact().getDisplayName() + ": " + getPositionType().getPositionTypeName();
+        return getPerson().getDisplayName() + ": " + getPositionType().getPositionTypeName();
     }
 }
