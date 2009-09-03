@@ -110,11 +110,8 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public Organization getSystemOrganization() {
         if(systemOrganization == null) {
-            UUID id = UUID.randomUUID();
-            systemOrganization = new Organization(id, id.toString());
-            systemOrganization.setDefaultCurrency(Currency.EUR.getDbResource());
-            systemOrganization.setParentId(id);
-            systemOrganization.setActive(true);
+            Query q = em.createNamedQuery(Organization.NQ_FIND_SYSTEM_ORGANIZATION);
+            systemOrganization = (Organization) q.getSingleResult();
         }
 
         return systemOrganization;

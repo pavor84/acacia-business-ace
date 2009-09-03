@@ -51,7 +51,8 @@ USING btree
         query = "select t from Organization t" +
                 " where" +
                 "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
-                "  and t.dataObject.deleted = :deleted"
+                "  and t.dataObject.deleted = :deleted" +
+                "  and not t.businessPartnerId = t.parentBusinessPartnerId"
     ),
     @NamedQuery(
         name = Organization.NQ_FIND_ORGANIZATION_BY_NAME,
@@ -60,6 +61,12 @@ USING btree
                 "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
                 "  and t.dataObject.deleted = :deleted" +
                 "  and lower(t.organizationName) = lower(:organizationName)"
+    ),
+    @NamedQuery(
+        name = Organization.NQ_FIND_SYSTEM_ORGANIZATION,
+        query = "select t from Organization t" +
+                " where" +
+                "  t.businessPartnerId = t.parentBusinessPartnerId"
     )
 })
 public class Organization extends BusinessPartner implements Serializable, TextResource {
@@ -69,6 +76,7 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     private static final String CLASS_NAME = "Organization";
     public static final String NQ_FIND_ALL_ORGANIZATIONS = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_ORGANIZATION_BY_NAME = CLASS_NAME + ".findByName";
+    public static final String NQ_FIND_SYSTEM_ORGANIZATION = CLASS_NAME + ".findSystemOrganization";
 
     @Basic(optional = false)
     @Column(name = "organization_name", nullable = false, length = 128)

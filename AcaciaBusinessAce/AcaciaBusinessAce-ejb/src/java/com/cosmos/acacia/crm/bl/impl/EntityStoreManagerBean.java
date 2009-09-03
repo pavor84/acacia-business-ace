@@ -64,6 +64,46 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     private Map<String, EntityProperties> entityPropertiesMap = new TreeMap<String, EntityProperties>();
 
     @Override
+    public DataObject saveDataObject(EntityManager em, Class entityClass) {
+        return saveDataObject(em, null, entityClass.getName(), null);
+    }
+
+    @Override
+    public DataObject saveDataObject(
+            EntityManager em,
+            DataObject dataObject,
+            String entityClassName,
+            UUID parentId) {
+        DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
+        DataObjectType dot = dotLocal.getDataObjectType(entityClassName);
+
+        if (dataObject == null) {
+            dataObject = new DataObject();
+        }
+
+        dataObject.setParentDataObjectId(parentId);
+        dataObject.setDataObjectType(dot);
+        dataObject.setDataObjectVersion(1);
+        UUID creatorId = null;
+        UUID ownerId = null;
+
+        try {
+            creatorId = session.getUser().getUserId();
+            ownerId = session.getBranch().getAddressId();
+        } catch (Exception ex) {
+            creatorId = NumberUtils.ZERO_UUID;
+            ownerId = NumberUtils.ZERO_UUID;
+        }
+
+        dataObject.setCreatorId(creatorId);
+        dataObject.setOwnerId(ownerId);
+
+        em.persist(dataObject);
+
+        return dataObject;
+    }
+
+    @Override
     public void persist(EntityManager em, Object entity) {
         boolean mustMerge = false;
         BusinessDocument oldBusinessDocument = null;
@@ -77,31 +117,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             UUID parentId = doBean.getParentId();
             if (id == null) {
                 if (dataObject == null || dataObject.getDataObjectId() == null) {
-                    DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
-                    DataObjectType dot = dotLocal.getDataObjectType(entity.getClass().getName());
-
-                    if (dataObject == null) {
-                        dataObject = new DataObject();
-                    }
-
-                    dataObject.setParentDataObjectId(parentId);
-                    dataObject.setDataObjectType(dot);
-                    dataObject.setDataObjectVersion(1);
-                    UUID creatorId = null;
-                    UUID ownerId = null;
-
-                    try {
-                        creatorId = session.getUser().getUserId();
-                        ownerId = session.getBranch().getAddressId();
-                    } catch (Exception ex) {
-                        creatorId = NumberUtils.ZERO_UUID;
-                        ownerId = NumberUtils.ZERO_UUID;
-                    }
-
-                    dataObject.setCreatorId(creatorId);
-                    dataObject.setOwnerId(ownerId);
-
-                    em.persist(dataObject);
+                    dataObject = saveDataObject(em, dataObject, entity.getClass().getName(), parentId);
                 } else {
                     UUID doParentId = dataObject.getParentDataObjectId();
                     boolean mustUpdateDO = false;
