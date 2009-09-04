@@ -122,11 +122,11 @@ public class ContactBookTest {
         organization = organizationFormSession.saveOrganization(organization);
 
         DataObject organizationDataObject = organization.getDataObject();
-        Address address = addressFormSession.newAddress();
+        Address address = addressFormSession.newAddress(organization);
         address.setAddressName(TestUtils.getRandomString(15));
 
         System.out.println("DOID" + organizationDataObject.getDataObjectId());
-        address = addressFormSession.saveAddress(address, organizationDataObject.getDataObjectId());
+        address = addressFormSession.saveAddress(address);
 
         DataObject addressDataObject = address.getDataObject();
 

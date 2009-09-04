@@ -75,8 +75,7 @@ public class BusinessPartnerListTest extends BaseTest{
     }
 
     private BusinessPartner createNew() throws UncompleteUnitTestException {
-
-        Person person = personFormSession.newPerson(getOrganizationId());
+        Person person = personFormSession.newPerson(getOrganization());
         person.setFirstName(""+random.nextInt(100000000));
         person.setSecondName(""+random.nextInt(100000000));
         person.setLastName(""+random.nextInt(100000000));

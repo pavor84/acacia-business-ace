@@ -100,12 +100,14 @@ public class PositionsHierarchyTreePanel extends BaseTreePanel<PositionType> {
 
     @Override
     public PositionType getParent(PositionType child) {
-        return child.getParentPositionType();
+        throw new UnsupportedOperationException("ToDO");
+//        return child.getParentPositionType();
     }
 
     @Override
     public void setParent(PositionType entity, PositionType parent) {
-        entity.setParentPositionType(parent);
+        throw new UnsupportedOperationException("ToDO");
+//        entity.setParentPositionType(parent);
     }
 
     @Override

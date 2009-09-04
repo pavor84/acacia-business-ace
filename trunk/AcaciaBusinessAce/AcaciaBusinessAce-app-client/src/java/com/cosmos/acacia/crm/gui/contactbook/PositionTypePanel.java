@@ -167,9 +167,9 @@ public class PositionTypePanel extends BaseEntityPanel {
         setResizable(false);
 
         log.info("initData().positionType: " + positionType);
-        if(positionType == null)
-        {
-            positionType = getFormSession().newPositionType(getOrganizationDataObjectId());
+        if(positionType == null) {
+            throw new UnsupportedOperationException("ToDo");
+//            positionType = getFormSession().newPositionType(getOrganizationDataObjectId());
         }
 
         BindingGroup bg = getBindingGroup();
@@ -211,7 +211,7 @@ public class PositionTypePanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: positionType: " + positionType);
-        positionType.setInternal(isInternal);
+//        positionType.setInternal(isInternal);
         positionType = getFormSession().savePositionType(positionType, ownerClass);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(positionType);
@@ -234,6 +234,6 @@ public class PositionTypePanel extends BaseEntityPanel {
     }
 
     public void setParentPosition(PositionType parent) {
-        positionType.setParentPositionType(parent);
+//        positionType.setParentPositionType(parent);
     }
 }

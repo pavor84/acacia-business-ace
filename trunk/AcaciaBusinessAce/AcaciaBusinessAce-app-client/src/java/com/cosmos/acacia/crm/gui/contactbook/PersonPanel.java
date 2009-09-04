@@ -420,7 +420,8 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         setResizable(false);
         log.info("initData().person: " + person);
         if (person == null) {
-            person = getFormSession().newPerson(getOrganizationDataObjectId());
+            throw new UnsupportedOperationException("ToDo");
+            //person = getFormSession().newPerson(getOrganizationDataObjectId());
         }
 
         BindingGroup bg = getBindingGroup();
