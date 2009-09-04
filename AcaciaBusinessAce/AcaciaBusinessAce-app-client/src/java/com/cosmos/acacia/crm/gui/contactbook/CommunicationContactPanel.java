@@ -27,8 +27,9 @@ public class CommunicationContactPanel extends BaseEntityPanel {
     public CommunicationContactPanel(CommunicationContact communicationContact) {
         super(communicationContact.getParentId());
         this.communicationContact = communicationContact;
-        this.contactPerson = communicationContact.getContactPerson();
-        init();
+        throw new UnsupportedOperationException("ToDO");
+        //this.contactPerson = communicationContact.getContactPerson();
+        //init();
     }
 
     @Override

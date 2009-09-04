@@ -338,7 +338,8 @@ public class AddressPanel extends BaseEntityPanel {
 
         log.info("initData().address: " + address);
         if (address == null) {
-            address = getFormSession().newAddress();
+            throw new UnsupportedOperationException("ToDo");
+//            address = getFormSession().newAddress();
         }
 
         BindingGroup bg = getBindingGroup();
@@ -525,7 +526,7 @@ public class AddressPanel extends BaseEntityPanel {
     public void performSave(boolean closeAfter) {
         log.info("Save: address: " + address);
 
-        address = getFormSession().saveAddress(address, getParentDataObjectId());
+        address = getFormSession().saveAddress(address);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(address);
         if (closeAfter) {

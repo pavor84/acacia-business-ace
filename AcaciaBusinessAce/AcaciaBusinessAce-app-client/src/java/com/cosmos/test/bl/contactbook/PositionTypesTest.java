@@ -115,7 +115,7 @@ public class PositionTypesTest {
     }
 
     private PositionType createNew(String nameInsert) {
-        PositionType result = formSession.newPositionType(org.getId());
+        PositionType result = formSession.newPositionType(org);
         result.setPositionTypeName(nameInsert);
 
         return formSession.savePositionType(result, Organization.class);
