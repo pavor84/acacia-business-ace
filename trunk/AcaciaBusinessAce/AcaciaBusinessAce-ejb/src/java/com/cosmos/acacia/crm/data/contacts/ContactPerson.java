@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -77,30 +78,31 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Basic(optional = false)
+    @Type(type="uuid")
     @Column(name = "contact_person_id", nullable = false)
     @Property(title="Contact Person Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
     private UUID contactPersonId;
 
-    @Column(name = "address_id")
-    @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
-    private UUID addressId;
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Address", editable=false, readOnly=true, visible=false, hidden=true)
+    private Address address;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
     @Property(title="Position Type", customDisplay="${positionType.positionTypeName}")
     private PositionType positionType;
 
-    @JoinColumn(name = "person_id")
-    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Person", propertyValidator=
         @PropertyValidator(required=true),
         customDisplay="${contact.displayName}")
     private Person person;
 
-    @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
-    @OneToOne
+    @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private DataObject dataObject;
 
     public ContactPerson() {
@@ -108,6 +110,10 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
 
     public ContactPerson(UUID contactPersonId) {
         this.contactPersonId = contactPersonId;
+    }
+
+    public ContactPerson(Address address) {
+        setAddress(address);
     }
 
     public UUID getContactPersonId() {
@@ -118,14 +124,26 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
         this.contactPersonId = contactPersonId;
     }
 
-    @Override
-    public UUID getParentId() {
-        return addressId;
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+        if(address != null) {
+            setParentId(address.getAddressId());
+        } else {
+            setParentId(null);
+        }
     }
 
     @Override
-    public void setParentId(UUID parentId) {
-        this.addressId = parentId;
+    public UUID getParentId() {
+        if(address != null) {
+            return address.getAddressId();
+        }
+
+        return null;
     }
 
     @Override

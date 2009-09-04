@@ -10,7 +10,6 @@ import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
-import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.entity.AbstractEntityService;

@@ -51,9 +51,9 @@ public class UserRightsBean implements UserRightsRemote, UserRightsLocal {
 
     @Override
     public void assignGroupToPosition(UserGroup group, PositionType position) {
-        position.setUserGroup(group);
-        esm.persist(em, position);
-
+        throw new UnsupportedOperationException("ToDo");
+//        position.setUserGroup(group);
+//        esm.persist(em, position);
     }
 
     @Override

@@ -20,6 +20,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PositionTypeValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PositionType;
@@ -77,9 +78,9 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
         return entityProperties;
     }
 
-    public PositionType newPositionType(UUID parentId) {
-        PositionType positionType = new PositionType();
-        positionType.setParentId(parentId);
+    @Override
+    public PositionType newPositionType(BusinessPartner businessPartner) {
+        PositionType positionType = new PositionType(businessPartner);
         return positionType;
     }
 
@@ -87,12 +88,12 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
     public PositionType savePositionType(PositionType positionType, Class ownerClass) {
         validator.validate(positionType);
 
-        if (ownerClass != null) {
-            if (ownerClass == Person.class)
-                positionType.setOwnerType('P');
-            if (ownerClass == Organization.class)
-                positionType.setOwnerType('O');
-        }
+//        if (ownerClass != null) {
+//            if (ownerClass == Person.class)
+//                positionType.setOwnerType('P');
+//            if (ownerClass == Organization.class)
+//                positionType.setOwnerType('O');
+//        }
 
         esm.persist(em, positionType);
         return positionType;
@@ -116,7 +117,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
                     ve.addMessage("parentPositionType", "TreeItem.err.cyclicParent");
                     break;
                 }
-                ancestor = ancestor.getParentPositionType();
+//                ancestor = ancestor.getParentPositionType();
             }
 
             // if we have validation messages - throw the exception since not everything is OK
@@ -128,7 +129,7 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
         }
 
         //newParent may be null here - but no problem
-        newChild.setParentPositionType(newParent);
+//        newChild.setParentPositionType(newParent);
         esm.persist(em, newChild);
 
         return newChild;

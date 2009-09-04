@@ -12,7 +12,5 @@ import javax.ejb.Local;
  * @author Bozhidar Bozhanov
  */
 @Local
-public interface PersonsListLocal
-    extends PersonsListRemote
-{
+public interface PersonsListLocal extends PersonsListRemote {
 }

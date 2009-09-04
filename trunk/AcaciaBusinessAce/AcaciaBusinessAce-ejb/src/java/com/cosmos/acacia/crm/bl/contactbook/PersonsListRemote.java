@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.contacts.City;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -92,7 +93,7 @@ public interface PersonsListRemote {
      * @param parentId the parent
      * @return the newly created Person
      */
-    Person newPerson(UUID parentId);
+    Person newPerson(BusinessPartner parentBusinessPartner);
 
     /**
      * Saves a Person

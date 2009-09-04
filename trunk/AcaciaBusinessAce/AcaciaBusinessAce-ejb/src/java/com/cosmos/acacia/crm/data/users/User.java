@@ -35,6 +35,7 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
@@ -163,6 +164,9 @@ public class User extends DataObjectBean implements Serializable {
     public static final String WORK_HOURS = "workHours";
     public static final String GROUPS = "groups";
     public static final String ROLES = "roles";
+    //
+    public static final String SUPERVISOR_USER_NAME = "supervisor";
+    public static final String SUPERVISOR_USER_PASSWORD = "Superv1s0r";
 
     @Id
     @Basic(optional = false)
@@ -170,6 +174,10 @@ public class User extends DataObjectBean implements Serializable {
     @Type(type="uuid")
     @Property(title="User ID", visible=false, hidden=true)
     private UUID userId;
+
+    @JoinColumn(name = "system_organization_id", referencedColumnName = "organization_id", nullable = false)
+    @ManyToOne(optional = false)
+    private Organization systemOrganization;
 
     @Basic(optional = false)
     @Column(name = "version", nullable = false)
@@ -273,10 +281,6 @@ public class User extends DataObjectBean implements Serializable {
     @Property(title="Creation time")
     private Date creationTime;
 
-    @Column(name = "description", length = 2147483647)
-    @Property(title="Description")
-    private String description;
-
     @Column(name = "next_action_after_login", length = 1024)
     @Property(title="Next action after login")
     private String nextActionAfterLogin;
@@ -295,6 +299,10 @@ public class User extends DataObjectBean implements Serializable {
 
     public User(UUID userId) {
         this.userId = userId;
+    }
+
+    public User(Organization systemOrganization) {
+        setSystemOrganization(systemOrganization);
     }
 
     public Person getPerson() {
@@ -377,14 +385,6 @@ public class User extends DataObjectBean implements Serializable {
         this.creationTime = creationTime;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getNextActionAfterLogin() {
         return nextActionAfterLogin;
     }
@@ -399,6 +399,19 @@ public class User extends DataObjectBean implements Serializable {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Organization getSystemOrganization() {
+        return systemOrganization;
+    }
+
+    public void setSystemOrganization(Organization systemOrganization) {
+        this.systemOrganization = systemOrganization;
+        if(systemOrganization != null) {
+            setParentId(systemOrganization.getBusinessPartnerId());
+        } else {
+            setParentId(null);
+        }
     }
 
     @Override
@@ -417,7 +430,11 @@ public class User extends DataObjectBean implements Serializable {
 
     @Override
     public UUID getParentId() {
-       return null;
+        if(systemOrganization != null) {
+            return systemOrganization.getBusinessPartnerId();
+        }
+
+        return null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.City;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**
@@ -19,6 +20,14 @@ import com.cosmos.beansbinding.EntityProperties;
  */
 @Remote
 public interface LocationsListRemote {
+
+    Country getCountryByName(String countryName);
+
+    Country getCountryByCodeA2(String countryCodeA2);
+
+    Country getCountryByCodeA3(String countryCodeA3);
+
+    City getCityByCode(Country country, String cityCode);
 
     /**
      * Listing all currencies
@@ -131,7 +140,7 @@ public interface LocationsListRemote {
      *
      * @return the newly created address
      */
-    Address newAddress();
+    Address newAddress(BusinessPartner businessPartner);
 
     /**
      * Saves an Address

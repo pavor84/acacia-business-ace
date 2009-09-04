@@ -21,12 +21,21 @@ import javax.persistence.Query;
 import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
+import com.cosmos.acacia.crm.bl.users.UsersServiceLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
+import com.cosmos.acacia.crm.data.contacts.Address;
+import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
+import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.contacts.PersonalCommunicationContact;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
@@ -65,7 +74,10 @@ import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import com.cosmos.util.ClassHelper;
+import com.cosmos.util.SecurityUtils;
 import java.lang.reflect.Modifier;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -95,6 +107,12 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     private LocationsListLocal locationsService;
 
     @EJB
+    private ContactsServiceLocal contactsService;
+
+    @EJB
+    private UsersServiceLocal usersService;
+
+    @EJB
     private AcaciaSessionLocal session;
 
     @Override
@@ -103,6 +121,8 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
             System.out.println("initDatabaseResource()");
             initDbResources();
             initCountries();
+            initCities();
+            initContacts();
             currencyNominalManager.initCurrencyNominals();
             initialized = true;
         }
@@ -177,6 +197,33 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
 
         for(Country country : countryMap.values()) {
             esm.persist(em, country);
+        }
+    }
+
+    private void initCities() {
+        Country bulgaria = locationsService.getCountryByCodeA2(Country.CODE_A2_BULGARIA);
+        Long count;
+        if((count = locationsService.getCountriesCount()) != null && count > 0) {
+            return;
+        }
+
+        City city;
+        if((city = locationsService.getCityByCode(bulgaria, City.CODE_SOFIA)) == null) {
+            city = locationsService.newCity(bulgaria);
+            city.setCityName("Sofia");
+            city.setCityCode(City.CODE_SOFIA);
+            city.setCityPhoneCode("2");
+            city.setPostalCode("1000");
+            esm.persist(em, city);
+        }
+
+        if((city = locationsService.getCityByCode(bulgaria, City.CODE_STARA_ZAGORA)) == null) {
+            city = locationsService.newCity(bulgaria);
+            city.setCityName("Stara Zagora");
+            city.setCityCode(City.CODE_STARA_ZAGORA);
+            city.setCityPhoneCode("42");
+            city.setPostalCode("6000");
+            esm.persist(em, city);
         }
     }
 
@@ -272,19 +319,80 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         dataObject.setOrderPosition(1);
         em.persist(dataObject);
 
-        Organization organization = new Organization(organizationId, organizationId.toString());
+        Organization organization = new Organization(organizationId, "COSMOS Software Enterprises, Ltd.");
         organization.setDataObject(dataObject);
         organization.setParentId(organizationId);
         organization.setDefaultCurrency(Currency.EUR.getDbResource());
         organization.setActive(true);
-
+        organization.setNickname("system");
         em.persist(organization);
+
+        Address address = new Address();
+        Country bulgaria = locationsService.getCountryByCodeA2(Country.CODE_A2_BULGARIA);
+        City city = locationsService.getCityByCode(bulgaria, City.CODE_SOFIA);
+        address.setCountry(bulgaria);
+        address.setCity(city);
+        address.setAddressName(Address.NAME_HEADQUARTER);
+        address.setBusinessPartner(organization);
+        address.setPostalCode("1612");
+        address.setPostalAddress("ap. 15, entr. B, fl. 1, 5 Vorino str., kv. Krasno selo");
+        esm.persist(em, address);
+
+        city = locationsService.getCityByCode(bulgaria, City.CODE_STARA_ZAGORA);
+        Person person = contactsService.newPerson(organization);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1966, Calendar.NOVEMBER, 17, 4, 0);
+        person.setBirthDate(calendar.getTime());
+        person.setBirthPlaceCountry(bulgaria);
+        person.setBirthPlaceCity(city);
+        person.setFirstName("Miroslav");
+        person.setLastName("Miroslav");
+        person.setGender(Gender.Male.getDbResource());
+        esm.persist(em, person);
+
+        ContactPerson contactPerson = new ContactPerson(address);
+        contactPerson.setPerson(person);
+        esm.persist(em, contactPerson);
+
+        CommunicationContact communicationContact = new CommunicationContact(address);
+        communicationContact.setCommunicationType(CommunicationType.Email.getDbResource());
+        communicationContact.setCommunicationValue("mnachev@gmail.com");
+        esm.persist(em, communicationContact);
+        PersonalCommunicationContact personalCommunicationContact = new PersonalCommunicationContact();
+        personalCommunicationContact.setContactPerson(contactPerson);
+        personalCommunicationContact.setCommunicationContact(communicationContact);
+        esm.persist(em, personalCommunicationContact);
+
+        communicationContact = new CommunicationContact(address);
+        communicationContact.setCommunicationType(CommunicationType.Mobile.getDbResource());
+        communicationContact.setCommunicationValue("(+359-88) 897-31-95");
+        esm.persist(em, communicationContact);
+        personalCommunicationContact = new PersonalCommunicationContact();
+        personalCommunicationContact.setContactPerson(contactPerson);
+        personalCommunicationContact.setCommunicationContact(communicationContact);
+        esm.persist(em, personalCommunicationContact);
+
+        communicationContact = new CommunicationContact(address);
+        communicationContact.setCommunicationType(CommunicationType.Skype.getDbResource());
+        communicationContact.setCommunicationValue("mnachev66");
+        esm.persist(em, communicationContact);
+        personalCommunicationContact = new PersonalCommunicationContact();
+        personalCommunicationContact.setContactPerson(contactPerson);
+        personalCommunicationContact.setCommunicationContact(communicationContact);
+        esm.persist(em, personalCommunicationContact);
+
+        User supervisor = usersService.newUser();
+        supervisor.setUserName(User.SUPERVISOR_USER_NAME);
+        supervisor.setEmailAddress("mnachev@gmail.com");
+        supervisor.setPerson(person);
+        supervisor.setUserPassword(SecurityUtils.getHash(User.SUPERVISOR_USER_PASSWORD));
+        supervisor.setCreationTime(new Date());
+        supervisor.setIsNew(false);
+        esm.persist(em, supervisor);
     }
 
     @Override
     public void initSecurityAccess() {
-        initContacts();
-
         try {
             TreeMap<String, TreeSet<String>> classesMap = new TreeMap<String, TreeSet<String>>();
             for(Class cls : ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class)) {

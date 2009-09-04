@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.bl.contacts;
 
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,5 +27,13 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
     @Override
     public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
         return super.getEntityItems(entity, itemClass, extraParameters);
+    }
+
+    @Override
+    public Person newPerson(BusinessPartner parentBusinessPartner) {
+        Person person = new Person();
+        person.setDefaultCurrency(Currency.EUR.getDbResource());
+        person.setParentId(parentBusinessPartner.getBusinessPartnerId());
+        return person;
     }
 }

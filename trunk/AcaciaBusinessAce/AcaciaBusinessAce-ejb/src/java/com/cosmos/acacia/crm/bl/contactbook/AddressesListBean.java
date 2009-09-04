@@ -29,6 +29,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -81,25 +82,18 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
      * @param parent
      * @return the city-list
      */
+    @Override
     public List<City> getCities(Country country) {
         return locationsManager.getCities(country);
     }
 
-    public Address newAddress() {
-        return locationsManager.newAddress();
+    @Override
+    public Address newAddress(BusinessPartner businessPartner) {
+        return locationsManager.newAddress(businessPartner);
     }
 
-    public Address saveAddress(Address address, UUID parentDataObjectId) {
-        if (parentDataObjectId != null) {
-            address.setParentId(parentDataObjectId);
-//            UserGroup group = groupsManager.newUserGroup(parentDataObjectId);
-//            group.setName("_" + address.getAddressName());
-//            groupsManager.saveUserGroup(group);
-//            address.setUserGroup(group);
-//
-//            //TO|DO : assign default rights to the newly created user group
-        }
-
+    @Override
+    public Address saveAddress(Address address) {
         addressValidator.validate(address);
 
         return locationsManager.saveAddress(address);
@@ -235,7 +229,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         if(communicationType != null) {
             communicationContact.setCommunicationType(communicationType.getDbResource());
         }
-        communicationContact.setContactPerson(contactPerson);
+        //communicationContact.setContactPerson(contactPerson);
         return communicationContact;
     }
 
@@ -250,7 +244,7 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             UUID parentDataObjectId,
             ContactPerson contactPerson) {
 
-        communicationContact.setContactPerson(contactPerson);
+        // communicationContact.setContactPerson(contactPerson);
         if (parentDataObjectId != null) {
             communicationContact.setParentId(parentDataObjectId);
         }

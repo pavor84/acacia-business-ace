@@ -25,6 +25,7 @@ import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.FunctionalHierarchy;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
+import com.cosmos.util.SecurityUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +51,12 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     //
     @EJB
     private ContactsServiceLocal contactsService;
+
+    @Override
+    public User newUser() {
+        User user = new User(session.getSystemOrganization());
+        return user;
+    }
 
     @Override
     public List<UserOrganization> getUserOrganizations(Organization organization) {
@@ -325,10 +332,10 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
 
         Address address = new Address();
 
-        User user = new User();
+        User user = newUser();
         user.setEmailAddress(userRegistration.getEmailAddress());
         user.setUserName(userRegistration.getUsername());
-        user.setUserPassword(userRegistration.getPassword());
+        user.setUserPassword(SecurityUtils.getHash(userRegistration.getPassword()));
         user.setPerson(person);
         user = super.save(user);
 

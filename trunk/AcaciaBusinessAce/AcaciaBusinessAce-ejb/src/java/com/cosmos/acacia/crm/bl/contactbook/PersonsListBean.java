@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.users.UsersLocal;
@@ -24,6 +25,7 @@ import com.cosmos.acacia.crm.data.contacts.City;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Passport;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
@@ -61,6 +63,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     
     @EJB
     private UsersLocal usersManager;
+
+    @EJB
+    private ContactsServiceLocal contactsService;
     
     @SuppressWarnings("unchecked")
     public List<Person> getPersons(UUID parentId)
@@ -98,10 +103,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return entityProperties;
     }
 
-    public Person newPerson(UUID parentId) {
-        Person p = new Person();
-        p.setParentId(parentId);
-        return p;
+    @Override
+    public Person newPerson(BusinessPartner parentBusinessPartner) {
+        return contactsService.newPerson(parentBusinessPartner);
     }
 
     public Person savePerson(Person person) {

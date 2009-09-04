@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PositionType;
 import com.cosmos.acacia.crm.enums.CommunicationType;
@@ -54,7 +55,7 @@ public interface AddressesListRemote {
      *
      * @return the newly created Address
      */
-    Address newAddress();
+    Address newAddress(BusinessPartner businessPartner);
 
     /**
      * Saves an address for the specified parent (person or organization)
@@ -63,7 +64,7 @@ public interface AddressesListRemote {
      *
      * @return the saved Address
      */
-    Address saveAddress(Address address, UUID parentDataObjectId);
+    Address saveAddress(Address address);
 
 
     /**

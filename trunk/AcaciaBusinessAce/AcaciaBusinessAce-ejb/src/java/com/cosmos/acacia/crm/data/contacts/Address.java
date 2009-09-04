@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Type;
@@ -31,6 +32,13 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "addresses")
 @NamedQueries({
+    @NamedQuery(
+        name=Address.FIND_ALL,
+        query = "select t from Address t" +
+                " where" +
+                "  t.businessPartner = :businessPartner" +
+                " order by t.country, t.city, t.addressName"
+    )
     /*@NamedQuery(
         name = "Address.findByParentDataObjectAndDeleted",
         query = "select a from Address a where a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
@@ -47,6 +55,17 @@ import org.hibernate.annotations.Type;
 public class Address extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "Address";
+    public static final String FIND_ALL = CLASS_NAME + ".findAll";
+    //
+    public static final String NAME_HEADQUARTER = "Headquarter";
+    public static final String NAME_POST_ADDRESS = "Post Address";
+    public static final String NAME_REGISTRATION_ADDRESS = "Registration Address";
+    public static final String NAME_BILL_TO_ADDRESS = "Bill To Address";
+    public static final String NAME_SHIP_TO_ADDRESS = "Ship To Address";
+    public static final String NAME_OFFICE_ADDRESS = "Office Address";
+    public static final String NAME_HOME_ADDRESS = "Home Address";
 
     @Id
     @Basic(optional = false)
@@ -55,11 +74,11 @@ public class Address extends DataObjectBean implements Serializable, TextResourc
     @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
     private UUID addressId;
 
-    @Basic(optional = false)
+    @JoinColumn(name = "business_partner_id", referencedColumnName = "business_partner_id", nullable = false)
+    @ManyToOne
     @Type(type="uuid")
-    @Column(name = "business_partner_id", nullable = false)
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private UUID businessPartnerId;
+    @Property(title="Parent", editable=false, readOnly=true, visible=false, hidden=true)
+    private BusinessPartner businessPartner;
 
     @Basic(optional = false)
     @Column(name = "address_name", nullable = false, length = 64)
@@ -92,6 +111,10 @@ public class Address extends DataObjectBean implements Serializable, TextResourc
     public Address() {
     }
 
+    public Address(BusinessPartner businessPartner) {
+        setBusinessPartner(businessPartner);
+    }
+
     public Address(UUID addressId) {
         this.addressId = addressId;
     }
@@ -104,22 +127,26 @@ public class Address extends DataObjectBean implements Serializable, TextResourc
         this.addressId = addressId;
     }
 
-    public UUID getBusinessPartnerId() {
-        return businessPartnerId;
+    public BusinessPartner getBusinessPartner() {
+        return businessPartner;
     }
 
-    public void setBusinessPartnerId(UUID businessPartnerId) {
-        this.businessPartnerId = businessPartnerId;
+    public void setBusinessPartner(BusinessPartner businessPartner) {
+        this.businessPartner = businessPartner;
+        if(businessPartner != null) {
+            setParentId(businessPartner.getBusinessPartnerId());
+        } else {
+            setParentId(null);
+        }
     }
 
     @Override
     public UUID getParentId() {
-        return getBusinessPartnerId();
-    }
+        if(businessPartner != null) {
+            return businessPartner.getBusinessPartnerId();
+        }
 
-    @Override
-    public void setParentId(UUID parentId) {
-        setBusinessPartnerId(parentId);
+        return null;
     }
 
     public String getAddressName() {
