@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import com.cosmos.acacia.crm.data.contacts.Country;
 import javax.ejb.Local;
 
 /**
@@ -14,4 +15,6 @@ import javax.ejb.Local;
 public interface LocationsListLocal extends LocationsListRemote {
 
     Long getCountriesCount();
+
+    Long getCitiesCount(Country country);
 }

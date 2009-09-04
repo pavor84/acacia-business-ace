@@ -9,22 +9,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
 import java.util.Set;
 import javax.crypto.Cipher;
 import javax.ejb.EJB;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -68,6 +63,7 @@ import com.cosmos.base64.Base64Decoder;
 import com.cosmos.base64.Base64Encoder;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.mail.MessageParameters;
+import com.cosmos.util.SecurityUtils;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -143,7 +139,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     private UUID login(String username, char[] password, String loginType) {
         Query loginQuery = em.createNamedQuery("User." + loginType);
         loginQuery.setParameter("username", username);
-        loginQuery.setParameter("password", getHash(new String(password)));
+        loginQuery.setParameter("password", SecurityUtils.getHash(new String(password)));
 
         try {
             User user = (User) loginQuery.getSingleResult();
@@ -195,7 +191,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     private static final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
     private void remindPassword(User user) {
         String tempPassword = generateTemporaryPassword();
-        user.setSystemPassword(getHash(tempPassword));
+        user.setSystemPassword(SecurityUtils.getHash(tempPassword));
         user.setSystemPasswordValidity(new Date(System.currentTimeMillis() + MILLIS_IN_DAY));
         esm.persist(em, user);
 
@@ -290,7 +286,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         }
         esm.persist(em, person);
 
-        user.setUserPassword(getHash(user.getUserPassword()));
+        user.setUserPassword(SecurityUtils.getHash(user.getUserPassword()));
         user.setPerson(person);
         user.setCreationTime(new Date());
         esm.persist(em, user);
@@ -325,7 +321,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         if(emailAddress == null || (emailAddress = emailAddress.trim()).length() == 0) {
             throw new NullPointerException("The email addesss " + emailAddress + " can not be null or empty.");
         }
-        User user = new User();
+        User user = usersService.newUser();
         user.setEmailAddress(emailAddress);
 
         return user;
@@ -441,13 +437,14 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
         return organization;
     }
-    private String getHexString(byte[] array) {
-        StringBuffer hexString = new StringBuffer();
+
+    /*private String getHexString(byte[] array) {
+        StringBuilder hexString = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
-        hexString.append(Integer.toHexString(0xFF & array[i]));
-    }
+            hexString.append(Integer.toHexString(0xFF & array[i]));
+        }
         return hexString.toString();
-    }
+    }*/
 
 
     @SuppressWarnings("unchecked")
@@ -467,7 +464,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
         return result;
     }
 
-    private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
+   /* private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
 
     private String saltPassword(String password) {
         StringBuffer sb = new StringBuffer();
@@ -494,7 +491,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             log.error("Hashing algorithm not found");
             return password;
         }
-    }
+    }*/
 
     private static String EMAIL_HOST = "localhost";
     private static String FROM = "admin@acacia.com";
@@ -525,7 +522,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             // try to login; if the old pass is incorrect, exception will be thrown
             login(user.getUserName(), oldPassword);
 
-            user.setUserPassword(getHash(new String(newPassword)));
+            user.setUserPassword(SecurityUtils.getHash(new String(newPassword)));
             user.setSystemPassword(null);
             esm.persist(em, user);
         } catch (ValidationException ex) {
@@ -800,8 +797,9 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
             try {
                 PositionType positionType = contact.getPositionType();
-                if (positionType != null)
-                    group = positionType.getUserGroup();
+                throw new UnsupportedOperationException("ToDo");
+//                if (positionType != null)
+//                    group = positionType.getUserGroup();
             } catch (NullPointerException ex) {
                 // ignored
             }

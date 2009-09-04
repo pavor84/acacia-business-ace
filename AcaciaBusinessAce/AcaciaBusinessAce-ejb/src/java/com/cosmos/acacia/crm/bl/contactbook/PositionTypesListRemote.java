@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.bl.contactbook;
 
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import java.util.UUID;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public interface PositionTypesListRemote {
      * @param parentId the parent
      * @return the newly created position type
      */
-    PositionType newPositionType(UUID parentId);
+    PositionType newPositionType(BusinessPartner businessPartner);
 
     /**
      * Saves a PositionType for a owner class (Person or Organization)

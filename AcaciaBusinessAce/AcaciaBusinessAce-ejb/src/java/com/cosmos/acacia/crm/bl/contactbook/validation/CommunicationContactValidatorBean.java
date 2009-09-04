@@ -23,20 +23,20 @@ public class CommunicationContactValidatorBean implements CommunicationContactVa
 
     @Override
     public void validate(CommunicationContact entity) throws ValidationException {
-        ValidationException ve = new ValidationException();
-
-        //unique name
-        Query q = em.createNamedQuery("CommunicationContact.findByTypeAndContactPersonAndParentDataObject");
-        q.setParameter("communicationType", entity.getCommunicationType());
-        q.setParameter("contactPerson", entity.getContactPerson());
-        q.setParameter("parentDataObjectId", entity.getParentId());
-
-        if ( !checkUnique(q.getResultList(), entity))
-            ve.addMessage("CommunicationContact.err.exists");
-
-        //if we have validation messages - throw the exception since not everything is OK
-        if ( !ve.getMessages().isEmpty() )
-            throw ve;
+//        ValidationException ve = new ValidationException();
+//
+//        //unique name
+//        Query q = em.createNamedQuery("CommunicationContact.findByTypeAndContactPersonAndParentDataObject");
+//        q.setParameter("communicationType", entity.getCommunicationType());
+////        q.setParameter("contactPerson", entity.getContactPerson());
+//        q.setParameter("parentDataObjectId", entity.getParentId());
+//
+//        if ( !checkUnique(q.getResultList(), entity))
+//            ve.addMessage("CommunicationContact.err.exists");
+//
+//        //if we have validation messages - throw the exception since not everything is OK
+//        if ( !ve.getMessages().isEmpty() )
+//            throw ve;
     }
 
 }

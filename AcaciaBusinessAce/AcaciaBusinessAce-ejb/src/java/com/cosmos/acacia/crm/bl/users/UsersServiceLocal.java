@@ -23,6 +23,8 @@ import javax.ejb.Local;
 @Local
 public interface UsersServiceLocal extends UsersServiceRemote {
 
+    User newUser();
+
     List<UserOrganization> getUserOrganizations(Organization organization);
 
     List<UserOrganization> getUserOrganizations(User user);

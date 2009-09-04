@@ -24,7 +24,9 @@ import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.City;
 import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.beansbinding.EntityProperties;
+import javax.persistence.NoResultException;
 
 /**
  * The implementation of handling locations (see interface for more info)
@@ -47,6 +49,51 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     private GenericUniqueValidatorLocal<Country> validator;
 
     @Override
+    public Country getCountryByName(String countryName) {
+        Query q = em.createNamedQuery(Country.NQ_FIND_BY_NAME);
+        q.setParameter("countryName", countryName);
+        try {
+            return (Country) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Country getCountryByCodeA2(String countryCodeA2) {
+        Query q = em.createNamedQuery(Country.NQ_FIND_BY_CODE_A2);
+        q.setParameter("countryCodeA2", countryCodeA2);
+        try {
+            return (Country) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Country getCountryByCodeA3(String countryCodeA3) {
+        Query q = em.createNamedQuery(Country.NQ_FIND_BY_CODE_A3);
+        q.setParameter("countryCodeA3", countryCodeA3);
+        try {
+            return (Country) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public City getCityByCode(Country country, String cityCode) {
+        Query q = em.createNamedQuery(City.NQ_FIND_BY_CODE);
+        q.setParameter("country", country);
+        q.setParameter("cityCode", cityCode);
+        try {
+            return (City) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
     public List<Country> getCountries() {
         Query q = em.createNamedQuery(Country.NQ_FIND_ALL);
         return new ArrayList<Country>(q.getResultList());
@@ -55,6 +102,12 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     @Override
     public Long getCountriesCount() {
         Query q = em.createNamedQuery(Country.NQ_COUNT_COUNTRIES);
+        return (Long) q.getSingleResult();
+    }
+
+    @Override
+    public Long getCitiesCount(Country country) {
+        Query q = em.createNamedQuery(City.NQ_COUNT_CITIES);
         return (Long) q.getSingleResult();
     }
 
@@ -123,8 +176,8 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return entityProperties;
     }
 
-    public Address newAddress() {
-        return new Address();
+    public Address newAddress(BusinessPartner businessPartner) {
+        return new Address(businessPartner);
     }
 
     public Address saveAddress(Address address) {
@@ -142,7 +195,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
 
     @Override
     public List<City> getCities(Country country) {
-        Query q = em.createNamedQuery("City.findByCountry");
+        Query q = em.createNamedQuery(City.NQ_FIND_ALL);
         q.setParameter("country", country);
 
         return new ArrayList<City>(q.getResultList());

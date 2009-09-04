@@ -39,7 +39,6 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
-import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;

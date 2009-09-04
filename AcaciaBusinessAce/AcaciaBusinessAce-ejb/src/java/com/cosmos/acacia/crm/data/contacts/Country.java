@@ -35,24 +35,53 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 /**
- *
+ * http://en.wikipedia.org/wiki/ISO_3166-1
  * @author Miro
  */
 @Entity
 @Table(name = "countries", catalog = "acacia", schema = "public"
-/*CREATE UNIQUE INDEX uix_countries_country_name
+/*
+CREATE UNIQUE INDEX uix_countries_code_a2
   ON countries
   USING btree
-  (lower(country_name::text));*/
+  (lower(country_code_a2::text));
+CREATE UNIQUE INDEX uix_countries_code_a3
+  ON countries
+  USING btree
+  (lower(country_code_a3::text));
+CREATE UNIQUE INDEX uix_countries_country_name
+  ON countries
+  USING btree
+  (lower(country_name::text));
+*/
 )
 @NamedQueries({
     @NamedQuery(
         name = Country.NQ_FIND_ALL,
-        query = "from Country order by countryName"
+        query = "select t from Country t" +
+                " order by t.countryName"
     ),
     @NamedQuery(
         name = Country.NQ_COUNT_COUNTRIES,
         query = "select count(t) from Country t"
+    ),
+    @NamedQuery(
+        name = Country.NQ_FIND_BY_NAME,
+        query = "select t from Country t" +
+                " where" +
+                "  lower(t.countryName) = lower(:countryName)"
+    ),
+    @NamedQuery(
+        name = Country.NQ_FIND_BY_CODE_A2,
+        query = "select t from Country t" +
+                " where" +
+                "  lower(t.countryCodeA2) = lower(:countryCodeA2)"
+    ),
+    @NamedQuery(
+        name = Country.NQ_FIND_BY_CODE_A3,
+        query = "select t from Country t" +
+                " where" +
+                "  lower(t.countryCodeA3) = lower(:countryCodeA3)"
     )
 })
 @Form(
@@ -65,7 +94,12 @@ public class Country extends DataObjectBean implements Serializable {
     protected static final String CLASS_NAME = "Country";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_COUNT_COUNTRIES = CLASS_NAME + ".countCountries";
-
+    public static final String NQ_FIND_BY_NAME = CLASS_NAME + ".findByName";
+    public static final String NQ_FIND_BY_CODE_A2 = CLASS_NAME + ".findByCodeA2";
+    public static final String NQ_FIND_BY_CODE_A3 = CLASS_NAME + ".findByCodeA3";
+    //
+    public static final String CODE_A2_BULGARIA = "BG";
+    //
     @Id
     @Basic(optional = false)
     @Type(type="uuid")

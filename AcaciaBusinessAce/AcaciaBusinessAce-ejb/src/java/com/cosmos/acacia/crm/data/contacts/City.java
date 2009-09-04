@@ -38,14 +38,38 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "cities"
-/*CREATE UNIQUE INDEX uix_cities_country_city_name
+/*
+CREATE UNIQUE INDEX uix_cities_country_city_code
   ON cities
   USING btree
-  (country_id, lower(city_name::text));*/
+  (country_id, lower(city_code::text));
+CREATE UNIQUE INDEX uix_cities_country_city_name
+  ON cities
+  USING btree
+  (country_id, lower(city_name::text));
+*/
 )
 @NamedQueries({
-    @NamedQuery(name = City.NQ_FIND_ALL,
-    query = "select c from City c where c.country = :country")
+    @NamedQuery(
+        name = City.NQ_FIND_ALL,
+        query = "select t from City t" +
+                " where" +
+                "  t.country = :country" +
+                " order by t.cityName"
+    ),
+    @NamedQuery(
+        name = City.NQ_FIND_BY_CODE,
+        query = "select t from City t" +
+                " where" +
+                "  t.country = :country" +
+                "  and lower(t.cityCode) = lower(:cityCode)"
+    ),
+    @NamedQuery(
+        name = City.NQ_COUNT_CITIES,
+        query = "select count(t) from City t" +
+                " where" +
+                "  t.country = :country"
+    )
 })
 @Form(
     serviceClass = LocationsServiceRemote.class
@@ -56,6 +80,11 @@ public class City extends DataObjectBean implements Serializable, TextResource {
     //
     protected static final String CLASS_NAME = "City";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_CODE = CLASS_NAME + ".findByCode";
+    public static final String NQ_COUNT_CITIES = CLASS_NAME + ".countCities";
+    //
+    public static final String CODE_SOFIA = "SF";
+    public static final String CODE_STARA_ZAGORA = "SZ";
     //
     @Id
     @Column(name = "city_id", nullable = false)
@@ -115,9 +144,11 @@ public class City extends DataObjectBean implements Serializable, TextResource {
     )
     private String postalCode;
 
-    @Column(name = "city_code")
+    @Column(name = "city_code", nullable = false)
     @Property(title = "City code",
-        propertyValidator=@PropertyValidator(validationType = ValidationType.LENGTH, maxLength = 3),
+        propertyValidator=@PropertyValidator(
+            validationType = ValidationType.LENGTH, maxLength = 5, required=true
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(

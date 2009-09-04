@@ -142,19 +142,19 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         organization.setDefaultCurrency(basicOrganization.getDefaultCurrency());
         organization = saveOrganization(organization);
 
-        Person person = personsManager.newPerson(acaciaSession.getOrganization().getId());
+        Person person = personsManager.newPerson(acaciaSession.getOrganization());
         person.setFirstName(basicOrganization.getFirstName());
         person.setSecondName(basicOrganization.getSecondName());
         person.setLastName(basicOrganization.getLastName());
         person.setExtraName(basicOrganization.getExtraName());
         person = personsManager.savePerson(person);
 
-        Address address = addressesManager.newAddress();
+        Address address = addressesManager.newAddress(organization);
         address.setAddressName("Registration");
         address.setCity(basicOrganization.getCity());
         address.setPostalCode(basicOrganization.getPostalCode());
         address.setPostalAddress(basicOrganization.getPostalAddress());
-        address = addressesManager.saveAddress(address, organization.getId());
+        address = addressesManager.saveAddress(address);
 
         ContactPerson contactPerson = addressesManager.newContactPerson();
         contactPerson.setPerson(person);
