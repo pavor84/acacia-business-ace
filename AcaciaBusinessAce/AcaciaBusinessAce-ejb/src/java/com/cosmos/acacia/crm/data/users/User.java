@@ -150,7 +150,9 @@ CREATE UNIQUE INDEX uix_users_email_address
             parentContainerName=DataObjectBean.PRIMARY_INFO
         )
     },
-    serviceClass=UsersServiceRemote.class
+    serviceClass=UsersServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.users.UserPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.users.UserListPanel"
 )
 public class User extends DataObjectBean implements Serializable {
 

@@ -89,10 +89,10 @@ import java.lang.reflect.Modifier;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.UUID;
 
 /**
@@ -105,7 +105,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     private static boolean initialized = false;
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
-    private static Map<String, Set<String>> entityClassesMap;
+    private static Map<String, Set<Class>> entityClassesMap;
 
     @PersistenceContext
     private EntityManager em;
@@ -443,23 +443,32 @@ delete from organizations;
 
         initPrivilegeCategory(organization);
 
-        Class entityClass = User.class;
-        PrivilegeCategory privilegeCategory = getPrivilegeCategory(organization, entityClass);
-
-        String entityClassName = entityClass.getName();
-        DataObjectType entityDataObjectType = dotService.getDataObjectType(entityClassName);
-        EntityTypePrivilege privilege = new EntityTypePrivilege(securityRole, entityDataObjectType);
-        privilege.setPrivilegeCategory(privilegeCategory);
-        privilege.setPrivilegeName(getLastName(entityClassName));
-        esm.persist(em, privilege);
-
         Map<AccessRight, AccessLevel> roleAccessMap = new EnumMap<AccessRight, AccessLevel>(AccessRight.class);
         roleAccessMap.put(AccessRight.Read, AccessLevel.System);
         roleAccessMap.put(AccessRight.Create, AccessLevel.System);
         roleAccessMap.put(AccessRight.Delete, AccessLevel.System);
         roleAccessMap.put(AccessRight.Modify, AccessLevel.System);
         roleAccessMap.put(AccessRight.Execute, AccessLevel.System);
-        setPrivilegeRoleAccess(privilege, roleAccessMap);
+
+        setSecurityRoleAccess(organization, securityRole, User.class.getPackage(), roleAccessMap);
+    }
+
+    private void setSecurityRoleAccess(
+            Organization organization,
+            SecurityRole securityRole,
+            Package pkg,
+            Map<AccessRight, AccessLevel> roleAccessMap) {
+        String packageName = pkg.getName();
+        PrivilegeCategory privilegeCategory = getPrivilegeCategory(organization, getLastName(packageName));
+        for(Class entityClass : getEntityClasses(packageName)) {
+            String entityClassName = entityClass.getName();
+            DataObjectType entityDataObjectType = dotService.getDataObjectType(entityClassName);
+            EntityTypePrivilege privilege = new EntityTypePrivilege(securityRole, entityDataObjectType);
+            privilege.setPrivilegeCategory(privilegeCategory);
+            privilege.setPrivilegeName(getLastName(entityClassName));
+            esm.persist(em, privilege);
+            setPrivilegeRoleAccess(privilege, roleAccessMap);
+        }
     }
 
     private void setPrivilegeRoleAccess(Privilege privilege, Map<AccessRight, AccessLevel> roleAccessMap) {
@@ -483,7 +492,7 @@ delete from organizations;
         }
 
         DbResource categoryType = PrivilegeCategoryType.System.getDbResource();
-        Map<String, Set<String>> classesMap = getEntityClassesMap();
+        Map<String, Set<Class>> classesMap = getEntityClassesMap();
         for(String packageName : classesMap.keySet()) {
             packageName = getLastName(packageName);
             PrivilegeCategory category = new PrivilegeCategory(organization, categoryType, packageName);
@@ -515,12 +524,16 @@ delete from organizations;
         }
     }
 
-    private Map<String, Set<String>> getEntityClassesMap() {
+    private Set<Class> getEntityClasses(String packageName) {
+        return getEntityClassesMap().get(packageName);
+    }
+
+    private Map<String, Set<Class>> getEntityClassesMap() {
         if(entityClassesMap != null) {
             return entityClassesMap;
         }
 
-        entityClassesMap = new TreeMap<String, Set<String>>();
+        entityClassesMap = new TreeMap<String, Set<Class>>();
         try {
             Set<Class<?>> acaciaClasses = ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class);
             for(Class cls : acaciaClasses) {
@@ -530,13 +543,12 @@ delete from organizations;
 
                 Package pkg = cls.getPackage();
                 String packageName = pkg.getName();
-                Set<String> classes;
+                Set<Class> classes;
                 if((classes = entityClassesMap.get(packageName)) == null) {
-                    classes = new TreeSet<String>();
+                    classes = new HashSet<Class>();
                     entityClassesMap.put(packageName, classes);
                 }
-                String className = cls.getSimpleName();
-                classes.add(className);
+                classes.add(cls);
             }
         } catch(Exception ex) {
             ex.printStackTrace();

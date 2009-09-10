@@ -39,6 +39,8 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
+import com.cosmos.acacia.crm.data.security.EntityAction;
+import com.cosmos.acacia.crm.data.security.SecureAction;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
@@ -61,9 +63,10 @@ import javax.ejb.EJB;
 import javax.jms.MapMessage;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.NoResultException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-import org.jdesktop.application.ApplicationAction;
 
 /**
  * Created	:	19.05.2008
@@ -110,8 +113,42 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
     @Override
-    public Set<ApplicationAction> getApplicationActions() {
-        return new HashSet<ApplicationAction>();
+    public Set<SecureAction> getSecureActions() {
+        HashSet<SecureAction> secureActions = new HashSet<SecureAction>();
+        try {
+            InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/AcaciaApplication.xml");
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader xmlReader = factory.createXMLStreamReader(inStream, "UTF-8");
+            String elementName;
+            while(xmlReader.hasNext()) {
+                int parseEventId = xmlReader.next();
+                System.out.println("parseEventId=" + parseEventId);
+                switch(parseEventId) {
+                    case XMLStreamReader.START_ELEMENT:
+                        elementName = xmlReader.getLocalName();
+                        System.out.println("elementName=" + elementName);
+                        if(EntityAction.ELEMENT_NAME.equals(elementName)) {
+                            EntityAction action = new EntityAction(xmlReader);
+                            System.out.println("action: " + action);
+                            secureActions.add(action);
+                        }
+                        break;
+
+                    default:
+                    if(xmlReader.hasName()) {
+                        System.out.println("xmlReader.getName(): " + xmlReader.getName());
+                    }
+                    if(xmlReader.hasText()) {
+                        System.out.println("xmlReader.getText(): " + xmlReader.getText());
+                    }
+                }
+            }
+            xmlReader.close();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return secureActions;
     }
 
     @Override
