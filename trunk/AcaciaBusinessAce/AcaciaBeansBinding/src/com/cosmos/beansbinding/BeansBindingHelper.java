@@ -4,6 +4,7 @@
  */
 package com.cosmos.beansbinding;
 
+import com.cosmos.acacia.annotation.Form;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
@@ -68,6 +69,23 @@ public class BeansBindingHelper {
             } else if (annotation.annotationType().equals(Table.class)) {
                 Table table = (Table) annotation;
                 entityProperties.setTableName(table.name());
+            } else if (annotation.annotationType().equals(Form.class)) {
+                Form form = (Form) annotation;
+                String value;
+                if((value = form.entityFormClassName()) != null && value.length() > 0) {
+                    try {
+                        entityProperties.setEntityFormClass(Class.forName(value));
+                    } catch(Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                if((value = form.entityListFormClassName()) != null && value.length() > 0) {
+                    try {
+                        entityProperties.setEntityListFormClass(Class.forName(value));
+                    } catch(Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
             }
         }
 
