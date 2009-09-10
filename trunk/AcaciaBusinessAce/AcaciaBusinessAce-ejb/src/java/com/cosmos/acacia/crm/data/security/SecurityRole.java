@@ -156,6 +156,12 @@ public class SecurityRole extends DataObjectBean implements Serializable {
         this.securityRoleName = securityRoleName;
     }
 
+    public SecurityRole(Organization organization, BusinessUnit businessUnit, String securityRoleName) {
+        this.organization = organization;
+        this.businessUnit = businessUnit;
+        this.securityRoleName = securityRoleName;
+    }
+
     public UUID getSecurityRoleId() {
         return securityRoleId;
     }

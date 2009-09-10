@@ -78,8 +78,8 @@ CREATE UNIQUE INDEX uix_users_email_address
         query = "select u from User u where u.emailAddress = :emailAddress"
     ),
     @NamedQuery(
-            name = "User.findByUserName",
-            query = "select u from User u where u.userName=:userName"
+        name = User.NQ_FIND_BY_USER_NAME,
+        query = "select u from User u where u.userName=:userName"
     ),
     @NamedQuery(
             name = "User.findAll",
@@ -158,6 +158,7 @@ public class User extends DataObjectBean implements Serializable {
     //
     protected static final String CLASS_NAME = "User";
     public static final String NQ_FIND_BY_EMAIL = CLASS_NAME + ".findByEmail";
+    public static final String NQ_FIND_BY_USER_NAME = CLASS_NAME + ".findByUserName";
     //
     public static final String INFO_GENERAL = "informationGeneral";
     public static final String INFO_ADDRESSES = "informationAddresses";

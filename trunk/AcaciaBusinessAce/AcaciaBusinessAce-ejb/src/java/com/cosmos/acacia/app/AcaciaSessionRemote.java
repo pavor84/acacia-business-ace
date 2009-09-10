@@ -17,6 +17,8 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.util.AcaciaProperties;
+import java.util.Set;
+import org.jdesktop.application.ApplicationAction;
 
 /**
  * Created	:	19.05.2008
@@ -27,6 +29,7 @@ import com.cosmos.acacia.util.AcaciaProperties;
 @Remote
 public interface AcaciaSessionRemote {
 
+    Set<ApplicationAction> getApplicationActions();
 //    DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(UUID dataObjectId);

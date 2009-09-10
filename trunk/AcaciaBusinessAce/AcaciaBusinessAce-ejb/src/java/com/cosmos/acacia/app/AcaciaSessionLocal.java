@@ -26,6 +26,8 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote {
 
     Organization getSystemOrganization();
 
+    User getSupervisor();
+
     /**
      * Logs in the user, creates new session and returns the session id.
      * @param user

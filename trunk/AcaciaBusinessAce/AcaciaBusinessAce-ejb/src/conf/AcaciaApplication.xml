@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <actions>
+    <!--
+    Task BlockingScope:
+        /**
+         * Don't block the GUI while this Task is executing.
+         */
+        NONE,
+        /**
+         * Block an {@link ApplicationAction Action} while the
+         * task is executing, typically by temporarily disabling it.
+         */
+        ACTION,
+        /**
+         * Block a component while the
+         * task is executing, typically by temporarily disabling it.
+         */
+        COMPONENT,
+        /**
+         * Block a top level window while the task is executing,
+         * typically by showing a window-modal dialog.
+         */
+        WINDOW,
+        /**
+         * Block all of the application's top level windows,
+         * typically by showing a application-modal dialog.
+         */
+        APPLICATION
+    -->
+        <action name="" enabledProperty="" selectedProperty="" blockingScope="">
+            <entity name=""/>
+        </action>
+        <action name="" enabledProperty="" selectedProperty="" blockingScope="">
+            <privilege name=""/>
+        </action>
+    </actions>
+    <menuBar>
+        <menu>
+            <menuItem name="" actionName="">
+            </menuItem>
+        </menu>
+    </menuBar>
+    <statusBar></statusBar>
+    <toolBar></toolBar>
+</root>

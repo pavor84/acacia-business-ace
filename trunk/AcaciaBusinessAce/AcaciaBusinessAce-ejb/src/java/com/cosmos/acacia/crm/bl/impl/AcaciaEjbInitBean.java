@@ -24,6 +24,5 @@ public class AcaciaEjbInitBean implements AcaciaEjbInitRemote {
     public void init() {
         logger.info("AcaciaEjbInitBean.init().databaseResource.initDatabaseResource()");
         databaseResource.initDatabaseResource();
-        databaseResource.initSecurityAccess();
     }
 }
