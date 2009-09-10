@@ -6,7 +6,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.util.AcaciaProperties;
-import java.util.UUID;
+import java.util.Set;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,7 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import java.util.UUID;
+import org.jdesktop.application.ApplicationAction;
 
 /**
  * Singleton client session. Caches results from the remote session
@@ -243,5 +244,10 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public void deleteExpression(Class beanClass, String propertyName) {
         remoteSession.deleteExpression(beanClass, propertyName);
+    }
+
+    @Override
+    public Set<ApplicationAction> getApplicationActions() {
+        return remoteSession.getApplicationActions();
     }
 }
