@@ -14,11 +14,11 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.security.SecureAction;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
-import org.jdesktop.application.ApplicationAction;
 
 /**
  * Created	:	19.05.2008
@@ -29,7 +29,7 @@ import org.jdesktop.application.ApplicationAction;
 @Remote
 public interface AcaciaSessionRemote {
 
-    Set<ApplicationAction> getApplicationActions();
+    Set<SecureAction> getSecureActions();
 //    DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(UUID dataObjectId);

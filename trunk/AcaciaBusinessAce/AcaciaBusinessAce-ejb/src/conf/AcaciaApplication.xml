@@ -27,13 +27,16 @@
          * typically by showing a application-modal dialog.
          */
         APPLICATION
+        show=Frame or Dialog; default=frame
     -->
-        <action name="" enabledProperty="" selectedProperty="" blockingScope="">
-            <entity name=""/>
-        </action>
-        <action name="" enabledProperty="" selectedProperty="" blockingScope="">
+        <entityAction name="usersListAction" enabledProperty="" selectedProperty="" blockingScope="" show="">
+            <entity className="com.cosmos.acacia.crm.data.users.User"/>
+        </entityAction>
+        <privilegeAction name="" enabledProperty="" selectedProperty="" blockingScope="">
             <privilege name=""/>
-        </action>
+        </privilegeAction>
+        <customAction name="" enabledProperty="" selectedProperty="" blockingScope="">
+        </customAction>
     </actions>
     <menuBar>
         <menu>
