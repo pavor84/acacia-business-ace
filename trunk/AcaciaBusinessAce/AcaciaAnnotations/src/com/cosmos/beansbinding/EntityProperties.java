@@ -27,6 +27,8 @@ public class EntityProperties implements Cloneable, Serializable {
     private EntityProperties superEntityProperties;
     private Map<String, PropertyDetails> beanProperties;
     private AutoBinding.UpdateStrategy updateStrategy;
+    private Class entityFormClass;
+    private Class entityListFormClass;
 
     public EntityProperties(Class entityClass) {
         this.entityClass = entityClass;
@@ -44,6 +46,22 @@ public class EntityProperties implements Cloneable, Serializable {
 
     public EntityProperties getSuperEntityProperties() {
         return superEntityProperties;
+    }
+
+    public Class getEntityFormClass() {
+        return entityFormClass;
+    }
+
+    void setEntityFormClass(Class entityFormClass) {
+        this.entityFormClass = entityFormClass;
+    }
+
+    public Class getEntityListFormClass() {
+        return entityListFormClass;
+    }
+
+    void setEntityListFormClass(Class entityListFormClass) {
+        this.entityListFormClass = entityListFormClass;
     }
 
     void setTableName(String tableName) {
