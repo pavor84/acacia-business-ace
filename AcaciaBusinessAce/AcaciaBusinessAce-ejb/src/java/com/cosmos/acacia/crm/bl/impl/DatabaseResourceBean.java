@@ -25,6 +25,7 @@ import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
 import com.cosmos.acacia.crm.bl.users.UsersServiceLocal;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -35,7 +36,15 @@ import com.cosmos.acacia.crm.data.contacts.Country;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PersonalCommunicationContact;
+import com.cosmos.acacia.crm.data.security.EntityTypePrivilege;
+import com.cosmos.acacia.crm.data.security.Privilege;
+import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
+import com.cosmos.acacia.crm.data.security.PrivilegeRole;
+import com.cosmos.acacia.crm.data.security.SecurityRole;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
@@ -72,13 +81,16 @@ import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
+import com.cosmos.acacia.security.PrivilegeCategoryType;
 import com.cosmos.acacia.security.PrivilegeType;
 import com.cosmos.util.ClassHelper;
 import com.cosmos.util.SecurityUtils;
 import java.lang.reflect.Modifier;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -93,6 +105,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     private static boolean initialized = false;
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
+    private static Map<String, Set<String>> entityClassesMap;
 
     @PersistenceContext
     private EntityManager em;
@@ -115,10 +128,12 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     @EJB
     private AcaciaSessionLocal session;
 
+    @EJB
+    private DataObjectTypeLocal dotService;
+
     @Override
     public synchronized void initDatabaseResource() {
         if (!initialized) {
-            System.out.println("initDatabaseResource()");
             initDbResources();
             initCountries();
             initCities();
@@ -162,6 +177,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         getDbResources(AccessRight.class);
         getDbResources(AccessLevel.class);
         getDbResources(PrivilegeType.class);
+        getDbResources(PrivilegeCategoryType.class);
         getDbResources(BusinessActivity.class);
         getDbResources(BusinessUnitType.class);
         getDbResources(BusinessUnitAddressType.class);
@@ -256,7 +272,6 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         String className = dbEnum.getClass().getName();
         EnumClass enumClass = enumClassMap.get(className);
         if (enumClass == null) {
-            System.out.println("Enum Class Name: " + className);
             Query q = em.createNamedQuery("EnumClass.findByEnumClassName");
             q.setParameter("enumClassName", className);
             try {
@@ -305,6 +320,24 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         return dbResource;
     }
 
+/*
+delete from assembling_messages;
+delete from expressions;
+delete from privilege_roles;
+delete from privileges;
+delete from privilege_categories;
+delete from user_security_roles;
+delete from security_roles;
+delete from business_unit_addresses;
+delete from business_units;
+delete from user_organizations;
+delete from personal_communication_contacts;
+delete from contact_persons;
+delete from communication_contacts;
+delete from addresses;
+delete from users;
+delete from organizations;
+*/
     private void initContacts() {
         Query q = em.createQuery("select count(t) from Organization t");
         Long count;
@@ -389,34 +422,127 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
         supervisor.setCreationTime(new Date());
         supervisor.setIsNew(false);
         esm.persist(em, supervisor);
+
+        UserOrganization userOrganization = new UserOrganization(supervisor, organization);
+        userOrganization.setUserActive(true);
+        userOrganization.setBranch(address);
+        esm.persist(em, userOrganization);
+
+        BusinessUnit businessUnit = new BusinessUnit(organization);
+        businessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT);
+        businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
+        businessUnit.setRoot(true);
+        businessUnit.setDisabled(false);
+        esm.persist(em, businessUnit);
+
+        SecurityRole securityRole = new SecurityRole(organization, businessUnit, User.SUPERVISOR_USER_NAME);
+        esm.persist(em, securityRole);
+
+        UserSecurityRole userSecurityRole = new UserSecurityRole(userOrganization, securityRole);
+        esm.persist(em, userSecurityRole);
+
+        initPrivilegeCategory(organization);
+
+        Class entityClass = User.class;
+        PrivilegeCategory privilegeCategory = getPrivilegeCategory(organization, entityClass);
+
+        String entityClassName = entityClass.getName();
+        DataObjectType entityDataObjectType = dotService.getDataObjectType(entityClassName);
+        EntityTypePrivilege privilege = new EntityTypePrivilege(securityRole, entityDataObjectType);
+        privilege.setPrivilegeCategory(privilegeCategory);
+        privilege.setPrivilegeName(getLastName(entityClassName));
+        esm.persist(em, privilege);
+
+        Map<AccessRight, AccessLevel> roleAccessMap = new EnumMap<AccessRight, AccessLevel>(AccessRight.class);
+        roleAccessMap.put(AccessRight.Read, AccessLevel.System);
+        roleAccessMap.put(AccessRight.Create, AccessLevel.System);
+        roleAccessMap.put(AccessRight.Delete, AccessLevel.System);
+        roleAccessMap.put(AccessRight.Modify, AccessLevel.System);
+        roleAccessMap.put(AccessRight.Execute, AccessLevel.System);
+        setPrivilegeRoleAccess(privilege, roleAccessMap);
+    }
+
+    private void setPrivilegeRoleAccess(Privilege privilege, Map<AccessRight, AccessLevel> roleAccessMap) {
+        for(AccessRight right : AccessRight.values()) {
+            AccessLevel level;
+            if((level = roleAccessMap.get(right)) == null) {
+                level = AccessLevel.None;
+            }
+            PrivilegeRole privilegeRole = new PrivilegeRole(privilege, right.getDbResource(), level.getDbResource());
+            esm.persist(em, privilegeRole);
+        }
     }
 
     @Override
-    public void initSecurityAccess() {
+    public void initPrivilegeCategory(Organization organization) {
+        Query q = em.createNamedQuery(PrivilegeCategory.NQ_COUNT_BY_ORGANIZATION);
+        q.setParameter("organization", organization);
+        Long count;
+        if((count = (Long) q.getSingleResult()) != null && count > 0) {
+            return;
+        }
+
+        DbResource categoryType = PrivilegeCategoryType.System.getDbResource();
+        Map<String, Set<String>> classesMap = getEntityClassesMap();
+        for(String packageName : classesMap.keySet()) {
+            packageName = getLastName(packageName);
+            PrivilegeCategory category = new PrivilegeCategory(organization, categoryType, packageName);
+            esm.persist(em, category);
+        }
+    }
+
+    private String getLastName(String packageName) {
+        int index;
+        if((index = packageName.lastIndexOf('.')) >= 0 || (index = packageName.lastIndexOf(' ')) >= 0) {
+            packageName = packageName.substring(index + 1);
+        }
+
+        return packageName;
+    }
+
+    private PrivilegeCategory getPrivilegeCategory(Organization organization, Class entityClass) {
+        return getPrivilegeCategory(organization, getLastName(entityClass.getPackage().getName()));
+    }
+
+    private PrivilegeCategory getPrivilegeCategory(Organization organization, String categoryName) {
+        Query q = em.createNamedQuery(PrivilegeCategory.NQ_FIND_BY_NAME);
+        q.setParameter("organization", organization);
+        q.setParameter("categoryName", categoryName);
         try {
-            TreeMap<String, TreeSet<String>> classesMap = new TreeMap<String, TreeSet<String>>();
-            for(Class cls : ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class)) {
+            return (PrivilegeCategory) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    private Map<String, Set<String>> getEntityClassesMap() {
+        if(entityClassesMap != null) {
+            return entityClassesMap;
+        }
+
+        entityClassesMap = new TreeMap<String, Set<String>>();
+        try {
+            Set<Class<?>> acaciaClasses = ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class);
+            for(Class cls : acaciaClasses) {
                 if(Modifier.isAbstract(cls.getModifiers())) {
                     continue;
                 }
 
-                String pkg = cls.getPackage().getName();
-                TreeSet<String> classes;
-                if((classes = classesMap.get(pkg)) == null) {
+                Package pkg = cls.getPackage();
+                String packageName = pkg.getName();
+                Set<String> classes;
+                if((classes = entityClassesMap.get(packageName)) == null) {
                     classes = new TreeSet<String>();
-                    classesMap.put(pkg, classes);
+                    entityClassesMap.put(packageName, classes);
                 }
-                classes.add(cls.getSimpleName());
-            }
-
-            for(String pkg : classesMap.keySet()) {
-                System.out.println(pkg);
-                for(String clsName : classesMap.get(pkg)) {
-                    System.out.println("\t " + clsName);
-                }
+                String className = cls.getSimpleName();
+                classes.add(className);
             }
         } catch(Exception ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
+
+        return entityClassesMap;
     }
 }

@@ -38,6 +38,12 @@ public class EntityTypePrivilege extends Privilege implements Serializable {
         super(ENTITY_DATA_OBJECT_TYPE_ID);
     }
 
+    public EntityTypePrivilege(SecurityRole securityRole, DataObjectType entityDataObjectType) {
+        this();
+        setSecurityRole(securityRole);
+        this.entityDataObjectType = entityDataObjectType;
+    }
+
     @Override
     public DataObjectType getEntityDataObjectType() {
         return entityDataObjectType;

@@ -124,6 +124,12 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
         this.privilegeRoleId = privilegeRoleId;
     }
 
+    public PrivilegeRole(Privilege privilege, DbResource accessRight, DbResource accessLevel) {
+        this.privilege = privilege;
+        this.accessRight = accessRight;
+        this.accessLevel = accessLevel;
+    }
+
     public UUID getPrivilegeRoleId() {
         return privilegeRoleId;
     }

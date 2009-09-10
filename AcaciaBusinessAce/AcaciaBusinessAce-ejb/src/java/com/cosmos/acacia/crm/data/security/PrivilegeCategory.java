@@ -56,6 +56,19 @@ import org.hibernate.annotations.Type;
                 "  p.organization = :organization" +
                 "  and p.privilegeType = :privilegeType" +
                 " ORDER BY p.categoryName"
+    ),
+    @NamedQuery(
+        name = PrivilegeCategory.NQ_FIND_BY_NAME,
+        query = "SELECT p FROM PrivilegeCategory p" +
+                " WHERE" +
+                "  p.organization = :organization" +
+                "  and p.categoryName = :categoryName"
+    ),
+    @NamedQuery(
+        name = PrivilegeCategory.NQ_COUNT_BY_ORGANIZATION,
+        query = "SELECT count(p) FROM PrivilegeCategory p" +
+                " WHERE" +
+                "  p.organization = :organization"
     )
 })
 @Form(
@@ -68,10 +81,12 @@ public class PrivilegeCategory extends DataObjectBean implements Serializable {
     protected static final String CLASS_NAME = "PrivilegeCategory";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_TYPE = CLASS_NAME + ".findByType";
+    public static final String NQ_FIND_BY_NAME = CLASS_NAME + ".findByName";
+    public static final String NQ_COUNT_BY_ORGANIZATION = CLASS_NAME + ".countByOrganization";
 
     @Id
     @Basic(optional = false)
-    @Column(name = "privilege_category_id", nullable = false, precision = 19, scale = 0)
+    @Column(name = "privilege_category_id", nullable = false, columnDefinition="uuid")
     @Type(type="uuid")
     private UUID privilegeCategoryId;
 
@@ -127,6 +142,12 @@ public class PrivilegeCategory extends DataObjectBean implements Serializable {
 
     public PrivilegeCategory(UUID privilegeCategoryId, String categoryName) {
         this.privilegeCategoryId = privilegeCategoryId;
+        this.categoryName = categoryName;
+    }
+
+    public PrivilegeCategory(Organization organization, DbResource privilegeType, String categoryName) {
+        this.organization = organization;
+        this.privilegeType = privilegeType;
         this.categoryName = categoryName;
     }
 

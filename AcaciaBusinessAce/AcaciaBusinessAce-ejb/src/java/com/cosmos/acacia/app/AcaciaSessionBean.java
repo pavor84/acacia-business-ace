@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.ejb.EJB;
@@ -62,6 +63,7 @@ import javax.mail.internet.InternetAddress;
 import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
+import org.jdesktop.application.ApplicationAction;
 
 /**
  * Created	:	19.05.2008
@@ -101,10 +103,16 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private AddressesListLocal addressService;
 
     private static Organization systemOrganization;
+    private static User supervisor;
 
     private static MailUtils systemMailUtils;
 
     private final ReentrantLock sublevelLock = new ReentrantLock();
+
+    @Override
+    public Set<ApplicationAction> getApplicationActions() {
+        return new HashSet<ApplicationAction>();
+    }
 
     @Override
     public Organization getSystemOrganization() {
@@ -114,6 +122,17 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         }
 
         return systemOrganization;
+    }
+
+    @Override
+    public User getSupervisor() {
+        if(supervisor == null) {
+            Query q = em.createNamedQuery(User.NQ_FIND_BY_USER_NAME);
+            q.setParameter("userName", User.SUPERVISOR_USER_NAME);
+            supervisor = (User) q.getSingleResult();
+        }
+
+        return supervisor;
     }
 
     @Override

@@ -103,6 +103,8 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByNullParentBusinessUnit";
     public static final String NQ_FIND_BY_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByParentBusinessUnit";
+    //
+    public static final String ROOT_BUSINESS_UNIT = "Root";
 
     @Id
     @Basic(optional = false)
@@ -239,6 +241,10 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
 
     public BusinessUnit(UUID businessUnitId) {
         this.businessUnitId = businessUnitId;
+    }
+
+    public BusinessUnit(Organization organization) {
+        this.organization = organization;
     }
 
     public UUID getBusinessUnitId() {
