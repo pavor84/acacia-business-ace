@@ -20,10 +20,10 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.security.SecureAction;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import java.util.UUID;
-import org.jdesktop.application.ApplicationAction;
 
 /**
  * Singleton client session. Caches results from the remote session
@@ -247,7 +247,7 @@ public class LocalSession implements AcaciaSessionRemote {
     }
 
     @Override
-    public Set<ApplicationAction> getApplicationActions() {
-        return remoteSession.getApplicationActions();
+    public Set<SecureAction> getSecureActions() {
+        return remoteSession.getSecureActions();
     }
 }
