@@ -29,4 +29,8 @@ public @interface Form {
     Class<? extends EntityService> serviceClass() default NullEntityService.class;
 
     Logic logic() default @Logic();
+
+    String entityFormClassName() default "";
+
+    String entityListFormClassName() default "";
 }
