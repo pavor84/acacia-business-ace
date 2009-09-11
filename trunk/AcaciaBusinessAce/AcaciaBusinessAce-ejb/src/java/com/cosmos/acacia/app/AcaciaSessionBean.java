@@ -39,10 +39,12 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.properties.DbProperty;
-import com.cosmos.acacia.crm.data.security.EntityAction;
-import com.cosmos.acacia.crm.data.security.SecureAction;
+import com.cosmos.acacia.data.ui.EntityAction;
+import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
+import com.cosmos.acacia.data.ui.AbstractMenu;
+import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import com.cosmos.mail.MailServer;
@@ -57,6 +59,9 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.ejb.EJB;
@@ -114,41 +119,133 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public Set<SecureAction> getSecureActions() {
+        InputStream inStream = null;
+        XMLStreamReader xmlReader = null;
         HashSet<SecureAction> secureActions = new HashSet<SecureAction>();
         try {
-            InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/AcaciaApplication.xml");
+            inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/AcaciaApplication.xml");
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader xmlReader = factory.createXMLStreamReader(inStream, "UTF-8");
+            xmlReader = factory.createXMLStreamReader(inStream, "UTF-8");
             String elementName;
             while(xmlReader.hasNext()) {
                 int parseEventId = xmlReader.next();
-                System.out.println("parseEventId=" + parseEventId);
                 switch(parseEventId) {
                     case XMLStreamReader.START_ELEMENT:
                         elementName = xmlReader.getLocalName();
-                        System.out.println("elementName=" + elementName);
                         if(EntityAction.ELEMENT_NAME.equals(elementName)) {
                             EntityAction action = new EntityAction(xmlReader);
-                            System.out.println("action: " + action);
                             secureActions.add(action);
                         }
                         break;
 
                     default:
-                    if(xmlReader.hasName()) {
-                        System.out.println("xmlReader.getName(): " + xmlReader.getName());
-                    }
-                    if(xmlReader.hasText()) {
-                        System.out.println("xmlReader.getText(): " + xmlReader.getText());
-                    }
+//                    if(xmlReader.hasName()) {
+//                        System.out.println("xmlReader.getName(): " + xmlReader.getName());
+//                    }
+//                    if(xmlReader.hasText()) {
+//                        System.out.println("xmlReader.getText(): " + xmlReader.getText());
+//                    }
                 }
             }
             xmlReader.close();
         } catch(Exception ex) {
             ex.printStackTrace();
+        } finally {
+            if(xmlReader != null) {
+                try {
+                    xmlReader.close();
+                    xmlReader = null;
+                } catch(Exception ex) {
+                }
+            }
+            if(inStream != null) {
+                try {
+                    inStream.close();
+                    inStream = null;
+                } catch(Exception ex) {
+                }
+            }
         }
 
         return secureActions;
+    }
+
+    @Override
+    public MenuBar getMenuBar() {
+        Map<String, SecureAction> secureActionMap = new TreeMap<String, SecureAction>();
+        for(SecureAction secureAction : getSecureActions()) {
+            secureActionMap.put(secureAction.getActionName(), secureAction);
+        }
+        InputStream inStream = null;
+        XMLStreamReader xmlReader = null;
+        try {
+            inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/AcaciaApplication.xml");
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            xmlReader = factory.createXMLStreamReader(inStream, "UTF-8");
+            String elementName;
+            while(xmlReader.hasNext()) {
+                int parseEventId = xmlReader.next();
+                switch(parseEventId) {
+                    case XMLStreamReader.START_ELEMENT:
+                        elementName = xmlReader.getLocalName();
+                        if(MenuBar.ELEMENT_NAME.equals(elementName)) {
+                            MenuBar menuBar = new MenuBar(xmlReader, secureActionMap);
+                            return trimMenuBar(menuBar);
+                        }
+                        break;
+
+                    default:
+                }
+            }
+            xmlReader.close();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if(xmlReader != null) {
+                try {
+                    xmlReader.close();
+                    xmlReader = null;
+                } catch(Exception ex) {
+                }
+            }
+            if(inStream != null) {
+                try {
+                    inStream.close();
+                    inStream = null;
+                } catch(Exception ex) {
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private MenuBar trimMenuBar(MenuBar menuBar) {
+        hasMenuItem(menuBar);
+        return menuBar;
+    }
+
+    private boolean hasMenuItem(AbstractMenu menu) {
+        Iterator<AbstractMenu> menuIterator = menu.getMenus().iterator();
+        while (menuIterator.hasNext()) {
+            AbstractMenu subMenu = menuIterator.next();
+            switch (subMenu.getType()) {
+                case Separator:
+                    continue;
+
+                case MenuItem:
+                    return true;
+
+                default:    // MenuBar, Menu
+                    if (hasMenuItem(subMenu)) {
+                        return true;
+                    } else {
+                        menuIterator.remove();
+                    }
+            }
+        }
+
+        return false;
     }
 
     @Override

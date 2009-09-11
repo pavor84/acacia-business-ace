@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cosmos.acacia.crm.data.security;
+package com.cosmos.acacia.data.ui;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -108,6 +108,6 @@ public class SecureAction implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append("[actionName=").append(actionName).append("]@").append(super.hashCode());
 
-        return super.toString();
+        return sb.toString();
     }
 }

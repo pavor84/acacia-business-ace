@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data.security;
+package com.cosmos.acacia.data.ui;
 
 import java.util.Map;
 import javax.xml.stream.XMLStreamException;

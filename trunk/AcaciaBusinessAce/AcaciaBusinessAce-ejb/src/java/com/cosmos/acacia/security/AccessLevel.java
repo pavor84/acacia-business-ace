@@ -102,6 +102,12 @@ public enum AccessLevel implements DatabaseResource {
 
     ParentChildOrganization,
 
+    /**
+     * Gives you the following access for an entity and privilege:
+     * - You can perform that action on records owned by any user within the
+     * entire system.
+     * - There are no access restrictions.
+     */
     System,
     ;
 
