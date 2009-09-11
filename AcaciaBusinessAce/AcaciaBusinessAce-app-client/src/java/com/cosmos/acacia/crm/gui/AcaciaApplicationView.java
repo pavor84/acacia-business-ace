@@ -16,9 +16,12 @@ import org.jdesktop.application.SingleFrameApplication;
 import com.birosoft.liquid.LiquidLookAndFeel;
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
-import com.cosmos.acacia.crm.data.security.EntityAction;
-import com.cosmos.acacia.crm.data.security.SecureAction;
+import com.cosmos.acacia.data.ui.EntityAction;
+import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
+import com.cosmos.acacia.data.ui.AbstractMenu;
+import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.Separator;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
@@ -27,15 +30,19 @@ import com.cosmos.swingb.JBMenu;
 import com.cosmos.swingb.JBMenuBar;
 import com.cosmos.swingb.JBMenuItem;
 import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
+import java.util.Arrays;
 import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
+import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task.BlockingScope;
 
 /**
  * The application's main frame.
@@ -126,18 +133,57 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected JMenuBar createMenuBar() {
-        JBMenuBar menuBar = new JBMenuBar();
-        JBMenu menu = new JBMenu();
-        menu.setName("settingsMenu");
-        menu.setText("Settings");
-        menuBar.add(menu);
-        JBMenuItem menuItem = new JBMenuItem();
-        ApplicationActionMap actionMap = getActionMap();
-        Action action = actionMap.get("usersListAction");
-        menuItem.setAction(action);
-        menu.add(menuItem);
+        MenuBar menuBar = getSession().getMenuBar();
 
-        return menuBar;
+        JBMenuBar jMenuBar = (JBMenuBar) getMenu(menuBar);
+
+        return jMenuBar;
+    }
+
+    protected JComponent getMenu(AbstractMenu menu) {
+        JComponent jComponent;
+        switch(menu.getType()) {
+            case Menu:
+                jComponent = new JBMenu();
+                ((JBMenu) jComponent).setAction(getAction(menu));
+                break;
+
+            case MenuItem:
+                jComponent = new JBMenuItem();
+                ((JBMenuItem) jComponent).setAction(getAction(menu));
+                break;
+
+            case Separator:
+                jComponent = new JBSeparator();
+                ((JBSeparator) jComponent).setOrientation(((Separator) menu).getOrientation());
+                break;
+
+            case MenuBar:
+                jComponent = new JBMenuBar();
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unsupported menu type: " + menu.getType());
+        }
+        jComponent.setName(menu.getName());
+
+        for(AbstractMenu subMenu : menu.getMenus()) {
+            jComponent.add(getMenu(subMenu));
+        }
+
+        return jComponent;
+    }
+
+    protected Action getAction(AbstractMenu menu) {
+        String name = menu.getName();
+        ResourceMap resourceMap = getResourceMap();
+        ApplicationActionMap appActionMap = getActionMap();
+        Action action = appActionMap.get(name);
+        if(action == null && AbstractMenu.Type.Menu.equals(menu.getType())) {
+            action = new ApplicationAction(appActionMap, resourceMap, name, null, null, null, BlockingScope.NONE);
+        }
+
+        return action;
     }
 
     protected JComponent createStatusBar() {

@@ -5,6 +5,7 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
-import com.cosmos.acacia.crm.data.security.SecureAction;
+import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import java.util.UUID;
@@ -249,5 +250,10 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public Set<SecureAction> getSecureActions() {
         return remoteSession.getSecureActions();
+    }
+
+    @Override
+    public MenuBar getMenuBar() {
+        return remoteSession.getMenuBar();
     }
 }
