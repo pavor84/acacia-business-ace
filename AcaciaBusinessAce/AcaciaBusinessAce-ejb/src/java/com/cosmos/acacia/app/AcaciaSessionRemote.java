@@ -14,9 +14,10 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
-import com.cosmos.acacia.crm.data.security.SecureAction;
+import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
+import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
 
@@ -30,6 +31,8 @@ import java.util.Set;
 public interface AcaciaSessionRemote {
 
     Set<SecureAction> getSecureActions();
+
+    MenuBar getMenuBar();
 //    DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(UUID dataObjectId);

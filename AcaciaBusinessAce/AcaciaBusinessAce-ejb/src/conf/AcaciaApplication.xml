@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <actions>
-    <!--
-    Task BlockingScope:
+    <!-- Action parameters:
+    "name" is required;
+    "enabledProperty"
+    "selectedProperty"
+    "blockingScope" where Task BlockingScope is:
         /**
          * Don't block the GUI while this Task is executing.
          */
@@ -27,9 +30,9 @@
          * typically by showing a application-modal dialog.
          */
         APPLICATION
-        show=Frame or Dialog; default=frame
+    "show" where the possible values are "Frame" or "Dialog"; the default value is "Frame"
     -->
-        <entityAction name="usersListAction" enabledProperty="" selectedProperty="" blockingScope="" show="">
+        <entityAction name="users" enabledProperty="" selectedProperty="" blockingScope="" show="">
             <entity className="com.cosmos.acacia.crm.data.users.User"/>
         </entityAction>
         <privilegeAction name="" enabledProperty="" selectedProperty="" blockingScope="">
@@ -38,10 +41,45 @@
         <customAction name="" enabledProperty="" selectedProperty="" blockingScope="">
         </customAction>
     </actions>
-    <menuBar>
-        <menu>
-            <menuItem name="" actionName="">
+    <menuBar name="menuBar">
+        <menu name="fileMenu">
+        </menu>
+        <menu name="salesMenu">
+        </menu>
+        <menu name="purchaseMenu">
+        </menu>
+        <menu name="reportsMenu">
+        </menu>
+        <menu name="productsMenu">
+        </menu>
+        <menu name="assemblingMenu">
+        </menu>
+        <menu name="settingsMenu">
+            <menu name="adminMenu">
+                <menuItem name="systemSettings"/>
+                <menuItem name="businessUnits"/>
+                <menuItem name="securityRoles"/>
+                <menuItem name="privilegeCategories"/>
+                <separator orientation="VERTICAL"/>
+                <menuItem name="users"/>
+                <menuItem name="userGroups"/>
+                <menuItem name="teams"/>
+            </menu>
+            <menu name="businessManagementMenu">
+                <menu name="customizationMenu"/>
+                <menu name="templatesMenu"/>
+                <menu name="productsAndPricingMenu"/>
+            </menu>
+            <menuItem name="currencyExchangeRates" actionName="">
             </menuItem>
+        </menu>
+        <menu name="contactBookMenu">
+        </menu>
+        <menu name="warehousesMenu">
+        </menu>
+        <menu name="classifiersMenu">
+        </menu>
+        <menu name="helpMenu">
         </menu>
     </menuBar>
     <statusBar></statusBar>
