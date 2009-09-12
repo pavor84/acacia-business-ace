@@ -226,6 +226,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     private boolean hasMenuItem(AbstractMenu menu) {
+        boolean hasMenuItem = false;
         Iterator<AbstractMenu> menuIterator = menu.getMenus().iterator();
         while (menuIterator.hasNext()) {
             AbstractMenu subMenu = menuIterator.next();
@@ -234,18 +235,19 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                     continue;
 
                 case MenuItem:
-                    return true;
+                    hasMenuItem = true;
+                    break;
 
                 default:    // MenuBar, Menu
                     if (hasMenuItem(subMenu)) {
-                        return true;
+                        hasMenuItem = true;
                     } else {
                         menuIterator.remove();
                     }
             }
         }
 
-        return false;
+        return hasMenuItem;
     }
 
     @Override
