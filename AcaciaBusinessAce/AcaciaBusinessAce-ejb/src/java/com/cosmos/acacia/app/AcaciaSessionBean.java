@@ -45,6 +45,9 @@ import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.data.ui.AbstractMenu;
 import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.Separator;
+import com.cosmos.acacia.data.ui.SystemAction;
+import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import com.cosmos.mail.MailServer;
@@ -133,7 +136,12 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                     case XMLStreamReader.START_ELEMENT:
                         elementName = xmlReader.getLocalName();
                         if(EntityAction.ELEMENT_NAME.equals(elementName)) {
-                            EntityAction action = new EntityAction(xmlReader);
+                            EntityAction action = new EntityAction();
+                            action.readXML(xmlReader);
+                            secureActions.add(action);
+                        } else if(SystemAction.ELEMENT_NAME.equals(elementName)) {
+                            SystemAction action = new SystemAction();
+                            action.readXML(xmlReader);
                             secureActions.add(action);
                         }
                         break;
@@ -172,9 +180,25 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public MenuBar getMenuBar() {
+        return getMenu(MenuBar.class);
+    }
+
+    @Override
+    public ToolBar getToolBar() {
+        return getMenu(ToolBar.class);
+    }
+
+    private <T extends AbstractMenu> T getMenu(Class<T> menuClass) {
+        T menu;
+        try {
+            menu = menuClass.newInstance();
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
         Map<String, SecureAction> secureActionMap = new TreeMap<String, SecureAction>();
         for(SecureAction secureAction : getSecureActions()) {
-            secureActionMap.put(secureAction.getActionName(), secureAction);
+            secureActionMap.put(secureAction.getName(), secureAction);
         }
         InputStream inStream = null;
         XMLStreamReader xmlReader = null;
@@ -188,9 +212,9 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                 switch(parseEventId) {
                     case XMLStreamReader.START_ELEMENT:
                         elementName = xmlReader.getLocalName();
-                        if(MenuBar.ELEMENT_NAME.equals(elementName)) {
-                            MenuBar menuBar = new MenuBar(xmlReader, secureActionMap);
-                            return trimMenuBar(menuBar);
+                        if(menu.getElementName().equals(elementName)) {
+                            menu.readXML(xmlReader, secureActionMap);
+                            return trimMenu(menu);
                         }
                         break;
 
@@ -220,34 +244,30 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return null;
     }
 
-    private MenuBar trimMenuBar(MenuBar menuBar) {
-        hasMenuItem(menuBar);
-        return menuBar;
+    private <T extends AbstractMenu> T trimMenu(T menu) {
+        hasRequiredAction(menu);
+        return menu;
     }
 
-    private boolean hasMenuItem(AbstractMenu menu) {
-        boolean hasMenuItem = false;
+    private boolean hasRequiredAction(AbstractMenu menu) {
+        boolean hasRequiredAction = false;
         Iterator<AbstractMenu> menuIterator = menu.getMenus().iterator();
         while (menuIterator.hasNext()) {
             AbstractMenu subMenu = menuIterator.next();
-            switch (subMenu.getType()) {
-                case Separator:
-                    continue;
-
-                case MenuItem:
-                    hasMenuItem = true;
-                    break;
-
-                default:    // MenuBar, Menu
-                    if (hasMenuItem(subMenu)) {
-                        hasMenuItem = true;
-                    } else {
-                        menuIterator.remove();
-                    }
+            if(subMenu instanceof Separator) {
+                continue;
+            } else if(subMenu.isRequiredAction()) {
+                hasRequiredAction = true;
+            } else {
+                if (hasRequiredAction(subMenu)) {
+                    hasRequiredAction = true;
+                } else {
+                    menuIterator.remove();
+                }
             }
         }
 
-        return hasMenuItem;
+        return hasRequiredAction;
     }
 
     @Override
