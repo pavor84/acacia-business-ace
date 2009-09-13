@@ -6,6 +6,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
 import java.util.HashMap;
@@ -255,5 +256,10 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public MenuBar getMenuBar() {
         return remoteSession.getMenuBar();
+    }
+
+    @Override
+    public ToolBar getToolBar() {
+        return remoteSession.getToolBar();
     }
 }

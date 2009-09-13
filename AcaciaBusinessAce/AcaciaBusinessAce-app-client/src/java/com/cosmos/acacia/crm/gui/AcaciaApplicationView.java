@@ -20,11 +20,17 @@ import com.cosmos.acacia.data.ui.EntityAction;
 import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
 import com.cosmos.acacia.data.ui.AbstractMenu;
+import com.cosmos.acacia.data.ui.Button;
+import com.cosmos.acacia.data.ui.Menu;
 import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.MenuItem;
 import com.cosmos.acacia.data.ui.Separator;
+import com.cosmos.acacia.data.ui.SystemAction;
+import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
+import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBDesktopPane;
 import com.cosmos.swingb.JBMenu;
 import com.cosmos.swingb.JBMenuBar;
@@ -32,12 +38,10 @@ import com.cosmos.swingb.JBMenuItem;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBToolBar;
-import java.util.Arrays;
 import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
-import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import org.jdesktop.application.ApplicationAction;
 import org.jdesktop.application.ApplicationActionMap;
@@ -65,15 +69,15 @@ public class AcaciaApplicationView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
         for(SecureAction secureAction : secureActions) {
-            ApplicationAction action = null;
             if(secureAction instanceof EntityAction) {
                 try {
-                    action = new EntityApplicationAction(appActionMap, resourceMap, (EntityAction) secureAction);
+                    ApplicationAction action = new EntityApplicationAction(appActionMap, resourceMap, (EntityAction) secureAction);
+                    appActionMap.put(action.getName(), action);
                 } catch(Exception ex) {
                     throw new RuntimeException(ex);
                 }
+            } else if(secureAction instanceof SystemAction) {
             }
-            appActionMap.put(action.getName(), action);
         }
     }
 
@@ -142,28 +146,24 @@ public class AcaciaApplicationView extends FrameView {
 
     protected JComponent getMenu(AbstractMenu menu) {
         JComponent jComponent;
-        switch(menu.getType()) {
-            case Menu:
-                jComponent = new JBMenu();
-                ((JBMenu) jComponent).setAction(getAction(menu));
-                break;
-
-            case MenuItem:
-                jComponent = new JBMenuItem();
-                ((JBMenuItem) jComponent).setAction(getAction(menu));
-                break;
-
-            case Separator:
-                jComponent = new JBSeparator();
-                ((JBSeparator) jComponent).setOrientation(((Separator) menu).getOrientation());
-                break;
-
-            case MenuBar:
-                jComponent = new JBMenuBar();
-                break;
-
-            default:
-                throw new UnsupportedOperationException("Unsupported menu type: " + menu.getType());
+        if(menu instanceof Menu) {
+            jComponent = new JBMenu();
+            ((JBMenu) jComponent).setAction(getAction(menu));
+        } else if(menu instanceof MenuItem) {
+            jComponent = new JBMenuItem();
+            ((JBMenuItem) jComponent).setAction(getAction(menu));
+        } else if(menu instanceof Separator) {
+            jComponent = new JBSeparator();
+            ((JBSeparator) jComponent).setOrientation(((Separator) menu).getOrientation());
+        } else if(menu instanceof MenuBar) {
+            jComponent = new JBMenuBar();
+        } else if(menu instanceof ToolBar) {
+            jComponent = new JBToolBar();
+        } else if(menu instanceof Button) {
+            jComponent = new JBButton();
+            ((JBButton) jComponent).setAction(getAction(menu));
+        } else {
+            throw new UnsupportedOperationException("Unsupported menu type: " + menu);
         }
         jComponent.setName(menu.getName());
 
@@ -179,7 +179,7 @@ public class AcaciaApplicationView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
         Action action = appActionMap.get(name);
-        if(action == null && AbstractMenu.Type.Menu.equals(menu.getType())) {
+        if(action == null && menu instanceof Menu) {
             action = new ApplicationAction(appActionMap, resourceMap, name, null, null, null, BlockingScope.NONE);
         }
 
@@ -193,9 +193,11 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected JToolBar createToolBar() {
-        JBToolBar toolBar = new JBToolBar();
+        ToolBar toolBar = getSession().getToolBar();
 
-        return toolBar;
+        JBToolBar jToolBar = (JBToolBar) getMenu(toolBar);
+
+        return jToolBar;
     }
 
     protected Form getForm(Class entityClass) {
@@ -248,7 +250,7 @@ public class AcaciaApplicationView extends FrameView {
                 ResourceMap resourceMap,
                 EntityAction entityAction) throws Exception {
             super(actionMap, resourceMap,
-                    entityAction.getActionName(),
+                    entityAction.getName(),
                     null,
                     entityAction.getEnabledProperty(),
                     entityAction.getSelectedProperty(),
