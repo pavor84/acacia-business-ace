@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.data.ui;
 
+import java.io.Serializable;
 import java.util.Map;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
@@ -13,27 +14,23 @@ import javax.xml.stream.XMLStreamReader;
  *
  * @author Miro
  */
-public class Separator extends AbstractMenu {
+public class Separator extends AbstractMenu implements Serializable {
 
     public static final String ELEMENT_NAME = "separator";
     //
-    public static final String ATTR_ORIENTATION = "orientation";
-    //
-    public static final String ORIENTATION_HORIZONTAL = "HORIZONTAL";
-    public static final String ORIENTATION_VERTICAL = "VERTICAL";
-    //
     private int orientation;
 
-    public Separator(XMLStreamReader xmlReader, Map<String, SecureAction> secureActionMap) throws XMLStreamException {
-        super(Type.Separator, xmlReader, secureActionMap);
+    public Separator() {
+        setRequiredAttributeName(false);
     }
 
     @Override
-    protected void readXML(XMLStreamReader xmlReader, Map<String, SecureAction> secureActionMap) throws XMLStreamException {
+    public void readXML(XMLStreamReader xmlReader, Map<String, SecureAction> secureActionMap) throws XMLStreamException {
         super.readXML(xmlReader, secureActionMap);
 
-        if(ORIENTATION_VERTICAL.equals(getAttributes(xmlReader).get(ATTR_ORIENTATION))) {
-            orientation = SwingConstants.VERTICAL;
+        Integer value;
+        if((value = getOrientation(getAttributes(xmlReader).get(ATTR_ORIENTATION))) != null) {
+            orientation = value;
         } else {
             orientation = SwingConstants.HORIZONTAL;
         }

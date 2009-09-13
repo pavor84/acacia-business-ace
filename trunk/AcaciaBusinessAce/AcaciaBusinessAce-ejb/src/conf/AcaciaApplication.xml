@@ -32,6 +32,11 @@
         APPLICATION
     "show" where the possible values are "Frame" or "Dialog"; the default value is "Frame"
     -->
+        <systemAction name="quit"/>
+        <systemAction name="cut"/>
+        <systemAction name="copy"/>
+        <systemAction name="paste"/>
+        <systemAction name="delete"/>
         <entityAction name="users" enabledProperty="" selectedProperty="" blockingScope="" show="">
             <entity className="com.cosmos.acacia.crm.data.users.User"/>
         </entityAction>
@@ -43,6 +48,13 @@
     </actions>
     <menuBar name="menuBar">
         <menu name="fileMenu">
+            <menuItem name="quit"/>
+        </menu>
+        <menu name="editMenu">
+            <menuItem name="cut"/>
+            <menuItem name="copy"/>
+            <menuItem name="paste"/>
+            <menuItem name="delete"/>
         </menu>
         <menu name="salesMenu">
         </menu>
@@ -82,6 +94,11 @@
         <menu name="helpMenu">
         </menu>
     </menuBar>
+    <toolBar name="editToolBar" orientation="">
+        <button name="cut"/>
+        <button name="copy"/>
+        <button name="paste"/>
+        <button name="delete"/>
+    </toolBar>
     <statusBar></statusBar>
-    <toolBar></toolBar>
 </root>

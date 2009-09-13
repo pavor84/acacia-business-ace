@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.data.ui;
 
+import java.io.Serializable;
 import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -13,21 +14,21 @@ import javax.xml.stream.XMLStreamReader;
  *
  * @author Miro
  */
-public class EntityAction extends SecureAction {
+public class EntityAction extends SecureAction implements Serializable {
 
     public static final String ELEMENT_NAME = "entityAction";
     public static final String ENTITY_ELEMENT_NAME = "entity";
-    public static final String ATTR_CLASS_NAME = "className";
     //
     private Class entityClass;
 
-    public EntityAction(XMLStreamReader xmlReader) throws XMLStreamException {
-        super(xmlReader);
+    public EntityAction() {
+        super();
     }
 
     @Override
-    protected void readXML(XMLStreamReader xmlReader) throws XMLStreamException {
+    public void readXML(XMLStreamReader xmlReader) throws XMLStreamException {
         super.readXML(xmlReader);
+
         String elementName;
         Map<String, String> attributes;
         while(xmlReader.hasNext()) {
@@ -67,6 +68,11 @@ public class EntityAction extends SecureAction {
                     */
             }
         }
+    }
+
+    @Override
+    public String getElementName() {
+        return ELEMENT_NAME;
     }
 
     public Class getEntityClass() {
