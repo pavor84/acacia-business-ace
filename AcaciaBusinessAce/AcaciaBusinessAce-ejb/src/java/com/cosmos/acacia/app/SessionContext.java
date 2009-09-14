@@ -37,7 +37,10 @@ public interface SessionContext {
     static final String ORGANIZATION_MAIL_UTILS_KEY = "ORGANIZATION_MAIL_UTILS_KEY";
     /** The User Mail Utils */
     static final String USER_MAIL_UTILS_KEY = "USER_MAIL_UTILS_KEY";
-    
+    static final String SECURE_ACTIONS_KEY = "SECURE_ACTIONS_KEY";
+    static final String MENU_BAR_KEY = "MENU_BAR_KEY";
+    static final String TOOL_BAR_KEY = "TOOL_BAR_KEY";
+    static final String STATUS_BAR_KEY = "STATUS_BAR_KEY";
 
     /** Acacia Properties */
     static String ACACIA_PROPERTIES = "ACACIA_PROPERTIES";

@@ -11,12 +11,12 @@ import java.io.Serializable;
  *
  * @author Miro
  */
-public class MenuItem extends AbstractMenu implements Serializable {
+public class MenuItem extends Widget implements Serializable {
 
     public static final String ELEMENT_NAME = "menuItem";
 
     public MenuItem() {
-        super(true);
+        super(true, false);
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.StatusBar;
 import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
@@ -36,6 +37,8 @@ public interface AcaciaSessionRemote {
     MenuBar getMenuBar();
 
     ToolBar getToolBar();
+
+    StatusBar getStatusBar();
 //    DataObject getLoginOrganizationDataObject();
 
     DataObject getDataObject(UUID dataObjectId);

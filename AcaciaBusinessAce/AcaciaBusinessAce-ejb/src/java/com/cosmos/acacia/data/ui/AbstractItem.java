@@ -21,6 +21,7 @@ public abstract class AbstractItem implements Serializable {
     public static final String ATTR_NAME = "name";
     public static final String ATTR_ORIENTATION = "orientation";
     public static final String ATTR_CLASS_NAME = "className";
+    public static final String ATTR_CONSTRAINTS = "constraints";
     //
     public static final String ORIENTATION_HORIZONTAL = "HORIZONTAL";
     public static final String ORIENTATION_VERTICAL = "VERTICAL";

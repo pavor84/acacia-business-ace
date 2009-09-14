@@ -56,23 +56,13 @@
             <menuItem name="paste"/>
             <menuItem name="delete"/>
         </menu>
-        <menu name="salesMenu">
-        </menu>
-        <menu name="purchaseMenu">
-        </menu>
-        <menu name="reportsMenu">
-        </menu>
-        <menu name="productsMenu">
-        </menu>
-        <menu name="assemblingMenu">
-        </menu>
         <menu name="settingsMenu">
             <menu name="adminMenu">
                 <menuItem name="systemSettings"/>
                 <menuItem name="businessUnits"/>
                 <menuItem name="securityRoles"/>
                 <menuItem name="privilegeCategories"/>
-                <separator orientation="VERTICAL"/>
+                <separator/>
                 <menuItem name="users"/>
                 <menuItem name="userGroups"/>
                 <menuItem name="teams"/>
@@ -82,16 +72,7 @@
                 <menu name="templatesMenu"/>
                 <menu name="productsAndPricingMenu"/>
             </menu>
-            <menuItem name="currencyExchangeRates" actionName="">
-            </menuItem>
-        </menu>
-        <menu name="contactBookMenu">
-        </menu>
-        <menu name="warehousesMenu">
-        </menu>
-        <menu name="classifiersMenu">
-        </menu>
-        <menu name="helpMenu">
+            <menuItem name="currencyExchangeRates"/>
         </menu>
     </menuBar>
     <toolBar name="editToolBar" orientation="">
@@ -100,5 +81,10 @@
         <button name="paste"/>
         <button name="delete"/>
     </toolBar>
-    <statusBar></statusBar>
+    <statusBar name="statusBar">
+        <label name="statusMessage"/>
+        <label name="statusAnimation"/>
+        <separator/>
+        <progressBar name="progressBar"/>
+    </statusBar>
 </root>

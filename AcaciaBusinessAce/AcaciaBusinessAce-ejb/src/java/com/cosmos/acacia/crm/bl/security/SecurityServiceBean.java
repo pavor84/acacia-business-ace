@@ -12,6 +12,8 @@ import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
+import com.cosmos.acacia.crm.enums.PermissionCategory;
+import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
 import com.cosmos.acacia.security.AccessRight;
@@ -191,4 +193,26 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
 
         return canDo;
     }
+
+    @Override
+    public boolean isAllowed(AccessRight accessRight, Class dataObjectClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isAllowed(AccessRight accessRight, Object dataObject) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isAllowed(AccessRight accessRight, SpecialPermission permission) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isAllowed(AccessRight accessRight, PermissionCategory permissionCategory) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
 }

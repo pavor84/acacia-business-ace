@@ -2,20 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.data.ui;
+
+import java.io.Serializable;
 
 /**
  *
  * @author Miro
  */
-public class Button extends Widget {
+public class ProgressBar extends Widget implements Serializable {
 
-    public static final String ELEMENT_NAME = "button";
-
-    public Button() {
-        super(true, false);
-    }
+    public static final String ELEMENT_NAME = "progressBar";
 
     @Override
     public String getElementName() {
