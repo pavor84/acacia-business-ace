@@ -12,6 +12,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.enums.MailType;
+import com.cosmos.acacia.data.ui.StatusBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,8 @@ import com.cosmos.acacia.data.ui.EntityAction;
 import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.data.ui.AbstractMenu;
+import com.cosmos.acacia.data.ui.Menu;
+import com.cosmos.acacia.data.ui.Widget;
 import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.data.ui.Separator;
 import com.cosmos.acacia.data.ui.SystemAction;
@@ -122,9 +124,14 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public Set<SecureAction> getSecureActions() {
+        HashSet<SecureAction> secureActions;
+        if((secureActions = (HashSet<SecureAction>) SessionRegistry.getSession().getValue(SessionContext.SECURE_ACTIONS_KEY)) != null) {
+            return secureActions;
+        }
+
         InputStream inStream = null;
         XMLStreamReader xmlReader = null;
-        HashSet<SecureAction> secureActions = new HashSet<SecureAction>();
+        secureActions = new HashSet<SecureAction>();
         try {
             inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/AcaciaApplication.xml");
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -175,23 +182,48 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             }
         }
 
+        SessionRegistry.getSession().setValue(SessionContext.SECURE_ACTIONS_KEY, secureActions);
+
         return secureActions;
     }
 
     @Override
     public MenuBar getMenuBar() {
-        return getMenu(MenuBar.class);
+        MenuBar menuBar;
+        if((menuBar = (MenuBar) SessionRegistry.getSession().getValue(SessionContext.MENU_BAR_KEY)) == null) {
+            menuBar = getWidget(MenuBar.class);
+            SessionRegistry.getSession().setValue(SessionContext.MENU_BAR_KEY, menuBar);
+        }
+
+        return menuBar;
     }
 
     @Override
     public ToolBar getToolBar() {
-        return getMenu(ToolBar.class);
+        ToolBar toolBar;
+        if((toolBar = (ToolBar) SessionRegistry.getSession().getValue(SessionContext.TOOL_BAR_KEY)) == null) {
+            toolBar = getWidget(ToolBar.class);
+            SessionRegistry.getSession().setValue(SessionContext.TOOL_BAR_KEY, toolBar);
+        }
+
+        return toolBar;
     }
 
-    private <T extends AbstractMenu> T getMenu(Class<T> menuClass) {
-        T menu;
+    @Override
+    public StatusBar getStatusBar() {
+        StatusBar statusBar;
+        if((statusBar = (StatusBar) SessionRegistry.getSession().getValue(SessionContext.STATUS_BAR_KEY)) == null) {
+            statusBar = getWidget(StatusBar.class);
+            SessionRegistry.getSession().setValue(SessionContext.STATUS_BAR_KEY, statusBar);
+        }
+
+        return statusBar;
+    }
+
+    private <T extends Widget> T getWidget(Class<T> widgetClass) {
+        T widget;
         try {
-            menu = menuClass.newInstance();
+            widget = widgetClass.newInstance();
         } catch(Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -212,16 +244,16 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                 switch(parseEventId) {
                     case XMLStreamReader.START_ELEMENT:
                         elementName = xmlReader.getLocalName();
-                        if(menu.getElementName().equals(elementName)) {
-                            menu.readXML(xmlReader, secureActionMap);
-                            return trimMenu(menu);
+                        if(widget.getElementName().equals(elementName)) {
+                            widget.readXML(xmlReader, secureActionMap);
+                            widget = trimMenu(widget);
+                            return widget;
                         }
                         break;
 
                     default:
                 }
             }
-            xmlReader.close();
         } catch(Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -244,26 +276,26 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         return null;
     }
 
-    private <T extends AbstractMenu> T trimMenu(T menu) {
+    private <T extends Widget> T trimMenu(T menu) {
         hasRequiredAction(menu);
         return menu;
     }
 
-    private boolean hasRequiredAction(AbstractMenu menu) {
+    private boolean hasRequiredAction(Widget widget) {
         boolean hasRequiredAction = false;
-        Iterator<AbstractMenu> menuIterator = menu.getMenus().iterator();
+        Iterator<Widget> menuIterator = widget.getWidgets().iterator();
         while (menuIterator.hasNext()) {
-            AbstractMenu subMenu = menuIterator.next();
-            if(subMenu instanceof Separator) {
-                continue;
-            } else if(subMenu.isRequiredAction()) {
+            Widget subWidget = menuIterator.next();
+            if(subWidget.isRequiredAction()) {
                 hasRequiredAction = true;
-            } else {
-                if (hasRequiredAction(subMenu)) {
+            } else if(subWidget.isChildrenAllow()) {
+                if (hasRequiredAction(subWidget)) {
                     hasRequiredAction = true;
                 } else {
                     menuIterator.remove();
                 }
+            } else {
+                continue;
             }
         }
 

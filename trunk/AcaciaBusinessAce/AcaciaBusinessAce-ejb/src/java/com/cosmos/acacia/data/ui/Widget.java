@@ -16,36 +16,54 @@ import javax.xml.stream.XMLStreamReader;
  *
  * @author Miro
  */
-public abstract class AbstractMenu extends AbstractItem implements Serializable {
+public abstract class Widget extends AbstractItem implements Serializable {
 
     private boolean requiredAction;
-    private List<AbstractMenu> menus = new ArrayList<AbstractMenu>();
+    private boolean childrenAllow;
+    private List<Widget> widgets = new ArrayList<Widget>();
+    private String constraints;
 
-    public AbstractMenu() {
-        this(false);
+    public Widget() {
+        this(false, false);
     }
 
-    public AbstractMenu(boolean requiredAction) {
+    public Widget(boolean requiredAction, boolean childrenAllow) {
         this.requiredAction = requiredAction;
+        this.childrenAllow = childrenAllow;
     }
 
-    public void add(AbstractMenu menu) {
-        menus.add(menu);
+    public void add(Widget menu) {
+        widgets.add(menu);
     }
 
-    public List<AbstractMenu> getMenus() {
-        return menus;
+    public List<Widget> getWidgets() {
+        return widgets;
     }
 
     public boolean isRequiredAction() {
         return requiredAction;
     }
 
+    public String getConstraints() {
+        return constraints;
+    }
+
     public void setRequiredAction(boolean requiredAction) {
         this.requiredAction = requiredAction;
     }
 
+    public boolean isChildrenAllow() {
+        return childrenAllow;
+    }
+
+    public void setChildrenAllow(boolean childrenAllow) {
+        this.childrenAllow = childrenAllow;
+    }
+
     public void readXML(XMLStreamReader xmlReader, Map<String, SecureAction> secureActionMap) throws XMLStreamException {
+        Map<String, String> attributes = getAttributes(xmlReader);
+        constraints = attributes.get(ATTR_CONSTRAINTS);
+
         if(this instanceof Separator) {
             return;
         }
@@ -78,6 +96,16 @@ public abstract class AbstractMenu extends AbstractItem implements Serializable 
                         if(secureActionMap.containsKey(button.getName())) {
                             add(button);
                         }
+                    } else if(Label.ELEMENT_NAME.equals(elementName)) {
+                        Label label = new Label();
+                        label.readXML(xmlReader, secureActionMap);
+                        add(label);
+                    } else if(ProgressBar.ELEMENT_NAME.equals(elementName)) {
+                        ProgressBar progressBar = new ProgressBar();
+                        progressBar.readXML(xmlReader, secureActionMap);
+                        add(progressBar);
+                    } else {
+                        throw new UnsupportedOperationException("Unknown elementName: " + elementName);
                     }
                     break;
 
@@ -97,7 +125,7 @@ public abstract class AbstractMenu extends AbstractItem implements Serializable 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append("; items=").append(menus);
+        sb.append("; widgets=").append(widgets);
 
         return sb.toString();
     }

@@ -10,9 +10,13 @@ import java.io.Serializable;
  *
  * @author Miro
  */
-public class Menu extends AbstractMenu implements Serializable {
+public class Menu extends Widget implements Serializable {
 
     public static final String ELEMENT_NAME = "menu";
+
+    public Menu() {
+        super(false, true);
+    }
 
     @Override
     public String getElementName() {

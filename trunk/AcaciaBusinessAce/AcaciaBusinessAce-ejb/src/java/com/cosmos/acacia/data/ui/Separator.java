@@ -14,7 +14,7 @@ import javax.xml.stream.XMLStreamReader;
  *
  * @author Miro
  */
-public class Separator extends AbstractMenu implements Serializable {
+public class Separator extends Widget implements Serializable {
 
     public static final String ELEMENT_NAME = "separator";
     //

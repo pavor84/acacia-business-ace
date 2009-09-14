@@ -9,11 +9,12 @@ package com.cosmos.acacia.data.ui;
  *
  * @author Miro
  */
-public class ToolBar extends AbstractMenu {
+public class ToolBar extends Widget {
 
     public static final String ELEMENT_NAME = "toolBar";
 
     public ToolBar() {
+        super(false, true);
     }
 
     @Override
