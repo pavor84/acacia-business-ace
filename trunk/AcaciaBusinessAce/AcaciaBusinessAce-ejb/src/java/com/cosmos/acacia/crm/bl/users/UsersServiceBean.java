@@ -28,7 +28,9 @@ import com.cosmos.acacia.entity.Operation;
 import com.cosmos.util.SecurityUtils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -158,7 +160,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public List<BusinessUnit> getBusinessUnits(BusinessUnit parentBusinessUnit) {
+    public List<BusinessUnit> getChildrenBusinessUnits(BusinessUnit parentBusinessUnit) {
         Query q;
         if(parentBusinessUnit != null) {
             q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT);
@@ -169,6 +171,21 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         }
 
         return new ArrayList<BusinessUnit>(q.getResultList());
+    }
+
+    @Override
+    public Set<BusinessUnit> getParentChildBusinessUnits(BusinessUnit currentBusinessUnit) {
+        HashSet<BusinessUnit> businessUnits = new HashSet<BusinessUnit>();
+        businessUnits.add(currentBusinessUnit);
+
+        BusinessUnit parentBusinessUnit;
+        if((parentBusinessUnit = currentBusinessUnit.getParentBusinessUnit()) == null) {
+            return businessUnits;
+        }
+        businessUnits.add(parentBusinessUnit);
+        businessUnits.addAll(getChildrenBusinessUnits(parentBusinessUnit));
+
+        return businessUnits;
     }
 
     @Override
@@ -228,7 +245,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             if(extraParameters.length == 0) {
                 return (List<E>) getBusinessUnits();
             } else {
-                return (List<E>) getBusinessUnits((BusinessUnit) extraParameters[0]);
+                return (List<E>) getChildrenBusinessUnits((BusinessUnit) extraParameters[0]);
             }
         } else if (entityClass == UserRegistration.class) {
             return new ArrayList<E>(2);
@@ -281,7 +298,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             BusinessUnit businessUnit = (BusinessUnit)entity;
             businessUnit.setOrganization(session.getOrganization());
             List<BusinessUnit> businessUnits;
-            if((businessUnits = getBusinessUnits(null)).size() == 0) {
+            if((businessUnits = getChildrenBusinessUnits(null)).size() == 0) {
                 businessUnit.setRoot(true);
                 businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
                 businessUnit.setBusinessUnitName(session.getOrganization().getOrganizationName());
@@ -364,7 +381,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     private void preSaveBusinessUnit(BusinessUnit businessUnit) {
         if(businessUnit.isRoot()) {
             List<BusinessUnit> businessUnits;
-            if((businessUnits = getBusinessUnits(null)).size() > 0 && !businessUnits.get(0).equals(businessUnit)) {
+            if((businessUnits = getChildrenBusinessUnits(null)).size() > 0 && !businessUnits.get(0).equals(businessUnit)) {
                 throw new RuntimeException("Only one root business unit is allowed.");
             }
             businessUnit.setParentBusinessUnit(null);

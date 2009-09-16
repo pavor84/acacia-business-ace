@@ -751,7 +751,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     private void initBusinessUnits() {
         List<BusinessUnit> businessUnits;
-        if((businessUnits = usersService.getBusinessUnits(null)) != null && businessUnits.size() > 0) {
+        if((businessUnits = usersService.getChildrenBusinessUnits(null)) != null && businessUnits.size() > 0) {
             return;
         }
 

@@ -2,6 +2,7 @@ package com.cosmos.acacia.app;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceLocal;
 import static com.cosmos.acacia.app.SessionContext.BRANCH_KEY;
 import static com.cosmos.acacia.app.SessionContext.PERSON_KEY;
 import static com.cosmos.acacia.app.SessionContext.CONTACT_PERSON_KEY;
@@ -32,6 +33,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.cosmos.acacia.crm.bl.users.RightsManagerLocal;
+import com.cosmos.acacia.crm.bl.users.UsersServiceLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -44,13 +46,12 @@ import com.cosmos.acacia.data.ui.EntityAction;
 import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.data.ui.Menu;
 import com.cosmos.acacia.data.ui.Widget;
 import com.cosmos.acacia.data.ui.MenuBar;
-import com.cosmos.acacia.data.ui.Separator;
 import com.cosmos.acacia.data.ui.SystemAction;
 import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.security.AccessLevel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.util.AcaciaPropertiesImpl;
 import com.cosmos.mail.MailServer;
 import com.cosmos.mail.MailUtils;
@@ -114,6 +115,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private ClassifiersLocal classifiersManager;
     @EJB
     private AddressesListLocal addressService;
+    @EJB
+    private SecurityServiceLocal securityService;
+    @EJB
+    private UsersServiceLocal usersService;
 
     private static Organization systemOrganization;
     private static User supervisor;
@@ -145,7 +150,9 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                         if(EntityAction.ELEMENT_NAME.equals(elementName)) {
                             EntityAction action = new EntityAction();
                             action.readXML(xmlReader);
-                            secureActions.add(action);
+                            if(canRead(action.getEntityClass())) {
+                                secureActions.add(action);
+                            }
                         } else if(SystemAction.ELEMENT_NAME.equals(elementName)) {
                             SystemAction action = new SystemAction();
                             action.readXML(xmlReader);
@@ -185,6 +192,10 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         SessionRegistry.getSession().setValue(SessionContext.SECURE_ACTIONS_KEY, secureActions);
 
         return secureActions;
+    }
+
+    private boolean canRead(Class entityClass) {
+        return securityService.isAllowed(entityClass, AccessRight.Read);
     }
 
     @Override
@@ -363,7 +374,17 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
 
     @Override
     public UserOrganization getUserOrganization() {
-        return (UserOrganization) SessionRegistry.getSession().getValue(SessionContext.USER_ORGANIZATION_KEY);
+        UserOrganization userOrganization;
+        if((userOrganization = (UserOrganization) SessionRegistry.getSession().getValue(SessionContext.USER_ORGANIZATION_KEY)) == null) {
+            User user;
+            Organization organization;
+            if((user = getUser()) != null && (organization = getOrganization()) != null) {
+                userOrganization = usersService.getUserOrganization(user, organization);
+                setUserOrganization(userOrganization);
+            }
+        }
+
+        return userOrganization;
     }
 
     @Override
@@ -478,7 +499,6 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         switch(level)
         {
             case System:
-            case ParentChildOrganization:
                 // ToDo: Put some real object because of FK constraint
                 return NumberUtils.ZERO_UUID;
 

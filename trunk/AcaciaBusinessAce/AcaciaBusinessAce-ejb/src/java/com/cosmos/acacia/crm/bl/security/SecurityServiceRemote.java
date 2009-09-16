@@ -8,6 +8,7 @@ import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.security.AccessRight;
+import java.util.Set;
 import javax.ejb.Remote;
 
 /**
@@ -17,11 +18,13 @@ import javax.ejb.Remote;
 @Remote
 public interface SecurityServiceRemote extends EntityService {
 
-    boolean isAllowed(AccessRight accessRight, Class dataObjectClass);
+    boolean isAllowed(Class dataObjectClass, AccessRight... accessRights);
 
-    boolean isAllowed(AccessRight accessRight, Object dataObject);
+    boolean isAllowed(Object dataObject, AccessRight... accessRights);
 
-    boolean isAllowed(AccessRight accessRight, SpecialPermission permission);
+    boolean isAllowed(SpecialPermission permission, AccessRight... accessRights);
 
-    boolean isAllowed(AccessRight accessRight, PermissionCategory permissionCategory);
+    boolean isAllowed(PermissionCategory permissionCategory, AccessRight... accessRights);
+
+    boolean isAllowed(Set<SpecialPermission> permissions, AccessRight... accessRights);
 }

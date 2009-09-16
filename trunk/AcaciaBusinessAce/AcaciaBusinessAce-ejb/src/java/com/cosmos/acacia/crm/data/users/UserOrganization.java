@@ -103,14 +103,14 @@ public class UserOrganization extends DataObjectBean implements Serializable {
     @Column(name = "email_address", length = 64)
     private String emailAddress;
 
-    @JoinColumn(name = "branch_id", referencedColumnName = "address_id")
-    @ManyToOne
+    @JoinColumn(name = "branch_id", referencedColumnName = "address_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Branch", customDisplay="${branch.addressName}"
     )
     private Address branch;
 
-    @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id")//, nullable = false)
-    @ManyToOne//(optional = false)
+    @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
+    @ManyToOne(optional = false)
     @Property(title="Business Unit",
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel"

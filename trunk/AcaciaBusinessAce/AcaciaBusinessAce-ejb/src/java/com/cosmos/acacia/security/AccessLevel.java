@@ -76,6 +76,11 @@ public enum AccessLevel implements DatabaseResource {
     BusinessUnit,
 
     /**
+     * This option provides BusinessUnit access, plus the ability to perform the
+     * action on all records for that entity that are owned by users assigned to
+     * business units subordinate to your business unit, regardless of how far
+     * down in the organizational hierarchy the subordinate business units may
+     * appear.
      * Gives you the following access for an entity and privilege:
      * - Business Unit access, plus
      * - The ability to perform that action on records that are owned by users
@@ -99,8 +104,6 @@ public enum AccessLevel implements DatabaseResource {
      * - There are no access restrictions.
      */
     Organization,
-
-    ParentChildOrganization,
 
     /**
      * Gives you the following access for an entity and privilege:
