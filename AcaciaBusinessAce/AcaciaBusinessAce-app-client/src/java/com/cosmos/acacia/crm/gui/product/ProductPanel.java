@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.DialogResponse;
@@ -83,11 +84,11 @@ public class ProductPanel extends BaseEntityPanel {
     }
 
     protected boolean hasProductPricingRights() {
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
+        return getSecurityService().isAllowed(SpecialPermission.ProductPricing, AccessRight.Read);
     }
 
     protected boolean hasProductRights() {
-        return getRightsManager().isAllowed(SpecialPermission.Product);
+        return getSecurityService().isAllowed(SpecialPermission.Product, AccessRight.Read);
     }
 
     private SimpleProduct product;

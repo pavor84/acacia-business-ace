@@ -17,6 +17,7 @@ import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -192,7 +193,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         patternMaskFormatComboList.bind(bg, patternListPanel, productCategory, propDetails,
                 "${patternName} (${format})", UpdateStrategy.READ_WRITE);
 
-        if (getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+        if (hasProductPricingPermission()) {
             productCategoryTabbedPane.addTab(getResourceString("categoryPricingPanel.TabConstraints.tabTitle"),
                     getCategoryPricingPanel()); // NOI18N
         }
@@ -201,6 +202,10 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         descriptionTextPane.bind(bg, productCategory, entityProps.getPropertyDetails("description"));
 
         bg.bind();
+    }
+
+    private boolean hasProductPricingPermission() {
+        return getSecurityService().isAllowed(SpecialPermission.ProductPricing, AccessRight.Read);
     }
 
     @SuppressWarnings("unchecked")

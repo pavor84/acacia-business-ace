@@ -6,6 +6,7 @@ import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.Expression;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.data.ui.MenuBar;
+import com.cosmos.acacia.data.ui.StatusBar;
 import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.util.AcaciaProperties;
 import java.util.Set;
@@ -16,7 +17,6 @@ import java.util.Map;
 import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.app.DeferredListServerRemote;
 import com.cosmos.acacia.app.SessionContext;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectType;
@@ -49,8 +49,6 @@ public class LocalSession implements AcaciaSessionRemote {
     private Map<String, Object> sessionCache = new HashMap<String, Object>();
 
     private static LocalSession instance;
-
-    private RightsManagerRemote rightsManager;
 
     private LocalSession() {
             remoteSession = AcaciaPanel.getBean(AcaciaSessionRemote.class, false);
@@ -159,13 +157,6 @@ public class LocalSession implements AcaciaSessionRemote {
         sessionCache.put(VIEW_DATA_FROM_ALL_BRANCHES, value);
     }
 
-    public RightsManagerRemote getRightsManager() {
-        if (rightsManager == null)
-            rightsManager = AcaciaPanel.getBean(RightsManagerRemote.class, false);
-
-        return rightsManager;
-    }
-
     @Override
     public boolean isAdministrator() {
         return remoteSession.isAdministrator();
@@ -261,5 +252,10 @@ public class LocalSession implements AcaciaSessionRemote {
     @Override
     public ToolBar getToolBar() {
         return remoteSession.getToolBar();
+    }
+
+    @Override
+    public StatusBar getStatusBar() {
+        return remoteSession.getStatusBar();
     }
 }

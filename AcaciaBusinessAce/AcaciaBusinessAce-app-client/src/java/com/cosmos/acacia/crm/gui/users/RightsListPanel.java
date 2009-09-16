@@ -16,7 +16,6 @@ import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.users.UserRightsRemote;
-import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.users.Right;
 import com.cosmos.acacia.crm.data.users.User;
@@ -266,14 +265,6 @@ public class RightsListPanel extends AbstractTablePanel<Right> {
             if (userGroup != null) {
                 getFormSession().assignSpecialPermissionsToGroup(rights, userGroup);
             }
-        }
-
-        // Clearing the cached rights on the client. They will be fetched
-        // the next time they are requested. This only happens if the user
-        // is changing his own rights
-        // TODO: same for user group
-        if (user != null && user.equals(getAcaciaSession().getUser())) {
-            LocalSession.instance().getRightsManager().clearCachedRights();
         }
     }
 

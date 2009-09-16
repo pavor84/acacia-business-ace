@@ -19,12 +19,15 @@ import com.cosmos.acacia.app.AcaciaSessionRemote;
 import com.cosmos.acacia.data.ui.EntityAction;
 import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.gui.users.LoginForm;
-import com.cosmos.acacia.data.ui.AbstractMenu;
+import com.cosmos.acacia.data.ui.Widget;
 import com.cosmos.acacia.data.ui.Button;
+import com.cosmos.acacia.data.ui.Label;
 import com.cosmos.acacia.data.ui.Menu;
 import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.data.ui.MenuItem;
+import com.cosmos.acacia.data.ui.ProgressBar;
 import com.cosmos.acacia.data.ui.Separator;
+import com.cosmos.acacia.data.ui.StatusBar;
 import com.cosmos.acacia.data.ui.SystemAction;
 import com.cosmos.acacia.data.ui.ToolBar;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -32,12 +35,16 @@ import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBDesktopPane;
+import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
 import com.cosmos.swingb.JBMenuBar;
 import com.cosmos.swingb.JBMenuItem;
 import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
+import com.cosmos.swingb.JBStatusBar;
 import com.cosmos.swingb.JBToolBar;
+import java.util.Arrays;
 import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -65,20 +72,27 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected void initActions() {
+        System.out.println("initActions()");
         Set<SecureAction> secureActions = getSession().getSecureActions();
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
         for(SecureAction secureAction : secureActions) {
+            //System.out.println("secureAction: " + secureAction);
             if(secureAction instanceof EntityAction) {
                 try {
                     ApplicationAction action = new EntityApplicationAction(appActionMap, resourceMap, (EntityAction) secureAction);
+                    //System.out.println("action: " + action);
                     appActionMap.put(action.getName(), action);
+                    //System.out.println("appActionMap.get(action.getName()): " + appActionMap.get(action.getName()));
                 } catch(Exception ex) {
                     throw new RuntimeException(ex);
                 }
             } else if(secureAction instanceof SystemAction) {
+            } else {
+                throw new UnsupportedOperationException("Unsupported secureAction: " + secureAction);
             }
         }
+        //System.out.println("appActionMap.get(\"users\"): " + appActionMap.get("users"));
     }
 
     public void init() {
@@ -139,42 +153,56 @@ public class AcaciaApplicationView extends FrameView {
     protected JMenuBar createMenuBar() {
         MenuBar menuBar = getSession().getMenuBar();
 
-        JBMenuBar jMenuBar = (JBMenuBar) getMenu(menuBar);
+        JBMenuBar jMenuBar = (JBMenuBar) getWidget(menuBar);
 
         return jMenuBar;
     }
 
-    protected JComponent getMenu(AbstractMenu menu) {
+    protected JComponent getWidget(Widget widget) {
         JComponent jComponent;
-        if(menu instanceof Menu) {
+        if(widget instanceof Menu) {
             jComponent = new JBMenu();
-            ((JBMenu) jComponent).setAction(getAction(menu));
-        } else if(menu instanceof MenuItem) {
+            ((JBMenu) jComponent).setAction(getAction(widget));
+        } else if(widget instanceof MenuItem) {
             jComponent = new JBMenuItem();
-            ((JBMenuItem) jComponent).setAction(getAction(menu));
-        } else if(menu instanceof Separator) {
+            ((JBMenuItem) jComponent).setAction(getAction(widget));
+        } else if(widget instanceof Separator) {
             jComponent = new JBSeparator();
-            ((JBSeparator) jComponent).setOrientation(((Separator) menu).getOrientation());
-        } else if(menu instanceof MenuBar) {
+            ((JBSeparator) jComponent).setOrientation(((Separator) widget).getOrientation());
+        } else if(widget instanceof MenuBar) {
             jComponent = new JBMenuBar();
-        } else if(menu instanceof ToolBar) {
+        } else if(widget instanceof ToolBar) {
             jComponent = new JBToolBar();
-        } else if(menu instanceof Button) {
+        } else if(widget instanceof StatusBar) {
+            jComponent = new JBStatusBar();
+        } else if(widget instanceof Button) {
             jComponent = new JBButton();
-            ((JBButton) jComponent).setAction(getAction(menu));
+            ((JBButton) jComponent).setAction(getAction(widget));
+        } else if(widget instanceof Label) {
+            jComponent = new JBLabel();
+            jComponent.setName(widget.getName());
+            initJComponent(jComponent);
+        } else if(widget instanceof ProgressBar) {
+            jComponent = new JBProgressBar();
+            jComponent.setName(widget.getName());
+            initJComponent(jComponent);
         } else {
-            throw new UnsupportedOperationException("Unsupported menu type: " + menu);
+            throw new UnsupportedOperationException("Unsupported menu type: " + widget);
         }
-        jComponent.setName(menu.getName());
+        jComponent.setName(widget.getName());
 
-        for(AbstractMenu subMenu : menu.getMenus()) {
-            jComponent.add(getMenu(subMenu));
+        for(Widget subWidget : widget.getWidgets()) {
+            jComponent.add(getWidget(subWidget));
         }
 
         return jComponent;
     }
 
-    protected Action getAction(AbstractMenu menu) {
+    protected void initJComponent(JComponent jComponent) {
+        getResourceMap().injectComponent(jComponent);
+    }
+
+    protected Action getAction(Widget menu) {
         String name = menu.getName();
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
@@ -187,15 +215,16 @@ public class AcaciaApplicationView extends FrameView {
     }
 
     protected JComponent createStatusBar() {
-        JBPanel statusPanel = new JBPanel();
+        StatusBar statusBar = getSession().getStatusBar();
+        JBStatusBar jStatusBar = (JBStatusBar) getWidget(statusBar);
 
-        return statusPanel;
+        return jStatusBar;
     }
 
     protected JToolBar createToolBar() {
         ToolBar toolBar = getSession().getToolBar();
 
-        JBToolBar jToolBar = (JBToolBar) getMenu(toolBar);
+        JBToolBar jToolBar = (JBToolBar) getWidget(toolBar);
 
         return jToolBar;
     }

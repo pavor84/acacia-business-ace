@@ -54,6 +54,7 @@ import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.AcaciaPercentValueField.EditType;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
@@ -930,7 +931,7 @@ public class ProductPanel extends AcaciaPanel {
             pricingPanel.getCurrencyField().bind(productBindingGroup, getEnumResources(Currency.class), product,
                 entityProps.getPropertyDetails("currency"));
             
-            if ( getRightsManager().isAllowed(SpecialPermission.ProductPricing)){
+            if (hasProductPricingPermission()){
                 productCategoryEntityProps = getFormSession().getProductCategoryEntityProperties();
                 // category discount
                 pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
@@ -997,7 +998,7 @@ public class ProductPanel extends AcaciaPanel {
             propDetails = entityProps.getPropertyDetails("description");
             descriptionTextPane.bind(productBindingGroup, product, propDetails);
             
-            jBButton1.setEnabled(getRightsManager().isAllowed(SpecialPermission.ProductPricing));
+            jBButton1.setEnabled(hasProductPricingPermission());
 
             productBindingGroup.bind();
             
@@ -1018,6 +1019,10 @@ public class ProductPanel extends AcaciaPanel {
         }
 
         return productBindingGroup;
+    }
+
+    private boolean hasProductPricingPermission() {
+        return getSecurityService().isAllowed(SpecialPermission.ProductPricing, AccessRight.Read);
     }
 
     protected void onProductCategoryChanged() {
