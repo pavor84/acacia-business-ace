@@ -140,27 +140,6 @@ public class ProductsListPanel
         return null;
     }
 
-    @Override
-    public boolean canCreate() {
-        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
-    }
-
-    @Override
-    public boolean canModify(SimpleProduct rowObject) {
-        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
-    }
-
-    @Override
-    public boolean canDelete(SimpleProduct rowObject) {
-        return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
-    }
-
-    @Override
-    public boolean canView(SimpleProduct rowObject) {
-        //return getRightsManager().isAllowed(SpecialPermission.ProductPermissions);
-        return true;
-    }
-
     protected List<SimpleProduct> getProducts() {
         if (products == null) {
             products = getFormSession().getProducts(getParentDataObjectId());

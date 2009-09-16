@@ -41,6 +41,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -537,12 +538,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        Set<SpecialPermission> permissions;
-        if((permissions = getCreatePermissions(getEntityClass())) == null || permissions.size() == 0) {
-            return false;
-        }
-
-        return getRightsManager().isAllowed(permissions);
+        return getSecurityService().isAllowed(getEntityClass(), AccessRight.Create);
     }
 
     public boolean canModify(E rowObject) {
@@ -554,12 +550,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        Set<SpecialPermission> permissions;
-        if((permissions = getModifyPermissions(rowObject)) == null || permissions.size() == 0) {
-            return false;
-        }
-
-        return getRightsManager().isAllowed(permissions);
+        return getSecurityService().isAllowed(rowObject, AccessRight.Modify);
     }
 
     public boolean canDelete(E rowObject) {
@@ -571,12 +562,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return false;
         }
 
-        Set<SpecialPermission> permissions;
-        if((permissions = getDeletePermissions(rowObject)) == null || permissions.size() == 0) {
-            return false;
-        }
-
-        return getRightsManager().isAllowed(permissions);
+        return getSecurityService().isAllowed(rowObject, AccessRight.Delete);
     }
 
     public boolean canView(E rowObject) {
@@ -584,18 +570,11 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
             return true;
         }
 
-        Object object;
         if(rowObject != null) {
-            object = rowObject;
+            return getSecurityService().isAllowed(rowObject, AccessRight.Delete);
         } else {
-            object = getEntityClass();
+            return getSecurityService().isAllowed(getEntityClass(), AccessRight.Delete);
         }
-        Set<SpecialPermission> permissions;
-        if((permissions = getViewPermissions(object)) == null || permissions.size() == 0) {
-            return false;
-        }
-
-        return getRightsManager().isAllowed(permissions);
     }
 
     public boolean canSelect(E rowObject) {

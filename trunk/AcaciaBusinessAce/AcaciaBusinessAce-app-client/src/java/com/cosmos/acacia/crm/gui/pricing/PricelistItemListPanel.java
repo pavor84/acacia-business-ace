@@ -22,7 +22,6 @@ import com.cosmos.acacia.crm.data.sales.Pricelist;
 import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ProductCategoriesTreePanel;
 import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -73,9 +72,9 @@ public class PricelistItemListPanel extends AbstractTablePanel<PricelistItem> {
         setVisible(Button.Close, false);
         setVisible(Button.Refresh, false);
 
-        if (!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
-            setReadonly();
-        }
+//        if (!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+//            setReadonly();
+//        }
     }
 
     protected void onIncludeCategory() {
@@ -176,42 +175,6 @@ public class PricelistItemListPanel extends AbstractTablePanel<PricelistItem> {
         }
 
         return list;
-    }
-
-    /**
-     * @see com.cosmos.acacia.gui.AbstractTablePanel#canCreate()
-     */
-    @Override
-    public boolean canCreate() {
-        if (pricelist.isGeneralPricelist()) {
-            return false;
-        }
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
-     */
-    @Override
-    public boolean canDelete(PricelistItem rowObject) {
-        if (pricelist.isGeneralPricelist()) {
-            return false;
-        }
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
-     */
-    @Override
-    public boolean canModify(PricelistItem rowObject) {
-        if (pricelist.isGeneralPricelist()) {
-            return false;
-        }
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    @Override
-    public boolean canView(PricelistItem rowObject) {
-        return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)

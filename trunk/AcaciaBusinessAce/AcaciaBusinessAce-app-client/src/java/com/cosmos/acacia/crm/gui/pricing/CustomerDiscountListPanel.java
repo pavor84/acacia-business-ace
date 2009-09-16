@@ -21,6 +21,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetails;
 import com.cosmos.swingb.DialogResponse;
@@ -195,6 +196,10 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
         return customerDiscountItemListPanel;
     }
 
+    private boolean hasProductPricingPermission() {
+        return getSecurityService().isAllowed(SpecialPermission.ProductPricing, AccessRight.Read);
+    }
+
     private class CustomerDiscountPanel extends AcaciaPanel {
 
         private JBLabel customerLabel;
@@ -282,7 +287,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             button.setText(getResourceString("button.includeProduct"));
             button.setToolTipText(getResourceString("button.includeProduct.tooltip"));
 
-            if (!getRightsManager().isAllowed(SpecialPermission.ProductPricing)) {
+            if (!hasProductPricingPermission()) {
                 setReadonly();
             }
             CustomerDiscountListPanel.this.addNestedFormListener(this);

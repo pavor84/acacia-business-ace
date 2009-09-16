@@ -42,6 +42,7 @@ import com.cosmos.acacia.crm.bl.reports.CombinedDataSourceObject;
 import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.bl.reports.ReportsTools;
 import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
 import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -70,7 +71,7 @@ public class AcaciaPanel extends JBPanel {
     //protected static Logger log = Logger.getLogger(AcaciaPanel.class);
 
     @EJB
-    private static RightsManagerRemote rightsManager;
+    private static SecurityServiceRemote securityService;
     @EJB
     private static ClassifiersRemote classifiersManager;
     private UUID parentDataObjectId;
@@ -563,12 +564,12 @@ public class AcaciaPanel extends JBPanel {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    protected static RightsManagerRemote getRightsManager() {
-        if (rightsManager == null) {
-            rightsManager = LocalSession.instance().getRightsManager();
+    protected static SecurityServiceRemote getSecurityService() {
+        if (securityService == null) {
+            securityService = getBean(SecurityServiceRemote.class);
         }
 
-        return rightsManager;
+        return securityService;
     }
 
     protected static ClassifiersRemote getClassifiersManager() {
@@ -597,64 +598,5 @@ public class AcaciaPanel extends JBPanel {
 
     protected static Classifier getClassifier(String classifierCode) {
         return LocalSession.instance().getClassifier(classifierCode);
-    }
-
-    public Set<SpecialPermission> getCreatePermissions(Object rowObject) {
-        return getPermissions(rowObject, AccessRight.Create);
-    }
-
-    public Set<SpecialPermission> getModifyPermissions(Object rowObject) {
-        return getPermissions(rowObject, AccessRight.Modify);
-    }
-
-    public Set<SpecialPermission> getDeletePermissions(Object rowObject) {
-        return getPermissions(rowObject, AccessRight.Delete);
-    }
-
-    public Set<SpecialPermission> getViewPermissions(Object rowObject) {
-        return getPermissions(rowObject, AccessRight.Read);
-    }
-
-    public Set<SpecialPermission> getExecutePermissions(Object rowObject) {
-        return getPermissions(rowObject, AccessRight.Execute);
-    }
-
-    public Set<SpecialPermission> getPermissions(
-            Object anObject,
-            AccessRight rightType) {
-        if(anObject == null) {
-            return Collections.emptySet();
-        }
-
-        if(anObject instanceof DataObjectBean) {
-            return getPermissions((DataObjectBean)anObject, rightType);
-        }
-
-        if(anObject instanceof Class && DataObjectBean.class.isAssignableFrom((Class)anObject)) {
-            return getPermissions((Class)anObject, rightType);
-        }
-
-        return Collections.emptySet();
-    }
-
-    public Set<SpecialPermission> getPermissions(
-            DataObjectBean entity,
-            AccessRight rightType) {
-        DataObject dataObject;
-        if(entity == null || (dataObject = entity.getDataObject()) == null || dataObject.getDataObjectId() == null) {
-            return Collections.emptySet();
-        }
-
-        return getRightsManager().getPermissions(dataObject, rightType);
-    }
-
-    public Set<SpecialPermission> getPermissions(
-            Class<? extends DataObjectBean> entityClass,
-            AccessRight rightType) {
-        if(entityClass == null) {
-            return Collections.emptySet();
-        }
-
-        return getRightsManager().getPermissions(entityClass, rightType);
     }
 }

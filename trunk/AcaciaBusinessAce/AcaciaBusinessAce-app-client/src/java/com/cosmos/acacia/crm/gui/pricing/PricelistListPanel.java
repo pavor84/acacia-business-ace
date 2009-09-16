@@ -13,7 +13,6 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
 import com.cosmos.acacia.crm.data.sales.Pricelist;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -77,39 +76,6 @@ public class PricelistListPanel extends AbstractTablePanel<Pricelist> {
             setList(getFormSession().listPricelists(getParentDataObjectId()));
         }
         return list;
-    }
-
-    /**
-     * @see com.cosmos.acacia.gui.AbstractTablePanel#canCreate()
-     */
-    @Override
-    public boolean canCreate() {
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
-     */
-    @Override
-    public boolean canDelete(Pricelist rowObject) {
-        if (rowObject.isGeneralPricelist()) {
-            return false;
-        }
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
-     */
-    @Override
-    public boolean canModify(Pricelist rowObject) {
-        if (rowObject.isGeneralPricelist()) {
-            return false;
-        }
-        return getRightsManager().isAllowed(SpecialPermission.ProductPricing);
-    }
-
-    @Override
-    public boolean canView(Pricelist rowObject) {
-        return true;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
