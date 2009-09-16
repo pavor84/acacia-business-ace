@@ -52,6 +52,46 @@ import org.hibernate.annotations.Type;
         query = "SELECT count(t) FROM PrivilegeRole t" +
                 " WHERE" +
                 "  t.privilege = :privilege"
+    ),
+    @NamedQuery(
+        name = PrivilegeRole.NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHT,
+        query = "SELECT t FROM PrivilegeRole t, EntityTypePrivilege t1" +
+                " WHERE" +
+                "  t1.securityRole.organization = :organization" +
+                "  and t1.entityDataObjectType = :entityDataObjectType" +
+                "  and t.privilege = t1" +
+                "  and t.accessRight in (:accessRights)" +
+                " ORDER BY t.accessLevel"
+    ),
+    @NamedQuery(
+        name = PrivilegeRole.NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHT,
+        query = "SELECT t FROM PrivilegeRole t, EntityPrivilege t1" +
+                " WHERE" +
+                "  t1.securityRole.organization = :organization" +
+                "  and t1.entityDataObject = :entityDataObject" +
+                "  and t.privilege = t1" +
+                "  and t.accessRight in (:accessRights)" +
+                " ORDER BY t.accessLevel"
+    ),
+    @NamedQuery(
+        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHT,
+        query = "SELECT t FROM PrivilegeRole t, SpecialPermissionPrivilege t1" +
+                " WHERE" +
+                "  t1.securityRole.organization = :organization" +
+                "  and t1.specialPermission in (:specialPermissions)" +
+                "  and t.privilege = t1" +
+                "  and t.accessRight in (:accessRights)" +
+                " ORDER BY t.accessLevel"
+    ),
+    @NamedQuery(
+        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHT,
+        query = "SELECT t FROM PrivilegeRole t, PermissionCategoryPrivilege t1" +
+                " WHERE" +
+                "  t1.securityRole.organization = :organization" +
+                "  and t1.permissionCategory = :permissionCategory" +
+                "  and t.privilege = t1" +
+                "  and t.accessRight in (:accessRights)" +
+                " ORDER BY t.accessLevel"
     )
 })
 @Form(
@@ -64,6 +104,14 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     protected static final String CLASS_NAME = "PrivilegeRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_COUNT_ROLES = CLASS_NAME + ".countRoles";
+    public static final String NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHT =
+            CLASS_NAME + ".findByEntityTypeAndAccessRight";
+    public static final String NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHT =
+            CLASS_NAME + ".findByEntityAndAccessRight";
+    public static final String NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHT =
+            CLASS_NAME + ".findByPermissionAndAccessRight";
+    public static final String NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHT =
+            CLASS_NAME + ".findByPermissionCategoryAndAccessRight";
 
     @Id
     @Basic(optional = false)

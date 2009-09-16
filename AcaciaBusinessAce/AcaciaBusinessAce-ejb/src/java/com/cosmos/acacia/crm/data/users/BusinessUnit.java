@@ -60,7 +60,8 @@ import org.hibernate.annotations.Type;
         query = "SELECT t FROM BusinessUnit t" +
                 " WHERE" +
                 "  t.organization = :organization" +
-                "  and t.parentBusinessUnit is null"
+                "  and t.parentBusinessUnit is null" +
+                " ORDER BY t.businessUnitName"
     ),
     @NamedQuery(
         name = BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT,

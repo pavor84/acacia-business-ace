@@ -4,6 +4,11 @@
  */
 package com.cosmos.acacia.crm.bl.security;
 
+import com.cosmos.acacia.crm.bl.impl.DataObjectTypeLocal;
+import com.cosmos.acacia.crm.bl.users.UsersServiceLocal;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
@@ -16,11 +21,18 @@ import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
+import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
@@ -41,6 +53,11 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public static final String PK_EXPIRES = "expires";
     //
     public static final int ACCESS_RIGHT_COUNT = AccessRight.values().length;
+    //
+    @EJB
+    private DataObjectTypeLocal dotService;
+    @EJB
+    private UsersServiceLocal usersService;
 
     public List<SecurityRole> getSecurityRoles() {
         Query q = em.createNamedQuery(SecurityRole.NQ_FIND_ALL);
@@ -68,6 +85,12 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         }
 
         return securityRoles;
+    }
+
+    public List<SecurityRole> getSecurityRoles(UserOrganization userOrganization) {
+        Query q = em.createNamedQuery(UserSecurityRole.NQ_FIND_SECURITY_ROLES_BY_USER_ORGANIZATION);
+        q.setParameter(PK_USER_ORGANIZATION, userOrganization);
+        return new ArrayList<SecurityRole>(q.getResultList());
     }
 
     public List<PrivilegeCategory> getPrivilegeCategories(PrivilegeType privilegeType) {
@@ -194,25 +217,148 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         return canDo;
     }
 
-    @Override
-    public boolean isAllowed(AccessRight accessRight, Class dataObjectClass) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private boolean isAllowed(
+            UserOrganization userOrganization,
+            Collection<PrivilegeRole> privilegeRoles,
+            DataObject entityDataObject) {
+        BusinessUnit userBusinessUnit = userOrganization.getBusinessUnit();
+        UUID userId = userOrganization.getUser().getUserId();
+        Set<BusinessUnit> parentChildBusinessUnits = usersService.getParentChildBusinessUnits(userBusinessUnit);
+        List<SecurityRole> userSecurityRoles = getSecurityRoles(userOrganization);
+
+        Iterator<PrivilegeRole> iterator = privilegeRoles.iterator();
+        while(iterator.hasNext()) {
+            PrivilegeRole privilegeRole = iterator.next();
+            AccessLevel accessLevel = (AccessLevel) privilegeRole.getAccessLevel().getEnumValue();
+            Privilege privilege = privilegeRole.getPrivilege();
+            SecurityRole securityRole = privilege.getSecurityRole();
+            BusinessUnit businessUnit = securityRole.getBusinessUnit();
+            switch(accessLevel) {
+                case System:
+                    if(userSecurityRoles.contains(securityRole)) {
+                        System.out.println("AccessLevel.System and User contains securityRole");
+                        return true;
+                    }
+                    break;
+
+                case Organization:
+                    if(securityRole.getOrganization().equals(userOrganization.getOrganization())) {
+                        System.out.println("AccessLevel.Organization and securityRole.getOrganization().equals(userOrganization.getOrganization())");
+                        return true;
+                    }
+                    break;
+
+                case ParentChildBusinessUnit:
+                    if(parentChildBusinessUnits.contains(businessUnit)) {
+                        System.out.println("AccessLevel.ParentChildBusinessUnit and parentChildBusinessUnits.contains(businessUnit)");
+                        return true;
+                    }
+                    break;
+
+                case BusinessUnit:
+                    if(userBusinessUnit.equals(businessUnit)) {
+                        System.out.println("AccessLevel.BusinessUnit and userBusinessUnit.equals(businessUnit)");
+                        return true;
+                    }
+                    break;
+
+                case User:
+                    if(entityDataObject != null && userId.equals(entityDataObject.getOwnerId())) {
+                        System.out.println("AccessLevel.User and userId.equals(entityDataObject.getOwnerId())");
+                        return true;
+                    }
+                    break;
+
+                case Client:
+                    break;
+
+                case ClientContact:
+                    break;
+
+                case Session:
+                    break;
+            }
+        }
+
+        return false;
+    }
+
+    private Set<DbResource> getDbResources(AccessRight... accessRights) {
+        HashSet<DbResource> dbResources = new HashSet<DbResource>(accessRights.length);
+        for(AccessRight accessRight : accessRights) {
+            dbResources.add(accessRight.getDbResource());
+        }
+
+        return dbResources;
     }
 
     @Override
-    public boolean isAllowed(AccessRight accessRight, Object dataObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean isAllowed(Class dataObjectClass, AccessRight... accessRights) {
+        UserOrganization userOrganization = session.getUserOrganization();
+
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHT);
+        DataObjectType dataObjectType = dotService.getDataObjectType(dataObjectClass.getName());
+        q.setParameter("organization", session.getOrganization());
+        q.setParameter("entityDataObjectType", dataObjectType);
+        q.setParameter("accessRights", getDbResources(accessRights));
+        List<PrivilegeRole> privilegeRoles = (List<PrivilegeRole>) q.getResultList();
+
+        return isAllowed(userOrganization, privilegeRoles, null);
     }
 
     @Override
-    public boolean isAllowed(AccessRight accessRight, SpecialPermission permission) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean isAllowed(Object dataObject, AccessRight... accessRights) {
+        if(dataObject == null) {
+            return false;
+        }
+        DataObject entityDataObject;
+        if(dataObject instanceof DataObject) {
+            entityDataObject = (DataObject) dataObject;
+        } else if(dataObject instanceof DataObjectBean) {
+            entityDataObject = ((DataObjectBean) dataObject).getDataObject();
+        } else {
+            return false;
+        }
+
+        UserOrganization userOrganization = session.getUserOrganization();
+
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHT);
+        q.setParameter("organization", session.getOrganization());
+        q.setParameter("entityDataObject", entityDataObject);
+        q.setParameter("accessRights", getDbResources(accessRights));
+        List<PrivilegeRole> privilegeRoles = (List<PrivilegeRole>) q.getResultList();
+
+        return isAllowed(userOrganization, privilegeRoles, null);
     }
 
     @Override
-    public boolean isAllowed(AccessRight accessRight, PermissionCategory permissionCategory) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean isAllowed(SpecialPermission permission, AccessRight... accessRights) {
+        return isAllowed(Collections.singleton(permission), accessRights);
     }
 
-    
+    @Override
+    public boolean isAllowed(Set<SpecialPermission> permissions, AccessRight... accessRights) {
+        UserOrganization userOrganization = session.getUserOrganization();
+
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHT);
+        q.setParameter("organization", session.getOrganization());
+        q.setParameter("specialPermissions", permissions);
+        q.setParameter("accessRights", getDbResources(accessRights));
+        List<PrivilegeRole> privilegeRoles = (List<PrivilegeRole>) q.getResultList();
+
+        return isAllowed(userOrganization, privilegeRoles, null);
+    }
+
+    @Override
+    public boolean isAllowed(PermissionCategory permissionCategory, AccessRight... accessRights) {
+        UserOrganization userOrganization = session.getUserOrganization();
+
+        Query q = em.createNamedQuery(PrivilegeRole.NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHT);
+        q.setParameter("organization", session.getOrganization());
+        q.setParameter("permissionCategory", permissionCategory);
+        q.setParameter("accessRights", getDbResources(accessRights));
+        List<PrivilegeRole> privilegeRoles = (List<PrivilegeRole>) q.getResultList();
+
+        return isAllowed(userOrganization, privilegeRoles, null);
+    }
 }

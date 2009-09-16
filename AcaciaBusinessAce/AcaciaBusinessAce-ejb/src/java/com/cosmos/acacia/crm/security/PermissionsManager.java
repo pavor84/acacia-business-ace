@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,7 +21,6 @@ import com.cosmos.acacia.crm.bl.users.annotations.RequiresReadRight;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.security.AccessRight;
 
 /**
@@ -55,7 +53,6 @@ public class PermissionsManager implements PermissionsManagerLocal {
     @PostConstruct
     public void init() {
         timer = new Timer();
-        timer.schedule(new ClearingTask(), CLEAR_PERIOD, CLEAR_PERIOD);
     }
 
     /**
@@ -230,26 +227,6 @@ public class PermissionsManager implements PermissionsManagerLocal {
             }
         }
         return null;
-    }
-
-    /**
-     * Method for checking special permissions
-     * @param specialPermission
-     * @return
-     */
-    public boolean isAllowed(DataObject dataObject, SpecialPermission specialPermission) {
-        return manager.isAllowed(dataObject, specialPermission);
-    }
-
-    public boolean isAllowed(SpecialPermission specialPermission) {
-        return manager.isAllowed(specialPermission);
-    }
-
-    class ClearingTask extends TimerTask {
-        @Override
-        public void run() {
-            manager.clearCachedRights();
-        }
     }
 
     private static final String CREATE_METHOD_PREFIX = "new";

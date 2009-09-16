@@ -45,6 +45,12 @@ import org.hibernate.annotations.Type;
         query = "SELECT t FROM UserSecurityRole t" +
                 " WHERE" +
                 "  t.userOrganization = :userOrganization"
+    ),
+    @NamedQuery(
+        name = UserSecurityRole.NQ_FIND_SECURITY_ROLES_BY_USER_ORGANIZATION,
+        query = "SELECT t.securityRole FROM UserSecurityRole t" +
+                " WHERE" +
+                "  t.userOrganization = :userOrganization"
     )
 })
 @Form(
@@ -56,6 +62,8 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
     //
     protected static final String CLASS_NAME = "UserSecurityRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_SECURITY_ROLES_BY_USER_ORGANIZATION =
+            CLASS_NAME + ".findSecurityRolesByUserOrganization";
     //
     @Id
     @Basic(optional = false)

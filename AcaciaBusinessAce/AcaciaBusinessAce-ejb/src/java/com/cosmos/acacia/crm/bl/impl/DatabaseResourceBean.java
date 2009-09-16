@@ -423,17 +423,18 @@ delete from organizations;
         supervisor.setIsNew(false);
         esm.persist(em, supervisor);
 
-        UserOrganization userOrganization = new UserOrganization(supervisor, organization);
-        userOrganization.setUserActive(true);
-        userOrganization.setBranch(address);
-        esm.persist(em, userOrganization);
-
         BusinessUnit businessUnit = new BusinessUnit(organization);
         businessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT);
         businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
         businessUnit.setRoot(true);
         businessUnit.setDisabled(false);
         esm.persist(em, businessUnit);
+
+        UserOrganization userOrganization = new UserOrganization(supervisor, organization);
+        userOrganization.setUserActive(true);
+        userOrganization.setBranch(address);
+        userOrganization.setBusinessUnit(businessUnit);
+        esm.persist(em, userOrganization);
 
         SecurityRole securityRole = new SecurityRole(organization, businessUnit, User.SUPERVISOR_USER_NAME);
         esm.persist(em, securityRole);

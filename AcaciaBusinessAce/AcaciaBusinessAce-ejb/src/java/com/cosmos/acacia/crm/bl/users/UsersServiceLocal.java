@@ -14,6 +14,7 @@ import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Local;
 
 /**
@@ -39,7 +40,9 @@ public interface UsersServiceLocal extends UsersServiceRemote {
 
     List<BusinessUnit> getBusinessUnits();
 
-    List<BusinessUnit> getBusinessUnits(BusinessUnit parentBusinessUnit);
+    List<BusinessUnit> getChildrenBusinessUnits(BusinessUnit parentBusinessUnit);
+
+    Set<BusinessUnit> getParentChildBusinessUnits(BusinessUnit currentBusinessUnit);
 
     List<BusinessUnitAddress> getBusinessUnitAddresses(BusinessUnit businessUnit, Object... extraParameters);
 
