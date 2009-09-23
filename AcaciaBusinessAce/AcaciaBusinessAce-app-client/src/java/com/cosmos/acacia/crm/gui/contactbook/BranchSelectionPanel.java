@@ -115,12 +115,12 @@ public class BranchSelectionPanel extends AcaciaPanel {
         branchesTable.setSelectedRowObject(getUserBranch());
     }
 
-    protected List<Address> getAddresses()
-    {
-        if(addresses == null)
-            addresses = getFormSession().getAddresses(getOrganizationDataObjectId());
+    protected List<Address> getAddresses() {
+        throw new UnsupportedOperationException("ToDo");
+//        if(addresses == null)
+//            addresses = getFormSession().getAddresses(getOrganizationDataObjectId());
 
-        return addresses;
+//        return addresses;
     }
 
     protected List<City> getCities()

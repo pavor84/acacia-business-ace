@@ -792,11 +792,19 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         if (RelationshipType.OneToMany.equals(relationshipType = containerEntity.getRelationshipType())) {
             DetailEntityListPanel<E, ?> listPanel;
             if(listPanelClass != null) {
+                Object[] args = new Object[] {this};
                 try {
                     listPanel = (DetailEntityListPanel<E, ?>)ConstructorUtils.invokeConstructor(
-                            listPanelClass, new Object[] {this, itemEntityClass});
+                            listPanelClass, args);
                 } catch(Exception ex) {
-                    throw new EntityPanelException(ex);
+                    try {
+                        args = new Object[] {getEntity()};
+                        listPanel = (DetailEntityListPanel<E, ?>)ConstructorUtils.invokeConstructor(
+                                listPanelClass, args);
+                    } catch(Exception ex1) {
+                        throw new EntityPanelException("listPanelClass=" + listPanelClass +
+                                ", args=" + Arrays.asList(args), ex1);
+                    }
                 }
             } else {
                 listPanel = new DetailEntityListPanel(this, itemEntityClass);

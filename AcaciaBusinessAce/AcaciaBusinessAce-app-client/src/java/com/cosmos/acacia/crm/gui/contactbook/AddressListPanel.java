@@ -94,7 +94,7 @@ public class AddressListPanel extends AbstractTablePanel<Address> {
 
     protected List<Address> getAddresses() {
         if (addresses == null) {
-            addresses = getFormSession().getAddresses(getParentDataObjectId());
+            addresses = getFormSession().getAddresses(getBusinessPartner());
         }
 
         return addresses;

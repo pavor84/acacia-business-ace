@@ -116,7 +116,7 @@ public class ContactBookTest {
 
         // Creating the entities
 
-        Organization organization = organizationFormSession.newOrganization(null);
+        Organization organization = organizationFormSession.newOrganization();
         organization.setOrganizationName(TestUtils.getRandomString(15));
 
         organization = organizationFormSession.saveOrganization(organization);
@@ -130,8 +130,8 @@ public class ContactBookTest {
 
         DataObject addressDataObject = address.getDataObject();
 
-        ContactPerson contactPerson = addressFormSession.newContactPerson();
-        Person person = personFormSession.newPerson(null);
+        ContactPerson contactPerson = addressFormSession.newContactPerson(address);
+        Person person = personFormSession.newPerson(organization);
         person.setFirstName(TestUtils.getRandomString(5));
         person.setSecondName(TestUtils.getRandomString(5));
         person.setLastName(TestUtils.getRandomString(5));
@@ -141,7 +141,7 @@ public class ContactBookTest {
         contactPerson.setPerson(person);
         contactPerson.setDataObject(addressDataObject);
 
-        contactPerson = addressFormSession.saveContactPerson(contactPerson, addressDataObject.getDataObjectId());
+        contactPerson = addressFormSession.saveContactPerson(contactPerson);
         CommunicationContact communicationContact = addressFormSession.newCommunicationContact(
                 address, CommunicationType.Phone, contactPerson);
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
@@ -159,7 +159,7 @@ public class ContactBookTest {
         person = personFormSession.savePerson(person);
 
         contactPerson.setPerson(person);
-        contactPerson = addressFormSession.saveContactPerson(contactPerson, address.getDataObject().getDataObjectId());
+        contactPerson = addressFormSession.saveContactPerson(contactPerson);
 
         communicationContact.setCommunicationValue(TestUtils.getRandomString(5));
         communicationContact = addressFormSession.saveCommunicationContact(communicationContact, address.getDataObject().getDataObjectId(), contactPerson);

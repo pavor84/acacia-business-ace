@@ -428,11 +428,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         log.info("initData().organization: " + organization);
 
         if (organization == null) {
-            if (getParentDataObjectId() == null) {
-                organization = getFormSession().newOrganization(null);
-            } else {
-                organization = getFormSession().newOrganization(getOrganizationDataObjectId());
-            }
+            organization = getFormSession().newOrganization();
         }
 
         BindingGroup bg = getBindingGroup();

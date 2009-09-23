@@ -19,8 +19,8 @@ import java.math.BigDecimal;
  */
 public class PurchaseInvoiceItemListPanel extends DetailEntityListPanel<PurchaseInvoice, PurchaseInvoiceItem> {
 
-    public PurchaseInvoiceItemListPanel(EntityPanel<PurchaseInvoice> mainEntityPanel, Class<PurchaseInvoiceItem> itemEntityClass) {
-        super(mainEntityPanel, itemEntityClass);
+    public PurchaseInvoiceItemListPanel(EntityPanel<PurchaseInvoice> mainEntityPanel) {
+        super(mainEntityPanel, PurchaseInvoiceItem.class);
     }
 
     @Override

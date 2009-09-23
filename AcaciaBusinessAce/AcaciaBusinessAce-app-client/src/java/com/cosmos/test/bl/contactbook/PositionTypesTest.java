@@ -64,7 +64,7 @@ public class PositionTypesTest {
     public void crudTest() throws Exception {
         String nameInsert = TestUtils.getRandomString(16);
 
-        org = orgSession.newOrganization(null);
+        org = orgSession.newOrganization();
         org.setOrganizationName(TestUtils.getRandomString(10));
         org = orgSession.saveOrganization(org);
 

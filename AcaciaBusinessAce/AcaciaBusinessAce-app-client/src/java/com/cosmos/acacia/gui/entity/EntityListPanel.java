@@ -4,7 +4,6 @@
  */
 package com.cosmos.acacia.gui.entity;
 
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.util.PersistentEntity;
 import java.util.List;
