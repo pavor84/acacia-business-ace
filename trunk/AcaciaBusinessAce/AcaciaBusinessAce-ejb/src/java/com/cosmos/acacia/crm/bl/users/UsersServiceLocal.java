@@ -26,6 +26,8 @@ public interface UsersServiceLocal extends UsersServiceRemote {
 
     User newUser();
 
+    List<User> getUsers(Organization organization);
+
     List<UserOrganization> getUserOrganizations(Organization organization);
 
     List<UserOrganization> getUserOrganizations(User user);
@@ -38,7 +40,11 @@ public interface UsersServiceLocal extends UsersServiceRemote {
 
     List<UserSecurityRole> getUserSecurityRoles(UserOrganization userOrganization);
 
-    List<BusinessUnit> getBusinessUnits();
+    BusinessUnit getRootBusinessUnit(Organization organization);
+
+    BusinessUnit getBusinessUnit(Organization organization, String businessUnitName);
+
+    List<BusinessUnit> getBusinessUnits(Organization organization);
 
     List<BusinessUnit> getChildrenBusinessUnits(BusinessUnit parentBusinessUnit);
 
@@ -47,4 +53,8 @@ public interface UsersServiceLocal extends UsersServiceRemote {
     List<BusinessUnitAddress> getBusinessUnitAddresses(BusinessUnit businessUnit, Object... extraParameters);
 
     List<JobTitle> getJobTitles(BusinessUnit businessUnit, Object... extraParameters);
+
+    List<Organization> getActiveOrganizations(User user);
+
+    List<Organization> getOrganizations(User user);
 }

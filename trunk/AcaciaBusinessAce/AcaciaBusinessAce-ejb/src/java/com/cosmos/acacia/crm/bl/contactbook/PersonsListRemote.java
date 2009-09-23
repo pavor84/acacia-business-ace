@@ -57,7 +57,7 @@ public interface PersonsListRemote {
      * @param parentId
      * @return list of addresses
      */
-    List<Address> getAddresses(UUID parentId);
+    List<Address> getAddresses(BusinessPartner businessPartner);
 
     /**
      * Gets all the (two) possible genders

@@ -22,6 +22,7 @@ import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.beansbinding.EntityProperties;
@@ -104,8 +105,8 @@ public class BankDetailsListBean implements BankDetailsListRemote, BankDetailsLi
     }
 
     @Override
-    public List<BankDetail> getBankDetailsForOrganization(UUID organizationDataObjectId) {
-        List<Address> orgAddresses = addressesListLocal.getAddresses(organizationDataObjectId);
+    public List<BankDetail> getBankDetailsForOrganization(BusinessPartner businessPartner) {
+        List<Address> orgAddresses = addressesListLocal.getAddresses(businessPartner);
         List<BankDetail> result = new ArrayList<BankDetail>();
         
         for (Address address : orgAddresses) {

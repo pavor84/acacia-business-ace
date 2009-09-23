@@ -52,7 +52,7 @@ USING btree
                 " where" +
                 "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
                 "  and t.dataObject.deleted = :deleted" +
-                "  and not t.businessPartnerId = t.parentBusinessPartnerId"
+                "  and t.businessPartnerId != t.parentBusinessPartnerId"
     ),
     @NamedQuery(
         name = Organization.NQ_FIND_ORGANIZATION_BY_NAME,
@@ -269,6 +269,16 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     public void setParentBusinessPartnerId(UUID parentBusinessPartnerId) {
         this.parentBusinessPartnerId = parentBusinessPartnerId;
         super.setParentBusinessPartnerId(parentBusinessPartnerId);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("; organizationName=").append(organizationName);
+        sb.append(", parentBusinessPartnerId=").append(parentBusinessPartnerId);
+
+        return sb.toString();
     }
 
     @Override

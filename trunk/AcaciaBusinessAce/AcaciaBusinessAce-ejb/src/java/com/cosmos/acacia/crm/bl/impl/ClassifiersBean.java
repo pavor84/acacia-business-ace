@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
-import com.cosmos.acacia.crm.bl.validation.ClassifierValidatorLocal;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
 import com.cosmos.acacia.crm.data.ClassifiedObjectBean;
 import com.cosmos.acacia.crm.data.Classifier;
@@ -46,8 +45,6 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     private EntityManager em;
     @EJB
     private EntityStoreManagerLocal esm;
-    @EJB
-    private ClassifierValidatorLocal classifierValidator;
     @EJB
     private AcaciaSessionLocal session;
 

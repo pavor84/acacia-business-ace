@@ -30,7 +30,14 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "addresses")
+@Table(name = "addresses"
+/*
+CREATE UNIQUE INDEX uix_addresses_business_partner_address_name
+  ON addresses
+  USING btree
+  (business_partner_id, lower(address_name::text));
+*/
+)
 @NamedQueries({
     @NamedQuery(
         name=Address.FIND_ALL,
@@ -38,10 +45,12 @@ import org.hibernate.annotations.Type;
                 " where" +
                 "  t.businessPartner = :businessPartner" +
                 " order by t.country, t.city, t.addressName"
-    )
-    /*@NamedQuery(
+    )/*,
+    @NamedQuery(
         name = "Address.findByParentDataObjectAndDeleted",
-        query = "select a from Address a where a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
+        query = "select a from Address a" +
+                " where" +
+                " a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
     ),
     @NamedQuery(
         name = "Address.findByParentDataObjectIsNullAndDeleted",

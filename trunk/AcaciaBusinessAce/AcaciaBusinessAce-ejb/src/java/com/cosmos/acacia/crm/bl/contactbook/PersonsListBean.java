@@ -15,7 +15,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
@@ -53,9 +52,6 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     private LocationsListLocal locationsManager;
 
     @EJB
-    private PersonValidatorLocal personValidator;
-
-    @EJB
     private AcaciaSessionLocal session;
     
     @EJB
@@ -67,22 +63,9 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     @EJB
     private ContactsServiceLocal contactsService;
     
-    @SuppressWarnings("unchecked")
-    public List<Person> getPersons(UUID parentId)
-    {
-
-        Query q;
-        if(parentId != null)
-        {
-            q = em.createNamedQuery("Person.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentId);
-        }
-        else
-        {
-            q = em.createNamedQuery("Person.findByParentDataObjectIsNullAndDeleted");
-        }
-        q.setParameter("deleted", false);
-        return new ArrayList<Person>(q.getResultList());
+    @Override
+    public List<Person> getPersons(UUID parentId) {
+        return contactsService.getPersons(parentId);
     }
 
     public List<Country> getCountries()
@@ -109,7 +92,6 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
     }
 
     public Person savePerson(Person person) {
-        personValidator.validate(person);
         esm.persist(em, person);
         return person;
     }
@@ -159,8 +141,8 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
         return esm.remove(em, person);
     }
 
-    public List<Address> getAddresses(UUID parentId) {
-       return locationsManager.getAddresses(parentId);
+    public List<Address> getAddresses(BusinessPartner businessPartner) {
+       return locationsManager.getAddresses(businessPartner);
     }
 
     public EntityProperties getAddressEntityProperties() {

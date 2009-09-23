@@ -27,12 +27,16 @@ import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
 import com.cosmos.util.SecurityUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -58,6 +62,13 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     public User newUser() {
         User user = new User(session.getSystemOrganization());
         return user;
+    }
+
+    @Override
+    public List<User> getUsers(Organization organization) {
+        Query q = em.createNamedQuery(User.NQ_FIND_ALL);
+        q.setParameter("userName", User.SUPERVISOR_USER_NAME);
+        return new ArrayList<User>(q.getResultList());
     }
 
     @Override
@@ -107,6 +118,50 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         return userOrganizations;
     }
 
+    @Override
+    public List<Organization> getActiveOrganizations(User user) {
+        if (user == null)
+            user = session.getUser();
+
+        Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_ACTIVE_USER);
+        q.setParameter("user", user);
+        return new ArrayList<Organization>(q.getResultList());
+    }
+
+    @Override
+    public List<Organization> getOrganizations(User user) {
+        if(user == null) {
+            throw new NullPointerException("The user parameter can not be null.");
+        }
+
+        Query q = em.createNamedQuery(UserOrganization.NQ_FIND_ORGANIZATIONS_BY_USER);
+        q.setParameter("user", user);
+        return new ArrayList<Organization>(q.getResultList());
+    }
+
+    @Override
+    public BusinessUnit getRootBusinessUnit(Organization organization) {
+        Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_ROOT_BUSINESS_UNIT);
+        q.setParameter(ORGANIZATION_KEY, organization);
+        try {
+            return (BusinessUnit) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public BusinessUnit getBusinessUnit(Organization organization, String businessUnitName) {
+        Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_BUSINESS_UNIT_NAME);
+        q.setParameter(ORGANIZATION_KEY, organization);
+        q.setParameter("businessUnitName", businessUnitName);
+        try {
+            return (BusinessUnit) q.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
+    }
+
     private List<BusinessUnit> getParentalBusinessUnits(BusinessUnit businessUnit) {
         List<BusinessUnit> businessUnits = new ArrayList<BusinessUnit>();
         while(businessUnit != null) {
@@ -152,9 +207,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public List<BusinessUnit> getBusinessUnits() {
+    public List<BusinessUnit> getBusinessUnits(Organization organization) {
         Query q = em.createNamedQuery(BusinessUnit.NQ_FIND_ALL);
-        q.setParameter(ORGANIZATION_KEY, session.getOrganization());
+        q.setParameter(ORGANIZATION_KEY, organization);
 
         return new ArrayList<BusinessUnit>(q.getResultList());
     }
@@ -166,7 +221,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT);
             q.setParameter("parentBusinessUnit", parentBusinessUnit);
         } else {
-            q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT);
+            q = em.createNamedQuery(BusinessUnit.NQ_FIND_ROOT_BUSINESS_UNIT);
             q.setParameter(ORGANIZATION_KEY, session.getOrganization());
         }
 
@@ -225,12 +280,14 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
                 if((parameter = extraParameters[0]) instanceof UserOrganization) {
                     return (List<E>) getPossibleManagers((UserOrganization) parameter);
                 } else if(parameter instanceof Organization) {
-                    return (List<E>) getUserOrganizations((Organization) parameter);
+                    //return (List<E>) getUserOrganizations((Organization) parameter);
+                    return (List<E>) getUsers((Organization) parameter);
                 } else if(parameter instanceof User) {
                     return (List<E>) getUserOrganizations((User) parameter);
                 }
             } else {
-                return (List<E>) getUserOrganizations(session.getOrganization());
+                //return (List<E>) getUserOrganizations(session.getOrganization());
+                return (List<E>) getUsers(session.getOrganization());
             }
         } else if (entityClass == Team.class) {
             if (extraParameters.length == 0) {
@@ -240,12 +297,6 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             Object parameter;
             if ((parameter = extraParameters[0]) instanceof BusinessUnit) {
                 return (List<E>) getTeams((DataObjectBean) parameter);
-            }
-        } else if (entityClass == BusinessUnit.class) {
-            if(extraParameters.length == 0) {
-                return (List<E>) getBusinessUnits();
-            } else {
-                return (List<E>) getChildrenBusinessUnits((BusinessUnit) extraParameters[0]);
             }
         } else if (entityClass == UserRegistration.class) {
             return new ArrayList<E>(2);
@@ -260,7 +311,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             return Collections.emptyList();
         }
 
-        if(itemClass == TeamMember.class) {
+        if(TeamMember.class == itemClass) {
             Query q;
             if(entity instanceof Team) {
                 q = em.createNamedQuery(TeamMember.NQ_FIND_BY_TEAM);
@@ -271,17 +322,30 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             } else {
                 throw new UnsupportedOperationException("Not supported parent entity: " + entity);
             }
-
             return new ArrayList<I>(q.getResultList());
-        } else if(entity instanceof BusinessUnit) {
-            if(BusinessUnitAddress.class == itemClass) {
-                return (List<I>) getBusinessUnitAddresses((BusinessUnit) entity, extraParameters);
-            } else if(JobTitle.class == itemClass) {
-                return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
+        } else if (BusinessUnit.class == itemClass) {
+            if(entity instanceof Organization) {
+                return (List<I>) getBusinessUnits((Organization) entity);
+            } else if (entity instanceof BusinessUnit) {
+                return (List<I>) getChildrenBusinessUnits((BusinessUnit) entity);
             }
-        } else if(entity instanceof UserOrganization) {
-            if(UserSecurityRole.class == itemClass) {
+        } else if(UserOrganization.class == itemClass) {
+            if(entity instanceof User) {
+                return (List<I>) getUserOrganizations((User) entity);
+            } else if(entity instanceof Organization) {
+                return (List<I>) getUserOrganizations((Organization) entity);
+            }
+        } else if(UserSecurityRole.class == itemClass) {
+            if(entity instanceof UserOrganization) {
                 return (List<I>) getUserSecurityRoles((UserOrganization) entity);
+            }
+        } else if(BusinessUnitAddress.class == itemClass) {
+            if(entity instanceof BusinessUnit) {
+                return (List<I>) getBusinessUnitAddresses((BusinessUnit) entity, extraParameters);
+            }
+        } else if(JobTitle.class == itemClass) {
+            if(entity instanceof BusinessUnit) {
+                return (List<I>) getJobTitles((BusinessUnit) entity, extraParameters);
             }
         }
 
@@ -294,8 +358,28 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             Team team = (Team) entity;
             team.setOrganization(session.getOrganization());
             team.setStatus(AccountStatus.Enabled.getDbResource());
-        } else if (entity instanceof BusinessUnit) {
-            BusinessUnit businessUnit = (BusinessUnit)entity;
+        }
+    }
+
+    @Override
+    protected <E, I> void initItem(E entity, I item) {
+        if (item instanceof BusinessUnitAddress) {
+            if (entity instanceof BusinessUnit) {
+                BusinessUnit businessUnit = (BusinessUnit)entity;
+                ((BusinessUnitAddress)item).setBusinessUnit(businessUnit);
+            }
+        } else if (item instanceof JobTitle) {
+            if (entity instanceof BusinessUnit) {
+                BusinessUnit businessUnit = (BusinessUnit)entity;
+                ((JobTitle)item).setBusinessUnit(businessUnit);
+            }
+        } else if(item instanceof TeamMember) {
+            if(entity instanceof Team) {
+                TeamMember member = (TeamMember) item;
+                member.setStatus(AccountStatus.Enabled.getDbResource());
+            }
+        } else if (item instanceof BusinessUnit) {
+            BusinessUnit businessUnit = (BusinessUnit)item;
             businessUnit.setOrganization(session.getOrganization());
             List<BusinessUnit> businessUnits;
             if((businessUnits = getChildrenBusinessUnits(null)).size() == 0) {
@@ -310,29 +394,16 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    protected <E, I> void initItem(E entity, I item) {
-        if (entity instanceof BusinessUnit) {
-            BusinessUnit businessUnit = (BusinessUnit)entity;
-            if (item instanceof BusinessUnitAddress) {
-                ((BusinessUnitAddress)item).setBusinessUnit(businessUnit);
-            } else if (item instanceof JobTitle) {
-                ((JobTitle)item).setBusinessUnit(businessUnit);
-            }
-        } else if(entity instanceof Team) {
-            if(item instanceof TeamMember) {
-                TeamMember member = (TeamMember) item;
-                member.setStatus(AccountStatus.Enabled.getDbResource());
-            }
+    public <E> E save(E entity) {
+        if(entity instanceof UserRegistration) {
+            return (E) saveUserRegistration((UserRegistration) entity);
         }
+
+        return super.save(entity);
     }
 
-    @Override
-    public <E> E save(E entity) {
-        if(!(entity instanceof UserRegistration)) {
-            return super.save(entity);
-        }
-
-        UserRegistration userRegistration = (UserRegistration) entity;
+    private UserRegistration saveUserRegistration(UserRegistration userRegistration) {
+        Organization systemOrganization = session.getSystemOrganization();
 
         Person person = new Person(); //contactsService.new
         person.setDefaultCurrency(userRegistration.getDefaultCurrency());
@@ -345,6 +416,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         person.setBirthDate(userRegistration.getBirthDate());
         person.setBirthPlaceCity(userRegistration.getBirthPlaceCity());
         person.setBirthPlaceCountry(userRegistration.getBirthPlaceCountry());
+        person.setParentBusinessPartnerId(systemOrganization.getBusinessPartnerId());
         person = super.save(person);
 
         Address address = new Address();
@@ -354,14 +426,25 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         user.setUserName(userRegistration.getUsername());
         user.setUserPassword(SecurityUtils.getHash(userRegistration.getPassword()));
         user.setPerson(person);
+        user.setCreationTime(new Date());
+
         user = super.save(user);
 
+        BusinessUnit usersBusinessUnit = getBusinessUnit(systemOrganization, BusinessUnit.USERS_BUSINESS_UNIT_NAME);
+        UserOrganization userOrganization = new UserOrganization(user, systemOrganization);
+        userOrganization.setBranch(systemOrganization.getRegistrationAddress());
+        userOrganization.setBusinessUnit(usersBusinessUnit);
+        userOrganization.setUserActive(true);
+        super.save(userOrganization);
+
+        session.sendSystemMail("New User Registration: " + user.toString(), user.getInfo());
+
         userRegistration.setUserId(user.getUserId());
-        return (E) userRegistration;
+        return userRegistration;
     }
 
     @Override
-    protected <E> void preSave(E entity) {
+    protected <E> void preSave(E entity, Map<String, Object> parameters) {
         if (entity instanceof User) {
             User user = (User) entity;
         } else if (entity instanceof Team) {
@@ -375,14 +458,16 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         } else if (entity instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit) entity;
             preSaveBusinessUnit(businessUnit);
+        } else if(entity instanceof UserOrganization) {
+            preSaveUserOrganization((UserOrganization) entity, parameters);
         }
     }
 
     private void preSaveBusinessUnit(BusinessUnit businessUnit) {
         if(businessUnit.isRoot()) {
-            List<BusinessUnit> businessUnits;
-            if((businessUnits = getChildrenBusinessUnits(null)).size() > 0 && !businessUnits.get(0).equals(businessUnit)) {
-                throw new RuntimeException("Only one root business unit is allowed.");
+            if(getRootBusinessUnit(businessUnit.getOrganization()) != null) {
+                throw new RuntimeException("The root business unit already exists for this organization. " + businessUnit +
+                        ", " + businessUnit.getOrganization());
             }
             businessUnit.setParentBusinessUnit(null);
         } else {
@@ -396,10 +481,24 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    protected <E> void postSave(E entity) {
+    protected <E> void postSave(E entity, Map<String, Object> parameters) {
         if (entity instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit) entity;
             postSaveBusinessUnit(businessUnit);
+        } else if (entity instanceof UserOrganization) {
+            postSaveUserOrganization((UserOrganization) entity, parameters);
+        }
+    }
+
+    private void preSaveUserOrganization(UserOrganization userOrganization, Map<String, Object> parameters) {
+        if(userOrganization.getUserOrganizationId() == null) {
+            setNewEntity(parameters);
+        }
+    }
+
+    private void postSaveUserOrganization(UserOrganization userOrganization, Map<String, Object> parameters) {
+        if(isNewEntity(parameters)) {
+            session.sendSystemMail(userOrganization.toString(), "New UserOrganization: " + userOrganization.getInfo());
         }
     }
 
@@ -418,7 +517,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    protected <E> void preDelete(E entity) {
+    protected <E> void preDelete(E entity, Map<String, Object> parameters) {
         if (entity instanceof BusinessUnit) {
             preDeleteBusinessUnit((BusinessUnit) entity);
         }

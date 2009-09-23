@@ -65,7 +65,7 @@ import java.util.UUID;
         ),
         @FormContainer(
             name=UserRegistration.BIRTH_INFO,
-            parentContainerName=UserRegistration.PERSONAL_INFO,
+            parentContainerName=UserRegistration.PRIMARY_INFO,
             container=@Component(
                 componentClass=JBPanel.class,
                 componentBorder=@ComponentBorder(

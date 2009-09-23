@@ -50,44 +50,56 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "users", catalog = "acacia", schema = "public"/*,
-CREATE UNIQUE INDEX uix_users_username
-   ON users (lower(user_name));
+@Table(name = "users", catalog = "acacia", schema = "public"
+/*
 CREATE UNIQUE INDEX uix_users_email_address
-   ON users (lower(email_address));
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email_address"}),
-        @UniqueConstraint(columnNames = {"user_name"})
-    }*/
+  ON users
+  USING btree
+  (lower(email_address::text));
+CREATE UNIQUE INDEX uix_users_username
+  ON users
+  USING btree
+  (lower(user_name::text));
+*/
 )
 @NamedQueries({
     @NamedQuery(
-            name = "User.login",
-            query = "select u from User u where u.userName=:username and u.userPassword=:password"
+        name = User.NQ_FIND_BY_USERNAME_AND_PASSWORD,
+        query = "select u from User u" +
+                " where" +
+                "   (lower(u.userName) = lower(:username) or lower(u.emailAddress) = lower(:username))" +
+                "   and u.userPassword = :password"
     ),
     @NamedQuery(
-            name = "User.temporaryLogin",
-            query = "select u from User u where u.userName=:username and u.systemPassword=:password"
-    ),
-    @NamedQuery(
-            name = "User.findCreatedUsers",
-            query = "select u from User u where u.creator=:creator"
+        name = User.NQ_FIND_BY_USERNAME_AND_SYSTEM_PASSWORD,
+        query = "select u from User u" +
+                " where" +
+                "   (lower(u.userName) = lower(:username) or lower(u.emailAddress) = lower(:username))" +
+                "   and u.systemPassword = :password"
     ),
     @NamedQuery(
         name = User.NQ_FIND_BY_EMAIL,
-        query = "select u from User u where u.emailAddress = :emailAddress"
+        query = "select u from User u" +
+                " where" +
+                "  lower(u.emailAddress) = lower(:emailAddress)"
     ),
     @NamedQuery(
         name = User.NQ_FIND_BY_USER_NAME,
-        query = "select u from User u where u.userName=:userName"
+        query = "select u from User u" +
+                " where" +
+                "  lower(u.userName) = lower(:userName)"
     ),
     @NamedQuery(
-            name = "User.findAll",
-            query = "select u from User u"
+            name = User.NQ_FIND_ALL,
+            query = "select u from User u" +
+                    " where" +
+                    "  lower(u.userName) != lower(:userName)"
     ),
     @NamedQuery(
-            name = "User.findByPerson",
-            query = "select u from User u where u.person=:person"
+            name = User.NQ_FIND_BY_PERSON,
+            query = "select u from User u" +
+                    " where" +
+                    "  u.person = :person"
     )
 })
 @Form(
@@ -110,28 +122,14 @@ CREATE UNIQUE INDEX uix_users_email_address
             componentIndex=1
         ),
         @FormContainer(
-            name=User.ROLES,
-            title="Roles",
+            name=User.ORGANIZATIONS,
+            title="Organizations",
             depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
             relationshipType=RelationshipType.OneToMany,
-            entityClass=UserSecurityRole.class
-        ),
-        @FormContainer(
-            name=User.GROUPS,
-            title="Groups",
-            container=@Component(
-                componentClass=JBTabbedPane.class
-            )
-        ),
-        @FormContainer(
-            name=User.WORK_HOURS,
-            title="Work Hours",
-            container=@Component(
-                componentClass=JBTabbedPane.class
-            )
+            entityClass=UserOrganization.class
         ),
         @FormContainer(
             name=User.INFO_GENERAL,
@@ -159,14 +157,16 @@ public class User extends DataObjectBean implements Serializable {
     private static final long serialVersionUID = 1L;
     //
     protected static final String CLASS_NAME = "User";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_USERNAME_AND_PASSWORD = CLASS_NAME + ".findByUsernameAndPassword";
+    public static final String NQ_FIND_BY_USERNAME_AND_SYSTEM_PASSWORD = CLASS_NAME + ".findByUsernameAndSystemPassword";
+    public static final String NQ_FIND_BY_PERSON = CLASS_NAME + ".findByPerson";
     public static final String NQ_FIND_BY_EMAIL = CLASS_NAME + ".findByEmail";
     public static final String NQ_FIND_BY_USER_NAME = CLASS_NAME + ".findByUserName";
     //
     public static final String INFO_GENERAL = "informationGeneral";
     public static final String INFO_ADDRESSES = "informationAddresses";
-    public static final String WORK_HOURS = "workHours";
-    public static final String GROUPS = "groups";
-    public static final String ROLES = "roles";
+    public static final String ORGANIZATIONS = "organizations";
     //
     public static final String SUPERVISOR_USER_NAME = "supervisor";
     public static final String SUPERVISOR_USER_PASSWORD = "Superv1s0r";

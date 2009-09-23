@@ -147,7 +147,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
         
         Set<ContactPerson> result = new HashSet<ContactPerson>();
         
-        List<Address> addrs = locationsList.getAddresses(supplier.getBusinessPartnerId());
+        List<Address> addrs = locationsList.getAddresses(supplier);
         for (Address address : addrs) {
             List<ContactPerson> cPersons = addressesList.getContactPersons(address.getAddressId());
             result.addAll(cPersons);

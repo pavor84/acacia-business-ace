@@ -31,10 +31,8 @@ import com.cosmos.acacia.callback.CallbackHandler;
 import com.cosmos.acacia.callback.CallbackLocal;
 import com.cosmos.acacia.callback.CallbackTransportObject;
 import com.cosmos.acacia.crm.bl.assembling.AssemblingLocal;
-import com.cosmos.acacia.crm.bl.contactbook.validation.PersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.ClassifierGroup;
@@ -95,12 +93,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
     private EntityStoreManagerLocal esm;
 
     @EJB
-    private GenericUniqueValidatorLocal<User> validator;
-
-    @EJB
-    private PersonValidatorLocal personValidator;
-
-    @EJB
     private AcaciaSessionLocal session;
 
     @EJB
@@ -125,34 +117,42 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public UUID login(String username, char[] password) {
         try {
-            return login(username, password, LOGIN);
-        } catch (ValidationException ex){
-            if (ex.getMessage().equals(INCORRECT_LOGIN_DATA))
-                return login(username, password, TEMPORARY_LOGIN);
+            return login(username, password, false);
+        } catch (ValidationException ex) {
+            if (ex.getMessage().equals(INCORRECT_LOGIN_DATA)) {
+                return login(username, password, true);
+            }
 
             throw ex;
         }
     }
 
-    private UUID login(String username, char[] password, String loginType) {
-        Query loginQuery = em.createNamedQuery("User." + loginType);
+    private UUID login(String username, char[] password, boolean temporaryLogin) {
+        Query loginQuery;
+        if(temporaryLogin) {
+            loginQuery = em.createNamedQuery(User.NQ_FIND_BY_USERNAME_AND_SYSTEM_PASSWORD);
+        } else {
+            loginQuery = em.createNamedQuery(User.NQ_FIND_BY_USERNAME_AND_PASSWORD);
+        }
         loginQuery.setParameter("username", username);
         loginQuery.setParameter("password", SecurityUtils.getHash(new String(password)));
 
         try {
             User user = (User) loginQuery.getSingleResult();
-//            if (!user.getIsActive())
-//                throw new ValidationException("Login.account.inactive");
 
-            if (loginType.equals(TEMPORARY_LOGIN)) {
+            if (temporaryLogin) {
                 // Checking whether the validity period hasn't expired
                 if (System.currentTimeMillis() > user.getSystemPasswordValidity().getTime())
                     throw new ValidationException(INCORRECT_LOGIN_DATA);
 
                 user.setNextActionAfterLogin(CHANGE_PASSWORD);
             }
-            if (!passwordChange)
-                return session.login(user);
+
+            if (!passwordChange) {
+                UUID sessionId = session.login(user);
+                setOrganization(session.getSystemOrganization());
+                return sessionId;
+            }
 
             return null;
         } catch (NoResultException ex){
@@ -221,7 +221,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         q = em.createNamedQuery(RegistrationCode.NQ_FIND_BY_EMAIL);
         q.setParameter("emailAddress", email);
         try {
-            codeNumber = (UUID) q.getSingleResult();
+            RegistrationCode registrationCode = (RegistrationCode) q.getSingleResult();
+            codeNumber = registrationCode.getRegistrationCode();
         } catch(NoResultException ex) {
             codeNumber = UUID.randomUUID();
             RegistrationCode code = new RegistrationCode(codeNumber);
@@ -255,10 +256,6 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @SuppressWarnings("null")
     @Override
     public User signup(User user, Organization organization, Address branch, Person person) {
-
-        validator.validate(user, "userName");
-        personValidator.validate(person);
-
         Query q = em.createQuery("SELECT p FROM Person p where p.firstName=:firstName and " +
                 "p.secondName=:secondName and " +
                 "p.lastName=:lastName and " +
@@ -377,7 +374,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public void updateOrganization(User user, CallbackHandler handler) {
 
-        List<Organization> organizations = getOrganizationsList(user);
+        List<Organization> organizations = getActiveOrganizations(user);
         Organization organization = null;
 
         if (organizations != null && organizations.size() > 0) {
@@ -436,60 +433,15 @@ public class UsersBean implements UsersRemote, UsersLocal {
         return organization;
     }
 
-    /*private String getHexString(byte[] array) {
-        StringBuilder hexString = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            hexString.append(Integer.toHexString(0xFF & array[i]));
-        }
-        return hexString.toString();
-    }*/
-
-
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Organization> getOrganizationsList(User user) {
-        if (user == null)
-            user = session.getUser();
-
-        Query q = em.createNamedQuery("UserOrganization.findByUser");
-        q.setParameter("user", user);
-
-        List<UserOrganization> uoList = q.getResultList();
-        List<Organization> result = new ArrayList(uoList.size());
-        for (UserOrganization uo : uoList) {
-            result.add(uo.getOrganization());
-        }
-        return result;
+    public List<Organization> getActiveOrganizations(User user) {
+        return usersService.getActiveOrganizations(user);
     }
 
-   /* private char[] saltChars = new char[] {'!', 'b', '0', 'z', 'h', 'o'};
-
-    private String saltPassword(String password) {
-        StringBuffer sb = new StringBuffer();
-        char[] chars = password.toCharArray();
-        int crystal = 0;
-        for (int i = 0; i < chars.length; i ++) {
-            sb.append(chars[i]);
-            if (i % 2 == 0 && crystal < saltChars.length) {
-                sb.append(saltChars[crystal++]);
-            }
-        }
-
-        return sb.toString();
+    @Override
+    public List<Organization> getOrganizations(User user) {
+        return usersService.getOrganizations(user);
     }
-
-     private String getHash(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA");
-            password = saltPassword(password);
-            digest.update(password.getBytes());
-            String result = getHexString(digest.digest());
-            return result;
-        } catch (NoSuchAlgorithmException e) {
-            log.error("Hashing algorithm not found");
-            return password;
-        }
-    }*/
 
     private static String EMAIL_HOST = "localhost";
     private static String FROM = "admin@acacia.com";
@@ -532,26 +484,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @SuppressWarnings("unchecked")
     @Override
     public List<User> getUsers(Organization organization) {
-        if(organization == null || organization.getId() == null) {
-            Query q = em.createNamedQuery("User.findAll");
-            return new ArrayList<User>(q.getResultList());
-        }
-
-        Query q = em.createNamedQuery("UserOrganization.findByOrganization");
-        q.setParameter(ORGANIZATION_KEY, organization);
-        List<UserOrganization> uoList = q.getResultList();
-        List<User> users = new ArrayList<User>(uoList.size());
-        for (UserOrganization userOrganization : uoList) {
-            User user = userOrganization.getUser();
-//            if (userOrganization.getBranch() != null) {
-//                user.setBranchName(userOrganization.getBranch().getAddressName());
-//            }
-
-//            user.setActive(userOrganization.isUserActive());
-            users.add(user);
-        }
-
-        return users;
+        return usersService.getUsers(organization);
     }
 
     @Override
@@ -567,7 +500,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public void leaveOrganization(Organization organization) {
         User user = session.getUser();
-        List<Organization> list = getOrganizationsList(user);
+        List<Organization> list = getActiveOrganizations(user);
         if (list != null && list.size() == 1)
             throw new ValidationException("Leave.impossible");
 
@@ -655,7 +588,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
     @Override
     public UserOrganization getUserOrganization(Person person) {
-        Query q = em.createNamedQuery("User.findByPerson");
+        Query q = em.createNamedQuery(User.NQ_FIND_BY_PERSON);
         q.setParameter("person", person);
 
         try {

@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.bl.contactbook;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
 import com.cosmos.acacia.crm.data.contacts.BasicOrganization;
 import java.util.UUID;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.OrganizationValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.ClassifiersLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -27,6 +27,7 @@ import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.Currency;
@@ -54,9 +55,6 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     private BankDetailsListLocal bankDetailsManager;
 
     @EJB
-    private OrganizationValidatorLocal organizationValidator;
-
-    @EJB
     private AddressesListLocal addressesManager;
 
     @EJB
@@ -68,27 +66,17 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     @EJB
     private ClassifiersLocal classifiersManager;
 
+    @EJB
+    private ContactsServiceLocal contactsService;
+
 
     @Override
-    public List<Organization> getOrganizations(UUID parentId)
-    {
-        Query q;
-        if(parentId != null)
-        {
-            q = em.createNamedQuery("Organization.findByParentDataObjectAndDeleted");
-            q.setParameter("parentDataObjectId", parentId);
-        }
-        else
-        {
-            q = em.createNamedQuery("Organization.findByParentDataObjectIsNullAndDeleted");
-        }
-        q.setParameter("deleted", false);
-        return new ArrayList<Organization>(q.getResultList());
+    public List<Organization> getOrganizations(UUID parentId) {
+        return contactsService.getOrganizations(parentId);
     }
 
     @Override
-    public List<DbResource> getCurrencies()
-    {
+    public List<DbResource> getCurrencies() {
         return bankDetailsManager.getCurrencies();
     }
 
@@ -110,11 +98,8 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     @Override
-    public Organization newOrganization(UUID parentId) {
-        Organization org = new Organization();
-        org.setParentId(parentId);
-        org.setDefaultCurrency(Currency.BGN.getDbResource());
-        return org;
+    public Organization newOrganization() {
+        return contactsService.newOrganization();
     }
 
     @Override
@@ -125,15 +110,12 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     public Organization saveOrganization(Organization organization) {
-        organizationValidator.validate(organization);
-
-        esm.persist(em, organization);
-        return organization;
+        return contactsService.saveOrganization(organization);
     }
 
     @Override
     public Organization saveBasicOrganization(BasicOrganization basicOrganization) {
-        Organization organization = newOrganization(acaciaSession.getOrganization().getId());
+        Organization organization = newOrganization();
         organization.setOrganizationName(basicOrganization.getOrganizationName());
         organization.setNickname(basicOrganization.getNickname());
         organization.setVatNumber(basicOrganization.getVatNumber());
@@ -156,9 +138,9 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
         address.setPostalAddress(basicOrganization.getPostalAddress());
         address = addressesManager.saveAddress(address);
 
-        ContactPerson contactPerson = addressesManager.newContactPerson();
+        ContactPerson contactPerson = addressesManager.newContactPerson(address);
         contactPerson.setPerson(person);
-        contactPerson = addressesManager.saveContactPerson(contactPerson, address.getId());
+        contactPerson = addressesManager.saveContactPerson(contactPerson);
 
         organization.setRegistrationAddress(address);
         organization = saveOrganization(organization);
@@ -208,8 +190,8 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     @Override
-    public List<Address> getAddresses(UUID parentId) {
-       return locationsManager.getAddresses(parentId);
+    public List<Address> getAddresses(BusinessPartner businessPartner) {
+       return locationsManager.getAddresses(businessPartner);
     }
 
     @Override

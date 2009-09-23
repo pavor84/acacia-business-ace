@@ -189,7 +189,9 @@ public interface UsersRemote {
      * @param user
      * @return list
      */
-    List<Organization> getOrganizationsList(User user);
+    List<Organization> getActiveOrganizations(User user);
+
+    List<Organization> getOrganizations(User user);
 
     /**
      * Deletes the specified user

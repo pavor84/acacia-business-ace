@@ -126,7 +126,7 @@ public interface LocationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(UUID parentId);
+    List<Address> getAddresses(BusinessPartner businessPartner);
 
     /**
      * Gets the EntityProperties of Address

@@ -98,6 +98,8 @@ public interface AcaciaSessionLocal extends AcaciaSessionRemote {
 
     void sendMail(MailType mailType, MessageParameters messageParameters);
 
+    void sendSystemMail(String content, String subject);
+
     MailUtils getSystemMailUtils();
 
     MailUtils getOrganizationMailUtils();

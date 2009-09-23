@@ -36,7 +36,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -44,8 +43,21 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "business_units", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "business_unit_name"})}
+@Table(name = "business_units", catalog = "acacia", schema = "public"
+/*
+CREATE UNIQUE INDEX idx_business_units_parent_child
+  ON business_units
+  USING btree
+  (parent_business_unit_id, business_unit_id);
+CREATE UNIQUE INDEX uidx_business_units_name
+  ON business_units
+  USING btree
+  (organization_id, lower(business_unit_name::text));
+CONSTRAINT check_business_units_parent_not_null CHECK (
+ is_root = false AND parent_business_unit_id IS NOT NULL
+ OR
+ is_root = true AND parent_business_unit_id IS NULL)
+*/
 )
 @NamedQueries({
     @NamedQuery(
@@ -56,12 +68,12 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.parentBusinessUnit, t.businessUnitName"
     ),
     @NamedQuery(
-        name = BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT,
+        name = BusinessUnit.NQ_FIND_ROOT_BUSINESS_UNIT,
         query = "SELECT t FROM BusinessUnit t" +
                 " WHERE" +
                 "  t.organization = :organization" +
                 "  and t.parentBusinessUnit is null" +
-                " ORDER BY t.businessUnitName"
+                "  and t.root = true"
     ),
     @NamedQuery(
         name = BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT,
@@ -69,6 +81,13 @@ import org.hibernate.annotations.Type;
                 " WHERE" +
                 "  t.parentBusinessUnit = :parentBusinessUnit" +
                 " ORDER BY t.businessUnitName"
+    ),
+    @NamedQuery(
+        name = BusinessUnit.NQ_FIND_BY_BUSINESS_UNIT_NAME,
+        query = "SELECT t FROM BusinessUnit t" +
+                " WHERE" +
+                "  t.organization = :organization" +
+                "  and t.businessUnitName = :businessUnitName"
     )
 })
 @Form(
@@ -102,10 +121,12 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     //
     protected static final String CLASS_NAME = "BusinessUnit";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
-    public static final String NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByNullParentBusinessUnit";
+    public static final String NQ_FIND_ROOT_BUSINESS_UNIT = CLASS_NAME + ".findRootBusinessUnit";
     public static final String NQ_FIND_BY_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByParentBusinessUnit";
+    public static final String NQ_FIND_BY_BUSINESS_UNIT_NAME = CLASS_NAME + ".findByBusinessUnitName";
     //
-    public static final String ROOT_BUSINESS_UNIT = "Root";
+    public static final String ROOT_BUSINESS_UNIT_NAME = "Root";
+    public static final String USERS_BUSINESS_UNIT_NAME = "Users";
 
     @Id
     @Basic(optional = false)
@@ -245,7 +266,13 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     }
 
     public BusinessUnit(Organization organization) {
-        this.organization = organization;
+        setOrganization(organization);
+    }
+
+    public BusinessUnit(BusinessUnit parentBusinessUnit) {
+        this.parentBusinessUnit = parentBusinessUnit;
+        setOrganization(parentBusinessUnit.getOrganization());
+        root = false;
     }
 
     public UUID getBusinessUnitId() {
