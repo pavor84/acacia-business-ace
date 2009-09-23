@@ -6,6 +6,7 @@
 package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
@@ -14,10 +15,14 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
  *
  * @author Miro
  */
-public class UserSecurityRoleListPanel extends DetailEntityListPanel<User, UserSecurityRole> {
+public class UserSecurityRoleListPanel extends DetailEntityListPanel<UserOrganization, UserSecurityRole> {
 
-    public UserSecurityRoleListPanel(EntityPanel<User> mainEntityPanel, Class<UserSecurityRole> itemEntityClass) {
-        super(mainEntityPanel, itemEntityClass);
+    public UserSecurityRoleListPanel(EntityPanel<UserOrganization> mainEntityPanel) {
+        super(mainEntityPanel, UserSecurityRole.class);
+    }
+
+    public UserSecurityRoleListPanel(UserOrganization userOrganization) {
+        super(userOrganization, UserSecurityRole.class);
     }
 
     @Override

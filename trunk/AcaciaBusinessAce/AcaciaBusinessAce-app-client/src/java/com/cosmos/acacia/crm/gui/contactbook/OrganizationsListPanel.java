@@ -39,12 +39,23 @@ import org.jdesktop.application.Task;
 public class OrganizationsListPanel extends AbstractTablePanel<Organization> {
 
     public OrganizationsListPanel() {
-        this(LocalSession.instance().getOrganization().getId());
+        this(getOrganizationId());
+    }
+
+    private static UUID getOrganizationId() {
+        Organization organization;
+        System.out.println("LocalSession.instance().getOrganization(): " + LocalSession.instance().getOrganization());
+        if((organization = LocalSession.instance().getOrganization()) != null) {
+            return organization.getId();
+        } else {
+            return null;
+        }
     }
 
     /** Creates new form OrganizationsListPanel */
     public OrganizationsListPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
+        System.out.println("OrganizationsListPanel(" + parentDataObjectId + ")");
         initComponentsCustom();
     }
 
@@ -156,11 +167,10 @@ public class OrganizationsListPanel extends AbstractTablePanel<Organization> {
                 setSpecialCaption("activateOrganization.Action.text");
         }
     }
-    protected List<Organization> getOrganizations()
-    {
-        if(organizations == null)
-        {
-            organizations = getFormSession().getOrganizations(getParentDataObjectId());
+    protected List<Organization> getOrganizations()  {
+        if(organizations == null) {
+            UUID parentDataObjectId = getParentDataObjectId();
+            organizations = getFormSession().getOrganizations(parentDataObjectId);
         }
 
         return organizations;

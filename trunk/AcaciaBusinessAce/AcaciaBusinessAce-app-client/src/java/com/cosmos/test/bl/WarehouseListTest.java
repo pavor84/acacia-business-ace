@@ -83,7 +83,7 @@ public class WarehouseListTest extends BaseTest{
     private Warehouse createNew() throws UncompleteUnitTestException {
 
         DataObject branchParent = getOrganization().getDataObject();
-        List<Address> addresses = addressListSession.getAddresses(branchParent.getDataObjectId());
+        List<Address> addresses = addressListSession.getAddresses(getOrganization());
 
         if ( addresses.size()==0 )
             throw new UncompleteUnitTestException("Not available branches to select from for branchParent= dataobject.id"+branchParent.getDataObjectId());

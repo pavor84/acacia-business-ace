@@ -336,7 +336,18 @@ public class LoginForm extends AcaciaPanel {
 
             /* End of preferences handling */
 
-            List<Organization> organizations = getFormSession().getOrganizationsList(user);
+            int size;
+            List<Organization> organizations = getFormSession().getActiveOrganizations(user);
+            if((size = organizations.size()) == 0) {
+                UserOrganizationListPanel userOrganizationListPanel = new UserOrganizationListPanel(user);
+                if(DialogResponse.SELECT.equals(userOrganizationListPanel.showDialog())) {
+                    System.out.println("userOrganizationListPanel.getSelectedRowObject(): " + userOrganizationListPanel.getSelectedRowObject());
+                } else {
+                }
+            } else {
+
+            }
+
             Organization organization = null;
             if (organizations.size() > 1) {
                 String defaultOrganization = prefs.get(username + ORGANIZATION, null);
@@ -385,6 +396,7 @@ public class LoginForm extends AcaciaPanel {
             close(false);
             AcaciaApplication.launch(AcaciaApplication.class, null);
         } catch (Exception ex) {
+            ex.printStackTrace();
             handleBusinessException(ex);
         }
 

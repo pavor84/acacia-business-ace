@@ -131,7 +131,7 @@ public abstract class TestUtils {
                 Person person = personsSession.getPersons(org.getId()).get(0);
 
                 // Must have at least one branch for the organization
-                branch = orgSession.getAddresses(org.getId()).get(0);
+                branch = orgSession.getAddresses(org).get(0);
                 searchMore = false;
 
                 user = usersSession.createUser("");

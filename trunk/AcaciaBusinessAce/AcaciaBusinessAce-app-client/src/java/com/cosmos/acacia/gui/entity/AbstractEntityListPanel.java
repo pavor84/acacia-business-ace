@@ -11,7 +11,6 @@ import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
-import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -150,6 +149,21 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity> extend
         }
 
         return getMainEntity();
+    }
+
+    @Override
+    protected Object getMainEntity() {
+        Object mainEntity;
+        if((mainEntity = super.getMainEntity()) != null) {
+            return mainEntity;
+        }
+
+        EntityPanel mainEntityPanel;
+        if((mainEntityPanel = getMainEntityPanel()) != null) {
+            return mainEntityPanel.getEntity();
+        }
+
+        return null;
     }
 
     protected boolean evaluateBooleanExpression(String expression) {

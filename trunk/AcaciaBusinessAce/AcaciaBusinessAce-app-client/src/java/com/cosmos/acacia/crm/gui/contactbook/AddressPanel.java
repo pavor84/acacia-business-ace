@@ -478,7 +478,7 @@ public class AddressPanel extends BaseEntityPanel {
     }
 
     private int getNewAddressNumber() {
-        List<Address> addresses = getFormSession().getAddresses(getParentDataObjectId());
+        List<Address> addresses = getFormSession().getAddresses(address.getBusinessPartner());
         if (addresses == null) {
             return 0;
         }

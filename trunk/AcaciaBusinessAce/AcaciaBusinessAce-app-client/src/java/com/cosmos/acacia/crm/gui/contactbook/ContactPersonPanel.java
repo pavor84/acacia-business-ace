@@ -129,10 +129,6 @@ public class ContactPersonPanel extends BaseEntityPanel {
         setResizable(false);
 
         System.out.println("initData().contactPerson: " + contactPerson);
-        if(contactPerson == null)
-        {
-            contactPerson = getFormSession().newContactPerson();
-        }
 
         BindingGroup bg = getBindingGroup();
 
@@ -225,7 +221,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: contactPerson: " + contactPerson);
-        contactPerson = getFormSession().saveContactPerson(contactPerson, getParentDataObjectId());
+        contactPerson = getFormSession().saveContactPerson(contactPerson);
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(contactPerson);
         if (closeAfter)

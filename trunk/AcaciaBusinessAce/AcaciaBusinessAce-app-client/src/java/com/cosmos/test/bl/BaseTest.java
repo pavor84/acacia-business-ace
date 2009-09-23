@@ -54,7 +54,7 @@ public class BaseTest {
         AcaciaApplication.setSessionId(sessionId);
 
         User user = session.getUser();
-        List<Organization> organizations = usersRemote.getOrganizationsList(user);
+        List<Organization> organizations = usersRemote.getActiveOrganizations(user);
         if ( organizations==null || organizations.isEmpty() )
             throw new IllegalStateException("Organizations empty for this user: "+userName);
 

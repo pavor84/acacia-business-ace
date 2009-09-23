@@ -63,7 +63,7 @@ public class UsersTest implements Serializable {
         if (orgSession == null)
             orgSession = AcaciaPanel.getBean(OrganizationsListRemote.class, false);
 
-        organization = orgSession.newOrganization(null);
+        organization = orgSession.newOrganization();
         organization.setOrganizationName(TestUtils.getRandomString(10));
         organization = orgSession.saveOrganization(organization);
 
@@ -189,7 +189,7 @@ public class UsersTest implements Serializable {
 
     @Test
     public void organizationsTest() {
-        Organization org = orgSession.newOrganization(null);
+        Organization org = orgSession.newOrganization();
         org.setOrganizationName(TestUtils.getRandomString(10));
         org = orgSession.saveOrganization(org);
         loginTest();
@@ -197,7 +197,7 @@ public class UsersTest implements Serializable {
         formSession.joinOrganization(org, null);
         formSession.updateOrganization(user, null);
 
-        List<Organization> orgs = formSession.getOrganizationsList(user);
+        List<Organization> orgs = formSession.getActiveOrganizations(user);
         Assert.assertNotNull(orgs);
         Assert.assertTrue(orgs.size() >= 2);
 

@@ -589,13 +589,14 @@ public class CustomerPaymentForm extends BaseEntityPanel {
             customerListPanel.setClassifierVisible(false);
         }
 
-        if (bankDetails == null) {
-            bankDetails = bankDetailsListRemote.getBankDetailsForOrganization(getOrganizationDataObjectId());
-        }
-
-        if (entity.getId() == null && entity.getCashier() == null) {
-            entity.setCashier(getAcaciaSession().getPerson());
-        }
+        throw new UnsupportedOperationException("ToDo");
+//        if (bankDetails == null) {
+//            bankDetails = bankDetailsListRemote.getBankDetailsForOrganization(getOrganizationDataObjectId());
+//        }
+//
+//        if (entity.getId() == null && entity.getCashier() == null) {
+//            entity.setCashier(getAcaciaSession().getPerson());
+//        }
     }
 
     private void afterBind() {

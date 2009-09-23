@@ -39,7 +39,6 @@ import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBMenu;
 import com.cosmos.swingb.JBMenuBar;
 import com.cosmos.swingb.JBMenuItem;
-import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBProgressBar;
 import com.cosmos.swingb.JBSeparator;
 import com.cosmos.swingb.JBStatusBar;
@@ -77,13 +76,13 @@ public class AcaciaApplicationView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
         for(SecureAction secureAction : secureActions) {
-            //System.out.println("secureAction: " + secureAction);
+            System.out.println("secureAction: " + secureAction);
             if(secureAction instanceof EntityAction) {
                 try {
                     ApplicationAction action = new EntityApplicationAction(appActionMap, resourceMap, (EntityAction) secureAction);
                     //System.out.println("action: " + action);
                     appActionMap.put(action.getName(), action);
-                    //System.out.println("appActionMap.get(action.getName()): " + appActionMap.get(action.getName()));
+                    System.out.println("appActionMap.get(action.getName()): " + appActionMap.get(action.getName()));
                 } catch(Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -207,8 +206,21 @@ public class AcaciaApplicationView extends FrameView {
         ResourceMap resourceMap = getResourceMap();
         ApplicationActionMap appActionMap = getActionMap();
         Action action = appActionMap.get(name);
+        if("users".equals(name) && action == null) {
+            System.out.println("getAction(" + menu + ")");
+            System.out.println("menuName=" + name + ", resourceMap=" + resourceMap + ", appActionMap=" + appActionMap);
+            System.out.println("action=" + action);
+            Object[] keys;
+            if((keys = appActionMap.allKeys()) != null) {
+                System.out.println("allKeys= " + Arrays.asList(keys));
+            }
+            if((keys = appActionMap.keys()) != null) {
+                System.out.println("keys= " + Arrays.asList(keys));
+            }
+        }
         if(action == null && menu instanceof Menu) {
             action = new ApplicationAction(appActionMap, resourceMap, name, null, null, null, BlockingScope.NONE);
+            System.out.println("new action=" + action);
         }
 
         return action;

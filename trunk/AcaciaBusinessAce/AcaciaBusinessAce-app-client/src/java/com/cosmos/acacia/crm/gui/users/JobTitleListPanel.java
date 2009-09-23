@@ -21,11 +21,7 @@ public class JobTitleListPanel extends DetailEntityListPanel<DataObjectBean, Job
     }*/
 
     public JobTitleListPanel(EntityPanel<DataObjectBean> mainEntityPanel) {
-        this(mainEntityPanel, JobTitle.class);
-    }
-
-    public JobTitleListPanel(EntityPanel<DataObjectBean> mainEntityPanel, Class<JobTitle> itemEntityClass) {
-        super(mainEntityPanel, itemEntityClass);
+        super(mainEntityPanel, JobTitle.class);
     }
 
     @Override
@@ -41,6 +37,8 @@ public class JobTitleListPanel extends DetailEntityListPanel<DataObjectBean, Job
         } else if(mainEntityPanel instanceof UserPanel) {
             //return ((UserPanel) mainEntityPanel).getEntity().getBusinessUnit();
             throw new UnsupportedOperationException("TODO");
+        } else if(mainEntityPanel instanceof UserOrganizationPanel) {
+            return ((UserOrganizationPanel) mainEntityPanel).getEntity().getBusinessUnit();
         }
 
         throw new UnsupportedOperationException("Unsupported mainEntityPanel=" + mainEntityPanel);

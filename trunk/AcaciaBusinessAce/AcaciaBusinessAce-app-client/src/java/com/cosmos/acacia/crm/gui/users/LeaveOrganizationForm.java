@@ -92,7 +92,7 @@ public class LeaveOrganizationForm extends AcaciaPanel {
     public void initData() {
         organizationsComboBox.removeAllItems();
         int idx = -1;
-        organizations = getFormSession().getOrganizationsList(null);
+        organizations = getFormSession().getActiveOrganizations(null);
         for (Organization org : organizations) {
             organizationsComboBox.addItem(org);
         }
