@@ -12,6 +12,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -36,7 +37,7 @@ public interface BankDetailsListRemote {
      * @param organizationDataObjectId
      * @return
      */
-    List<BankDetail> getBankDetailsForOrganization(UUID organizationDataObjectId);
+    List<BankDetail> getBankDetailsForOrganization(BusinessPartner businessPartner);
 
     /**
      * Gets the EntithyProperties of BankDetail

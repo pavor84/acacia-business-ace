@@ -6,7 +6,10 @@
 package com.cosmos.acacia.crm.bl.contacts;
 
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
+import java.util.List;
+import java.util.UUID;
 import javax.ejb.Local;
 
 /**
@@ -18,9 +21,15 @@ public interface ContactsServiceLocal extends ContactsServiceRemote {
 
     Person newPerson(BusinessPartner parentBusinessPartner);
 
-    /*Organization newOrganization();
+    List<Person> getPersons(UUID parentBusinessPartnerId);
 
-    Address newAddress(BusinessPartner businessPartner);
+    List<Organization> getOrganizations(UUID parentBusinessPartnerId);
+
+    Organization newOrganization();
+
+    Organization saveOrganization(Organization organization);
+
+    /*Address newAddress(BusinessPartner businessPartner);
 
     CommunicationContact newCommunicationContact(Address address);
 

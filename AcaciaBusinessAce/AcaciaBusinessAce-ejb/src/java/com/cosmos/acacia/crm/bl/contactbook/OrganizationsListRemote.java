@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.BasicOrganization;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -41,7 +42,7 @@ public interface OrganizationsListRemote {
      * @param parent
      * @return list of addresses
      */
-    List<Address> getAddresses(UUID parentId);
+    List<Address> getAddresses(BusinessPartner businessPartner);
 
     /**
      * Lists all organization types
@@ -77,7 +78,7 @@ public interface OrganizationsListRemote {
      * @param parentId the parent
      * @return the newly created organization
      */
-    Organization newOrganization(UUID parentId);
+    Organization newOrganization();
 
     /**
      * Saves an Organization

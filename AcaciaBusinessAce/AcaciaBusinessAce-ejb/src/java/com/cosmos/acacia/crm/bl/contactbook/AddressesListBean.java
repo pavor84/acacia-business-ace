@@ -18,9 +18,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.AddressValidatorLocal;
-import com.cosmos.acacia.crm.bl.contactbook.validation.CommunicationContactValidatorLocal;
-import com.cosmos.acacia.crm.bl.contactbook.validation.ContactPersonValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.City;
@@ -53,12 +50,6 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     private LocationsListLocal locationsManager;
     @EJB
     private PersonsListLocal personManager;
-    @EJB
-    private AddressValidatorLocal addressValidator;
-    @EJB
-    private ContactPersonValidatorLocal contactPersonValidator;
-    @EJB
-    private CommunicationContactValidatorLocal communicationContactValidator;
     @EJB
     private PositionTypesListLocal positionTypesManager;
 
@@ -94,8 +85,6 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
 
     @Override
     public Address saveAddress(Address address) {
-        addressValidator.validate(address);
-
         return locationsManager.saveAddress(address);
     }
 
@@ -107,8 +96,8 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
         return esm.remove(em, address);
     }
 
-    public List<Address> getAddresses(UUID parentId) {
-        return locationsManager.getAddresses(parentId);
+    public List<Address> getAddresses(BusinessPartner businessPartner) {
+        return locationsManager.getAddresses(businessPartner);
     }
 
     public EntityProperties getAddressEntityProperties() {
@@ -234,8 +223,9 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
     }
 
     @Override
-    public ContactPerson newContactPerson() {
-        return new ContactPerson();
+    public ContactPerson newContactPerson(Address address) {
+        ContactPerson contactPerson = new ContactPerson(address);
+        return contactPerson;
     }
 
     @Override
@@ -249,20 +239,12 @@ public class AddressesListBean implements AddressesListRemote, AddressesListLoca
             communicationContact.setParentId(parentDataObjectId);
         }
 
-        communicationContactValidator.validate(communicationContact);
-
         esm.persist(em, communicationContact);
         return communicationContact;
     }
 
     @Override
-    public ContactPerson saveContactPerson(ContactPerson contactPerson, UUID parentDataObjectId) {
-
-        //if (parentDataObjectId != contactPerson.getParentId())
-        contactPerson.setParentId(parentDataObjectId);
-
-        contactPersonValidator.validate(contactPerson);
-
+    public ContactPerson saveContactPerson(ContactPerson contactPerson) {
         esm.persist(em, contactPerson);
 
         return contactPerson;

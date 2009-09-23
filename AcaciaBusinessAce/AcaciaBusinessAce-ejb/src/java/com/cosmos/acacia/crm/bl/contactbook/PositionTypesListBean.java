@@ -18,7 +18,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.contactbook.validation.PositionTypeValidatorLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.Organization;
@@ -42,9 +41,6 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
     @EJB
     private EntityStoreManagerLocal esm;
-
-    @EJB
-    private PositionTypeValidatorLocal validator;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -86,7 +82,6 @@ public class PositionTypesListBean implements PositionTypesListRemote, PositionT
 
     @SuppressWarnings("unchecked")
     public PositionType savePositionType(PositionType positionType, Class ownerClass) {
-        validator.validate(positionType);
 
 //        if (ownerClass != null) {
 //            if (ownerClass == Person.class)

@@ -321,6 +321,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     }
 
 /*
+delete from registration_codes;
 delete from assembling_messages;
 delete from expressions;
 delete from privilege_roles;
@@ -328,6 +329,7 @@ delete from privileges;
 delete from privilege_categories;
 delete from user_security_roles;
 delete from security_roles;
+delete from user_organizations;
 delete from business_unit_addresses;
 delete from business_units;
 delete from user_organizations;
@@ -370,6 +372,9 @@ delete from organizations;
         address.setPostalCode("1612");
         address.setPostalAddress("ap. 15, entr. B, fl. 1, 5 Vorino str., kv. Krasno selo");
         esm.persist(em, address);
+
+        organization.setRegistrationAddress(address);
+        em.persist(organization);
 
         city = locationsService.getCityByCode(bulgaria, City.CODE_STARA_ZAGORA);
         Person person = contactsService.newPerson(organization);
@@ -423,20 +428,26 @@ delete from organizations;
         supervisor.setIsNew(false);
         esm.persist(em, supervisor);
 
-        BusinessUnit businessUnit = new BusinessUnit(organization);
-        businessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT);
-        businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
-        businessUnit.setRoot(true);
-        businessUnit.setDisabled(false);
-        esm.persist(em, businessUnit);
+        BusinessUnit rootBusinessUnit = new BusinessUnit(organization);
+        rootBusinessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT_NAME);
+        rootBusinessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
+        rootBusinessUnit.setRoot(true);
+        rootBusinessUnit.setDisabled(false);
+        esm.persist(em, rootBusinessUnit);
+
+        BusinessUnit usersBusinessUnit = new BusinessUnit(rootBusinessUnit);
+        usersBusinessUnit.setBusinessUnitName(BusinessUnit.USERS_BUSINESS_UNIT_NAME);
+        usersBusinessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
+        usersBusinessUnit.setDisabled(false);
+        esm.persist(em, usersBusinessUnit);
 
         UserOrganization userOrganization = new UserOrganization(supervisor, organization);
         userOrganization.setUserActive(true);
         userOrganization.setBranch(address);
-        userOrganization.setBusinessUnit(businessUnit);
+        userOrganization.setBusinessUnit(rootBusinessUnit);
         esm.persist(em, userOrganization);
 
-        SecurityRole securityRole = new SecurityRole(organization, businessUnit, User.SUPERVISOR_USER_NAME);
+        SecurityRole securityRole = new SecurityRole(organization, rootBusinessUnit, User.SUPERVISOR_USER_NAME);
         esm.persist(em, securityRole);
 
         UserSecurityRole userSecurityRole = new UserSecurityRole(userOrganization, securityRole);

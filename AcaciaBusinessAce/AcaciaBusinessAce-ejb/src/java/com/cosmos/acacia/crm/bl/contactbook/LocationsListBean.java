@@ -19,7 +19,6 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntitySequenceServiceLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.bl.validation.GenericUniqueValidatorLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.City;
 import com.cosmos.acacia.crm.data.contacts.Country;
@@ -45,8 +44,6 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     private EntitySequenceServiceLocal entitySequenceService;
     @EJB
     private BankDetailsListLocal bankDetailsManager;
-    @EJB
-    private GenericUniqueValidatorLocal<Country> validator;
 
     @Override
     public Country getCountryByName(String countryName) {
@@ -124,9 +121,6 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
     }
 
     public Country saveCountry(Country country) {
-
-        validator.validate(country, "countryName");
-
         esm.persist(em, country);
         return country;
     }
@@ -156,15 +150,14 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
         return esm.remove(em, city);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Address> getAddresses(UUID parentId) {
-        if (parentId == null) {
+    @Override
+    public List<Address> getAddresses(BusinessPartner businessPartner) {
+        if (businessPartner == null || businessPartner.getBusinessPartnerId() == null) {
             return new ArrayList<Address>();
         }
 
-        Query query = em.createNamedQuery("Address.findByParentDataObjectAndDeleted");
-        query.setParameter("parentDataObjectId", parentId);
-        query.setParameter("deleted", false);
+        Query query = em.createNamedQuery(Address.FIND_ALL);
+        query.setParameter("businessPartner", businessPartner);
 
         return new ArrayList<Address>(query.getResultList());
     }

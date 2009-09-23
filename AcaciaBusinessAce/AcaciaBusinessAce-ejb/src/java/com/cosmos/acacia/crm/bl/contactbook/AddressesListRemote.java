@@ -81,7 +81,7 @@ public interface AddressesListRemote {
      * @param parentDataObjectId
      * @return list of addresses
      */
-    List<Address> getAddresses(UUID parentDataObjectId);
+    List<Address> getAddresses(BusinessPartner businessPartner);
 
     /* Handling contact persons */
 
@@ -114,7 +114,7 @@ public interface AddressesListRemote {
      *
      * @return the newly created ContactPerson
      */
-    ContactPerson newContactPerson();
+    ContactPerson newContactPerson(Address address);
 
     /**
      * Saves a ContactPerson for a specified parent (an Address data object)
@@ -123,8 +123,7 @@ public interface AddressesListRemote {
      * @param parentDataObjectId
      * @return the saved ContactPerson
      */
-    ContactPerson saveContactPerson(ContactPerson contactPerson,
-            UUID parentDataObjectId);
+    ContactPerson saveContactPerson(ContactPerson contactPerson);
 
     /**
      * Deletes a ContactPerson

@@ -11,7 +11,6 @@ import javax.persistence.Query;
 
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
-import com.cosmos.acacia.crm.bl.validation.PatternMaskFormatValidatorLocal;
 import com.cosmos.acacia.crm.data.product.PatternMaskFormat;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -30,9 +29,6 @@ public class PatternMaskListBean implements PatternMaskListRemote {
     @EJB
     private EntityStoreManagerLocal esm;
     
-    @EJB
-    private PatternMaskFormatValidatorLocal patternMaskFormatValidator;
-
     /**
      * @see com.cosmos.acacia.crm.bl.impl.PatternMaskListRemote#getPatternMaskEntityProperties()
      */
@@ -68,8 +64,6 @@ public class PatternMaskListBean implements PatternMaskListRemote {
 
     @Override
     public PatternMaskFormat savePatternMaskFormat(PatternMaskFormat format) {
-        patternMaskFormatValidator.validate(format); 
-        
         //dummy - because it is not used, but yet set as 'not-null' 
         //in the db schema
         format.setFormatType('-');

@@ -64,6 +64,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -356,15 +357,22 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public DataObject getDataObject(UUID dataObjectId)
-    {
+    public DataObject getDataObject(UUID dataObjectId) {
         return em.find(DataObject.class, dataObjectId);
     }
 
     @Override
     public void setOrganization(Organization organization) {
+        if(getSupervisor().equals(getUser())) {
+            organization = getSystemOrganization();
+        }
+        if(organization == null) {
+            throw new NullPointerException("The organization can not be null.");
+        }
+
         organization.setOwn(true);
         SessionRegistry.getSession().setValue(SessionContext.ORGANIZATION_KEY, organization);
+        setUserOrganization(null);
     }
 
     @Override
@@ -740,6 +748,20 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
             throw new RuntimeException(ex);
         }
     }
+
+    @Override
+    public void sendSystemMail(String content, String subject) {
+        String email = getSupervisor().getEmailAddress();
+        try {
+            List<javax.mail.Address> to =
+                    Arrays.<javax.mail.Address>asList(InternetAddress.parse(email, false));
+            MessageParameters messageParameters = new MessageParameters(to, content, subject);
+            sendMail(MailType.System, messageParameters);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("email=" + email + "; subject=" + subject + "; content=" + content, ex);
+        }
+     }
 
     @Override
     public void sendMail(MailType mailType, MessageParameters messageParameters) {

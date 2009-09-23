@@ -13,10 +13,13 @@ import com.cosmos.acacia.crm.data.ChildEntityBean;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.util.BooleanUtils;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +31,8 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
  */
 //@Stateless
 public abstract class AbstractEntityService implements EntityService {
+
+    protected static final String IS_NEW_ENTITY = "IS_NEW_ENTITY";
 
     @PersistenceContext
     protected EntityManager em;
@@ -42,22 +47,22 @@ public abstract class AbstractEntityService implements EntityService {
     protected <E, I> void initItem(E entity, I item) {
     }
 
-    protected <E> void preSave(E entity) {
+    protected <E> void preSave(E entity, Map<String, Object> parameters) {
     }
 
-    protected <E> void postSave(E entity) {
+    protected <E> void postSave(E entity, Map<String, Object> parameters) {
     }
 
-    protected <E> void preConfirm(E entity) {
+    protected <E> void preConfirm(E entity, Map<String, Object> parameters) {
     }
 
-    protected <E> void postConfirm(E entity) {
+    protected <E> void postConfirm(E entity, Map<String, Object> parameters) {
     }
 
-    protected <E> void preDelete(E entity) {
+    protected <E> void preDelete(E entity, Map<String, Object> parameters) {
     }
 
-    protected <E> void postDelete(E entity) {
+    protected <E> void postDelete(E entity, Map<String, Object> parameters) {
     }
 
     @Override
@@ -134,9 +139,10 @@ public abstract class AbstractEntityService implements EntityService {
 
     @Override
     public <E> E save(E entity) {
-        preSave(entity);
+        TreeMap<String, Object> parameters = new TreeMap<String, Object>();
+        preSave(entity, parameters);
         esm.persist(em, entity);
-        postSave(entity);
+        postSave(entity, parameters);
         return entity;
     }
 
@@ -157,13 +163,14 @@ public abstract class AbstractEntityService implements EntityService {
             throw new UnsupportedOperationException("Not supported entity: " + entity);
         }
 
-        preConfirm(entity);
+        TreeMap<String, Object> parameters = new TreeMap<String, Object>();
+        preConfirm(entity, parameters);
 
         if(entity instanceof BusinessDocument) {
             confirmBusinessDocument((BusinessDocument)entity);
         }
 
-        postConfirm(entity);
+        postConfirm(entity, parameters);
 
         return entity;
     }
@@ -175,9 +182,10 @@ public abstract class AbstractEntityService implements EntityService {
 
     @Override
     public <E> void delete(E entity) {
-        preDelete(entity);
+        TreeMap<String, Object> parameters = new TreeMap<String, Object>();
+        preDelete(entity, parameters);
         esm.remove(em, entity);
-        postDelete(entity);
+        postDelete(entity, parameters);
     }
 
     @Override
@@ -205,5 +213,26 @@ public abstract class AbstractEntityService implements EntityService {
         }
 
         return items;
+    }
+
+    protected boolean isNewEntity(Map<String, Object> parameters) {
+        Object value;
+        if((value = parameters.get(IS_NEW_ENTITY)) != null) {
+            if(value instanceof Boolean) {
+                return (Boolean) value;
+            }
+
+            return BooleanUtils.parseBoolean(String.valueOf(value));
+        }
+
+        return false;
+    }
+
+    protected void setNewEntity(Map<String, Object> parameters) {
+        setNewEntity(parameters, Boolean.TRUE);
+    }
+
+    protected void setNewEntity(Map<String, Object> parameters, Boolean value) {
+        parameters.put(IS_NEW_ENTITY, value);
     }
 }
