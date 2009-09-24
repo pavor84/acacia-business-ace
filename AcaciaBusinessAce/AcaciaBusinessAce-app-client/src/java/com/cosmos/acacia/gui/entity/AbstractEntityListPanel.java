@@ -37,8 +37,8 @@ import org.jdesktop.swingbinding.JTableBinding;
  *
  * @author Miro
  */
-public abstract class AbstractEntityListPanel<E extends PersistentEntity> extends AbstractTablePanel<E>
-        implements Refreshable {
+public abstract class AbstractEntityListPanel<E extends PersistentEntity>
+        extends AbstractTablePanel<E> implements Refreshable {
 
     private EntityFormProcessor entityFormProcessor;
     private EntityService entityService;

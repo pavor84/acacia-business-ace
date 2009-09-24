@@ -5,8 +5,8 @@
 
 package com.cosmos.acacia.crm.gui.location;
 
-import com.cosmos.acacia.crm.data.contacts.City;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.City;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.gui.entity.DetailEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 
