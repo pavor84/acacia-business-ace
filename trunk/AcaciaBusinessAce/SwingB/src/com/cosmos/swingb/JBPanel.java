@@ -48,8 +48,7 @@ import org.jdesktop.swingx.error.ErrorReporter;
  *
  * @author Miro
  */
-public class JBPanel
-        extends JXPanel {
+public class JBPanel extends JXPanel {
 
     private static final Logger logger = Logger.getLogger(JBPanel.class.getName());
     private Application application;
