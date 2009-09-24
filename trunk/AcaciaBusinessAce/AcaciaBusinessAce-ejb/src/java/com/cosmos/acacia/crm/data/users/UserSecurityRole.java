@@ -73,7 +73,7 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "user_organization_id", referencedColumnName = "user_organization_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="User")
+    @Property(title="User Organization")
     private UserOrganization userOrganization;
 
     @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
@@ -82,7 +82,7 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.security.SecurityRoleListPanel",
             constructorParameters={
-                @PropertyName(getter="user"),
+                @PropertyName(getter="userOrganization"),
                 @PropertyName(getter="${entity}", setter="userSecurityRole")
             }
         ),

@@ -74,8 +74,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             DataObject dataObject,
             String entityClassName,
             UUID parentId) {
-        DataObjectTypeLocal dotLocal = getDataObjectTypeLocal();
-        DataObjectType dot = dotLocal.getDataObjectType(entityClassName);
+        DataObjectType dot = getDataObjectTypeLocal().getDataObjectType(entityClassName);
 
         if (dataObject == null) {
             dataObject = new DataObject();

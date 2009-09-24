@@ -15,6 +15,7 @@ import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
@@ -62,12 +63,14 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     public List<SecurityRole> getSecurityRoles() {
         Query q = em.createNamedQuery(SecurityRole.NQ_FIND_ALL);
         q.setParameter(PK_ORGANIZATION, session.getOrganization());
+        q.setParameter("supervisorRoleName", SecurityRole.SUPERVISOR_ROLE_NAME);
 
         return new ArrayList<SecurityRole>(q.getResultList());
     }
 
     public List<SecurityRole> getSecurityRoles(BusinessUnit businessUnit) {
         Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_BUSINESS_UNIT);
+        q.setParameter("supervisorRoleName", SecurityRole.SUPERVISOR_ROLE_NAME);
         q.setParameter(PK_BUSINESS_UNIT, businessUnit);
 
         return new ArrayList<SecurityRole>(q.getResultList());
@@ -77,6 +80,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
         Query q = em.createNamedQuery(SecurityRole.NQ_FIND_BY_USER_ORGANIZATION);
         q.setParameter(PK_ORGANIZATION, session.getOrganization());
         q.setParameter(PK_USER_ORGANIZATION, userOrganization);
+        q.setParameter("supervisorRoleName", SecurityRole.SUPERVISOR_ROLE_NAME);
         List<SecurityRole> securityRoles = new ArrayList<SecurityRole>(q.getResultList());
         SecurityRole securityRole;
         if(userSecurityRole != null && (securityRole = userSecurityRole.getSecurityRole()) != null

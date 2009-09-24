@@ -20,10 +20,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;

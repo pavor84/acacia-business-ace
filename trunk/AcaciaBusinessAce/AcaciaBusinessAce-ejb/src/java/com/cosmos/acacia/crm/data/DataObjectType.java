@@ -170,9 +170,12 @@ public class DataObjectType implements Serializable, PersistentEntity<DataObject
 
     @Override
     public String toString() {
-        return super.toString();
-        //return "com.cosmos.acacia.crm.data.DataObjectType[dataObjectTypeId=" +
-               //dataObjectTypeId + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append("[id=").append(dataObjectTypeId).append("]@");
+        sb.append(Integer.toHexString(super.hashCode()));
+        sb.append("; dataObjectType=").append(dataObjectType);
+        
+        return sb.toString();
     }
 
     @Override

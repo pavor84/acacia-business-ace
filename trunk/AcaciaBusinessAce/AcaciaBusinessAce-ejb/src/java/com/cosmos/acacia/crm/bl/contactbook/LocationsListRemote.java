@@ -6,8 +6,8 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.contacts.City;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.City;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.beansbinding.EntityProperties;

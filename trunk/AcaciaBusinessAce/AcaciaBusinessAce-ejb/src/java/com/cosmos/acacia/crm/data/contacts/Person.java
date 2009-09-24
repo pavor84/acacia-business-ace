@@ -5,6 +5,9 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.crm.data.location.City;
+import com.cosmos.acacia.crm.data.location.Country;
+import com.cosmos.acacia.annotation.Form;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -26,6 +29,7 @@ import javax.persistence.DiscriminatorValue;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
 import org.hibernate.annotations.Type;
@@ -73,6 +77,11 @@ CREATE UNIQUE INDEX uix_persons_names_birth_date_city
                 "  and t.dataObject.deleted = :deleted"
     )
 })
+@Form(
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
+)
 public class Person extends BusinessPartner implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;

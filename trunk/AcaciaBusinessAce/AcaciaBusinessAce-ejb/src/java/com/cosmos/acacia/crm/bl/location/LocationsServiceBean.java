@@ -4,8 +4,8 @@
  */
 package com.cosmos.acacia.crm.bl.location;
 
-import com.cosmos.acacia.crm.data.contacts.City;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.City;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import java.util.ArrayList;
 import java.util.List;

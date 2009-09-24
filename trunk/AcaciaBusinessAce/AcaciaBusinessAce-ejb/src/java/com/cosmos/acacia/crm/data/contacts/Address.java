@@ -5,6 +5,8 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.crm.data.location.City;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;

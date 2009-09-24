@@ -81,8 +81,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
     }
 
     @Override
-    public EntityProperties getOrganizationEntityProperties()
-    {
+    public EntityProperties getOrganizationEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(Organization.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 

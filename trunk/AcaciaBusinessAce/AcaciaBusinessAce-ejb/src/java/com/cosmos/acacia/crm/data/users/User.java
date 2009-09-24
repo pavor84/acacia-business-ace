@@ -138,14 +138,6 @@ CREATE UNIQUE INDEX uix_users_username
                 componentClass=JBPanel.class
             ),
             parentContainerName=DataObjectBean.PRIMARY_INFO
-        ),
-        @FormContainer(
-            name=User.INFO_ADDRESSES,
-            title="Addresses",
-            container=@Component(
-                componentClass=JBPanel.class
-            ),
-            parentContainerName=DataObjectBean.PRIMARY_INFO
         )
     },
     serviceClass=UsersServiceRemote.class,
@@ -165,7 +157,6 @@ public class User extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_BY_USER_NAME = CLASS_NAME + ".findByUserName";
     //
     public static final String INFO_GENERAL = "informationGeneral";
-    public static final String INFO_ADDRESSES = "informationAddresses";
     public static final String ORGANIZATIONS = "organizations";
     //
     public static final String SUPERVISOR_USER_NAME = "supervisor";

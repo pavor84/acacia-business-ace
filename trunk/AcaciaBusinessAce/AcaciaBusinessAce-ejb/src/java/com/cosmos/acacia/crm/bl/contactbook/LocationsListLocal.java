@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.bl.contactbook;
 
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.Country;
 import javax.ejb.Local;
 
 /**

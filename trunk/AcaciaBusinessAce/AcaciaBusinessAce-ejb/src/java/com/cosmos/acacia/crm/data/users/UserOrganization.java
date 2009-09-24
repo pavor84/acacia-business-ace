@@ -71,6 +71,7 @@ import org.hibernate.annotations.Type;
                 " where" +
                 "  t.user = :user" +
                 "  and t.userActive = true" +
+                "  and t.organization.active = true" +
                 "  and t.organization.businessPartnerId != t.organization.parentBusinessPartnerId"
     ),
     @NamedQuery(
@@ -91,6 +92,15 @@ import org.hibernate.annotations.Type;
                 "  t1.organization = :organization" +
                 "  and t1.businessUnit in (:businessUnits)" +
                 "  and t1.jobTitle.functionalHierarchy in (:functionalHierarchies)"
+    ),
+    @NamedQuery(
+        name = UserOrganization.NQ_UPDATE_DEFAULT_ORGANIZATIONS,
+        query = "update UserOrganization t" +
+                " set" +
+                "  defaultOrganization = false" +
+                " where" +
+                "  t.organization = :organization" +
+                "  and t.userOrganizationId != :userOrganizationId"
     )
 })
 @Form(
@@ -147,6 +157,8 @@ public class UserOrganization extends DataObjectBean implements Serializable {
             CLASS_NAME + ".findByUserAndOrganization";
     public static final String NQ_FIND_BY_BUSINESS_UNITS_AND_FUNCTIONAL_HIERARCHY =
             CLASS_NAME + ".findByBusinessUnitsAndFunctionalHierarchy";
+    public static final String NQ_UPDATE_DEFAULT_ORGANIZATIONS =
+            CLASS_NAME + ".updateDefaultOrganizations";
 
     @Id
     @Basic(optional = false)
@@ -198,22 +210,6 @@ public class UserOrganization extends DataObjectBean implements Serializable {
         )
     )
     private Address branch;
-
-    @Basic(optional = false)
-    @Column(name = "is_user_active", nullable = false)
-    @Property(title="Active",
-        editable=false,
-        readOnly=true,
-        formComponent=@FormComponent(
-            parentContainerName=PRIMARY_INFO,
-            component=@Component(
-                componentClass=JBCheckBox.class,
-                text="Active",
-                componentConstraints="skip 1"
-            )
-        )
-    )
-    private boolean userActive;
 
     @Column(name = "email_address", length = 64)
     @Property(title="Email",
@@ -296,6 +292,34 @@ public class UserOrganization extends DataObjectBean implements Serializable {
     )
     private User manager;
 
+    @Basic(optional = false)
+    @Column(name = "is_user_active", nullable = false)
+    @Property(title="Active",
+        formComponent=@FormComponent(
+            parentContainerName=PRIMARY_INFO,
+            component=@Component(
+                componentClass=JBCheckBox.class,
+                text="Active",
+                componentConstraints="skip 1"
+            )
+        )
+    )
+    private boolean userActive;
+
+    @Basic(optional = false)
+    @Column(name = "default_organization", nullable = false)
+    @Property(title="Default",
+        formComponent=@FormComponent(
+            parentContainerName=PRIMARY_INFO,
+            component=@Component(
+                componentClass=JBCheckBox.class,
+                text="Default",
+                componentConstraints="skip 1"
+            )
+        )
+    )
+    private boolean defaultOrganization;
+
     @JoinColumn(name = "user_organization_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private DataObject dataObject;
@@ -350,6 +374,14 @@ public class UserOrganization extends DataObjectBean implements Serializable {
 
     public void setBusinessUnit(BusinessUnit businessUnit) {
         this.businessUnit = businessUnit;
+    }
+
+    public boolean isDefaultOrganization() {
+        return defaultOrganization;
+    }
+
+    public void setDefaultOrganization(boolean defaultOrganization) {
+        this.defaultOrganization = defaultOrganization;
     }
 
     @Override

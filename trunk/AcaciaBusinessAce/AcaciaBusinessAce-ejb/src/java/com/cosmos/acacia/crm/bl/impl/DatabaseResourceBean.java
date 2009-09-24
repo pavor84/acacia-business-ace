@@ -29,10 +29,10 @@ import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PersonalCommunicationContact;
@@ -447,7 +447,7 @@ delete from organizations;
         userOrganization.setBusinessUnit(rootBusinessUnit);
         esm.persist(em, userOrganization);
 
-        SecurityRole securityRole = new SecurityRole(organization, rootBusinessUnit, User.SUPERVISOR_USER_NAME);
+        SecurityRole securityRole = new SecurityRole(organization, rootBusinessUnit, SecurityRole.SUPERVISOR_ROLE_NAME);
         esm.persist(em, securityRole);
 
         UserSecurityRole userSecurityRole = new UserSecurityRole(userOrganization, securityRole);
@@ -463,6 +463,8 @@ delete from organizations;
         roleAccessMap.put(AccessRight.Execute, AccessLevel.System);
 
         setSecurityRoleAccess(organization, securityRole, User.class.getPackage(), roleAccessMap);
+        setSecurityRoleAccess(organization, securityRole, Organization.class.getPackage(), roleAccessMap);
+        setSecurityRoleAccess(organization, securityRole, Country.class.getPackage(), roleAccessMap);
     }
 
     private void setSecurityRoleAccess(

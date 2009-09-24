@@ -120,8 +120,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
 
     @Override
     public List<Organization> getActiveOrganizations(User user) {
-        if (user == null)
-            user = session.getUser();
+        if(user == null) {
+            throw new NullPointerException("The user parameter can not be null.");
+        }
 
         Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_ACTIVE_USER);
         q.setParameter("user", user);
@@ -499,6 +500,13 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     private void postSaveUserOrganization(UserOrganization userOrganization, Map<String, Object> parameters) {
         if(isNewEntity(parameters)) {
             session.sendSystemMail(userOrganization.toString(), "New UserOrganization: " + userOrganization.getInfo());
+        }
+
+        if(userOrganization.isDefaultOrganization()) {
+            Query q = em.createNamedQuery(UserOrganization.NQ_UPDATE_DEFAULT_ORGANIZATIONS);
+            q.setParameter("organization", userOrganization.getOrganization());
+            q.setParameter("userOrganizationId", userOrganization.getUserOrganizationId());
+            q.executeUpdate();
         }
     }
 
