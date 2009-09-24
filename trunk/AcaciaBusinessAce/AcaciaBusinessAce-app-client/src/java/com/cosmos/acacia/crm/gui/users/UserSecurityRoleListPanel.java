@@ -29,4 +29,13 @@ public class UserSecurityRoleListPanel extends DetailEntityListPanel<UserOrganiz
     protected EntityPanel getEntityPanel(UserSecurityRole entity) {
         return new UserSecurityRolePanel(this, entity);
     }
+
+    public UserOrganization getUserOrganization() {
+        return getMainEntity();
+    }
+
+    public void setUserOrganization(UserOrganization userOrganization) {
+        setMainEntity(userOrganization);
+        refresh();
+    }
 }

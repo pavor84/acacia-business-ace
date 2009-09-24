@@ -24,10 +24,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.contactbook.AddressesListRemote;
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.contacts.City;
+import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.contacts.CommunicationContact;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
-import com.cosmos.acacia.crm.data.contacts.Country;
+import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaLookupProvider;

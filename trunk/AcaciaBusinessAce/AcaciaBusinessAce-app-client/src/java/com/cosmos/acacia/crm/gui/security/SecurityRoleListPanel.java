@@ -6,7 +6,7 @@ package com.cosmos.acacia.crm.gui.security;
 
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
-import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
@@ -26,8 +26,8 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
         super(SecurityRole.class, businessUnit);
     }
 
-    public SecurityRoleListPanel(User user, UserSecurityRole userSecurityRole) {
-        super(SecurityRole.class, user, userSecurityRole);
+    public SecurityRoleListPanel(UserOrganization userOrganization, UserSecurityRole userSecurityRole) {
+        super(SecurityRole.class, userOrganization, userSecurityRole);
     }
 
     @Override
@@ -44,12 +44,12 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
     @Override
     public List<SecurityRole> getEntities() {
         BusinessUnit businessUnit;
-        User user;
+        UserOrganization userOrganization;
         Class entityClass = getEntityClass();
         if((businessUnit = getBusinessUnit()) != null) {
             return getEntityService().getEntities(entityClass, businessUnit);
-        } else if((user = getUser()) != null) {
-            return getEntityService().getEntities(entityClass, user, getUserSecurityRole());
+        } else if((userOrganization = getUserOrganization()) != null) {
+            return getEntityService().getEntities(entityClass, userOrganization, getUserSecurityRole());
         } else {
             return getEntityService().getEntities(entityClass);
         }
@@ -71,19 +71,19 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
         refresh();
     }
 
-    public User getUser() {
-        if(parameters != null && parameters.length > 0 && parameters[0] instanceof User) {
-            return (User) parameters[0];
+    public UserOrganization getUserOrganization() {
+        if(parameters != null && parameters.length > 0 && parameters[0] instanceof UserOrganization) {
+            return (UserOrganization) parameters[0];
         }
 
         return null;
     }
 
-    public void setUser(User user) {
+    public void setUserOrganization(UserOrganization userOrganization) {
         if(parameters == null) {
             parameters = new Object[2];
         }
-        parameters[0] = user;
+        parameters[0] = userOrganization;
         refresh();
     }
 
