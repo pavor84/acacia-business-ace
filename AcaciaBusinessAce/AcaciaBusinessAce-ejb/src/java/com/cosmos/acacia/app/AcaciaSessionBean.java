@@ -46,6 +46,7 @@ import com.cosmos.acacia.data.ui.EntityAction;
 import com.cosmos.acacia.data.ui.SecureAction;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
 import com.cosmos.acacia.crm.enums.SpecialPermission;
+import com.cosmos.acacia.data.ui.CustomAction;
 import com.cosmos.acacia.data.ui.Widget;
 import com.cosmos.acacia.data.ui.MenuBar;
 import com.cosmos.acacia.data.ui.SystemAction;
@@ -153,9 +154,15 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
                             action.readXML(xmlReader);
                             if(canRead(action.getEntityClass())) {
                                 secureActions.add(action);
+                            } else {
+                                System.out.println("No access to the action: " + action);
                             }
                         } else if(SystemAction.ELEMENT_NAME.equals(elementName)) {
                             SystemAction action = new SystemAction();
+                            action.readXML(xmlReader);
+                            secureActions.add(action);
+                        } else if(CustomAction.ELEMENT_NAME.equals(elementName)) {
+                            CustomAction action = new CustomAction();
                             action.readXML(xmlReader);
                             secureActions.add(action);
                         }

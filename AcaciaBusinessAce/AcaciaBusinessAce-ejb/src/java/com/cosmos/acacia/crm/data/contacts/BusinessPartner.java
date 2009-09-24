@@ -1,5 +1,6 @@
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -57,6 +59,10 @@ import org.hibernate.annotations.Type;
                 " order by t1.discriminatorId, t1.businessPartnerId"
     )
 })
+@Form(
+    serviceClass=ContactsServiceRemote.class,
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel"
+)
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
 
     public static final String PARTNER_ORGANIZATION = "O";

@@ -49,6 +49,8 @@ import org.hibernate.annotations.Type;
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.organization = :organization" +
+                "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
+                "           and t.securityRoleName = :supervisorRoleName)" +
                 " ORDER BY t.businessUnit.businessUnitName, t.securityRoleName"
     ),
     @NamedQuery(
@@ -56,6 +58,8 @@ import org.hibernate.annotations.Type;
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.businessUnit = :businessUnit" +
+                "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
+                "           and t.securityRoleName = :supervisorRoleName)" +
                 " ORDER BY t.securityRoleName"
     ),
     @NamedQuery(
@@ -63,6 +67,8 @@ import org.hibernate.annotations.Type;
         query = "SELECT t FROM SecurityRole t" +
                 " WHERE" +
                 "  t.organization = :organization" +
+                "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
+                "           and t.securityRoleName = :supervisorRoleName)" +
                 "  and t.securityRoleId not in (" +
                 "   SELECT t1.securityRole.securityRoleId FROM UserSecurityRole t1" +
                 "    WHERE" +
@@ -94,6 +100,8 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_BUSINESS_UNIT = CLASS_NAME + ".findByBusinessUnit";
     public static final String NQ_FIND_BY_USER_ORGANIZATION = CLASS_NAME + ".findByUserOrganization";
+    //
+    public static final String SUPERVISOR_ROLE_NAME = "supervisorRole";
 
     @Id
     @Basic(optional = false)

@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
 import javax.persistence.Basic;
@@ -69,6 +71,11 @@ USING btree
                 "  t.businessPartnerId = t.parentBusinessPartnerId"
     )
 })
+@Form(
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.OrganizationPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel"
+)
 public class Organization extends BusinessPartner implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
@@ -132,7 +139,8 @@ public class Organization extends BusinessPartner implements Serializable, TextR
 
     @Basic(optional = false)
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @Property(title="Active")
+    private boolean active;
 
     @Basic(optional = false)
     @Type(type="uuid")
@@ -246,11 +254,11 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

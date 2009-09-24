@@ -40,11 +40,24 @@
         <entityAction name="users" enabledProperty="" selectedProperty="" blockingScope="" show="">
             <entity className="com.cosmos.acacia.crm.data.users.User"/>
         </entityAction>
+        <entityAction name="organizations" enabledProperty="" selectedProperty="" blockingScope="" show="">
+            <entity className="com.cosmos.acacia.crm.data.contacts.Organization"/>
+        </entityAction>
+        <entityAction name="persons" enabledProperty="" selectedProperty="" blockingScope="" show="">
+            <entity className="com.cosmos.acacia.crm.data.contacts.Person"/>
+        </entityAction>
+        <customAction name="businessPartners" enabledProperty="" selectedProperty="" blockingScope="">
+            <form className="com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel"/>
+        </customAction>
+        <entityAction name="countries" enabledProperty="" selectedProperty="" blockingScope="" show="">
+            <entity className="com.cosmos.acacia.crm.data.location.Country"/>
+        </entityAction>
+        <entityAction name="positionTypes" enabledProperty="" selectedProperty="" blockingScope="" show="">
+            <entity className="com.cosmos.acacia.crm.data.contacts.PositionType"/>
+        </entityAction>
         <privilegeAction name="" enabledProperty="" selectedProperty="" blockingScope="">
             <privilege name=""/>
         </privilegeAction>
-        <customAction name="" enabledProperty="" selectedProperty="" blockingScope="">
-        </customAction>
     </actions>
     <menuBar name="menuBar">
         <menu name="fileMenu">
@@ -55,6 +68,15 @@
             <menuItem name="copy"/>
             <menuItem name="paste"/>
             <menuItem name="delete"/>
+        </menu>
+        <menu name="contactsMenu">
+            <menuItem name="organizations"/>
+            <menuItem name="persons"/>
+            <separator/>
+            <menuItem name="businessPartners"/>
+            <separator/>
+            <menuItem name="countries"/>
+            <menuItem name="positionTypes"/>
         </menu>
         <menu name="settingsMenu">
             <menu name="adminMenu">

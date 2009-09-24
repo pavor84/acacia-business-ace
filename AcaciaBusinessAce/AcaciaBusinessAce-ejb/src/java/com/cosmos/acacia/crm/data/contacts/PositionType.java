@@ -7,9 +7,11 @@ package com.cosmos.acacia.crm.data.contacts;
 
 
 
+import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
@@ -54,6 +56,11 @@ CREATE UNIQUE INDEX uix_position_types
                 "  and t.positionTypeName = :positionTypeName"
     )
 })
+@Form(
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.PositionTypePanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel"
+)
 public class PositionType extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;

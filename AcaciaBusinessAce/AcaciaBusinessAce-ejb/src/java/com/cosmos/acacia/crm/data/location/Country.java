@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data.contacts;
+package com.cosmos.acacia.crm.data.location;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
@@ -85,7 +85,9 @@ CREATE UNIQUE INDEX uix_countries_country_name
     )
 })
 @Form(
-    serviceClass=LocationsServiceRemote.class
+    serviceClass=LocationsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.location.CountryPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
 )
 public class Country extends DataObjectBean implements Serializable {
 
