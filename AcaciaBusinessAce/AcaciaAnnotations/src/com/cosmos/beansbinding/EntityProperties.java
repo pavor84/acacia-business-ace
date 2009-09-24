@@ -25,7 +25,7 @@ public class EntityProperties implements Cloneable, Serializable {
     private Class entityClass;
     private String tableName;
     private EntityProperties superEntityProperties;
-    private Map<String, PropertyDetails> beanProperties;
+    private Map<String, PropertyDetails> beanProperties = new TreeMap<String, PropertyDetails>();
     private AutoBinding.UpdateStrategy updateStrategy;
     private Class entityFormClass;
     private Class entityListFormClass;
@@ -110,10 +110,6 @@ public class EntityProperties implements Cloneable, Serializable {
     }
 
     public void addBeanProperties(Collection<PropertyDetails> beanProps) {
-        if (beanProperties == null) {
-            beanProperties = new HashMap<String, PropertyDetails>();
-        }
-
         int orderPosition;
         Map<Integer, PropertyDetails> map = getPropertyDetailsMap();
         if((map = getPropertyDetailsMap()).size() == 0) {
@@ -136,12 +132,8 @@ public class EntityProperties implements Cloneable, Serializable {
     }
 
     public void setBeanProperties(Collection<PropertyDetails> beanProps) {
-        int size;
-        if (beanProps == null || (size = beanProps.size()) == 0) {
-            beanProperties = Collections.EMPTY_MAP;
-        } else {
-            beanProperties = new HashMap<String, PropertyDetails>(size);
-
+        beanProperties.clear();
+        if (beanProps != null && beanProps.size() > 0) {
             for (PropertyDetails bp : beanProps) {
                 beanProperties.put(bp.getPropertyName(), bp);
             }
@@ -153,10 +145,6 @@ public class EntityProperties implements Cloneable, Serializable {
     }
 
     public void addPropertyDetails(PropertyDetails propertyDetails) {
-        if (beanProperties == null) {
-            beanProperties = new HashMap<String, PropertyDetails>();
-        }
-
         beanProperties.put(propertyDetails.getPropertyName(), propertyDetails);
     }
 
@@ -201,13 +189,9 @@ public class EntityProperties implements Cloneable, Serializable {
     public Object clone() {
         try {
             EntityProperties entityProps = (EntityProperties) super.clone();
-            Collection<PropertyDetails> props = getValues();
-            List<PropertyDetails> newProps = new ArrayList<PropertyDetails>(props.size());
-            Iterator<PropertyDetails> iter = props.iterator();
-            while (iter.hasNext()) {
-                newProps.add((PropertyDetails) iter.next().clone());
+            for(String key : beanProperties.keySet()) {
+                entityProps.beanProperties.put(key, (PropertyDetails) beanProperties.get(key).clone());
             }
-            entityProps.setBeanProperties(newProps);
 
             return entityProps;
         } catch (CloneNotSupportedException ex) {
