@@ -7,7 +7,6 @@ package com.cosmos.beansbinding;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,7 +21,7 @@ public class EntityProperties implements Cloneable, Serializable {
     private Class entityClass;
     private String tableName;
     private EntityProperties superEntityProperties;
-    private Map<String, PropertyDetails> beanProperties = new HashMap<String, PropertyDetails>();
+    private Map<String, PropertyDetails> beanProperties = new TreeMap<String, PropertyDetails>();
     private AutoBinding.UpdateStrategy updateStrategy;
     private Class entityFormClass;
     private Class entityListFormClass;
