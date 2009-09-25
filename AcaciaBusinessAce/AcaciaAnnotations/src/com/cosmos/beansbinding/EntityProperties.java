@@ -169,10 +169,11 @@ public class EntityProperties implements Cloneable, Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Entity class: ").append(entityClass);
         sb.append(", tableName: ").append(tableName);
+        sb.append(", keys: ").append(beanProperties.keySet());
+        sb.append(", values: ").append(beanProperties.values());
         Collection<PropertyDetails> properties = getValues();
         sb.append(", properties: ").append(properties);
         sb.append(", properties.hashCode: ").append(properties.hashCode());
-        sb.append(", 1st property: ").append(properties.iterator().next());
         sb.append(", super: ").append(super.toString());
 
         //private Map<String, PropertyDetails> beanProperties;
@@ -185,7 +186,7 @@ public class EntityProperties implements Cloneable, Serializable {
     public Object clone() {
         try {
             EntityProperties entityProps = (EntityProperties) super.clone();
-            entityProps.beanProperties.clear();
+            entityProps.beanProperties = new TreeMap<String, PropertyDetails>();
             for(String key : beanProperties.keySet()) {
                 entityProps.beanProperties.put(key, (PropertyDetails) beanProperties.get(key).clone());
             }
