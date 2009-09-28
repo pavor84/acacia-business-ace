@@ -16,11 +16,11 @@ import java.util.List;
 public class UserListPanel extends EntityListPanel<User> {
 
     public UserListPanel() {
-        super(User.class);
+        super(User.class, null);
     }
 
     public UserListPanel(User user) {
-        super(User.class, user);
+        super(User.class, null, user);
     }
 
     @Override

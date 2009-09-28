@@ -14,7 +14,7 @@ import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.PropertyStateEvent;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.JBFormattedTextField;
 
 /**
@@ -172,7 +172,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
      * @return the binding
      */
     public Binding bind(BindingGroup bindingGroup, Object entity,
-                     PropertyDetails propertyDetails, NumberFormat format, final boolean bindToPercent, EditType editType, Number totalValue) {
+                     EntityProperty propertyDetails, NumberFormat format, final boolean bindToPercent, EditType editType, Number totalValue) {
         
         boolean rebinding = binding!=null;
         //first - un-bind if needed
@@ -195,8 +195,10 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         
         binding = targetField.bind(bindingGroup, entity, propertyDetails, format);
         secondField.setFormat(format);
-        
-        secondBinding = secondField.bind(bindingGroup, this, new PropertyDetails("secondValue", "Second Value", BigDecimal.class.getName()), format);
+
+        EntityProperty entityProperty = EntityProperty.createEntityProperty(
+                "secondValue", "Second Value", BigDecimal.class.getName());
+        secondBinding = secondField.bind(bindingGroup, this, entityProperty, format);
         //set up listener for value updates on the bound field
         binding.addBindingListener(new AbstractBindingListener() {
             private void update(){

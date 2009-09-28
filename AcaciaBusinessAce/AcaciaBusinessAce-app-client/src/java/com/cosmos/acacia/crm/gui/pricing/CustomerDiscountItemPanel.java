@@ -16,7 +16,7 @@ import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBDecimalField;
@@ -160,7 +160,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             CustomerDiscountItemByProduct itemByProduct = (CustomerDiscountItemByProduct)item;
             EntityProperties entityProps = getFormSession().getCustomerDiscountItemByProductEntityProperties();
 
-            PropertyDetails propDetails = entityProps.getPropertyDetails("product");
+            EntityProperty propDetails = entityProps.getEntityProperty("product");
             ProductsListPanel productList = new ProductsListPanel(getOrganizationDataObjectId());
             productComboList.bind(
                 bg,
@@ -176,7 +176,7 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
                 }
             }, true);
 
-            propDetails = entityProps.getPropertyDetails("discountPercent");
+            propDetails = entityProps.getEntityProperty("discountPercent");
             Binding binding = productDiscountPercentField.bind(bg, itemByProduct, propDetails);
             binding.addBindingListener(new AbstractBindingListener() {
 
@@ -189,14 +189,14 @@ public class CustomerDiscountItemPanel extends BaseEntityPanel {
             CustomerDiscountItemByCategory itemByCategory = (CustomerDiscountItemByCategory)item;
             EntityProperties entityProps = getFormSession().getCustomerDiscountItemByCategoryEntityProperties();
 
-            PropertyDetails propDetails = entityProps.getPropertyDetails("category");
+            EntityProperty propDetails = entityProps.getEntityProperty("category");
             ProductCategoriesTreePanel categoriesPanel = new ProductCategoriesTreePanel(getOrganizationDataObjectId());
             categoryComboList.bind(bg, categoriesPanel, itemByCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("discountPercent");
+            propDetails = entityProps.getEntityProperty("discountPercent");
             categoryDiscountPercentField.bind(bg, itemByCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("includeHeirs");
+            propDetails = entityProps.getEntityProperty("includeHeirs");
             includeHeirsCheckBox.bind(bg, itemByCategory, propDetails);
         }
         bg.bind();

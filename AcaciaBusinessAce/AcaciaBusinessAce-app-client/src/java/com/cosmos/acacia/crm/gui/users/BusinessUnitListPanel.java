@@ -21,11 +21,11 @@ public class BusinessUnitListPanel extends DetailEntityListPanel<Organization, B
     }
 
     public BusinessUnitListPanel(Organization organization) {
-        super(organization, BusinessUnit.class);
+        super(organization, BusinessUnit.class, null);
     }
 
     public BusinessUnitListPanel(EntityPanel<Organization> mainEntityPanel) {
-        super(mainEntityPanel, BusinessUnit.class);
+        super(mainEntityPanel, BusinessUnit.class, null);
     }
 
     @Override

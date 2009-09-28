@@ -609,15 +609,15 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
         
         //branch
-        //branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branch"));
+        //branchField.bind(bindGroup, entity, entProps.getEntityProperty("branch"));
         if ( entity.getBranch()!=null )
             branchField.setText(entity.getBranch().getAddressName());
         
         //document number
-        documentNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"));
+        documentNumberField.bind(bg, entity, entProps.getEntityProperty("documentNumber"));
         
         //doc date
-        documentDateField.bind(bg, entity, entProps.getPropertyDetails("documentDate"), AcaciaUtils.getShortDateFormat());
+        documentDateField.bind(bg, entity, entProps.getEntityProperty("documentDate"), AcaciaUtils.getShortDateFormat());
         
         //clear explicitly any items
         supplierContactField.setModel(new DefaultComboBoxModel());
@@ -629,7 +629,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             bg,
             listPanel,
             entity,
-            entProps.getPropertyDetails("supplier"),
+            entProps.getEntityProperty("supplier"),
             "${displayName}",
             UpdateStrategy.READ_WRITE);
         supplierField.addItemListener(new ItemListener() {
@@ -647,11 +647,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         
         //supplier contact
         supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(),
-            entity, entProps.getPropertyDetails("supplierContact"));
+            entity, entProps.getEntityProperty("supplierContact"));
         onSelectSupplier();
         
         //doc type
-        documentTypeField.bind(bg, getDocumentTypes(), entity, entProps.getPropertyDetails("documentType"));
+        documentTypeField.bind(bg, getDocumentTypes(), entity, entProps.getEntityProperty("documentType"));
         documentTypeField.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -662,13 +662,13 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         }, true);
         
         //currency
-        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getEntityProperty("currency"));
         
         //variable for re-use
         Binding amountsBinding = null;
         
         //invoice sub value
-        amountsBinding = invoiceSubValueField.bind(bg, entity, entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
+        amountsBinding = invoiceSubValueField.bind(bg, entity, entProps.getEntityProperty("invoiceSubValue"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -690,7 +690,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //vat 
-        amountsBinding = vatPercentField.bind(bg, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
+        amountsBinding = vatPercentField.bind(bg, entity, entProps.getEntityProperty("vat"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -699,7 +699,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount value 
-        amountsBinding = discountAmountField.bind(bg, entity, entProps.getPropertyDetails("discountAmount"), getDecimalFormat());
+        amountsBinding = discountAmountField.bind(bg, entity, entProps.getEntityProperty("discountAmount"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -715,7 +715,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //discount percent
-        amountsBinding = discountPercentField.bind(bg, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
+        amountsBinding = discountPercentField.bind(bg, entity, entProps.getEntityProperty("discountPercent"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -731,7 +731,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //transport price
-        amountsBinding = transportPriceField.bind(bg, entity, entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
+        amountsBinding = transportPriceField.bind(bg, entity, entProps.getEntityProperty("transportationPrice"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -740,11 +740,11 @@ public class OrderConfirmationForm extends BaseEntityPanel {
         });
         
         //total value
-        totalValueField.bind(bg, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
+        totalValueField.bind(bg, entity, entProps.getEntityProperty("totalValue"), getDecimalFormat());
         totalValueField.setEditable(true);
         
         //ship week
-        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
+        shipWeekField.bind(bg, entity, entProps.getEntityProperty("shipWeek"), getIntegerFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -753,7 +753,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date from
-        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
+        shipDateFromField.bind(bg, entity, entProps.getEntityProperty("shipDateFrom"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -762,7 +762,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //ship date to
-        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
+        shipDateToField.bind(bg, entity, entProps.getEntityProperty("shipDateTo"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -771,7 +771,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
             });
         
         //notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
         
         bg.bind();
     }
@@ -996,7 +996,7 @@ public class OrderConfirmationForm extends BaseEntityPanel {
     protected void onSelectSupplier() {
         BindingGroup bg = getBindingGroup();
         bg.removeBinding(supplierContactBinding);
-        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
+        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(), entity, entProps.getEntityProperty("supplierContact"));
         supplierContactBinding.bind();
         
         //auto select if one choice is available

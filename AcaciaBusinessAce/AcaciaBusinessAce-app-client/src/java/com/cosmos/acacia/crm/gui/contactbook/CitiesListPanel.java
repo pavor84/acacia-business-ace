@@ -20,7 +20,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -95,7 +95,7 @@ public class CitiesListPanel extends AbstractTablePanel<City> {
 
             countryCity = new City();
             countryBindingGroup = new BindingGroup();
-            PropertyDetails propDetails = new PropertyDetails(
+            EntityProperty propDetails = EntityProperty.createEntityProperty(
                     "country", "Country", Country.class.getName());
             propDetails.setColumnName("country");
 

@@ -13,7 +13,7 @@ import org.jdesktop.swingbinding.JTableBinding.ColumnBinding;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 import com.cosmos.acacia.util.AcaciaUtils;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.FormattedCellRenderer;
 import com.cosmos.swingb.JBTable;
 import com.cosmos.swingb.SelectableListDialog;
@@ -37,14 +37,14 @@ public class AcaciaTable
     public void bindComboListCellEditor(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         bindComboListCellEditor(bindingGroup, selectableListDialog, propertyDetails, (String) null);
     }
 
     public void bindComboListCellEditor(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elPropertyItemDisplay) {
         ObjectToStringConverter converter;
         if (elPropertyItemDisplay != null) {
@@ -66,7 +66,7 @@ public class AcaciaTable
 
     public ColumnBinding createColumnBinding(
             JTableBinding tableBinding,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         ColumnBinding result = super.createColumnBinding(tableBinding, propertyDetails);
 
         //if the column type is java.util.Date and there is no custom display expression - set up format converter
@@ -79,9 +79,9 @@ public class AcaciaTable
 
     protected class TableCellConverter extends Converter {
 
-        private PropertyDetails propertyDetails;
+        private EntityProperty propertyDetails;
 
-        public TableCellConverter(PropertyDetails propertyDetails) {
+        public TableCellConverter(EntityProperty propertyDetails) {
             this.propertyDetails = propertyDetails;
         }
 

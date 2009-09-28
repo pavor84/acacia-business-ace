@@ -18,7 +18,7 @@ import java.util.List;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.DialogResponse;
 
@@ -162,7 +162,7 @@ public class BusinessPartnerTypeChooser extends AcaciaPanel {
         types.add(person);
         
         setSelectedTypeDisplay(org);
-        PropertyDetails pd = new PropertyDetails("selectedTypeDisplay", "Partner Type",
+        EntityProperty pd = EntityProperty.createEntityProperty("selectedTypeDisplay", "Partner Type",
             ToString.class.getName());
         pd.setEditable(false);
         BindingGroup group = new BindingGroup();

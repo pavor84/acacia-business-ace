@@ -24,7 +24,7 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -55,8 +55,8 @@ public class ProductsListPanel
 
         entityProps = getFormSession().getProductListingEntityProperties();
 
-        List<PropertyDetails> propertyDetails =
-                new ArrayList<PropertyDetails>(entityProps.getValues());
+        List<EntityProperty> propertyDetails =
+                new ArrayList<EntityProperty>(entityProps.getValues());
 
         //set custom display for 'productCategory'
         setCustomDisplay(propertyDetails, "category",
@@ -87,10 +87,10 @@ public class ProductsListPanel
         JTableBinding tableBinding = productsTable.bind(productsBindingGroup, getProducts(), entityProps, UpdateStrategy.READ);
 
         tableBinding.setEditable(false);
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getPropertyDetails("measureUnit"));
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getPropertyDetails("dimensionUnit"));
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.MassWeight), entityProps.getPropertyDetails("weightUnit"));
-        productsTable.bindComboBoxCellEditor(productsBindingGroup, getFormSession().getProductColors(), entityProps.getPropertyDetails("productColor"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(), entityProps.getEntityProperty("measureUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.Volume), entityProps.getEntityProperty("dimensionUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getMeasureUnits(MeasurementUnit.Category.MassWeight), entityProps.getEntityProperty("weightUnit"));
+        productsTable.bindComboBoxCellEditor(productsBindingGroup, getFormSession().getProductColors(), entityProps.getEntityProperty("productColor"));
 
         productsBindingGroup.bind();
 

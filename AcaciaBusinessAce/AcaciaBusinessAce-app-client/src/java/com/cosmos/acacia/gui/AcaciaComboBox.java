@@ -13,7 +13,7 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.JBComboBox;
 
 /**
@@ -28,7 +28,7 @@ public class AcaciaComboBox extends JBComboBox {
     @SuppressWarnings("unchecked")
     @Override
     public JComboBoxBinding bind(BindingGroup bindingGroup, List data, Object beanEntity,
-            PropertyDetails propertyDetails, UpdateStrategy updateStrategy) {
+            EntityProperty propertyDetails, UpdateStrategy updateStrategy) {
         AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
 
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
@@ -37,7 +37,7 @@ public class AcaciaComboBox extends JBComboBox {
                 AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
-    private AcaciaToStringConverter createToStringConverter(PropertyDetails propertyDetails) {
+    private AcaciaToStringConverter createToStringConverter(EntityProperty propertyDetails) {
         String customElProperty = propertyDetails.getCustomDisplay();
         if (customElProperty == null) {
             return new AcaciaToStringConverter();
@@ -54,7 +54,7 @@ public class AcaciaComboBox extends JBComboBox {
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         AcaciaToStringConverter resourceToStringConverter = createToStringConverter(propertyDetails);
         AutoCompleteDecorator.decorate(this, resourceToStringConverter);
         setConverter(resourceToStringConverter);
@@ -66,7 +66,7 @@ public class AcaciaComboBox extends JBComboBox {
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             ObjectToStringConverter converter) {
         AutoCompleteDecorator.decorate(this, converter);
         setConverter(converter);

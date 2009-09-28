@@ -209,22 +209,22 @@ public class RightsPanel extends BaseEntityPanel {
         dataObjectTypeComboBox.bind(bg,
                 getDataObjectTypes(),
                 right,
-                entityProps.getPropertyDetails("dataObjectType"),
+                entityProps.getEntityProperty("dataObjectType"),
                 converter);
         AutoCompleteDecorator.decorate(dataObjectTypeComboBox, converter);
 
-        readCheckBox.bind(bg, right, entityProps.getPropertyDetails("read"));
-        createCheckBox.bind(bg, right, entityProps.getPropertyDetails("create"));
-        modifyCheckBox.bind(bg, right, entityProps.getPropertyDetails("modify"));
-        deleteCheckBox.bind(bg, right, entityProps.getPropertyDetails("delete"));
-        executeCheckBox.bind(bg, right, entityProps.getPropertyDetails("execute"));
+        readCheckBox.bind(bg, right, entityProps.getEntityProperty("read"));
+        createCheckBox.bind(bg, right, entityProps.getEntityProperty("create"));
+        modifyCheckBox.bind(bg, right, entityProps.getEntityProperty("modify"));
+        deleteCheckBox.bind(bg, right, entityProps.getEntityProperty("delete"));
+        executeCheckBox.bind(bg, right, entityProps.getEntityProperty("execute"));
 
-        excludedCheckBox.bind(bg, right, entityProps.getPropertyDetails("excluded"));
+        excludedCheckBox.bind(bg, right, entityProps.getEntityProperty("excluded"));
 
         expiresDatePicker.setDate(new Date());
-        System.out.println(entityProps.getPropertyDetails("expires"));
+        System.out.println(entityProps.getEntityProperty("expires"));
         System.out.println("entityProps: " + entityProps);
-        expiresDatePicker.bind(bg, right, entityProps.getPropertyDetails("expires"),
+        expiresDatePicker.bind(bg, right, entityProps.getEntityProperty("expires"),
                 AcaciaUtils.getShortDateFormat());
 
         bg.bind();

@@ -23,7 +23,7 @@ import com.cosmos.acacia.crm.gui.contactbook.ContactPersonsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -169,12 +169,12 @@ public class WarehousePanel extends BaseEntityPanel {
     @Override
     protected void initData() {
         entProps = getFormSession().getWarehouseEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
         //branch address
-        propDetails = entProps.getPropertyDetails("address");
+        propDetails = entProps.getEntityProperty("address");
         AddressListPanel addressListPanel = new AddressListPanel(getOrganizationDataObjectId());
         addressListPanel.setTitle(getResourceMap().getString("AddressListPanel.title"));
         branchField.bind(
@@ -194,13 +194,13 @@ public class WarehousePanel extends BaseEntityPanel {
 
         //warehouse-man
         bindWarehouseManField(entity.getAddress());
-//        propDetails = entProps.getPropertyDetails("warehouseman");
+//        propDetails = entProps.getEntityProperty("warehouseman");
 //        BusinessPartnersListPanel employeeListPanel = BusinessPartnersListPanel.createEmployeesPanel(getOrganizationDataObjectId());
 //        warehousemanField.bind(bindGroup, employeeListPanel, entity, propDetails,
 //            "${firstName} ${lastName}", UpdateStrategy.READ_WRITE);
 
         //description
-        descriptionField.bind(bg, entity, entProps.getPropertyDetails("description"));
+        descriptionField.bind(bg, entity, entProps.getEntityProperty("description"));
 
         bg.bind();
     }
@@ -215,7 +215,7 @@ public class WarehousePanel extends BaseEntityPanel {
             bg.removeBinding(warehouseManBinding);
         }
 
-        warehouseManBinding = warehousemanField.bind(bg, listPanel, entity, entProps.getPropertyDetails("warehouseman"),
+        warehouseManBinding = warehousemanField.bind(bg, listPanel, entity, entProps.getEntityProperty("warehouseman"),
                 "${contact.firstName} ${contact.lastName}", UpdateStrategy.READ_WRITE);
         warehouseManBinding.bind();
 

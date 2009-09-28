@@ -193,12 +193,12 @@ public class UserPanelOld extends BaseEntityPanel {
         branchComboList.setEnabled(true);
         AddressListPanel branchesTable = new AddressListPanel(userOrganization.getOrganization().getId());
         branchesTable.setVisible(Button.New, false);
-        branchComboList.bind(bg, branchesTable, userOrganization, entityProps.getPropertyDetails("branch"));
+        branchComboList.bind(bg, branchesTable, userOrganization, entityProps.getEntityProperty("branch"));
 
         /*
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(userOrganization.getOrganization().getId());
-        groupComboList.bind(bg, groupsTable, userOrganization, entityProps.getPropertyDetails("userGroup"), "${name}");
+        groupComboList.bind(bg, groupsTable, userOrganization, entityProps.getEntityProperty("userGroup"), "${name}");
 
         final boolean isGroupEmpty = userOrganization.getUserGroup() == null;
 

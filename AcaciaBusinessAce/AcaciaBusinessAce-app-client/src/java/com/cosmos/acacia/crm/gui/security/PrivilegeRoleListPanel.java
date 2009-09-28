@@ -18,7 +18,7 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class PrivilegeRoleListPanel extends DetailEntityListPanel<Privilege, PrivilegeRole> {
 
     public PrivilegeRoleListPanel(EntityPanel<Privilege> mainEntityPanel) {
-        super(mainEntityPanel, PrivilegeRole.class);
+        super(mainEntityPanel, PrivilegeRole.class, null);
     }
 
     @Override

@@ -63,7 +63,7 @@ import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmFactory;
 import com.cosmos.acacia.util.numbers.NumberNamesAlgorithmType;
 import com.cosmos.acacia.util.numbers.UnsupportedNumberAlgorithmException;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.swingb.DialogResponse;
@@ -1215,39 +1215,39 @@ public class InvoiceForm extends BaseEntityPanel {
     protected void bindComponents(BindingGroup bg, EntityProperties entProps) {
         // branch
         // branchField.bind(bindGroup, entity,
-        // entProps.getPropertyDetails("branch"));
+        // entProps.getEntityProperty("branch"));
         if (entity.getBranch() != null) {
             branchField.setText(entity.getBranch().getAddressName());
         }
 
         // document number
-        invoiceNumberField.bind(bg, entity, entProps.getPropertyDetails("invoiceNumber"));
+        invoiceNumberField.bind(bg, entity, entProps.getEntityProperty("invoiceNumber"));
 
         // doc date
-        documentDateField.bind(bg, entity, entProps.getPropertyDetails("invoiceDate"), AcaciaUtils.getShortDateFormat());
+        documentDateField.bind(bg, entity, entProps.getEntityProperty("invoiceDate"), AcaciaUtils.getShortDateFormat());
 
         // clear explicitly any items
         recipientContactField.setModel(new DefaultComboBoxModel());
 
         // creator
-        createdByField.bind(bg, entity, entProps.getPropertyDetails("creatorName"));
+        createdByField.bind(bg, entity, entProps.getEntityProperty("creatorName"));
 
         // creation time
-        createdAtField.bind(bg, entity, entProps.getPropertyDetails("creationTime"), AcaciaUtils.getShortDateFormat());
+        createdAtField.bind(bg, entity, entProps.getEntityProperty("creationTime"), AcaciaUtils.getShortDateFormat());
 
         // sender
-        sentByField.bind(bg, entity, entProps.getPropertyDetails("senderName"));
+        sentByField.bind(bg, entity, entProps.getEntityProperty("senderName"));
 
         // sent time
-        sentAtField.bind(bg, entity, entProps.getPropertyDetails("sentTime"), AcaciaUtils.getShortDateFormat());
+        sentAtField.bind(bg, entity, entProps.getEntityProperty("sentTime"), AcaciaUtils.getShortDateFormat());
 
         // completed at
-        completedAtField.bind(bg, entity, entProps.getPropertyDetails("completionDate"), AcaciaUtils.getShortDateFormat());
+        completedAtField.bind(bg, entity, entProps.getEntityProperty("completionDate"), AcaciaUtils.getShortDateFormat());
         if (customerListPanel == null) {
             Classifier classifier = getClassifier(Classifier.Customer.getClassifierCode());
             customerListPanel = new BusinessPartnersListPanel(classifier);
         }
-        recipientField.bind(bg, customerListPanel, entity, entProps.getPropertyDetails("recipient"),
+        recipientField.bind(bg, customerListPanel, entity, entProps.getEntityProperty("recipient"),
                 "${displayName}", UpdateStrategy.READ_WRITE);
         recipientField.getBinding().addBindingListener(new AbstractBindingListener() {
 
@@ -1285,12 +1285,12 @@ public class InvoiceForm extends BaseEntityPanel {
             shippingAgentListPanel = new BusinessPartnersListPanel(classifier);
         }
         shippingAgentField.bind(bg, shippingAgentListPanel, entity,
-                entProps.getPropertyDetails("shippingAgent"), "${displayName}",
+                entProps.getEntityProperty("shippingAgent"), "${displayName}",
                 UpdateStrategy.READ_WRITE);
 
         // doc type
         documentTypeField.bind(bg, getDocumentTypes(), entity,
-                entProps.getPropertyDetails("invoiceType"));
+                entProps.getEntityProperty("invoiceType"));
         documentTypeField.addItemListener(new ItemListener() {
 
             @Override
@@ -1303,37 +1303,37 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // document delivery
         documentDeliveryField.bind(bg, getDeliveryMethods(), entity,
-                entProps.getPropertyDetails("documentDeliveryMethod"));
+                entProps.getEntityProperty("documentDeliveryMethod"));
 
         // transportation method
         transportMethodField.bind(bg, getTransportationMethods(), entity,
-                entProps.getPropertyDetails("transportationMethod"));
+                entProps.getEntityProperty("transportationMethod"));
 
         // delivery type
         deliveryTypeField.bind(bg, getDeliveryTypes(), entity,
-                entProps.getPropertyDetails("deliveryType"));
+                entProps.getEntityProperty("deliveryType"));
 
         // vat condition
         vatConditionField.bind(bg, getVatConditions(), entity,
-                entProps.getPropertyDetails("vatCondition"));
+                entProps.getEntityProperty("vatCondition"));
 
         // status field
-        statusField.bind(bg, getStatuses(), entity, entProps.getPropertyDetails("status"));
+        statusField.bind(bg, getStatuses(), entity, entProps.getEntityProperty("status"));
 
         // delivery status field
-        deliveryStatusField.bind(bg, new ArrayList(), entity, entProps.getPropertyDetails("deliveryStatus"));
+        deliveryStatusField.bind(bg, new ArrayList(), entity, entProps.getEntityProperty("deliveryStatus"));
 
         // currency
         currencyField.bind(bg, getCurrencies(), entity,
-                entProps.getPropertyDetails("currency"));
+                entProps.getEntityProperty("currency"));
 
         // payment type
         paymentTypeField.bind(bg, getPaymentTypes(), entity,
-                entProps.getPropertyDetails("paymentType"));
+                entProps.getEntityProperty("paymentType"));
 
         // payment terms
         paymentTermsField.bind(bg, getPaymentTerms(), entity,
-                entProps.getPropertyDetails("paymentTerms"));
+                entProps.getEntityProperty("paymentTerms"));
         paymentTermsField.addItemListener(new ItemListener() {
 
             @Override
@@ -1343,7 +1343,7 @@ public class InvoiceForm extends BaseEntityPanel {
         }, true);
 
         // payment due date
-        Binding paymentDueBinding = paymentDueField.bind(bg, entity, entProps.getPropertyDetails("paymentDueDate"), AcaciaUtils.getShortDateFormat());
+        Binding paymentDueBinding = paymentDueField.bind(bg, entity, entProps.getEntityProperty("paymentDueDate"), AcaciaUtils.getShortDateFormat());
         paymentDueBinding.setValidator(new BaseValidator() {
 
             @Override
@@ -1381,7 +1381,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // invoice sub value
         amountsBinding = invoiceSubValueField.bind(bg, entity,
-                entProps.getPropertyDetails("invoiceSubValue"), getDecimalFormat());
+                entProps.getEntityProperty("invoiceSubValue"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
 
             @Override
@@ -1399,7 +1399,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // vat
-        amountsBinding = vatPercentField.bind(bg, entity, entProps.getPropertyDetails("vat"), getDecimalFormat());
+        amountsBinding = vatPercentField.bind(bg, entity, entProps.getEntityProperty("vat"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
 
             @SuppressWarnings("unchecked")
@@ -1411,7 +1411,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // excise
-        amountsBinding = excisePercentField.bind(bg, entity, entProps.getPropertyDetails("exciseDutyPercent"), getDecimalFormat());
+        amountsBinding = excisePercentField.bind(bg, entity, entProps.getEntityProperty("exciseDutyPercent"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
 
             @SuppressWarnings("unchecked")
@@ -1424,7 +1424,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
         // transport price
         amountsBinding = transportPriceField.bind(bg, entity,
-                entProps.getPropertyDetails("transportationPrice"), getDecimalFormat());
+                entProps.getEntityProperty("transportationPrice"), getDecimalFormat());
         amountsBinding.addBindingListener(new AbstractBindingListener() {
 
             @Override
@@ -1434,17 +1434,17 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // single pay amount
-        singlePayAmountField.bind(bg, entity, entProps.getPropertyDetails("singlePayAmount"), getDecimalFormat());
+        singlePayAmountField.bind(bg, entity, entProps.getEntityProperty("singlePayAmount"), getDecimalFormat());
 
         // payments count
-        paymentsCountField.bind(bg, entity, entProps.getPropertyDetails("paymentsCount"), getDecimalFormat());
+        paymentsCountField.bind(bg, entity, entProps.getEntityProperty("paymentsCount"), getDecimalFormat());
 
         // payments count
         daysBetweenPaymentsField.bind(bg, entity,
-                entProps.getPropertyDetails("daysBetweenPayments"), getDecimalFormat());
+                entProps.getEntityProperty("daysBetweenPayments"), getDecimalFormat());
 
         // ship week
-        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek")).addBindingListener(new AbstractBindingListener() {
+        shipWeekField.bind(bg, entity, entProps.getEntityProperty("shipWeek")).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1453,7 +1453,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // ship date from
-        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+        shipDateFromField.bind(bg, entity, entProps.getEntityProperty("shipDateFrom"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1462,7 +1462,7 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // ship date to
-        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+        shipDateToField.bind(bg, entity, entProps.getEntityProperty("shipDateTo"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -1471,15 +1471,15 @@ public class InvoiceForm extends BaseEntityPanel {
         });
 
         // total value
-        totalValueField.bind(bg, entity, entProps.getPropertyDetails("totalValue"), getDecimalFormat());
+        totalValueField.bind(bg, entity, entProps.getEntityProperty("totalValue"), getDecimalFormat());
         totalValueField.setEditable(true);
 
         // notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
 
         // vat condition notes
         vatConditionNotesField.bind(bg, entity,
-                entProps.getPropertyDetails("vatConditionNotes"));
+                entProps.getEntityProperty("vatConditionNotes"));
 
         boolean readonlyState = !InvoiceStatus.Open.equals(entity.getStatus().getEnumValue()) &&
                 !InvoiceStatus.Reopen.equals(entity.getStatus().getEnumValue());
@@ -1487,7 +1487,7 @@ public class InvoiceForm extends BaseEntityPanel {
         //some fields only for proforma invoice
         if (proforma) {
             // valid to date
-            PropertyDetails pd = entProps.getPropertyDetails("validTo");
+            EntityProperty pd = entProps.getEntityProperty("validTo");
             pd.setRequired(true);
             Binding validToBinding = validToField.bind(bg, entity, pd, AcaciaUtils.getShortDateFormat());
             if (!readonlyState) {
@@ -1530,7 +1530,7 @@ public class InvoiceForm extends BaseEntityPanel {
             }
 
             // additional terms
-            additionalTermsField.bind(bg, entity, entProps.getPropertyDetails("additionalTerms"));
+            additionalTermsField.bind(bg, entity, entProps.getEntityProperty("additionalTerms"));
         }
 
         invoiceSubValueField.setEditable(false);
@@ -2090,7 +2090,7 @@ public class InvoiceForm extends BaseEntityPanel {
             bg.removeBinding(recipientContactBinding);
         }
         recipientContactBinding = recipientContactField.bind(bg, recipientContacts,
-                entity, entProps.getPropertyDetails("recipientContact"));
+                entity, entProps.getEntityProperty("recipientContact"));
         recipientContactBinding.bind();
 
         // auto select if one choice is available
@@ -2104,7 +2104,7 @@ public class InvoiceForm extends BaseEntityPanel {
             if (bg.getBindings().contains(attendeeBinding)) {
                 bg.removeBinding(attendeeBinding);
             }
-            PropertyDetails pd = entProps.getPropertyDetails("attendee");
+            EntityProperty pd = entProps.getEntityProperty("attendee");
             pd.setValidator(new RequiredValidator());
             ((RequiredValidator) pd.getValidator()).setRequired(true);
             pd.setRequired(true);

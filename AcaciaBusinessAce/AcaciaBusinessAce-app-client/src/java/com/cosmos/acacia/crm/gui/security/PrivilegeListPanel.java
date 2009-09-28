@@ -19,7 +19,7 @@ import com.cosmos.swingb.item.OptionalItem;
 public class PrivilegeListPanel extends DetailEntityListPanel<SecurityRole, Privilege> {
 
     public PrivilegeListPanel(EntityPanel<SecurityRole> mainEntityPanel) {
-        super(mainEntityPanel, Privilege.class);
+        super(mainEntityPanel, Privilege.class, null);
     }
 
     @Override

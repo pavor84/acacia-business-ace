@@ -11,7 +11,7 @@ import com.cosmos.acacia.gui.AcaciaLookupProvider;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.util.UUID;
 import javax.ejb.EJB;
@@ -162,12 +162,12 @@ public class AssemblingCategoryPanel
     @Override
     protected void initData() {
         entProps = getFormSession().getAssemblingCategoryEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
         //parent category
-        propDetails = entProps.getPropertyDetails("parentCategory");
+        propDetails = entProps.getEntityProperty("parentCategory");
         parentCategoryLookup.bind(new AcaciaLookupProvider() {
 
             @Override
@@ -182,15 +182,15 @@ public class AssemblingCategoryPanel
                 UpdateStrategy.READ_WRITE);
 
         //category code
-        propDetails = entProps.getPropertyDetails("categoryCode");
+        propDetails = entProps.getEntityProperty("categoryCode");
         categoryCodeTextField.bind(bg, entity, propDetails);
 
         //category name
-        propDetails = entProps.getPropertyDetails("categoryName");
+        propDetails = entProps.getEntityProperty("categoryName");
         categoryNameTextField.bind(bg, entity, propDetails);
 
         //description
-        propDetails = entProps.getPropertyDetails("description");
+        propDetails = entProps.getEntityProperty("description");
         descriptionTextPane.bind(bg, entity, propDetails);
 
         bg.bind();

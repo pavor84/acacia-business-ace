@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.UUID;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -48,14 +47,7 @@ public class PersonPanel extends BaseEntityPanel {
 
     /** Creates new form PersonPanel */
     public PersonPanel(Person person) {
-        super(person.getDataObject().getParentDataObjectId());
-        this.person = person;
-        init();
-    }
-
-    /** Creates new form PersonPanel */
-    public PersonPanel(UUID parentDataObjectId) {
-        super(parentDataObjectId);
+        super(person);
         init();
     }
 
@@ -67,7 +59,7 @@ public class PersonPanel extends BaseEntityPanel {
     }
 
     private void initComponentsCustom() {
-        if (getClassifiersManager().isClassifiedAs(person, "customer")) {
+        if (getClassifiersManager().isClassifiedAs(getPerson(), "customer")) {
             JBButton b = new JBButton();
             b.setText(getResourceMap().getString("button.discount"));
             b.addActionListener(new ActionListener() {
@@ -81,8 +73,8 @@ public class PersonPanel extends BaseEntityPanel {
     }
 
     protected void onDiscount() {
-        if (person.getId() != null) {
-            CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(person);
+        if (getPerson().getId() != null) {
+            CustomerDiscountListPanel customerDiscountForm = new CustomerDiscountListPanel(getPerson());
             customerDiscountForm.showDialog(this);
         }
     }
@@ -409,7 +401,6 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     private AddressListPanel addressesTable;
     private PassportsListPanel passportsTable;
     private BindingGroup bindingGroup;
-    private Person person;
     private Binding cityBinding;
     private Country country;
     private boolean namesChanged;
@@ -418,26 +409,26 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
     @Override
     protected void initData() {
         setResizable(false);
+        Person person = getPerson();
         log.info("initData().person: " + person);
         if (person == null) {
             throw new UnsupportedOperationException("ToDo");
-            //person = getFormSession().newPerson(getOrganizationDataObjectId());
         }
 
         BindingGroup bg = getBindingGroup();
 
         final EntityProperties entityProps = getPersonEntityProperties();
 
-        genderComboBox.bind(bg, getGenders(), person, entityProps.getPropertyDetails("gender"));
+        genderComboBox.bind(bg, getGenders(), person, entityProps.getEntityProperty("gender"));
 
-        firstNameTextField.bind(bg, person, entityProps.getPropertyDetails("firstName"));
-        secondNameTextField.bind(bg, person, entityProps.getPropertyDetails("secondName"));
-        lastNameTextField.bind(bg, person, entityProps.getPropertyDetails("lastName"));
-        extraNameTextField.bind(bg, person, entityProps.getPropertyDetails("extraName"));
+        firstNameTextField.bind(bg, person, entityProps.getEntityProperty("firstName"));
+        secondNameTextField.bind(bg, person, entityProps.getEntityProperty("secondName"));
+        lastNameTextField.bind(bg, person, entityProps.getEntityProperty("lastName"));
+        extraNameTextField.bind(bg, person, entityProps.getEntityProperty("extraName"));
 
-        personalUniqueIdTextField.bind(bg, person, entityProps.getPropertyDetails("personalUniqueId"));
-        birthdateDatePicker.bind(bg, person, entityProps.getPropertyDetails("birthDate"), AcaciaUtils.getShortDateFormat());
-        birthPlaceCountryComboBox.bind(bg, getCountries(), person, entityProps.getPropertyDetails("birthPlaceCountry"));
+        personalUniqueIdTextField.bind(bg, person, entityProps.getEntityProperty("personalUniqueId"));
+        birthdateDatePicker.bind(bg, person, entityProps.getEntityProperty("birthDate"), AcaciaUtils.getShortDateFormat());
+        birthPlaceCountryComboBox.bind(bg, getCountries(), person, entityProps.getEntityProperty("birthPlaceCountry"));
         birthPlaceCountryComboBox.addActionListener(new ActionListener() {
 
             @Override
@@ -455,11 +446,11 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
             }
         }, bg,
                 person,
-                entityProps.getPropertyDetails("birthPlaceCity"),
+                entityProps.getEntityProperty("birthPlaceCity"),
                 "${cityName}",
                 UpdateStrategy.READ_WRITE);
 
-        descriptionTextPane.bind(bg, person, entityProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, person, entityProps.getEntityProperty("description"));
 
         // Using an AbstractTablePanel implementation
         addressesTable = new AddressListPanel(person.getId());
@@ -490,6 +481,10 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
         lastNameTextField.addKeyListener(nameChangeListener);
 
         bg.bind();
+    }
+
+    private Person getPerson() {
+        return (Person) getMainDataObject();
     }
 
     protected Object onChooseCity() {
@@ -530,11 +525,12 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
 
     @Override
     public Object getEntity() {
-        return person;
+        return getPerson();
     }
 
     @Override
     public void performSave(boolean closeAfter) {
+        Person person = getPerson();
         log.info("Save: person: " + person);
 
         isUnique = true;
@@ -550,13 +546,13 @@ private void testCallback(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test
                     this, getResourceMap().getString("Person.confirm.uniqueness"), "", JOptionPane.OK_CANCEL_OPTION);
 
             if (answer == JOptionPane.OK_OPTION) {
-                person = getFormSession().savePerson(person);
+                setMainDataObject(getFormSession().savePerson(person));
                 isUnique = true;
             }
         }
 
         if (tmpPerson != null) {
-            person = tmpPerson;
+            setMainDataObject(tmpPerson);
         }
 
         if (isUnique) {

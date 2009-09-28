@@ -17,7 +17,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.TablePanelListener;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -441,7 +441,7 @@ public class AssemblingSchemasPanel extends AcaciaPanel
             if (categorySchema == null) {
                 categorySchema = getFormSession().newAssemblingSchema();
             }
-            PropertyDetails propDetails = entityProps.getPropertyDetails("assemblingCategory");
+            EntityProperty propDetails = entityProps.getEntityProperty("assemblingCategory");
             AssemblingCategoryTreeTablePanel listPanel =
                     new AssemblingCategoryTreeTablePanel(getCategory());
             categoryComboList.bind(
@@ -686,7 +686,7 @@ public class AssemblingSchemasPanel extends AcaciaPanel
             table.setDefaultEditor(Serializable.class, cellEditor);
 
             ProductsListPanel productsListPanel = new ProductsListPanel(null);
-            PropertyDetails propDetails = entityProps.getPropertyDetails("virtualProduct");
+            EntityProperty propDetails = entityProps.getEntityProperty("virtualProduct");
             table.bindComboListCellEditor(bindingGroup, productsListPanel, propDetails);*/
 
             bindingGroup.bind();

@@ -57,7 +57,7 @@ import com.cosmos.acacia.gui.AcaciaPercentValueField.EditType;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBErrorPane;
@@ -785,10 +785,10 @@ public class ProductPanel extends AcaciaPanel {
 
             EntityProperties entityProps = getProductEntityProperties();
 
-            PropertyDetails propDetails = entityProps.getPropertyDetails("productName");
+            EntityProperty propDetails = entityProps.getEntityProperty("productName");
             productNameTextField.bind(productBindingGroup, product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("productCode");
+            propDetails = entityProps.getEntityProperty("productCode");
             productCodeBinding = productCodeTextField.bind(productBindingGroup, product, propDetails);
             productCodeBinding.addBindingListener(new AbstractBindingListener() {
                 @SuppressWarnings("unchecked")
@@ -801,10 +801,10 @@ public class ProductPanel extends AcaciaPanel {
                 }
             });
 
-            propDetails = entityProps.getPropertyDetails("measureUnit");
+            propDetails = entityProps.getEntityProperty("measureUnit");
             measureUnitComboBox.bind(productBindingGroup, getMeasureUnits(), product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("category");
+            propDetails = entityProps.getEntityProperty("category");
             ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
             categoryField.bind(productBindingGroup, categoryListPanel, product, propDetails,
                 "${categoryName}", UpdateStrategy.READ_WRITE);
@@ -815,16 +815,16 @@ public class ProductPanel extends AcaciaPanel {
                 }
             }, true);
             
-            propDetails = entityProps.getPropertyDetails("purchased");
+            propDetails = entityProps.getEntityProperty("purchased");
             purchasedProductCheckBox.bind(productBindingGroup, product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("salable");
+            propDetails = entityProps.getEntityProperty("salable");
             salableProductCheckBox.bind(productBindingGroup, product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("obsolete");
+            propDetails = entityProps.getEntityProperty("obsolete");
             obsoleteProductCheckBox.bind(productBindingGroup, product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("patternMaskFormat");
+            propDetails = entityProps.getEntityProperty("patternMaskFormat");
             PatternMaskFormatListPanel formatsListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
             codeFormatField.bind(productBindingGroup, formatsListPanel, product, propDetails,
                 "${patternName} (${format})", UpdateStrategy.READ_WRITE);
@@ -835,13 +835,13 @@ public class ProductPanel extends AcaciaPanel {
                 }
             }, true);
 
-            propDetails = entityProps.getPropertyDetails("productColor");
+            propDetails = entityProps.getEntityProperty("productColor");
             productColorComboBox.bind(productBindingGroup, getProductColors(), product, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("minimumQuantity");
+            propDetails = entityProps.getEntityProperty("minimumQuantity");
             minQuantityTextField.bind(productBindingGroup, product, propDetails, getDecimalFormat());
-            maxQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("maximumQuantity"), getDecimalFormat());
-            defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("defaultQuantity"), getDecimalFormat());
+            maxQuantityTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("maximumQuantity"), getDecimalFormat());
+            defaultQuantityTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("defaultQuantity"), getDecimalFormat());
             
 //            product.setDiscountPercent(product.getDiscount());
 //            product.setDutyPercent(product.getDuty());
@@ -860,10 +860,10 @@ public class ProductPanel extends AcaciaPanel {
             pricingPanel = new ProductPricingPanel(product);
             
             //list price in current form
-            final Binding listPriceFieldBinding = listPriceTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"), getDecimalFormat());
+            final Binding listPriceFieldBinding = listPriceTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("listPrice"), getDecimalFormat());
             listPriceTextField.setEditable(false);
             //list price in pricing panel
-            Binding pricingPanelListBinding = pricingPanel.getListPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("listPrice"), getDecimalFormat());
+            Binding pricingPanelListBinding = pricingPanel.getListPriceField().bind(productBindingGroup, product, entityProps.getEntityProperty("listPrice"), getDecimalFormat());
             pricingPanelListBinding.addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -929,12 +929,12 @@ public class ProductPanel extends AcaciaPanel {
             
             // currency
             pricingPanel.getCurrencyField().bind(productBindingGroup, getEnumResources(Currency.class), product,
-                entityProps.getPropertyDetails("currency"));
+                entityProps.getEntityProperty("currency"));
             
             if (hasProductPricingPermission()){
                 productCategoryEntityProps = getFormSession().getProductCategoryEntityProperties();
                 // category discount
-                pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+                pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getEntityProperty("discountPercent"), getDecimalFormat(),
                     true, EditType.NONE_DELETABLE, product.getListPrice());
                 // category profit
                 pricingPanel.getCategoryProfitField().bind(productBindingGroup, this, createPricePropertyDetails("categoryProfit"),getDecimalFormat(),
@@ -942,11 +942,11 @@ public class ProductPanel extends AcaciaPanel {
             }
             
             // discount
-            pricingPanel.getAdditionalDiscountField().bind(productBindingGroup, product, entityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+            pricingPanel.getAdditionalDiscountField().bind(productBindingGroup, product, entityProps.getEntityProperty("discountPercent"), getDecimalFormat(),
                 true, EditType.NONE_DELETABLE, product.getListPrice());
             
             // transport
-            Binding transportBinding = pricingPanel.getTransportPriceField().bind(productBindingGroup, product, entityProps.getPropertyDetails("transportPrice"), getDecimalFormat(),
+            Binding transportBinding = pricingPanel.getTransportPriceField().bind(productBindingGroup, product, entityProps.getEntityProperty("transportPrice"), getDecimalFormat(),
                 false, EditType.VALUE, product.getPurchasePrice());
             transportBinding.addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -955,11 +955,11 @@ public class ProductPanel extends AcaciaPanel {
             });
             
             // duty
-            pricingPanel.getDutyField().bind(productBindingGroup, product, entityProps.getPropertyDetails("dutyPercent"), getDecimalFormat(),
+            pricingPanel.getDutyField().bind(productBindingGroup, product, entityProps.getEntityProperty("dutyPercent"), getDecimalFormat(),
                 true, EditType.NONE_DELETABLE, product.getPurchasePrice());
             
             // profit
-            pricingPanel.getAdditionalProfitField().bind(productBindingGroup, product, entityProps.getPropertyDetails("profitPercent"), getDecimalFormat(),
+            pricingPanel.getAdditionalProfitField().bind(productBindingGroup, product, entityProps.getEntityProperty("profitPercent"), getDecimalFormat(),
                 true, EditType.NONE_DELETABLE, product.getCostPrice());
             
             //total profit in current form
@@ -968,34 +968,34 @@ public class ProductPanel extends AcaciaPanel {
             pricingPanel.updateTotalProfitField(true);
             
             quantityPerPackageTextField.bind(productBindingGroup, product,
-                    entityProps.getPropertyDetails("quantityPerPackage"), AcaciaUtils.getIntegerFormat());
+                    entityProps.getEntityProperty("quantityPerPackage"), AcaciaUtils.getIntegerFormat());
 
             dimensionUnitComboBox.bind(
                     productBindingGroup,
                     getMeasureUnits(MeasurementUnit.Category.Volume),
                     product,
-                    entityProps.getPropertyDetails("dimensionUnit"));
-            dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionWidth"), getDecimalFormat());
-            dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionLength"), getDecimalFormat());
-            dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("dimensionHeight"), getDecimalFormat());
+                    entityProps.getEntityProperty("dimensionUnit"));
+            dimensionWidthTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("dimensionWidth"), getDecimalFormat());
+            dimensionLengthTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("dimensionLength"), getDecimalFormat());
+            dimensionHeightTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("dimensionHeight"), getDecimalFormat());
 
             weightUnitComboBox.bind(
                     productBindingGroup,
                     getMeasureUnits(MeasurementUnit.Category.MassWeight),
                     product,
-                    entityProps.getPropertyDetails("weightUnit"));
-            weightTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("weight"), getDecimalFormat());
+                    entityProps.getEntityProperty("weightUnit"));
+            weightTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("weight"), getDecimalFormat());
 
-            deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getPropertyDetails("deliveryTime"), getIntegerFormat());
+            deliveryTimeTextField.bind(productBindingGroup, product, entityProps.getEntityProperty("deliveryTime"), getIntegerFormat());
 
-            propDetails = entityProps.getPropertyDetails("producer");
+            propDetails = entityProps.getEntityProperty("producer");
 
             Classifier producerClassifier = getClassifier(Classifier.Producer.getClassifierCode());
             BusinessPartnersListPanel producterListPanel = new BusinessPartnersListPanel(producerClassifier);
             producerField.bind(productBindingGroup, producterListPanel, product, propDetails,
                 "${displayName}", UpdateStrategy.READ_WRITE);
             
-            propDetails = entityProps.getPropertyDetails("description");
+            propDetails = entityProps.getEntityProperty("description");
             descriptionTextPane.bind(productBindingGroup, product, propDetails);
             
             jBButton1.setEnabled(hasProductPricingPermission());
@@ -1026,7 +1026,7 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     protected void onProductCategoryChanged() {
-        pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getPropertyDetails("discountPercent"), getDecimalFormat(),
+        pricingPanel.getCategoryDiscountField().bind(productBindingGroup, product.getCategory(), productCategoryEntityProps.getEntityProperty("discountPercent"), getDecimalFormat(),
             true, EditType.NONE, product.getListPrice());
         if ( product.getCategory()==null )
             categoryProfit=null;
@@ -1041,8 +1041,8 @@ public class ProductPanel extends AcaciaPanel {
         pricingPanel.updateSalePriceField(true);
     }
 
-    private PropertyDetails createPricePropertyDetails(String propertyName){
-        PropertyDetails pd = new PropertyDetails(propertyName, propertyName, BigDecimal.class.getName());
+    private EntityProperty createPricePropertyDetails(String propertyName){
+        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, propertyName, BigDecimal.class.getName());
         pd.setEditable(false);
         return pd;
     }

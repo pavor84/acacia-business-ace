@@ -189,9 +189,9 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
         EntityProperties assignmentProps = getFormSession().getDeliveryCertificateAssignmentEntityProperties(); 
         
         //Base Properties Panel
-        numberTextField.bind(bg, entity, entityProps.getPropertyDetails("deliveryCertificateNumber"));
-        creationDatePicker.bind(bg, entity, entityProps.getPropertyDetails("deliveryCertificateDate"),AcaciaUtils.getShortDateFormat());
-        Binding binding1 = reasonComboBox.bind(bg, getFormSession().getReasons(), entity, entityProps.getPropertyDetails("deliveryCertificateReason"));
+        numberTextField.bind(bg, entity, entityProps.getEntityProperty("deliveryCertificateNumber"));
+        creationDatePicker.bind(bg, entity, entityProps.getEntityProperty("deliveryCertificateDate"),AcaciaUtils.getShortDateFormat());
+        Binding binding1 = reasonComboBox.bind(bg, getFormSession().getReasons(), entity, entityProps.getEntityProperty("deliveryCertificateReason"));
 //        reasonComboBox.addItemListener(new ItemListener(){
 //			@Override
 //			public void itemStateChanged(ItemEvent item) {
@@ -225,17 +225,17 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 
             }, bg,
             assignment,
-            assignmentProps.getPropertyDetails("documentNumber"),
+            assignmentProps.getEntityProperty("documentNumber"),
             UpdateStrategy.READ_WRITE);
         
         //Creator Panel
-        creatorNameTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorName"));
-        creatorOrganizationTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorOrganizationName"));
-        creatorBranchTextField.bind(bg, entity, entityProps.getPropertyDetails("creatorBranchName"));
+        creatorNameTextField.bind(bg, entity, entityProps.getEntityProperty("creatorName"));
+        creatorOrganizationTextField.bind(bg, entity, entityProps.getEntityProperty("creatorOrganizationName"));
+        creatorBranchTextField.bind(bg, entity, entityProps.getEntityProperty("creatorBranchName"));
         
         //Recipient Panel
-        recipientNameBinding = recipientNameTextField.bind(bg, entity, entityProps.getPropertyDetails("recipientName"));
-        recipientBranchNameBinding = recipientBranchTextField.bind(bg, entity, entityProps.getPropertyDetails("recipientBranchName"));
+        recipientNameBinding = recipientNameTextField.bind(bg, entity, entityProps.getEntityProperty("recipientName"));
+        recipientBranchNameBinding = recipientBranchTextField.bind(bg, entity, entityProps.getEntityProperty("recipientBranchName"));
         recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
             new AcaciaLookupProvider(){
                 @Override
@@ -244,11 +244,11 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 }
             }, bg,
             entity,        
-            entityProps.getPropertyDetails("recipientContact"),
+            entityProps.getEntityProperty("recipientContact"),
             UpdateStrategy.READ_WRITE);
                 
         //Delivery Type Panel
-        deliveryTypeComboBox.bind(bg, getFormSession().getDeliveryTypes(), entity, entityProps.getPropertyDetails("deliveryCertificateMethodType"));
+        deliveryTypeComboBox.bind(bg, getFormSession().getDeliveryTypes(), entity, entityProps.getEntityProperty("deliveryCertificateMethodType"));
         deliveryTypeComboBox.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -273,7 +273,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 }
             }, bg,
             entity,
-            entityProps.getPropertyDetails("forwarder"),
+            entityProps.getEntityProperty("forwarder"),
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
        forwarderBranchAcaciaLookup.bind(new AcaciaLookupProvider(){
@@ -284,7 +284,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 }, 
                 bg,
                 entity, 
-                entityProps.getPropertyDetails("forwarderBranch"),
+                entityProps.getEntityProperty("forwarderBranch"),
                 "${addressName}",      
                 UpdateStrategy.READ_WRITE);
        forwarderContactPersonAcaciaLookup.bind( new AcaciaLookupProvider(){
@@ -294,7 +294,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
                 }
             }, bg,
             entity,        
-            entityProps.getPropertyDetails("forwarderContact"),
+            entityProps.getEntityProperty("forwarderContact"),
             "${displayName}",
             UpdateStrategy.READ_WRITE);
        
@@ -352,10 +352,10 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	            
 	            //populate the components with new values.
 	            bindingGroup.removeBinding(recipientNameBinding);
-	            recipientNameBinding = recipientNameTextField.bind(bindingGroup, entity, entityProps.getPropertyDetails("recipientName"));
+	            recipientNameBinding = recipientNameTextField.bind(bindingGroup, entity, entityProps.getEntityProperty("recipientName"));
 	            recipientNameBinding.bind();
 	            bindingGroup.removeBinding(recipientBranchNameBinding);
-	            recipientBranchNameBinding = recipientBranchTextField.bind(bindingGroup, entity, entityProps.getPropertyDetails("recipientBranchName"));
+	            recipientBranchNameBinding = recipientBranchTextField.bind(bindingGroup, entity, entityProps.getEntityProperty("recipientBranchName"));
 	            recipientBranchNameBinding.bind();
 	            bindingGroup.removeBinding(recipientContactNameBinding);
 	            recipientContactNameBinding = recipientContactPersonAcaciaLookup.bind(
@@ -367,7 +367,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	                },  
 	                bindingGroup,
 	                entity,        
-	                entityProps.getPropertyDetails("recipientContact"),
+	                entityProps.getEntityProperty("recipientContact"),
 	                "${contact.displayName}",
 	                UpdateStrategy.READ_WRITE);
 	            recipientContactNameBinding.bind();

@@ -48,7 +48,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -457,7 +457,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         bindMeasureUnitField(new ArrayList(), null);
 
         //ordered quantity
-        Binding orderedQtyBinding = orderedQtyField.bind(bg, entity, entProps.getPropertyDetails("orderedQuantity"), AcaciaUtils.getDecimalFormat());
+        Binding orderedQtyBinding = orderedQtyField.bind(bg, entity, entProps.getEntityProperty("orderedQuantity"), AcaciaUtils.getDecimalFormat());
 
         orderedQtyBinding.addBindingListener(new AbstractBindingListener() {
 
@@ -468,14 +468,14 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
 
         //shipped quantity
-        shippedQtyField.bind(bg, entity, entProps.getPropertyDetails("shippedQuantity"), getDecimalFormat());
+        shippedQtyField.bind(bg, entity, entProps.getEntityProperty("shippedQuantity"), getDecimalFormat());
 
         //returned quantity
-        returnedQtyField.bind(bg, entity, entProps.getPropertyDetails("returnedQuantity"), getDecimalFormat());
+        returnedQtyField.bind(bg, entity, entProps.getEntityProperty("returnedQuantity"), getDecimalFormat());
 
         //unit price
 //        Binding unitPriceBinding = 
-        unitPriceField.bind(bg, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
+        unitPriceField.bind(bg, entity, entProps.getEntityProperty("unitPrice"), getDecimalFormat());
 //        unitPriceBinding.addBindingListener(new AbstractBindingListener() {
 //            @Override
 //            public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -484,13 +484,13 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //        });
 
         //extended price
-        extendedPriceField.bind(bg, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
+        extendedPriceField.bind(bg, entity, entProps.getEntityProperty("extendedPrice"), getDecimalFormat());
 
         //variable for re-use
 //        Binding amountsBinding = null;
 
         //discount value 
-//        amountsBinding = totalItemDiscountValueField.bind(bindGroup, entity, entProps.getPropertyDetails("discountAmount"));
+//        amountsBinding = totalItemDiscountValueField.bind(bindGroup, entity, entProps.getEntityProperty("discountAmount"));
 //        amountsBinding.addBindingListener(new AbstractBindingListener() {
 //            @Override
 //            public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -505,7 +505,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //        });
 
         //discount percent
-//        amountsBinding = totalItemDiscountPercentField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"));
+//        amountsBinding = totalItemDiscountPercentField.bind(bindGroup, entity, entProps.getEntityProperty("discountPercent"));
 //        amountsBinding.addBindingListener(new AbstractBindingListener() {
 //            @Override
 //            public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -520,7 +520,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
 //        });
 
         //ship week
-        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek")).addBindingListener(new AbstractBindingListener() {
+        shipWeekField.bind(bg, entity, entProps.getEntityProperty("shipWeek")).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -529,7 +529,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
 
         //ship date from
-        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+        shipDateFromField.bind(bg, entity, entProps.getEntityProperty("shipDateFrom"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -538,7 +538,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
 
         //ship date to
-        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
+        shipDateToField.bind(bg, entity, entProps.getEntityProperty("shipDateTo"), AcaciaUtils.getShortDateFormat()).addBindingListener(new AbstractBindingListener() {
 
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -547,7 +547,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
         });
 
         //warehouse
-        PropertyDetails pd = entProps.getPropertyDetails("warehouse");
+        EntityProperty pd = entProps.getEntityProperty("warehouse");
         WarehouseListPanel warehouseListPanel = new WarehouseListPanel(getOrganizationDataObjectId());
         warehouseForShipField.bind(
                 bg,
@@ -558,10 +558,10 @@ public class InvoiceItemForm extends BaseEntityPanel {
                 UpdateStrategy.READ_WRITE);
 
         //notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
 
         //product description
-        productDescriptionField.bind(bg, entity, entProps.getPropertyDetails("productDescription"));
+        productDescriptionField.bind(bg, entity, entProps.getEntityProperty("productDescription"));
 
         productDetailsButton.addActionListener(new ActionListener() {
 
@@ -602,7 +602,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
             measureUnitBinding.unbind();
             bg.removeBinding(measureUnitBinding);
         }
-        measureUnitBinding = measureUnitField.bind(bg, mUnits, entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitBinding = measureUnitField.bind(bg, mUnits, entity, entProps.getEntityProperty("measureUnit"));
         measureUnitBinding.bind();
         if (selectedUnit != null && mUnits.contains(selectedUnit)) {
             measureUnitField.setSelectedItem(selectedUnit);

@@ -435,28 +435,28 @@ public class OrganizationPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getOrganizationEntityProperties();
 
-        nameTextField.bind(bg, organization, entityProps.getPropertyDetails("organizationName"));
-        nicknameTextField.bind(bg, organization, entityProps.getPropertyDetails("nickname"));
-        shareCapitalTextField.bind(bg, organization, entityProps.getPropertyDetails("shareCapital"));
-        vatNumberTextField.bind(bg, organization, entityProps.getPropertyDetails("vatNumber"));
-        uniqueIdTextField.bind(bg, organization, entityProps.getPropertyDetails("uniqueIdentifierCode"));
+        nameTextField.bind(bg, organization, entityProps.getEntityProperty("organizationName"));
+        nicknameTextField.bind(bg, organization, entityProps.getEntityProperty("nickname"));
+        shareCapitalTextField.bind(bg, organization, entityProps.getEntityProperty("shareCapital"));
+        vatNumberTextField.bind(bg, organization, entityProps.getEntityProperty("vatNumber"));
+        uniqueIdTextField.bind(bg, organization, entityProps.getEntityProperty("uniqueIdentifierCode"));
 
-        registrationDateDatePicker.bind(bg, organization, entityProps.getPropertyDetails("registrationDate"), AcaciaUtils.getShortDateFormat());
+        registrationDateDatePicker.bind(bg, organization, entityProps.getEntityProperty("registrationDate"), AcaciaUtils.getShortDateFormat());
 
         organizationTypeComboBox.bind(bg,
                 getOrganizationTypes(),
                 organization,
-                entityProps.getPropertyDetails("organizationType"));
+                entityProps.getEntityProperty("organizationType"));
 
         shareCapitalCurrencyComboBox.bind(bg,
                 getCurrencies(),
                 organization,
-                entityProps.getPropertyDetails("shareCapitalCurrency"));
+                entityProps.getEntityProperty("shareCapitalCurrency"));
 
         defaultCurrencyComboBox.bind(bg,
                 getCurrencies(),
                 organization,
-                entityProps.getPropertyDetails("defaultCurrency"));
+                entityProps.getEntityProperty("defaultCurrency"));
 
         registeringOrganizationLookup.bind(new AcaciaLookupProvider() {
 
@@ -466,11 +466,11 @@ public class OrganizationPanel extends BaseEntityPanel {
             }
         }, bg,
                 organization,
-                entityProps.getPropertyDetails("registrationOrganization"),
+                entityProps.getEntityProperty("registrationOrganization"),
                 "${organizationName}",
                 UpdateStrategy.READ_WRITE);
 
-        descriptionTextPane.bind(bg, organization, entityProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, organization, entityProps.getEntityProperty("description"));
 
         // Using an AbstractTablePanel implementation
         branchesTable = new AddressListPanel(organization != null ? organization.getId() : null);
@@ -498,7 +498,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             }
         }, bg,
                 organization,
-                entityProps.getPropertyDetails("registrationAddress"),
+                entityProps.getEntityProperty("registrationAddress"),
                 "${addressName}",
                 UpdateStrategy.READ_WRITE);
 
@@ -511,7 +511,7 @@ public class OrganizationPanel extends BaseEntityPanel {
             }
         }, bg,
                 organization,
-                entityProps.getPropertyDetails("administrationAddress"),
+                entityProps.getEntityProperty("administrationAddress"),
                 "${addressName}",
                 UpdateStrategy.READ_WRITE);
 

@@ -33,7 +33,7 @@ import com.cosmos.acacia.crm.data.sales.Invoice;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 
@@ -469,11 +469,11 @@ public class PaymentMatchingPanel extends AcaciaPanel {
 
     private EntityProperties getPaymentListEntityProperties() {
         EntityProperties entProps = formSession.getListingEntityProperties();
-        entProps.getPropertyDetails("creationTime").setOrderPosition(1000);
+        entProps.setOrderPosition("creationTime", 1000);
         
-        PropertyDetails unmatchedAmountPD = new PropertyDetails("unmatchedAmount", 
+        EntityProperty unmatchedAmountPD = EntityProperty.createEntityProperty("unmatchedAmount",
             getResourceMap().getString("column.unmatchedamount"), BigDecimal.class.getName(), 35);
-        entProps.addPropertyDetails(unmatchedAmountPD);
+        entProps.addEntityProperty(unmatchedAmountPD);
         return entProps;
     }
 
@@ -540,28 +540,28 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         viewPaymentButton.setEnabled(matchSelected);
     }
 
-    private List<PropertyDetails> createInvoiceListColumns() {
-        List<PropertyDetails> result = new ArrayList<PropertyDetails>();
-        result.add(new PropertyDetails("invoiceNumber", getResourceMap().getString("column.docnumber"), BigInteger.class.getName(), 10));
-        result.add(new PropertyDetails("creationTime", getResourceMap().getString("column.docdate"), Date.class.getName(), 20));
-        result.add(new PropertyDetails("totalValue", getResourceMap().getString("column.totalamount"), BigDecimal.class.getName(), 30));
-        result.add(new PropertyDetails("paidAmount", getResourceMap().getString("column.paidamount"), BigDecimal.class.getName(), 40));
-        result.add(new PropertyDetails("dueAmount", getResourceMap().getString("column.dueamount"), BigDecimal.class.getName(), 50));
-        int position = 0;
-        for (PropertyDetails propertyDetails : result) {
-            position +=10; 
-            propertyDetails.setOrderPosition(position);
-        }
+    private List<EntityProperty> createInvoiceListColumns() {
+        List<EntityProperty> result = new ArrayList<EntityProperty>();
+        result.add(EntityProperty.createEntityProperty("invoiceNumber", getResourceMap().getString("column.docnumber"), BigInteger.class.getName(), 10));
+        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.docdate"), Date.class.getName(), 20));
+        result.add(EntityProperty.createEntityProperty("totalValue", getResourceMap().getString("column.totalamount"), BigDecimal.class.getName(), 30));
+        result.add(EntityProperty.createEntityProperty("paidAmount", getResourceMap().getString("column.paidamount"), BigDecimal.class.getName(), 40));
+        result.add(EntityProperty.createEntityProperty("dueAmount", getResourceMap().getString("column.dueamount"), BigDecimal.class.getName(), 50));
+//        int position = 0;
+//        for (EntityProperty propertyDetails : result) {
+//            position +=10;
+//            propertyDetails.setOrderPosition(position);
+//        }
         return result;
     }
     
-    private List<PropertyDetails> createPaymentHistoryColumns() {
-        List<PropertyDetails> result = new ArrayList<PropertyDetails>();
-        result.add(new PropertyDetails("amount", getResourceMap().getString("column.matchAmount"), BigDecimal.class.getName(),10));
-        result.add(new PropertyDetails("matchNumber", getResourceMap().getString("column.matchNumber"), Integer.class.getName(),20));
-        result.add(new PropertyDetails("creationTime", getResourceMap().getString("column.matchDate"), Date.class.getName(),30));
-        result.add(new PropertyDetails("customerPayment.documentNumber", getResourceMap().getString("column.paymentNumber"), BigInteger.class.getName(),40));
-        result.add(new PropertyDetails("customerPayment.completionTime", getResourceMap().getString("column.paymentDate"), Date.class.getName(),50));
+    private List<EntityProperty> createPaymentHistoryColumns() {
+        List<EntityProperty> result = new ArrayList<EntityProperty>();
+        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.matchAmount"), BigDecimal.class.getName(),10));
+        result.add(EntityProperty.createEntityProperty("matchNumber", getResourceMap().getString("column.matchNumber"), Integer.class.getName(),20));
+        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.matchDate"), Date.class.getName(),30));
+        result.add(EntityProperty.createEntityProperty("customerPayment.documentNumber", getResourceMap().getString("column.paymentNumber"), BigInteger.class.getName(),40));
+        result.add(EntityProperty.createEntityProperty("customerPayment.completionTime", getResourceMap().getString("column.paymentDate"), Date.class.getName(),50));
         return result;
     }
 
@@ -605,8 +605,9 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         }
         pendingDocumentsBindingGroup = new BindingGroup();
         
-        List<PropertyDetails> pd = createInvoiceListColumns();
-        EntityProperties ep = new EntityProperties(pd);
+        List<EntityProperty> pd = createInvoiceListColumns();
+        EntityProperties ep = new EntityProperties(Object.class);
+        ep.addEntityProperties(pd);
         
         pendingDocumentsTable.bind(pendingDocumentsBindingGroup, pendingInvoices, 
             ep, UpdateStrategy.READ);
@@ -621,9 +622,10 @@ public class PaymentMatchingPanel extends AcaciaPanel {
             paymentHistoryBindingGroup.unbind();
         }
         paymentHistoryBindingGroup = new BindingGroup();
-        
-        paymentHistoryTable.bind(paymentHistoryBindingGroup, matchHistory, 
-            new EntityProperties(createPaymentHistoryColumns()), UpdateStrategy.READ);
+
+        EntityProperties entityProperties = new EntityProperties(Object.class);
+        entityProperties.addEntityProperties(createPaymentHistoryColumns());
+        paymentHistoryTable.bind(paymentHistoryBindingGroup, matchHistory, entityProperties, UpdateStrategy.READ);
         
         paymentHistoryBindingGroup.bind();
     }

@@ -21,11 +21,11 @@ public class UserOrganizationListPanel extends DetailEntityListPanel<User, UserO
     }
 
     public UserOrganizationListPanel(User user) {
-        super(user, UserOrganization.class);
+        super(user, UserOrganization.class, null);
     }
 
     public UserOrganizationListPanel(EntityPanel<User> mainEntityPanel) {
-        super(mainEntityPanel, UserOrganization.class);
+        super(mainEntityPanel, UserOrganization.class, null);
     }
 
     @Override

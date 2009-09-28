@@ -74,7 +74,7 @@ public class PatternMaskFormatListPanel extends AbstractTablePanel<PatternMaskFo
             entityProperties
             );
 
-        formatsTable.bindComboBoxCellEditor(formatsBindingGroup, formatsList, entityProperties.getPropertyDetails("owner"));
+        formatsTable.bindComboBoxCellEditor(formatsBindingGroup, formatsList, entityProperties.getEntityProperty("owner"));
 
         formatsBindingGroup.bind();
     }

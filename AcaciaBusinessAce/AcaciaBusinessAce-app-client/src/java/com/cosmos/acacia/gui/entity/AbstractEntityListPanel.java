@@ -11,6 +11,7 @@ import com.cosmos.acacia.annotation.OperationType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.annotation.UpdateOperation;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.AbstractTablePanel;
@@ -45,16 +46,17 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
     private EntityProperties entityProperties;
     private E entity;
 
-    protected AbstractEntityListPanel(Class<E> entityClass, Object... parameters) {
-        super(null, null, entityClass, parameters);
+    protected AbstractEntityListPanel(Class<E> entityClass, Classifier classifier, Object... parameters) {
+        super(null, null, entityClass, classifier, parameters);
     }
 
     protected AbstractEntityListPanel(
             EntityPanel mainEntityPanel,
             Object mainEntity,
             Class<E> itemEntityClass,
+            Classifier classifier,
             Object... parameters) {
-        super(mainEntityPanel, mainEntity, itemEntityClass, parameters);
+        super(mainEntityPanel, mainEntity, itemEntityClass, classifier, parameters);
     }
 
     protected EntityPanel getMainEntityPanel() {
@@ -364,6 +366,12 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
     @Override
     public List<E> getEntities() {
         throw new UnsupportedOperationException("This method MUST be implemented.");
+    }
+
+    @Override
+    public void setClassifier(Classifier classifier) {
+        super.setClassifier(classifier);
+        refresh();
     }
 
     @Override

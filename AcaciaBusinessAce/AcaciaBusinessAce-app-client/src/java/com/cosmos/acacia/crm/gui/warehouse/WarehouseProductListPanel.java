@@ -83,10 +83,10 @@ public class WarehouseProductListPanel extends AbstractTablePanel<WarehouseProdu
 
         //remove the columns that doesn't have summary meaning if this is set to true
         if (showSummaryProducts) {
-            entityProps.removePropertyDetails("warehouse");
-            entityProps.removePropertyDetails("notes");
-            entityProps.removePropertyDetails("deliveryTime");
-            entityProps.removePropertyDetails("salePrice");
+            entityProps.removeEntityProperty("warehouse");
+            entityProps.removeEntityProperty("notes");
+            entityProps.removeEntityProperty("deliveryTime");
+            entityProps.removeEntityProperty("salePrice");
         }
 
         refreshDataTable(entityProps);

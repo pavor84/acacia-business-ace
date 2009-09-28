@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class PurchaseInvoiceItemListPanel extends DetailEntityListPanel<PurchaseInvoice, PurchaseInvoiceItem> {
 
     public PurchaseInvoiceItemListPanel(EntityPanel<PurchaseInvoice> mainEntityPanel) {
-        super(mainEntityPanel, PurchaseInvoiceItem.class);
+        super(mainEntityPanel, PurchaseInvoiceItem.class, null);
     }
 
     @Override

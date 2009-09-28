@@ -16,7 +16,7 @@ import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -47,7 +47,7 @@ public class ProductPricingValueListPanel extends AbstractTablePanel<ProductPerc
     protected void bindComponents() {
         entityProps = getFormSession().getListingEntityProperties();
         if (type != null) {
-            PropertyDetails propDetails = entityProps.getPropertyDetails("percentValue");
+            EntityProperty propDetails = entityProps.getEntityProperty("percentValue");
             String title = getResourceMap().getString("percentValue.name." + type);
             propDetails.setPropertyTitle(title);
         }

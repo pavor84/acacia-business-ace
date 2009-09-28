@@ -17,11 +17,11 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class CitiesListPanel extends DetailEntityListPanel<Country, City> {
 
     public CitiesListPanel(EntityPanel<Country> mainEntityPanel) {
-        super(mainEntityPanel, City.class);
+        super(mainEntityPanel, City.class, null);
     }
 
     public CitiesListPanel(Country country) {
-        super(country, City.class);
+        super(country, City.class, null);
     }
 
     @Override

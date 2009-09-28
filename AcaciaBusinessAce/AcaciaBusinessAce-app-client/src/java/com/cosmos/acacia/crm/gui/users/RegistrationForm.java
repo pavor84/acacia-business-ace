@@ -269,8 +269,8 @@ public class RegistrationForm extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
 
         EntityProperties entityProps = getFormSession().getUserEntityProperties();
-        usernameTextField.bind(bg, user, entityProps.getPropertyDetails("userName"));
-        passwordTextField.bind(bg, user, entityProps.getPropertyDetails("userPassword"));
+        usernameTextField.bind(bg, user, entityProps.getEntityProperty("userName"));
+        passwordTextField.bind(bg, user, entityProps.getEntityProperty("userPassword"));
 
         /*OrganizationsListPanel organizationsTable = new OrganizationsListPanel(null);
         organizationComboList.initUnbound(organizationsTable, "${organizationName}");

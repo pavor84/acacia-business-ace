@@ -11,7 +11,7 @@ import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBComboBox;
@@ -215,7 +215,7 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
         EntityProperties ep = getEntityProperties();
         CurrencyExchangeRate cer = getCurrencyExchangeRate();
 
-        PropertyDetails pd = ep.getPropertyDetails("fixedExchangeRate");
+        EntityProperty pd = ep.getEntityProperty("fixedExchangeRate");
         fixedExchangeRateCheckBox.bind(bg, cer, pd).addBindingListener(new AbstractBindingListener() {
 
             @Override
@@ -224,7 +224,7 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
             }
         });
 
-        pd = ep.getPropertyDetails("validFrom");
+        pd = ep.getEntityProperty("validFrom");
         validFromDatePicker.bind(bg, cer, pd, new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT)).addBindingListener(new AbstractBindingListener() {
 
             @Override
@@ -233,17 +233,17 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
             }
         });
 
-        pd = ep.getPropertyDetails("validUntil");
+        pd = ep.getEntityProperty("validUntil");
         validUntilDatePicker.bind(bg, cer, pd, new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT));
 
         List<DbResource> currencies = getCurrencies();
-        pd = ep.getPropertyDetails("fromCurrency");
+        pd = ep.getEntityProperty("fromCurrency");
         fromCurrencyComboBox.bind(bg, currencies, cer, pd);
 
-        pd = ep.getPropertyDetails("toCurrency");
+        pd = ep.getEntityProperty("toCurrency");
         toCurrencyComboBox.bind(bg, currencies, cer, pd);
 
-        pd = ep.getPropertyDetails("exchangeRate");
+        pd = ep.getEntityProperty("exchangeRate");
         exchangeRateDecimalField.bind(bg, cer, pd);
 
         bg.bind();

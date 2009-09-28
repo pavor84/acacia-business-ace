@@ -346,11 +346,11 @@ public class AddressPanel extends BaseEntityPanel {
 
         final EntityProperties entityProps = getAddressEntityProperties();
 
-        addressNameTextField.bind(bg, address, entityProps.getPropertyDetails("addressName"));
-        postalCodeTextField.bind(bg, address, entityProps.getPropertyDetails("postalCode"));
-        postalAddressTextPane.bind(bg, address, entityProps.getPropertyDetails("postalAddress"));
+        addressNameTextField.bind(bg, address, entityProps.getEntityProperty("addressName"));
+        postalCodeTextField.bind(bg, address, entityProps.getEntityProperty("postalCode"));
+        postalAddressTextPane.bind(bg, address, entityProps.getEntityProperty("postalAddress"));
 
-        countryComboBox.bind(bg, getCountries(), address, entityProps.getPropertyDetails("country"));
+        countryComboBox.bind(bg, getCountries(), address, entityProps.getEntityProperty("country"));
         countryComboBox.addActionListener(new ActionListener() {
 
             @Override
@@ -368,12 +368,12 @@ public class AddressPanel extends BaseEntityPanel {
             }
         }, bg,
                 address,
-                entityProps.getPropertyDetails("city"),
+                entityProps.getEntityProperty("city"),
                 "${cityName}",
                 UpdateStrategy.READ_WRITE);
 
 
-        descriptionTextPane.bind(bg, address, entityProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, address, entityProps.getEntityProperty("description"));
 
         UUID dataObjectId;
         DataObject dataObject;

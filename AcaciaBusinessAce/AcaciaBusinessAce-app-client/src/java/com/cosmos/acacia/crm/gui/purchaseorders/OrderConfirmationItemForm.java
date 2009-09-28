@@ -34,7 +34,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 
@@ -341,7 +341,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
 //        }
         
         //product
-        PropertyDetails pd = entProps.getPropertyDetails("product");
+        EntityProperty pd = entProps.getEntityProperty("product");
         pd.setRequired(true);
         ProductsListPanel listPanel = new ProductsListPanel(getOrganizationDataObjectId());
         productField.bind(
@@ -359,10 +359,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         }, true);
         
         //measure unit 
-        measureUnitField.bind(bg, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitField.bind(bg, getMeasureUnits(), entity, entProps.getEntityProperty("measureUnit"));
         
         //confirmed quantity
-        Binding confirmedQtyBinding = confirmedQuantityField.bind(bg, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
+        Binding confirmedQtyBinding = confirmedQuantityField.bind(bg, entity, entProps.getEntityProperty("confirmedQuantity"), getDecimalFormat());
         confirmedQtyBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -371,10 +371,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         });
         
         //currency
-        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getEntityProperty("currency"));
         
         //unit price
-        Binding unitPriceBinding = unitPriceField.bind(bg, entity, entProps.getPropertyDetails("unitPrice"), getDecimalFormat());
+        Binding unitPriceBinding = unitPriceField.bind(bg, entity, entProps.getEntityProperty("unitPrice"), getDecimalFormat());
         unitPriceBinding.addBindingListener(new AbstractBindingListener() {
             @Override
             public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -383,10 +383,10 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
         });
         
         //extended price
-        extendedPriceField.bind(bg, entity, entProps.getPropertyDetails("extendedPrice"), getDecimalFormat());
+        extendedPriceField.bind(bg, entity, entProps.getEntityProperty("extendedPrice"), getDecimalFormat());
         
         //ship week
-        shipWeekField.bind(bg, entity, entProps.getPropertyDetails("shipWeek"), getIntegerFormat())
+        shipWeekField.bind(bg, entity, entProps.getEntityProperty("shipWeek"), getIntegerFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -395,7 +395,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             });
         
         //ship date from
-        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat())
+        shipDateFromField.bind(bg, entity, entProps.getEntityProperty("shipDateFrom"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -404,7 +404,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             });
         
         //ship date to
-        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat())
+        shipDateToField.bind(bg, entity, entProps.getEntityProperty("shipDateTo"), AcaciaUtils.getShortDateFormat())
             .addBindingListener(new AbstractBindingListener() {
                 @Override
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -413,7 +413,7 @@ public class OrderConfirmationItemForm extends BaseEntityPanel {
             });
         
         //notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
         
         bg.bind();
         

@@ -35,7 +35,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DefaultSelectableListDialog;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
@@ -876,11 +876,11 @@ public class CashReconcileForm extends BaseEntityPanel {
         return Arrays.asList(new JBColumn[]{jc});
     }
 
-//    private List<PropertyDetails> createPaymentSummaryColumns() {
-//        List<PropertyDetails> result = new ArrayList<PropertyDetails>();
-//        result.add(new PropertyDetails("paymentType", getResourceMap().getString("column.paymentType"), Currency.class.getName(),10));
-//        result.add(new PropertyDetails("currency", getResourceMap().getString("column.currency"), Currency.class.getName(),20));
-//        result.add(new PropertyDetails("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(),30));
+//    private List<EntityProperty> createPaymentSummaryColumns() {
+//        List<EntityProperty> result = new ArrayList<EntityProperty>();
+//        result.add(new EntityProperty("paymentType", getResourceMap().getString("column.paymentType"), Currency.class.getName(),10));
+//        result.add(new EntityProperty("currency", getResourceMap().getString("column.currency"), Currency.class.getName(),20));
+//        result.add(new EntityProperty("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(),30));
 //        return result;
 //    }
     @Action
@@ -909,7 +909,7 @@ public class CashReconcileForm extends BaseEntityPanel {
     protected void bind() {
         BindingGroup bg = getBindingGroup();
         //document number
-        documentNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"), UpdateStrategy.READ);
+        documentNumberField.bind(bg, entity, entProps.getEntityProperty("documentNumber"), UpdateStrategy.READ);
 
         //document date
         if (entity.getDocumentDate() != null) {
@@ -927,64 +927,66 @@ public class CashReconcileForm extends BaseEntityPanel {
         officerInChargeField.setSelectedItem(entity.getPublisherOfficer());
 
         //cashier
-        cashierField.bind(bg, cashiersPanel, entity, entProps.getPropertyDetails("cashier"));
+        cashierField.bind(bg, cashiersPanel, entity, entProps.getEntityProperty("cashier"));
 
         //initial cash
-        initialCashField.bind(bg, entity, entProps.getPropertyDetails("initialCashBalance"), AcaciaUtils.getDecimalFormat());
+        initialCashField.bind(bg, entity, entProps.getEntityProperty("initialCashBalance"), AcaciaUtils.getDecimalFormat());
 
         //initial bank
-        initialBankField.bind(bg, entity, entProps.getPropertyDetails("initialBankBalance"), AcaciaUtils.getDecimalFormat());
+        initialBankField.bind(bg, entity, entProps.getEntityProperty("initialBankBalance"), AcaciaUtils.getDecimalFormat());
 
         //initial balance
-        initialBalanceField.bind(bg, entity, entProps.getPropertyDetails("initialBalance"), AcaciaUtils.getDecimalFormat());
+        initialBalanceField.bind(bg, entity, entProps.getEntityProperty("initialBalance"), AcaciaUtils.getDecimalFormat());
 
         //period revenue
-        preiodRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+        preiodRevenueField.bind(bg, entity, entProps.getEntityProperty("periodRevenue"), AcaciaUtils.getDecimalFormat());
 
         //period expenses
-        periodExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+        periodExpensesField.bind(bg, entity, entProps.getEntityProperty("periodExpenses"), AcaciaUtils.getDecimalFormat());
 
         //end balance
-        endBalanceField.bind(bg, entity, entProps.getPropertyDetails("endBalance"), AcaciaUtils.getDecimalFormat());
+        endBalanceField.bind(bg, entity, entProps.getEntityProperty("endBalance"), AcaciaUtils.getDecimalFormat());
 
         //notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
 
         //period cash revenue
-        cashRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
+        cashRevenueField.bind(bg, entity, entProps.getEntityProperty("periodCashRevenue"), AcaciaUtils.getDecimalFormat());
 
         //period bank revenue
-        bankRevenueField.bind(bg, entity, entProps.getPropertyDetails("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
+        bankRevenueField.bind(bg, entity, entProps.getEntityProperty("periodBankRevenue"), AcaciaUtils.getDecimalFormat());
 
         //period revenue
-        revenueField.bind(bg, entity, entProps.getPropertyDetails("periodRevenue"), AcaciaUtils.getDecimalFormat());
+        revenueField.bind(bg, entity, entProps.getEntityProperty("periodRevenue"), AcaciaUtils.getDecimalFormat());
 
         //period cash expenses
-        cashExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
+        cashExpensesField.bind(bg, entity, entProps.getEntityProperty("periodCashExpenses"), AcaciaUtils.getDecimalFormat());
 
         //period bank expenses
-        bankExpensesField.bind(bg, entity, entProps.getPropertyDetails("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
+        bankExpensesField.bind(bg, entity, entProps.getEntityProperty("periodBankExpenses"), AcaciaUtils.getDecimalFormat());
 
         //period expenses
-        expensesField.bind(bg, entity, entProps.getPropertyDetails("periodExpenses"), AcaciaUtils.getDecimalFormat());
+        expensesField.bind(bg, entity, entProps.getEntityProperty("periodExpenses"), AcaciaUtils.getDecimalFormat());
 
         //end balances table
         List<EndBalance> endBalances = getEndBalances();
-        endBalanceTable.bind(bg, endBalances,
-                new EntityProperties(createEndBalancesColumns()), UpdateStrategy.READ);
+        EntityProperties entityProperties = new EntityProperties(Object.class);
+        entityProperties.addEntityProperties(createEndBalancesColumns());
+        entityProperties.setUpdateStrategy(UpdateStrategy.READ);
+        endBalanceTable.bind(bg, endBalances, entityProperties, UpdateStrategy.READ);
 
         bg.bind();
     }
 
-    private List<PropertyDetails> createEndBalancesColumns() {
-        List<PropertyDetails> result = new ArrayList<PropertyDetails>();
-        result.add(new PropertyDetails("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(), 10));
-        result.add(new PropertyDetails("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(), 20));
+    private List<EntityProperty> createEndBalancesColumns() {
+        List<EntityProperty> result = new ArrayList<EntityProperty>();
+        result.add(EntityProperty.createEntityProperty("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(), 10));
+        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(), 20));
         String defaultCurrencyTitle = getResourceMap().getString("column.amountDefaultCurrency");
         if (defaultCurrencyTitle.contains("{0}")) {
             defaultCurrencyTitle = MessageFormat.format(defaultCurrencyTitle, ((Currency) entity.getCurrency().getEnumValue()).getCode());
         }
-        result.add(new PropertyDetails("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(), 30));
+        result.add(EntityProperty.createEntityProperty("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(), 30));
         return result;
     }
 

@@ -23,7 +23,7 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.beansbinding.Validator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.BaseValidator;
 import org.jdesktop.beansbinding.Property;
 
@@ -89,7 +89,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     public Binding bind(AcaciaLookupProvider lookupProvider, BindingGroup bindingGroup,
-                     Object beanEntity, PropertyDetails propertyDetails,
+                     Object beanEntity, EntityProperty propertyDetails,
                      AutoBinding.UpdateStrategy updateStrategy) {
         return
         this.bind(lookupProvider, bindingGroup, beanEntity, propertyDetails, null, updateStrategy);
@@ -109,7 +109,7 @@ public class AcaciaLookup extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     public Binding bind(AcaciaLookupProvider lookupProvider, BindingGroup bindingGroup,
-                     Object beanEntity, PropertyDetails propertyDetails,
+                     Object beanEntity, EntityProperty propertyDetails,
                      String elPropertyItemDisplay, AutoBinding.UpdateStrategy updateStrategy) {
         if (lookupProvider == null)
             throw new IllegalArgumentException("Please specify not null parameter!");

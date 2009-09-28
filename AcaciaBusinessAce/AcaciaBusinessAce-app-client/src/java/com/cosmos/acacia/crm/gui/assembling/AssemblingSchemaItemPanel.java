@@ -14,7 +14,7 @@ import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -324,7 +324,7 @@ public class AssemblingSchemaItemPanel
     @Override
     protected void initData() {
         entityProps = getFormSession().getAssemblingSchemaItemEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
@@ -336,7 +336,7 @@ public class AssemblingSchemaItemPanel
         schemaNameTextField.setText(as.getSchemaName());
 
         //messageComboList
-        propDetails = entityProps.getPropertyDetails("assemblingMessage");
+        propDetails = entityProps.getEntityProperty("assemblingMessage");
         AssemblingMessageListPanel listPanel =
                 new AssemblingMessageListPanel();
         messageComboList.bind(
@@ -353,31 +353,31 @@ public class AssemblingSchemaItemPanel
         AutoCompleteDecorator.decorate(dataTypeComboBox, resourceToStringConverter);
 
         //algorithmComboBox
-        propDetails = entityProps.getPropertyDetails("assemblingAlgorithm");
+        propDetails = entityProps.getEntityProperty("assemblingAlgorithm");
         algorithmComboBox.bind(bg, getAlgorithms(), entity, propDetails);
 
         //dataTypeComboBox
-        propDetails = entityProps.getPropertyDetails("dataType");
+        propDetails = entityProps.getEntityProperty("dataType");
         dataTypeComboBox.bind(bg, getDataTypes(), entity, propDetails);
 
         //minSelectionsTextField
-        propDetails = entityProps.getPropertyDetails("minSelections");
+        propDetails = entityProps.getEntityProperty("minSelections");
         minSelectionsTextField.bind(bg, entity, propDetails);
 
         //maxSelectionsTextField
-        propDetails = entityProps.getPropertyDetails("maxSelections");
+        propDetails = entityProps.getEntityProperty("maxSelections");
         maxSelectionsTextField.bind(bg, entity, propDetails);
 
         //quantityTextField
-        propDetails = entityProps.getPropertyDetails("quantity");
+        propDetails = entityProps.getEntityProperty("quantity");
         quantityTextField.bind(bg, entity, propDetails);
 
         //defaultValueTextField
-        propDetails = entityProps.getPropertyDetails("defaultValue");
+        propDetails = entityProps.getEntityProperty("defaultValue");
         defaultValueTextField.bind(bg, entity, propDetails);
 
         //descriptionTextPane
-        propDetails = entityProps.getPropertyDetails("description");
+        propDetails = entityProps.getEntityProperty("description");
         descriptionTextPane.bind(bg, entity, propDetails);
 
         bg.bind();

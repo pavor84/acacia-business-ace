@@ -19,7 +19,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBLabel;
@@ -172,22 +172,22 @@ public class ProductCategoryPanel extends BaseEntityPanel {
 //        add(productCategoryTabbedPane, java.awt.BorderLayout.CENTER);
 
         EntityProperties entityProps = getFormSession().getProductCategoryEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
         //parent category
-        propDetails = entityProps.getPropertyDetails("parentCategory");
+        propDetails = entityProps.getEntityProperty("parentCategory");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(getParentDataObjectId());
         parentCategoryComboList.bind(bg, categoryListPanel, productCategory, propDetails,
                 "${categoryName}", UpdateStrategy.READ_WRITE);
 
         //category name
-        propDetails = entityProps.getPropertyDetails("categoryName");
+        propDetails = entityProps.getEntityProperty("categoryName");
         categoryNameTextField.bind(bg, productCategory, propDetails);
 
         //pattern mask format
-        propDetails = entityProps.getPropertyDetails("patternMaskFormat");
+        propDetails = entityProps.getEntityProperty("patternMaskFormat");
         PatternMaskFormatListPanel patternListPanel = new PatternMaskFormatListPanel(getParentDataObjectId());
 
         patternMaskFormatComboList.bind(bg, patternListPanel, productCategory, propDetails,
@@ -199,7 +199,7 @@ public class ProductCategoryPanel extends BaseEntityPanel {
         }
 
         //description
-        descriptionTextPane.bind(bg, productCategory, entityProps.getPropertyDetails("description"));
+        descriptionTextPane.bind(bg, productCategory, entityProps.getEntityProperty("description"));
 
         bg.bind();
     }
@@ -431,23 +431,23 @@ public class ProductCategoryPanel extends BaseEntityPanel {
             BindingGroup bg = getBindingGroup();
             EntityProperties entityProps = getFormSession().getProductCategoryEntityProperties();
 
-            PropertyDetails propDetails = entityProps.getPropertyDetails("discountPercent");
+            EntityProperty propDetails = entityProps.getEntityProperty("discountPercent");
             discountPercentField.bind(bg, productCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("profitPercent");
+            propDetails = entityProps.getEntityProperty("profitPercent");
             profitPercentField.bind(bg, productCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("customsDutyPercent");
+            propDetails = entityProps.getEntityProperty("customsDutyPercent");
             customsDutyPercentField.bind(bg, productCategory, propDetails);
 
-            propDetails = entityProps.getPropertyDetails("exciseDutyPercent");
+            propDetails = entityProps.getEntityProperty("exciseDutyPercent");
             exciseDutyPercentField.bind(bg, productCategory, propDetails);
 
             percentValueSynchronizer =
                     new JBPercentValueSynchronizer(transportPercentField, transportDecimalField);
-            propDetails = entityProps.getPropertyDetails("transportPercent");
+            propDetails = entityProps.getEntityProperty("transportPercent");
             transportPercentField.bind(bindingGroup, productCategory, propDetails);
-            propDetails = entityProps.getPropertyDetails("transportValue");
+            propDetails = entityProps.getEntityProperty("transportValue");
             Binding binding = transportDecimalField.bind(bindingGroup, productCategory, propDetails);
 
             binding.addBindingListener(new AbstractBindingListener() {

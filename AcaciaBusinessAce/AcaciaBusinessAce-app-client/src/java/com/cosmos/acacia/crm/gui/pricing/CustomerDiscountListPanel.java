@@ -23,7 +23,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBLabel;
@@ -245,7 +245,7 @@ public class CustomerDiscountListPanel extends BaseEntityPanel {
             BindingGroup bg = getBindingGroup();
             CustomerDiscount discount = getCustomerDiscount();
             EntityProperties entityProperties = getFormSession().getCustomerDiscountEntityProperties();
-            PropertyDetails propDetails = entityProperties.getPropertyDetails("discountPercent");
+            EntityProperty propDetails = entityProperties.getEntityProperty("discountPercent");
             discountPercentField.bind(bg, discount, propDetails);
             bg.bind();
         }

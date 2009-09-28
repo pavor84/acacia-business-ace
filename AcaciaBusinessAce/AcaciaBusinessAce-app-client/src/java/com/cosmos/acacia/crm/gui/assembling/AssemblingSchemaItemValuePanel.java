@@ -15,7 +15,7 @@ import com.cosmos.acacia.crm.gui.ProductsListPanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.util.UUID;
 import javax.ejb.EJB;
@@ -221,24 +221,24 @@ public class AssemblingSchemaItemValuePanel
     @Override
     protected void initData() {
         entityProps = getFormSession().getAssemblingSchemaItemValueEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
-        // propDetails = entityProps.getPropertyDetails("virtualProduct");
+        // propDetails = entityProps.getEntityProperty("virtualProduct");
         // productOrSchemaTextField.bind(bindingGroup, entity, propDetails);
         VirtualProduct virtualProduct = entity.getVirtualProduct();
         if (virtualProduct != null) {
             productOrSchemaTextField.setText(virtualProduct.getProductName());
         }
 
-        propDetails = entityProps.getPropertyDetails("minConstraint");
+        propDetails = entityProps.getEntityProperty("minConstraint");
         minValueTextField.bind(bg, entity, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("maxConstraint");
+        propDetails = entityProps.getEntityProperty("maxConstraint");
         maxValueTextField.bind(bg, entity, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("quantity");
+        propDetails = entityProps.getEntityProperty("quantity");
         quantityTextField.bind(bg, entity, propDetails);
 
         bg.bind();

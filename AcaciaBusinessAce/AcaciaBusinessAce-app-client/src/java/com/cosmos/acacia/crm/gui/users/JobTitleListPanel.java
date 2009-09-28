@@ -21,7 +21,7 @@ public class JobTitleListPanel extends DetailEntityListPanel<DataObjectBean, Job
     }*/
 
     public JobTitleListPanel(EntityPanel<DataObjectBean> mainEntityPanel) {
-        super(mainEntityPanel, JobTitle.class);
+        super(mainEntityPanel, JobTitle.class, null);
     }
 
     @Override

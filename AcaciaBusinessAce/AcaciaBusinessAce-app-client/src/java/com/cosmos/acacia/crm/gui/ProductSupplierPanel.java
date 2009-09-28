@@ -21,7 +21,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.MigLayoutHelper;
 import java.awt.BorderLayout;
@@ -431,46 +431,46 @@ public class ProductSupplierPanel extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
         EntityProperties entityProps = getEntityProperties();
 
-        PropertyDetails propDetails = entityProps.getPropertyDetails("supplier");
+        EntityProperty propDetails = entityProps.getEntityProperty("supplier");
         Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
         BusinessPartnersListPanel producerListPanel = new BusinessPartnersListPanel(classifier);
         supplierComboList.bind(bg, producerListPanel, productSupplier, propDetails,
             "${displayName}", UpdateStrategy.READ_WRITE);
 
-        propDetails = entityProps.getPropertyDetails("measureUnit");
+        propDetails = entityProps.getEntityProperty("measureUnit");
         measureUnitComboBox.bind(bg, getMeasureUnits(), productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("productCode");
+        propDetails = entityProps.getEntityProperty("productCode");
         supplierProductCodeTextField.bind(bg, productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("productName");
+        propDetails = entityProps.getEntityProperty("productName");
         supplierProductNameTextField.bind(bg, productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("pricePerQuantity");
+        propDetails = entityProps.getEntityProperty("pricePerQuantity");
         pricePerQuantityTextField.bind(bg, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
 
-        propDetails = entityProps.getPropertyDetails("orderPrice");
+        propDetails = entityProps.getEntityProperty("orderPrice");
         orderPriceTextField.bind(bg, productSupplier, propDetails, AcaciaUtils.getDecimalFormat());
 
-        propDetails = entityProps.getPropertyDetails("currency");
+        propDetails = entityProps.getEntityProperty("currency");
         currencyComboBox.bind(bg, getCurrencies(), productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("deliveryTime");
+        propDetails = entityProps.getEntityProperty("deliveryTime");
         deliveryTimeTextField.bind(bg, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
 
-        propDetails = entityProps.getPropertyDetails("minOrderQuantity");
+        propDetails = entityProps.getEntityProperty("minOrderQuantity");
         minOrderQuantityTextField.bind(bg, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
 
-        propDetails = entityProps.getPropertyDetails("maxOrderQuantity");
+        propDetails = entityProps.getEntityProperty("maxOrderQuantity");
         maxOrderQuantityTextField.bind(bg, productSupplier, propDetails, AcaciaUtils.getIntegerFormat());
 
-        propDetails = entityProps.getPropertyDetails("deliverable");
+        propDetails = entityProps.getEntityProperty("deliverable");
         deliverableCheckBox.bind(bg, productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("obsolete");
+        propDetails = entityProps.getEntityProperty("obsolete");
         obsoleteCheckBox.bind(bg, productSupplier, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("description");
+        propDetails = entityProps.getEntityProperty("description");
         descriptionTextPane.bind(bg, productSupplier, propDetails);
 
         bg.bind();
