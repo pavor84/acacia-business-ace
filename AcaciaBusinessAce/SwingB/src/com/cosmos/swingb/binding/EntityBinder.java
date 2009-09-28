@@ -4,7 +4,7 @@
  */
 package com.cosmos.swingb.binding;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -18,12 +18,12 @@ public interface EntityBinder extends Refreshable, Clearable {
     Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails);
+            EntityProperty propertyDetails);
 
     Binding bind(
             BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy);
 
     String getPropertyName();

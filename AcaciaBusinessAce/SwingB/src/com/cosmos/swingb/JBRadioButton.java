@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import javax.swing.Icon;
 import javax.swing.JRadioButton;
 import org.jdesktop.beansbinding.AutoBinding;
@@ -34,14 +34,14 @@ public class JBRadioButton
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
         if(propertyDetails == null || propertyDetails.isHiden())

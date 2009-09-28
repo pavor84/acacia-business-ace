@@ -529,7 +529,7 @@ public class JBTreeTable
             EntityProperties entityProps = getEntityProperties();
             if(entityProps == null)
                 throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            PropertyDetails pd = entityProps.getEntityProperty(propertyName);
             if(pd != null)
             {
                 String columnName = pd.getPropertyTitle();
@@ -588,7 +588,7 @@ public class JBTreeTable
             EntityProperties entityProps = getEntityProperties();
             if(entityProps == null)
                 throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            PropertyDetails pd = entityProps.getEntityProperty(propertyName);
             if(pd != null)
             {
                 String columnName = pd.getPropertyTitle();

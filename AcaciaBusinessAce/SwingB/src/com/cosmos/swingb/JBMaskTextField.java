@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.validation.Validatable;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
@@ -43,7 +43,7 @@ public class JBMaskTextField extends JXMaskTextField  implements Validatable {
      */
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
@@ -58,7 +58,7 @@ public class JBMaskTextField extends JXMaskTextField  implements Validatable {
     @SuppressWarnings("unchecked")
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
         if(propertyDetails == null || propertyDetails.isHiden())

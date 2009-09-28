@@ -4,7 +4,7 @@
  */
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.binding.EntityBinder;
 import com.cosmos.swingb.validation.Validatable;
 import java.awt.Color;
@@ -59,11 +59,11 @@ public class JBDatePicker extends JXDatePicker implements Validatable, EntityBin
     @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), null);
     }
 
-    protected String getExpression(PropertyDetails propertyDetails) {
+    protected String getExpression(EntityProperty propertyDetails) {
         String expression;
         if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
             return expression;
@@ -74,21 +74,21 @@ public class JBDatePicker extends JXDatePicker implements Validatable, EntityBin
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails, DateFormat dateFormat) {
+            EntityProperty propertyDetails, DateFormat dateFormat) {
         return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), dateFormat);
     }
 
     @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
         return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy(), null);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy, DateFormat dateFormat) {
         if (propertyDetails == null || propertyDetails.isHiden()) {
             setEditable(false);

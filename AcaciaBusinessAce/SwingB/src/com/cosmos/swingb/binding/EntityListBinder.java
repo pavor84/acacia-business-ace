@@ -4,7 +4,7 @@
  */
 package com.cosmos.swingb.binding;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.SelectableListDialog;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -17,8 +17,8 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 public interface EntityListBinder extends Refreshable, Clearable {
 
     JComboBoxBinding bind(BindingGroup bindingGroup, SelectableListDialog selectableListDialog,
-            Object beanEntity, PropertyDetails propertyDetails);
+            Object beanEntity, EntityProperty propertyDetails);
 
     JComboBoxBinding bind(BindingGroup bindingGroup, SelectableListDialog selectableListDialog,
-            Object beanEntity, PropertyDetails propertyDetails, AutoBinding.UpdateStrategy updateStrategy);
+            Object beanEntity, EntityProperty propertyDetails, AutoBinding.UpdateStrategy updateStrategy);
 }

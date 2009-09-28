@@ -4,7 +4,7 @@
  */
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import org.jdesktop.beansbinding.Binding;
 
 /**
@@ -13,9 +13,9 @@ import org.jdesktop.beansbinding.Binding;
  */
 public class ComboListBindingValidationListener extends BindingValidationListener {
 
-    private PropertyDetails propertyDetails;
+    private EntityProperty propertyDetails;
 
-    public ComboListBindingValidationListener(JBComboList comboList, PropertyDetails propertyDetails) {
+    public ComboListBindingValidationListener(JBComboList comboList, EntityProperty propertyDetails) {
         super(comboList);
         this.propertyDetails = propertyDetails;
     }

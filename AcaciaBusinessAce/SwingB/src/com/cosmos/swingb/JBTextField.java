@@ -5,7 +5,7 @@
 package com.cosmos.swingb;
 
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.resource.BeanResource;
 import com.cosmos.resource.EnumResource;
 import com.cosmos.resource.TextResource;
@@ -47,12 +47,12 @@ public class JBTextField extends JTextField
     @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails),
                 propertyDetails.getUpdateStrategy());
     }
 
-    protected String getExpression(PropertyDetails propertyDetails) {
+    protected String getExpression(EntityProperty propertyDetails) {
         String expression;
         if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
             return expression;
@@ -64,21 +64,21 @@ public class JBTextField extends JTextField
     @Override
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
         return bind(bindingGroup, beanEntity, propertyDetails, getExpression(propertyDetails), updateStrategy);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elProperyDisplay) {
         return bind(bindingGroup, beanEntity, propertyDetails, elProperyDisplay, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elProperyDisplay,
             AutoBinding.UpdateStrategy updateStrategy) {
         if (propertyDetails == null || propertyDetails.isHiden()) {
