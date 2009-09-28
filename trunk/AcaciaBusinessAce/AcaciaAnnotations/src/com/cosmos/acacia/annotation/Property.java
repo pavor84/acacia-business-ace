@@ -20,6 +20,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Property {
 
+    public static final int INITIAL_INDEX_VALUE = 3000000;
+    public static final int CUSTOM_INDEX_VALUE = 6000000;
+    public static final int STEP_VALUE = 100;
+
     String title();
 
     boolean readOnly() default false;
