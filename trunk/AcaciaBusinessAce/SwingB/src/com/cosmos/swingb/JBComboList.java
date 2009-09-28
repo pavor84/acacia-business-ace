@@ -31,7 +31,7 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.binding.EntityListBinder;
 import com.cosmos.swingb.validation.Validatable;
 import org.jdesktop.application.Task;
@@ -156,7 +156,7 @@ public class JBComboList extends JXPanel
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         return bind(
                 bindingGroup,
                 selectableListDialog,
@@ -170,12 +170,12 @@ public class JBComboList extends JXPanel
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             UpdateStrategy updateStrategy) {
         return bind(bindingGroup, selectableListDialog, beanEntity, propertyDetails, null, updateStrategy);
     }
 
-    protected String getExpression(PropertyDetails propertyDetails) {
+    protected String getExpression(EntityProperty propertyDetails) {
         String expression;
         if ((expression = propertyDetails.getCustomDisplay()) != null && expression.length() > 0) {
             return expression;
@@ -188,7 +188,7 @@ public class JBComboList extends JXPanel
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             ObjectToStringConverter converter) {
         return bind(
                 bindingGroup,
@@ -203,7 +203,7 @@ public class JBComboList extends JXPanel
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             ObjectToStringConverter converter,
             AutoBinding.UpdateStrategy updateStrategy) {
         if(converter != null) {

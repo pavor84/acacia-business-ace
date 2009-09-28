@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.validation.Validatable;
 import java.math.BigDecimal;
 import org.jdesktop.application.Application;
@@ -45,14 +45,14 @@ public class JBPercentField extends JXPercentField implements Validatable {
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, propertyDetails.getPropertyName(), updateStrategy);
@@ -60,7 +60,7 @@ public class JBPercentField extends JXPercentField implements Validatable {
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elProperyDisplay)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, elProperyDisplay, AutoBinding.UpdateStrategy.READ_WRITE);
@@ -68,7 +68,7 @@ public class JBPercentField extends JXPercentField implements Validatable {
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elProperyDisplay,
             AutoBinding.UpdateStrategy updateStrategy)
     {

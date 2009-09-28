@@ -33,7 +33,7 @@ import org.jdesktop.swingbinding.JComboBoxBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.binding.EnumerationBinder;
 import com.cosmos.swingb.binding.Refreshable;
 import com.cosmos.swingb.listeners.ComboListEventListener;
@@ -81,7 +81,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         this.selectableListDialog = selectableListDialog;
         return bind(bindingGroup, selectableListDialog.getListData(), beanEntity, propertyDetails);
     }
@@ -91,7 +91,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             UpdateStrategy updateStrategy) {
         this.selectableListDialog = selectableListDialog;
         return bind(bindingGroup, selectableListDialog.getListData(), beanEntity, propertyDetails, updateStrategy);
@@ -101,7 +101,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             UpdateStrategy updateStrategy,
             String componentName,
             BindingValidationListener bindingValidationListener) {
@@ -116,7 +116,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails) {
+            EntityProperty propertyDetails) {
         return bind(bindingGroup, data, beanEntity, propertyDetails, propertyDetails.getUpdateStrategy());
     }
 
@@ -125,7 +125,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
         ComboBoxBindingValidationListener bindingValidationListener =
                 new ComboBoxBindingValidationListener(this, propertyDetails);
@@ -138,7 +138,7 @@ public class JBComboBox extends JComboBox implements Validatable, EnumerationBin
             BindingGroup bindingGroup,
             List data,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy,
             String componentName,
             BindingValidationListener bindingValidationListener) {

@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.resource.BeanResource;
 import java.awt.Component;
 import javax.swing.JTable;
@@ -20,11 +20,11 @@ import org.jdesktop.application.Application;
 public class BeanTableCellRenderer
     extends DefaultTableCellRenderer
 {
-    private PropertyDetails propertyDetails;
+    private EntityProperty propertyDetails;
     private BeanResource beanResource;
     private DefaultFormatter formatter;
 
-    public BeanTableCellRenderer(PropertyDetails propertyDetails, Application application)
+    public BeanTableCellRenderer(EntityProperty propertyDetails, Application application)
     {
         this.propertyDetails = propertyDetails;
         beanResource = new BeanResource(application);

@@ -5,7 +5,7 @@
 
 package com.cosmos.swingb;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.resource.BeanResource;
 import com.cosmos.resource.EnumResource;
 import com.cosmos.resource.TextResource;
@@ -100,14 +100,14 @@ public class JBPasswordField extends JPasswordField implements Validatable, Enti
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE);
     }
 
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy)
     {
         if(propertyDetails == null || propertyDetails.isHiden())

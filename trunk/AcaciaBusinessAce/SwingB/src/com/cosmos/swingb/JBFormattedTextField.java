@@ -30,7 +30,7 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.Validator;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.validation.Validatable;
 
 /**
@@ -75,7 +75,7 @@ public class JBFormattedTextField
      */
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, null);
     }
@@ -89,7 +89,7 @@ public class JBFormattedTextField
      */
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails, Format format)
+            EntityProperty propertyDetails, Format format)
     {
         return bind(bindingGroup, beanEntity, propertyDetails, AutoBinding.UpdateStrategy.READ_WRITE, format);
     }
@@ -105,7 +105,7 @@ public class JBFormattedTextField
     @SuppressWarnings("unchecked")
     public Binding bind(BindingGroup bindingGroup,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy, Format format)
     {
         

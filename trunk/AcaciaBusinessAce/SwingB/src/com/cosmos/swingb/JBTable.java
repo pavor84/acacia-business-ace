@@ -37,7 +37,7 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.table.TableColumnExt;
 
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.converters.ResourceConverter;
 
 /**
@@ -305,7 +305,7 @@ public class JBTable
     public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
-            Collection<PropertyDetails> propertyDetails,
+            Collection<EntityProperty> propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy) {
         return bind(bindingGroup, data, propertyDetails, updateStrategy, null, false);
     }
@@ -323,7 +323,7 @@ public class JBTable
     public JTableBinding bind(
             BindingGroup bindingGroup,
             List data,
-            Collection<PropertyDetails> propertyDetails,
+            Collection<EntityProperty> propertyDetails,
             AutoBinding.UpdateStrategy updateStrategy, List<JBColumn> customColumns, boolean showIndexColumn) {
         updateStrategy = UpdateStrategy.READ;
         if(!(data instanceof ObservableList))
@@ -378,8 +378,8 @@ public class JBTable
         return tableBinding;
     }
 
-    protected void afterBindInit(Collection<PropertyDetails> propertyDetails) {
-        for(PropertyDetails pd : propertyDetails) {
+    protected void afterBindInit(Collection<EntityProperty> propertyDetails) {
+        for(EntityProperty pd : propertyDetails) {
             TableColumnExt column = getColumn(pd);
             if(column != null) {
                 column.setMaxWidth(pd.getMaxTableColumnWidth());
@@ -412,11 +412,11 @@ public class JBTable
 
     protected void createColumnsBinding(
             JTableBinding tableBinding,
-            Collection<PropertyDetails> properties, List<JBColumn> customColumns, boolean showIndexColumn)
+            Collection<EntityProperty> properties, List<JBColumn> customColumns, boolean showIndexColumn)
     {
         if ( showIndexColumn )
             createIndexColumnBinding(tableBinding);
-        for(PropertyDetails property : properties)
+        for(EntityProperty property : properties)
         {
             if(!property.isHiden())
                 createColumnBinding(tableBinding, property);
@@ -515,7 +515,7 @@ public class JBTable
     //TODO
     public ColumnBinding createColumnBinding(
         JTableBinding tableBinding,
-        PropertyDetails propertyDetails)
+        EntityProperty propertyDetails)
     {
         //Use custom display if available
         //Note that if custom display is used, the column class should be String.class or
@@ -571,7 +571,7 @@ public class JBTable
     public void bindComboBoxCellEditor(
             BindingGroup bindingGroup,
             List comboBoxValues,
-            PropertyDetails propertyDetails)
+            EntityProperty propertyDetails)
     {
         JBComboBox comboBox = new JBComboBox();
 
@@ -598,7 +598,7 @@ public class JBTable
     public void bindComboListCellEditor(
             BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             ObjectToStringConverter converter)
     {
         Application app = getApplication();
@@ -624,7 +624,7 @@ public class JBTable
             column.setCellRenderer(getBeanResourceCellRenderer(propertyDetails));
     }
 
-    public TableColumnExt getColumn(PropertyDetails propertyDetails) {
+    public TableColumnExt getColumn(EntityProperty propertyDetails) {
         TableColumnExt column;
         String propertyName = propertyDetails.getPropertyName();
         try {
@@ -637,7 +637,7 @@ public class JBTable
             EntityProperties entityProps = getEntityProperties();
             if(entityProps == null)
                 throw new IllegalArgumentException("EntityProperties is not initialized. Set EntityProperties first.");
-            PropertyDetails pd = entityProps.getPropertyDetails(propertyName);
+            EntityProperty pd = entityProps.getEntityProperty(propertyName);
             if(pd != null) {
                 String columnName = pd.getPropertyTitle();
                 column = getColumnExt(columnName);
@@ -656,7 +656,7 @@ public class JBTable
      */
     public void bindDatePickerCellEditor(
             BindingGroup bindingGroup,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             DateFormat dateFormat)
     {
         Application app = getApplication();
@@ -751,7 +751,7 @@ public class JBTable
         return super.getDefaultRenderer(columnClass);
     }
 
-    protected TableCellRenderer getBeanResourceCellRenderer(PropertyDetails propertyDetails)
+    protected TableCellRenderer getBeanResourceCellRenderer(EntityProperty propertyDetails)
     {
         if(beanResourceCellRenderer == null)
         {
@@ -761,7 +761,7 @@ public class JBTable
         return beanResourceCellRenderer;
     }
 
-    private boolean isResource(PropertyDetails propertyDetails)
+    private boolean isResource(EntityProperty propertyDetails)
     {
         if (propertyDetails == null || propertyDetails.getPropertyClass() == null
                 || propertyDetails.getPropertyClass().getName() == null)
