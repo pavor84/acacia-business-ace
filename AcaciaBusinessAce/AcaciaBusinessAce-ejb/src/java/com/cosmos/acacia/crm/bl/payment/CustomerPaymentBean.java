@@ -56,15 +56,15 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
 
         EntityProperties entityProperties = esm.getEntityProperties(CustomerPayment.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        entityProperties.removePropertyDetails("branch");
-        entityProperties.removePropertyDetails("customerContact");
-        entityProperties.removePropertyDetails("status");
-        entityProperties.removePropertyDetails("matchedAmount");
-        entityProperties.removePropertyDetails("creator");
-        entityProperties.removePropertyDetails("completor");
-        entityProperties.removePropertyDetails("paymentReturn");
-        entityProperties.removePropertyDetails("transactionFee");
-        entityProperties.removePropertyDetails("description");
+        entityProperties.removeEntityProperty("branch");
+        entityProperties.removeEntityProperty("customerContact");
+        entityProperties.removeEntityProperty("status");
+        entityProperties.removeEntityProperty("matchedAmount");
+        entityProperties.removeEntityProperty("creator");
+        entityProperties.removeEntityProperty("completor");
+        entityProperties.removeEntityProperty("paymentReturn");
+        entityProperties.removeEntityProperty("transactionFee");
+        entityProperties.removeEntityProperty("description");
         
         return entityProperties;
     }

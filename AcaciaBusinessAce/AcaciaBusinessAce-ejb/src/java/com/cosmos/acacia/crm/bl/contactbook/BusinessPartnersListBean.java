@@ -35,7 +35,7 @@ import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 
 /**
  * 
@@ -87,7 +87,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
     public EntityProperties getListingEntityProperties() {
         EntityProperties result = esm.getEntityProperties(BusinessPartner.class);
         
-        PropertyDetails pd = null;
+        EntityProperty pd = null;
         
         //partner name
         addPropertyDetails(0, "displayName", "Partner Name", null, result);
@@ -96,16 +96,16 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         addPropertyDetails(10, "class", "Partner Type", "${class.simpleName}", result);
         
         //organization type
-        pd = esm.getPropertyDetails(Organization.class, "organizationType", 20);
-        result.addPropertyDetails(pd);
+        pd = EntityProperty.createEntityProperty(Organization.class, "organizationType", 20);
+        result.addEntityProperty(pd);
         
         //gender
-        pd = esm.getPropertyDetails(Person.class, "gender", 30);
-        result.addPropertyDetails(pd);
+        pd = EntityProperty.createEntityProperty(Person.class, "gender", 30);
+        result.addEntityProperty(pd);
    
         //administration address
-        pd = esm.getPropertyDetails(Organization.class, "administrationAddress", 40);
-        result.addPropertyDetails(pd);
+        pd = EntityProperty.createEntityProperty(Organization.class, "administrationAddress", 40);
+        result.addEntityProperty(pd);
         
         //unique code
         addPropertyDetails(50, "uniqueCode", "Unique Code", null, result);
@@ -114,18 +114,17 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         addPropertyDetails(60, "birthOrRegistration", "Birth/Registration", null, result);
         
         //vat
-        pd = esm.getPropertyDetails(Organization.class, "vatNumber", 70);
-        result.addPropertyDetails(pd);    
+        pd = EntityProperty.createEntityProperty(Organization.class, "vatNumber", 70);
+        result.addEntityProperty(pd);
         
         return result;
     }
 
     private void addPropertyDetails(int orderPosition, String propertyName, String columnName,
                           String customELDisplay, EntityProperties entityProperties) {
-       PropertyDetails pd = new PropertyDetails(propertyName, columnName, null);
+       EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition);
        pd.setCustomDisplay(customELDisplay);
-       pd.setOrderPosition(orderPosition);
-       entityProperties.addPropertyDetails(pd);
+       entityProperties.addEntityProperty(pd);
    }
 
 

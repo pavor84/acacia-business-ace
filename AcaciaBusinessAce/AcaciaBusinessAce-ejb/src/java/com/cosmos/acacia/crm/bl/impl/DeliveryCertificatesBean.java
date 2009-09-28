@@ -93,11 +93,11 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     
     public EntityProperties getDeliveryCertificateListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(DeliveryCertificate.class);
-        entityProperties.removePropertyDetails("recipientBranch");
-        entityProperties.removePropertyDetails("creationTime");
-        entityProperties.removePropertyDetails("recipientContact");
-        entityProperties.removePropertyDetails("creatorOrganization");
-        entityProperties.removePropertyDetails("creatorBranch");
+        entityProperties.removeEntityProperty("recipientBranch");
+        entityProperties.removeEntityProperty("creationTime");
+        entityProperties.removeEntityProperty("recipientContact");
+        entityProperties.removeEntityProperty("creatorOrganization");
+        entityProperties.removeEntityProperty("creatorBranch");
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }

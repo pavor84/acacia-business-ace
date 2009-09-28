@@ -109,19 +109,18 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
         q.setParameter("deleted", false);
         return new ArrayList<ProductCategory>(q.getResultList());
     }
-    
-    public EntityProperties getProductListingEntityProperties()
-    {
+
+    public EntityProperties getProductListingEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(SimpleProduct.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        entityProperties.removePropertyDetails("purchasePrice");
-        entityProperties.removePropertyDetails("salePrice");
-        entityProperties.removePropertyDetails("listPrice");
-        entityProperties.removePropertyDetails("discountPercent");
-        entityProperties.removePropertyDetails("dutyPercent");
-        entityProperties.removePropertyDetails("transportPrice");
-        entityProperties.removePropertyDetails("costPrice");
-        entityProperties.removePropertyDetails("profitPercent");
+        entityProperties.removeEntityProperty("purchasePrice");
+        entityProperties.removeEntityProperty("salePrice");
+        entityProperties.removeEntityProperty("listPrice");
+        entityProperties.removeEntityProperty("discountPercent");
+        entityProperties.removeEntityProperty("dutyPercent");
+        entityProperties.removeEntityProperty("transportPrice");
+        entityProperties.removeEntityProperty("costPrice");
+        entityProperties.removeEntityProperty("profitPercent");
         
         return entityProperties;
     }
@@ -178,9 +177,9 @@ public class ProductsListBean implements ProductsListRemote, ProductsListLocal {
     @Override
     public EntityProperties getProductCategoryEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(ProductCategory.class);
-        if ( !rightsManagerLocal.isAllowed(SpecialPermission.ProductPricing)){
-            entityProperties.removePropertyDetails("discountPercent");
-            entityProperties.removePropertyDetails("profitPercent");
+        if (!rightsManagerLocal.isAllowed(SpecialPermission.ProductPricing)) {
+            entityProperties.removeEntityProperty("discountPercent");
+            entityProperties.removeEntityProperty("profitPercent");
         }
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;

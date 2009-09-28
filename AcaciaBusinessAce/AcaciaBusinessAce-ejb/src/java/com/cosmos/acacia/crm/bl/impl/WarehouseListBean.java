@@ -358,11 +358,11 @@ public class WarehouseListBean implements WarehouseListRemote, WarehouseListLoca
     public EntityProperties getWarehouseProductTableProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(WarehouseProduct.class);
         //the next two prices - are security restricted values
-        entityProperties.removePropertyDetails("purchasePrice");
+        entityProperties.removeEntityProperty("purchasePrice");
         //the next tree quantities will be retrieved from synthetic accessors rather the default getters
-        entityProperties.removePropertyDetails("minimumQuantity");
-        entityProperties.removePropertyDetails("maximumQuantity");
-        entityProperties.removePropertyDetails("defaultQuantity");
+        entityProperties.removeEntityProperty("minimumQuantity");
+        entityProperties.removeEntityProperty("maximumQuantity");
+        entityProperties.removeEntityProperty("defaultQuantity");
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
         return entityProperties;

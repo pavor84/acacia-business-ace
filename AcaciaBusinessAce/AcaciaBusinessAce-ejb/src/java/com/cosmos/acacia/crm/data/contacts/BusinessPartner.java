@@ -1,6 +1,9 @@
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.FormContainer;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -16,11 +19,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.swingb.JBComboBox;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
 import javax.persistence.Basic;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -60,6 +68,15 @@ import org.hibernate.annotations.Type;
     )
 })
 @Form(
+    formContainers={
+        @FormContainer(
+            name=BusinessPartner.ADDRESSES,
+            title="Addresses",
+            container=@Component(
+                componentClass=JBPanel.class
+            )
+        )
+    },
     serviceClass=ContactsServiceRemote.class,
     entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel"
 )
@@ -73,6 +90,11 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
             CLASS_NAME + ".findAllBusinessPartners";
     public static final String NQ_FIND_ALL_BUSINESS_PARTNERS_BY_CLASSIFIER =
             CLASS_NAME + ".findAllBusinessPartnersByClassifier";
+    //
+    public static final String ADDRESSES = "Addresses";
+    //
+    public static final int DEFAULT_CURRENCY_INDEX =
+            Property.CUSTOM_INDEX_VALUE + Property.STEP_VALUE * 100;
 
     @Id
     @Basic(optional = false)
@@ -87,15 +109,31 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
     private UUID parentBusinessPartnerId;
 
-    @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id", nullable = false)
-    @ManyToOne(optional = false)
-    @Property(title="Default Currency",
-        resourceDisplayInTable = ResourceDisplay.FullName, index=Integer.MAX_VALUE)
-    private DbResource defaultCurrency;
-
     @Basic(optional = false)
     @Column(name = "discriminator_id", nullable = false, length = 2)
     protected String discriminatorId;
+
+    @JoinColumn(name = "default_currency_id", referencedColumnName = "resource_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Default Currency",
+        resourceDisplayInTable = ResourceDisplay.FullName,
+        index=DEFAULT_CURRENCY_INDEX,
+        propertyValidator=@PropertyValidator(required=true),
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.Currency"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Default Currency:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
+    private DbResource defaultCurrency;
 
     @JoinColumn(name = "business_partner_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
