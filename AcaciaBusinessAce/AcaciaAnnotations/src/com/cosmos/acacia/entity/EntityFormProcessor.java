@@ -65,8 +65,6 @@ public class EntityFormProcessor {
     private static final String ACACIA_ANNOTATION_PREFIX =
             "com.cosmos.acacia.annotation.";
     private static final String FORM_ANNOTATION_CLASS_NAME = Form.class.getName();
-    public static final int INITIAL_INDEX_VALUE = 0x1FFFFFFF;
-    public static final int CUSTOM_INDEX_VALUE = 0x3FFFFFFF;
     //
     private Class entityClass;
     private ResourceMap resourceMap;
@@ -80,7 +78,7 @@ public class EntityFormProcessor {
     private Map<String, Set<String>> containerDependenciesMap;
     private Map<UnitType, List<Unit>> entityListLogicUnitsMap;
     private Map<UnitType, List<Unit>> entityLogicUnitsMap;
-    private int componentIndexCounter = INITIAL_INDEX_VALUE;
+    private int componentIndexCounter = Property.INITIAL_INDEX_VALUE;
 
     public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
         this.entityClass = entityClass;
@@ -150,7 +148,7 @@ public class EntityFormProcessor {
         }
     }
 
-    protected Map<Integer, Object> getIndexedComponents(
+    private Map<Integer, Object> getIndexedComponents(
             Map<Integer, FormContainer> formContainersMap,
             Map<StringIntegerComparator, Field> fieldsMap) {
         TreeMap<Integer, Object> indexedComponents = new TreeMap<Integer, Object>();
@@ -793,8 +791,8 @@ public class EntityFormProcessor {
         for (Form form : forms) {
             for (FormContainer formContainer : form.formContainers()) {
                 int index;
-                if ((index = formContainer.componentIndex()) < 0) {
-                    map.put(++componentIndexCounter, formContainer);
+                if ((index = formContainer.componentIndex()) <= 0) {
+                    map.put(componentIndexCounter += Property.STEP_VALUE, formContainer);
                 } else {
                     if(map.containsKey(index)) {
                         if(!formContainer.name().equals(map.get(index).name())) {
@@ -833,9 +831,15 @@ public class EntityFormProcessor {
                                 index = ((FormComponent) annotation).componentIndex();
                                 str = ((FormComponent) annotation).parentContainerName();
                             }
+
+                            if(index <= 0) {
+                                Property property = field.getAnnotation(Property.class);
+                                index = property.index();
+                            }
+
                             StringIntegerComparator key;
-                            if (index < 0) {
-                                key = new StringIntegerComparator(str, ++componentIndexCounter);
+                            if (index <= 0) {
+                                key = new StringIntegerComparator(str, componentIndexCounter += Property.STEP_VALUE);
                             } else {
                                 key = new StringIntegerComparator(str, index);
                             }
@@ -858,7 +862,7 @@ public class EntityFormProcessor {
             return Collections.emptyList();
         }
 
-        int counter = INITIAL_INDEX_VALUE;
+        int counter = Property.INITIAL_INDEX_VALUE;
         Map<Integer, Annotation> map = new TreeMap<Integer, Annotation>();
         for (Annotation annotation : declaredAnnotations) {
             if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
@@ -872,8 +876,14 @@ public class EntityFormProcessor {
                 } else if (annotation instanceof FormComponent) {
                     index = ((FormComponent) annotation).componentIndex();
                 }
-                if (index < 0) {
-                    map.put(++counter, annotation);
+
+                if(index <= 0) {
+                    Property property = field.getAnnotation(Property.class);
+                    index = property.index();
+                }
+
+                if (index <= 0) {
+                    map.put(counter += Property.STEP_VALUE, annotation);
                 } else {
                     map.put(index, annotation);
                 }

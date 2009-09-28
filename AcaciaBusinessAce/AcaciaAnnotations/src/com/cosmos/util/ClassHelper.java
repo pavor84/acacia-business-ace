@@ -9,9 +9,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -25,6 +28,21 @@ import java.util.jar.JarInputStream;
 public class ClassHelper {
 
     private static final char EXTENSION_SEPARATOR = '.';
+
+    public static List<Class> getSuperclasses(Class mainClass, boolean reverseOrder) {
+        int counter = 0;
+        TreeMap<Integer, Class> classMap = new TreeMap<Integer, Class>();
+        do {
+            classMap.put(counter++, mainClass);
+            mainClass = mainClass.getSuperclass();
+        } while (mainClass != null && !Object.class.equals(mainClass));
+
+        if(reverseOrder) {
+            return new ArrayList<Class>(classMap.descendingMap().values());
+        } else {
+            return new ArrayList<Class>(classMap.values());
+        }
+    }
 
     public static Class getClass(String className) {
         if ("boolean".equals(className)) {
