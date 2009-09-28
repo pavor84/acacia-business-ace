@@ -38,12 +38,11 @@ import org.jdesktop.application.Task;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBPanel;
@@ -72,17 +71,19 @@ public abstract class AbstractTablePanel<E extends PersistentEntity>
     }
 
     protected AbstractTablePanel(JBPanel parentPanel) {
-        this(parentPanel, null, null);
+        this(parentPanel, null, null, null);
     }
 
     protected AbstractTablePanel(
             JBPanel parentPanel,
             Object mainEntity,
             Class entityClass,
+            Classifier classifier,
             Object... parameters) {
         this.parentPanel = parentPanel;
         this.mainEntity = mainEntity;
         this.entityClass = entityClass;
+        this.classifier = classifier;
         this.parameters = parameters;
         init();
     }
@@ -420,10 +421,9 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     public void addColumn(int orderPosition, String propertyName, String columnName,
             String customELDisplay, EntityProperties entityProperties) {
-        PropertyDetails pd = new PropertyDetails(propertyName, columnName, null);
+        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition);
         pd.setCustomDisplay(customELDisplay);
-        pd.setOrderPosition(orderPosition);
-        entityProperties.addPropertyDetails(pd);
+        entityProperties.addEntityProperty(pd);
     }
 
     protected String getString(String key) {
@@ -437,8 +437,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param customDisplay - provide valid EL expression string.
      * Otherwise no fail-fast in this method. Will fail when compiled.
      */
-    public void setCustomDisplay(List<PropertyDetails> propertyDetails, String propertyName, String customDisplay) {
-        for (PropertyDetails pd : propertyDetails) {
+    public void setCustomDisplay(List<EntityProperty> propertyDetails, String propertyName, String customDisplay) {
+        for (EntityProperty pd : propertyDetails) {
             if (pd.getPropertyName().equals(propertyName)) {
                 pd.setCustomDisplay(customDisplay);
                 break;
@@ -1162,7 +1162,8 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
      * @param classifier
      */
     public void setClassifier(Classifier classifier) {
-        setClassifier(classifier, false);
+        this.classifier = classifier;
+        //setClassifier(classifier, false);
     }
 
     public void setClassifier(Classifier classifier, boolean allowChange) {

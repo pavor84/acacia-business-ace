@@ -125,8 +125,8 @@ public class CommunicationContactPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getCommunicationContactEntityProperties();
 
-        typeComboBox.bind(bg, getCommunicationTypes(), communicationContact, entityProps.getPropertyDetails("communicationType"));
-        valueTextField.bind(bg, communicationContact, entityProps.getPropertyDetails("communicationValue"));
+        typeComboBox.bind(bg, getCommunicationTypes(), communicationContact, entityProps.getEntityProperty("communicationType"));
+        valueTextField.bind(bg, communicationContact, entityProps.getEntityProperty("communicationValue"));
 
         bg.bind();
 

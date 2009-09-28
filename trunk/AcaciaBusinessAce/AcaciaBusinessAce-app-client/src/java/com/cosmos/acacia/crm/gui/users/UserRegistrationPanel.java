@@ -21,7 +21,7 @@ public class UserRegistrationPanel extends EntityPanel<UserRegistration> {
     private static class UserRegistrationEntityListPanel extends EntityListPanel<UserRegistration> {
 
         public UserRegistrationEntityListPanel() {
-            super(UserRegistration.class);
+            super(UserRegistration.class, null);
         }
     }
 }

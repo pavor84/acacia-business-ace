@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.util.PersistentEntity;
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
  */
 public class EntityListPanel<E extends PersistentEntity> extends AbstractEntityListPanel<E> {
 
-    public EntityListPanel(Class<E> entityClass, Object... parameters) {
-        super(entityClass, parameters);
+    public EntityListPanel(Class<E> entityClass, Classifier classifier, Object... parameters) {
+        super(entityClass, classifier, parameters);
     }
 
     @Override

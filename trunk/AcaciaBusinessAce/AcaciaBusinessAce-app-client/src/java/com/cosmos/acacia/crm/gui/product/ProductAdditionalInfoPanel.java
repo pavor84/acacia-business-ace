@@ -9,7 +9,7 @@ import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBIntegerField;
 import com.cosmos.swingb.JBLabel;
@@ -223,20 +223,20 @@ public class ProductAdditionalInfoPanel extends JBPanel {
         AutoCompleteDecorator.decorate(dimensionUnitComboBox, resourceToStringConverter);
         AutoCompleteDecorator.decorate(weightUnitComboBox, resourceToStringConverter);
 
-        PropertyDetails propDetails = entityProps.getPropertyDetails("weightUnit");
+        EntityProperty propDetails = entityProps.getEntityProperty("weightUnit");
         weightUnitComboBox.bind(
                 bindingGroup,
                 productPanel.getMeasureUnits(MeasurementUnit.Category.MassWeight),
                 product,
                 propDetails);
 
-        propDetails = entityProps.getPropertyDetails("weight");
+        propDetails = entityProps.getEntityProperty("weight");
         weightDecimalField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("deliveryTime");
+        propDetails = entityProps.getEntityProperty("deliveryTime");
         deliveryTimeIntegerField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("dimensionUnit");
+        propDetails = entityProps.getEntityProperty("dimensionUnit");
         dimensionUnitComboBox.bind(
                 bindingGroup,
                 productPanel.getMeasureUnits(MeasurementUnit.Category.Volume),
@@ -244,21 +244,21 @@ public class ProductAdditionalInfoPanel extends JBPanel {
                 propDetails);
 
         CubatureBindingListener cubatureBindingListener = new CubatureBindingListener();
-        propDetails = entityProps.getPropertyDetails("dimensionWidth");
+        propDetails = entityProps.getEntityProperty("dimensionWidth");
         Binding binding = widthDecimalField.bind(bindingGroup, product, propDetails);
         binding.addBindingListener(cubatureBindingListener);
 
-        propDetails = entityProps.getPropertyDetails("dimensionLength");
+        propDetails = entityProps.getEntityProperty("dimensionLength");
         binding = lengthDecimalField.bind(bindingGroup, product, propDetails);
         binding.addBindingListener(cubatureBindingListener);
 
-        propDetails = entityProps.getPropertyDetails("dimensionHeight");
+        propDetails = entityProps.getEntityProperty("dimensionHeight");
         binding = heightDecimalField.bind(bindingGroup, product, propDetails);
         binding.addBindingListener(cubatureBindingListener);
 
         cubatureDecimalField.setEditable(false);
 
-        propDetails = entityProps.getPropertyDetails("description");
+        propDetails = entityProps.getEntityProperty("description");
         binding = descriptionTextPane.bind(bindingGroup, product, propDetails);
     }
 

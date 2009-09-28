@@ -353,8 +353,8 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
         }
 
         // nominal
-        curNominalProps.getPropertyDetails("nominal").setEditable(false);
-        nominalField.bind(bg, getNominals(), this, curNominalProps.getPropertyDetails("nominal")).bind();
+        curNominalProps.getEntityProperty("nominal").setEditable(false);
+        nominalField.bind(bg, getNominals(), this, curNominalProps.getEntityProperty("nominal")).bind();
         nominalField.setRenderer(new AlignedListCellRenderer(JLabel.RIGHT));
         if (nominals.size() > 0) {
             nominalField.setSelectedIndex(0);
@@ -392,11 +392,11 @@ public class BanknoteQuantityForm extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
 
         // currency
-        curNominalProps.getPropertyDetails("currency").setEditable(false);
-        currencyField.bind(bg, getCurrencies(), entity.getCurrencyNominal(), curNominalProps.getPropertyDetails("currency"));
+        curNominalProps.getEntityProperty("currency").setEditable(false);
+        currencyField.bind(bg, getCurrencies(), entity.getCurrencyNominal(), curNominalProps.getEntityProperty("currency"));
 
         // quantity
-        quantityField.bind(bg, entity, entProps.getPropertyDetails("quantity"), AcaciaUtils.getIntegerFormat());
+        quantityField.bind(bg, entity, entProps.getEntityProperty("quantity"), AcaciaUtils.getIntegerFormat());
 
         //nominals
         bindNominalField();

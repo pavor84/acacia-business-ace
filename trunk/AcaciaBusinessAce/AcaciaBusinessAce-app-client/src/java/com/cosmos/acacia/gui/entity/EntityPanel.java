@@ -22,7 +22,7 @@ import com.cosmos.acacia.util.SystemUtils;
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.PropertyDetail;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.SelectableListDialog;
@@ -156,7 +156,12 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
 
             String componentName = jComponent.getName();
             String propertyName = getPropertyName(componentName);
-            PropertyDetails propertyDetails = entityProps.getPropertyDetails(propertyName);
+            EntityProperty propertyDetails = entityProps.getEntityProperty(propertyName);
+            if(propertyDetails == null) {
+                throw new EntityPanelException("Missing PropertyDetails of property '" + propertyName +
+                        "' for componentName=" + componentName + " and jComponent=" + jComponent +
+                        ",\n entityProps.getKeys(): " + entityProps.getKeys());
+            }
             addDependencies(jComponent.getName(), propertyDetails.getPropertyDetailsDependencies());
 
             if (jComponent instanceof EntityBinder) {
@@ -211,7 +216,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         initDataMode(getDataMode());
     }
 
-    protected Object[] getParameters(PropertyDetails propertyDetails) {
+    protected Object[] getParameters(EntityProperty propertyDetails) {
         int size;
         List<PropertyDetail> pdList;
         if((pdList = propertyDetails.getSelectableListDialogConstructorParameters()) == null || (size = pdList.size()) == 0) {
@@ -473,7 +478,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         }
     }
 
-    protected Class getSelectableListDialogClass(PropertyDetails propertyDetails) {
+    protected Class getSelectableListDialogClass(EntityProperty propertyDetails) {
         String className;
         if ((className = propertyDetails.getSelectableListDialogClassName()) == null) {
             return null;
@@ -486,7 +491,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         }
     }
 
-    protected SelectableListDialog getSelectableListDialog(PropertyDetails propertyDetails,
+    protected SelectableListDialog getSelectableListDialog(EntityProperty propertyDetails,
             EntityProperties entityProps, JComponent jComponent) {
         Class<? extends SelectableListDialog> cls = null;
         Class[] parameterTypes = null;
@@ -514,7 +519,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
                     ", parameterTypes: " + asList(parameterTypes), ex);
         }
 
-        return new EntityListPanel(propertyDetails.getPropertyClass());
+        return new EntityListPanel(propertyDetails.getPropertyClass(), null);
     }
 
     protected <T> List<T> asList(T... values) {
@@ -625,7 +630,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
                 }
                 parameterTypes[i] = paramTypes[0];
             } else {
-                PropertyDetails propertyDetails = entityProps.getPropertyDetails(getter);
+                EntityProperty propertyDetails = entityProps.getEntityProperty(getter);
                 if (propertyDetails == null) {
                     throw new EntityPanelException("Missing PropertyDetails with name '" + getter + "'");
                 }
@@ -807,7 +812,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
                     }
                 }
             } else {
-                listPanel = new DetailEntityListPanel(this, itemEntityClass);
+                listPanel = new DetailEntityListPanel(this, itemEntityClass, null);
             }
 
             return listPanel;
@@ -894,7 +899,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         propertyDependencies.addDependency(dependencyPropertyName);
     }
 
-    public void addDependencies(String propertyName, List<PropertyDetails> pdList) {
+    public void addDependencies(String propertyName, List<EntityProperty> pdList) {
         if(pdList == null || pdList.size() == 0) {
             return;
         }
@@ -905,7 +910,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
             putPropertyDependencies(propertyName, propertyDependencies);
         }
 
-        for(PropertyDetails pd : pdList) {
+        for(EntityProperty pd : pdList) {
             propertyDependencies.addDependency(pd.getPropertyName());
         }
     }

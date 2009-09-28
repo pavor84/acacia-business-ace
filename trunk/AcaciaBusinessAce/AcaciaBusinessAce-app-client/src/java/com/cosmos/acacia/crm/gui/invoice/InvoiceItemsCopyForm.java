@@ -36,7 +36,7 @@ import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.gui.purchaseorders.CopyItemsListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -301,7 +301,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         
         //and then bind again
         documentField.bind(new BindingGroup(), templateDocuments, this, 
-            new PropertyDetails("selectedDocument", "Selected Document", Object.class.getName()),
+            EntityProperty.createEntityProperty("selectedDocument", "Selected Document", Object.class.getName()),
             new ObjectToStringConverter() {
                 @Override
                 public String getPreferredStringForItem(Object templateDocument) {

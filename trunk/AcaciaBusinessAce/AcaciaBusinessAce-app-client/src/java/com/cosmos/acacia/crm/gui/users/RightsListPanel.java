@@ -147,22 +147,22 @@ public class RightsListPanel extends AbstractTablePanel<Right> {
         EntityProperties entityProps = getFormSession().getUserRightEntityProperties();
 
         if (user == null) {
-            entityProps.removePropertyDetails("user");
+            entityProps.removeEntityProperty("user");
         }
 
         if (userGroup == null) {
-            entityProps.removePropertyDetails("userGroup");
+            entityProps.removeEntityProperty("userGroup");
         }
 
         if (type == Type.GeneralRightsPanel) {
-            entityProps.removePropertyDetails("specialPermission");
+            entityProps.removeEntityProperty("specialPermission");
         }
 
         if (type == Type.SpecialPermissionsPanel) {
-            entityProps.removePropertyDetails("read");
-            entityProps.removePropertyDetails("create");
-            entityProps.removePropertyDetails("modify");
-            entityProps.removePropertyDetails("delete");
+            entityProps.removeEntityProperty("read");
+            entityProps.removeEntityProperty("create");
+            entityProps.removeEntityProperty("modify");
+            entityProps.removeEntityProperty("delete");
         }
 
         return entityProps;

@@ -186,8 +186,8 @@ public class UserGroupPanel extends BaseEntityPanel {
 
         entityProps = getUserGroupEntityProperties();
 
-        nameTextField.bind(bg, userGroup, entityProps.getPropertyDetails("name"));
-        descriptionTextPane.bind(bg, userGroup, entityProps.getPropertyDetails("description"));
+        nameTextField.bind(bg, userGroup, entityProps.getEntityProperty("name"));
+        descriptionTextPane.bind(bg, userGroup, entityProps.getEntityProperty("description"));
 
         rightsTable = new RightsListPanel(userGroup, RightsListPanel.Type.GeneralRightsPanel);
         rightsTable.setVisibleButtons(2 + 4 + 8 + 16);

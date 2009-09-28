@@ -39,7 +39,7 @@ import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBColumn;
 import com.cosmos.swingb.JBLabel;
@@ -133,7 +133,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel<BusinessPartne
                     response = formPanel.showDialog(this);
                 //person
                 } else {
-                    formPanel = new PersonPanel(getParentDataObjectId());
+                    formPanel = new PersonPanel(null);
                     response = formPanel.showDialog(this);
                 }
 
@@ -237,7 +237,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel<BusinessPartne
 
             classifiedObject = new ClassifiedObject();
             comboListBindingGroup = new BindingGroup();
-            PropertyDetails propDetails = new PropertyDetails(
+            EntityProperty propDetails = EntityProperty.createEntityProperty(
                     "classifier", "Classifier", Classifier.class.getName());
             propDetails.setColumnName("classifier");
 

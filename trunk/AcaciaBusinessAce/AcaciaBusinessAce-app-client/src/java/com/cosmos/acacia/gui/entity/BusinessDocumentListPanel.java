@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
@@ -16,8 +17,8 @@ import com.cosmos.acacia.crm.enums.DocumentType;
  */
 public class BusinessDocumentListPanel<E extends BusinessDocument> extends EntityListPanel<E> {
 
-    public BusinessDocumentListPanel(Class<E> entityClass) {
-        super(entityClass);
+    public BusinessDocumentListPanel(Class<E> entityClass, Classifier classifier) {
+        super(entityClass, classifier);
     }
 
     public DocumentStatus getStatus(E entity) {

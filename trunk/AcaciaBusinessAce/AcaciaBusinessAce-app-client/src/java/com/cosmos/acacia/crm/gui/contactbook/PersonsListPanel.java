@@ -155,7 +155,8 @@ public class PersonsListPanel extends AbstractTablePanel<Person> {
 
     @Override
     protected Person newRow() {
-        PersonPanel personPanel = new PersonPanel(getParentDataObjectId());
+        Person person = getFormSession().newPerson(LocalSession.instance().getOrganization());
+        PersonPanel personPanel = new PersonPanel(person);
         DialogResponse response = personPanel.showDialog(this);
         if (DialogResponse.SAVE.equals(response)) {
             return (Person) personPanel.getSelectedValue();

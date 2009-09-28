@@ -36,7 +36,7 @@ public class CopyItemsListPanel extends AbstractTablePanel<InvoiceItem> {
         super.initData();
         
         entityProps = getFormSession().getItemsListEntityProperties();
-        entityProps.getPropertyDetails("product").setCustomDisplay("${product.productName}");
+        entityProps.getEntityProperty("product").setCustomDisplay("${product.productName}");
         refreshDataTable(entityProps);
 
         setVisible(Button.Select, false);

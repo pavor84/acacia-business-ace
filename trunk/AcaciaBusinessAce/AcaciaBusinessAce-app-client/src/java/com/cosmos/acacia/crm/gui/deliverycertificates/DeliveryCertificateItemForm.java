@@ -77,7 +77,7 @@ public class DeliveryCertificateItemForm extends BaseEntityPanel {
             }
         });
     	
-    	quantityFormattedTextField.bind(bg, entity, entProps.getPropertyDetails("quantity"), getIntegerFormat());
+    	quantityFormattedTextField.bind(bg, entity, entProps.getEntityProperty("quantity"), getIntegerFormat());
     	bg.bind();
     }
     

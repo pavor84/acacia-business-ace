@@ -12,7 +12,7 @@ import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.util.UUID;
 import java.util.List;
@@ -200,12 +200,12 @@ public class AssemblingSchemaPanel
         AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
 
         entityProps = getFormSession().getAssemblingSchemaEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
         //parent category
-        propDetails = entityProps.getPropertyDetails("assemblingCategory");
+        propDetails = entityProps.getEntityProperty("assemblingCategory");
         AssemblingCategoryTreeTablePanel listPanel =
                 new AssemblingCategoryTreeTablePanel();
         assemblingCategoryComboList.bind(
@@ -216,27 +216,27 @@ public class AssemblingSchemaPanel
                 "${categoryName}",
                 UpdateStrategy.READ_WRITE);
 
-        propDetails = entityProps.getPropertyDetails("measureUnit");
+        propDetails = entityProps.getEntityProperty("measureUnit");
         measureUnitComboBox.bind(bg, getMeasureUnits(), entity, propDetails);
 
         //schema code
-        propDetails = entityProps.getPropertyDetails("schemaCode");
+        propDetails = entityProps.getEntityProperty("schemaCode");
         schemaCodeTextField.bind(bg, entity, propDetails);
 
         //schema name
-        propDetails = entityProps.getPropertyDetails("schemaName");
+        propDetails = entityProps.getEntityProperty("schemaName");
         schemaNameTextField.bind(bg, entity, propDetails);
 
         //applicable
-        propDetails = entityProps.getPropertyDetails("applicable");
+        propDetails = entityProps.getEntityProperty("applicable");
         isApplicableCheckBox.bind(bg, entity, propDetails);
 
         //obsolete
-        propDetails = entityProps.getPropertyDetails("obsolete");
+        propDetails = entityProps.getEntityProperty("obsolete");
         isObsoleteCheckBox.bind(bg, entity, propDetails);
 
         //description
-        propDetails = entityProps.getPropertyDetails("description");
+        propDetails = entityProps.getEntityProperty("description");
         descriptionTextPane.bind(bg, entity, propDetails);
 
         bg.bind();

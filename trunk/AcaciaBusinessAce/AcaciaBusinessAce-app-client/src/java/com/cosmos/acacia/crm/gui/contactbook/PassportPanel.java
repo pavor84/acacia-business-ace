@@ -25,7 +25,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.LookupRecordDeletionListener;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -233,15 +233,15 @@ public class PassportPanel extends BaseEntityPanel {
 
         entityProps = getPassportEntityProperties();
 
-        numberTextField.bind(bg, passport, entityProps.getPropertyDetails("passportNumber"));
-        otherInfoTextField.bind(bg, passport, entityProps.getPropertyDetails("additionalInfo"));
+        numberTextField.bind(bg, passport, entityProps.getEntityProperty("passportNumber"));
+        otherInfoTextField.bind(bg, passport, entityProps.getEntityProperty("additionalInfo"));
 
-        PropertyDetails issueDateProperties = entityProps.getPropertyDetails("issueDate");
+        EntityProperty issueDateProperties = entityProps.getEntityProperty("issueDate");
         issueDateDatePicker.bind(bg, passport, issueDateProperties, AcaciaUtils.getShortDateFormat());
 
-        expirationDateDatePicker.bind(bg, passport, entityProps.getPropertyDetails("expirationDate"), AcaciaUtils.getShortDateFormat());
+        expirationDateDatePicker.bind(bg, passport, entityProps.getEntityProperty("expirationDate"), AcaciaUtils.getShortDateFormat());
 
-        passportTypeComboBox.bind(bg, getPassportTypes(), passport, entityProps.getPropertyDetails("passportType"));
+        passportTypeComboBox.bind(bg, getPassportTypes(), passport, entityProps.getEntityProperty("passportType"));
 
         issuerBinding = issuerLookup.bind(new AcaciaLookupProvider() {
 
@@ -251,7 +251,7 @@ public class PassportPanel extends BaseEntityPanel {
             }
         }, bg,
                 passport,
-                entityProps.getPropertyDetails("issuer"),
+                entityProps.getEntityProperty("issuer"),
                 "${organizationName}",
                 UpdateStrategy.READ_WRITE);
 
@@ -273,7 +273,7 @@ public class PassportPanel extends BaseEntityPanel {
             }
         }, bg,
                 passport,
-                entityProps.getPropertyDetails("issuerBranch"),
+                entityProps.getEntityProperty("issuerBranch"),
                 "${addressName}",
                 UpdateStrategy.READ_WRITE);
 

@@ -16,7 +16,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.listeners.TableModificationListener;
@@ -435,10 +435,10 @@ public class PricelistForm extends BaseEntityPanel {
             entity.setPricelistName(getResourceMap().getString("Pricelist.generalPricelist.name"));
         
         // name 
-        nameField.bind(bindGroup, entity, entProps.getPropertyDetails("name"));
+        nameField.bind(bindGroup, entity, entProps.getEntityProperty("name"));
         
         // for period
-        forPeriodField.bind(bindGroup, entity, entProps.getPropertyDetails("forPeriod"));
+        forPeriodField.bind(bindGroup, entity, entProps.getEntityProperty("forPeriod"));
         forPeriodField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -447,7 +447,7 @@ public class PricelistForm extends BaseEntityPanel {
         });
         
         // active from
-        activeFromField.bind(bindGroup, entity, entProps.getPropertyDetails("activeFrom"), AcaciaUtils.getShortDateFormat());
+        activeFromField.bind(bindGroup, entity, entProps.getEntityProperty("activeFrom"), AcaciaUtils.getShortDateFormat());
         
         // active from hours
         activeFromHours.bind(bindGroup, this, createHoursPropertyDetails("activeFromHoursValue"));
@@ -456,7 +456,7 @@ public class PricelistForm extends BaseEntityPanel {
         activeFromMinunites.bind(bindGroup, this, createMinutesPropertyDetails("activeFromMinutesValue"));
         
         // active to
-        activeToField.bind(bindGroup, entity, entProps.getPropertyDetails("activeTo"), AcaciaUtils.getShortDateFormat());
+        activeToField.bind(bindGroup, entity, entProps.getEntityProperty("activeTo"), AcaciaUtils.getShortDateFormat());
         
         // active to hours
         activeToHours.bind(bindGroup, this, createHoursPropertyDetails("activeToHoursValue"));
@@ -465,20 +465,20 @@ public class PricelistForm extends BaseEntityPanel {
         activeToMinutes.bind(bindGroup, this, createMinutesPropertyDetails("activeToMinutesValue"));
 
         // minimum turnover
-        minTurnoverField.bind(bindGroup, entity, entProps.getPropertyDetails("minTurnover"), getDecimalFormat());
+        minTurnoverField.bind(bindGroup, entity, entProps.getEntityProperty("minTurnover"), getDecimalFormat());
         
         // currency
         currencyField.bind(bindGroup, enumResourceRemote.getEnumResources(Currency.class), 
-            entity, entProps.getPropertyDetails("currency"));
+            entity, entProps.getEntityProperty("currency"));
         
         // months
-        monthsField.bind(bindGroup, entity, entProps.getPropertyDetails("months"));
+        monthsField.bind(bindGroup, entity, entProps.getEntityProperty("months"));
         
         // default discount
-        discountField.bind(bindGroup, entity, entProps.getPropertyDetails("defaultDiscount"), getDecimalFormat());
+        discountField.bind(bindGroup, entity, entProps.getEntityProperty("defaultDiscount"), getDecimalFormat());
         
         // active
-        activeField.bind(bindGroup, entity, entProps.getPropertyDetails("active"));
+        activeField.bind(bindGroup, entity, entProps.getEntityProperty("active"));
         
         bindGroup.bind();
         
@@ -486,8 +486,8 @@ public class PricelistForm extends BaseEntityPanel {
         onForPeriodAction();
     }
 
-    private PropertyDetails createHoursPropertyDetails(String propertyName) {
-        PropertyDetails pd =  new PropertyDetails(propertyName, "Hours", Integer.class.getName());
+    private EntityProperty createHoursPropertyDetails(String propertyName) {
+        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Hours", Integer.class.getName());
         NumericRangeValidator validator = new NumericRangeValidator();
         validator.setMinValue(0);
         validator.setMaxValue(23);
@@ -495,8 +495,8 @@ public class PricelistForm extends BaseEntityPanel {
         return pd;
     }
     
-    private PropertyDetails createMinutesPropertyDetails(String propertyName) {
-        PropertyDetails pd =  new PropertyDetails(propertyName, "Minutes", Integer.class.getName());
+    private EntityProperty createMinutesPropertyDetails(String propertyName) {
+        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Minutes", Integer.class.getName());
         NumericRangeValidator validator = new NumericRangeValidator();
         validator.setMinValue(0);
         validator.setMaxValue(59);

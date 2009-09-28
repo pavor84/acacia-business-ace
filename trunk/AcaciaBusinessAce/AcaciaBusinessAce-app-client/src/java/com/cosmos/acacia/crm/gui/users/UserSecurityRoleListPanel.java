@@ -18,11 +18,11 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class UserSecurityRoleListPanel extends DetailEntityListPanel<UserOrganization, UserSecurityRole> {
 
     public UserSecurityRoleListPanel(EntityPanel<UserOrganization> mainEntityPanel) {
-        super(mainEntityPanel, UserSecurityRole.class);
+        super(mainEntityPanel, UserSecurityRole.class, null);
     }
 
     public UserSecurityRoleListPanel(UserOrganization userOrganization) {
-        super(userOrganization, UserSecurityRole.class);
+        super(userOrganization, UserSecurityRole.class, null);
     }
 
     @Override

@@ -247,13 +247,13 @@ public class CountryPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getCountryEntityProperties();
 
-        currencyComboBox.bind(bg, getCurrencies(), country, entityProps.getPropertyDetails("currency"));
-        nameTextField.bind(bg, country, entityProps.getPropertyDetails("countryName"));
-        phoneCodeTextField.bind(bg, country, entityProps.getPropertyDetails("countryPhoneCode"));
-        a2codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeA2"));
-        a3codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeA3"));
-        n3codeTextField.bind(bg, country, entityProps.getPropertyDetails("countryCodeN3"));
-        descriptionTextPane.bind(bg, country, entityProps.getPropertyDetails("description"));
+        currencyComboBox.bind(bg, getCurrencies(), country, entityProps.getEntityProperty("currency"));
+        nameTextField.bind(bg, country, entityProps.getEntityProperty("countryName"));
+        phoneCodeTextField.bind(bg, country, entityProps.getEntityProperty("countryPhoneCode"));
+        a2codeTextField.bind(bg, country, entityProps.getEntityProperty("countryCodeA2"));
+        a3codeTextField.bind(bg, country, entityProps.getEntityProperty("countryCodeA3"));
+        n3codeTextField.bind(bg, country, entityProps.getEntityProperty("countryCodeN3"));
+        descriptionTextPane.bind(bg, country, entityProps.getEntityProperty("description"));
 
         bg.bind();
     }

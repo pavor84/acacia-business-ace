@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.gui;
 
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.ELPropertyToStringConverter;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.SelectableListDialog;
@@ -28,7 +28,7 @@ public class AcaciaComboList extends JBComboList {
     public JComboBoxBinding bind(BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elPropertyItemDisplay) {
         return bind(bindingGroup,
                 selectableListDialog,
@@ -41,7 +41,7 @@ public class AcaciaComboList extends JBComboList {
     public JComboBoxBinding bind(BindingGroup bindingGroup,
             SelectableListDialog selectableListDialog,
             Object beanEntity,
-            PropertyDetails propertyDetails,
+            EntityProperty propertyDetails,
             String elPropertyItemDisplay,
             AutoBinding.UpdateStrategy updateStrategy) {
         ObjectToStringConverter converter;

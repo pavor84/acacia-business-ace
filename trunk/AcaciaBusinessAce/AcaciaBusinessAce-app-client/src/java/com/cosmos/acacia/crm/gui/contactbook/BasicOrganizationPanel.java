@@ -18,7 +18,7 @@ import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.awt.BorderLayout;
 import java.util.UUID;
@@ -442,74 +442,74 @@ public class BasicOrganizationPanel
         initClassifier();
 
         EntityProperties entityProps = getFormSession().getBasicOrganizationEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
-        propDetails = entityProps.getPropertyDetails("organizationName");
+        propDetails = entityProps.getEntityProperty("organizationName");
         organizationNameTextField.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("nickname");
+        propDetails = entityProps.getEntityProperty("nickname");
         nicknameTextField.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("vatNumber");
+        propDetails = entityProps.getEntityProperty("vatNumber");
         vatNumberTextField.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("uniqueIdentifierCode");
+        propDetails = entityProps.getEntityProperty("uniqueIdentifierCode");
         uniqueIdTextField.bind(bg, basicOrganization, propDetails);
 
         defaultCurrencyComboBox.bind(bg,
                 getCurrencies(),
                 basicOrganization,
-                entityProps.getPropertyDetails("defaultCurrency"));
+                entityProps.getEntityProperty("defaultCurrency"));
 
 
         // City
         if (citiesListPanel == null) {
             citiesListPanel = new CitiesListPanel();
         }
-        propDetails = entityProps.getPropertyDetails("city");
+        propDetails = entityProps.getEntityProperty("city");
         cityComboList.bind(bg, citiesListPanel, basicOrganization,
                 propDetails, "${cityName}", UpdateStrategy.READ_WRITE);
 
         // PostalCode
-        propDetails = entityProps.getPropertyDetails("postalCode");
+        propDetails = entityProps.getEntityProperty("postalCode");
         postalCodeTextField.bind(bg, basicOrganization, propDetails);
 
         // PostalAddress
-        propDetails = entityProps.getPropertyDetails("postalAddress");
+        propDetails = entityProps.getEntityProperty("postalAddress");
         postalAddressTextPane.bind(bg, basicOrganization, propDetails);
 
         // FirstName
-        propDetails = entityProps.getPropertyDetails("firstName");
+        propDetails = entityProps.getEntityProperty("firstName");
         firstNameTextField.bind(bg, basicOrganization, propDetails);
 
         // SecondName
-        propDetails = entityProps.getPropertyDetails("secondName");
+        propDetails = entityProps.getEntityProperty("secondName");
         secondNameTextField.bind(bg, basicOrganization, propDetails);
 
         // LastName
-        propDetails = entityProps.getPropertyDetails("lastName");
+        propDetails = entityProps.getEntityProperty("lastName");
         lastNameTextField.bind(bg, basicOrganization, propDetails);
 
         // ExtraName
-        propDetails = entityProps.getPropertyDetails("extraName");
+        propDetails = entityProps.getEntityProperty("extraName");
         extraNameTextField.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("customer");
+        propDetails = entityProps.getEntityProperty("customer");
         customerCheckBox.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("supplier");
+        propDetails = entityProps.getEntityProperty("supplier");
         supplierCheckBox.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("producer");
+        propDetails = entityProps.getEntityProperty("producer");
         producerCheckBox.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("shippingAgent");
+        propDetails = entityProps.getEntityProperty("shippingAgent");
         shippingAgentCheckBox.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("courier");
+        propDetails = entityProps.getEntityProperty("courier");
         courierCheckBox.bind(bg, basicOrganization, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("bank");
+        propDetails = entityProps.getEntityProperty("bank");
         bankCheckBox.bind(bg, basicOrganization, propDetails);
 
         bg.bind();

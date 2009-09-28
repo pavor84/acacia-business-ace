@@ -43,7 +43,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.beansbinding.validation.RequiredValidator;
 import com.cosmos.beansbinding.validation.ValidationError;
@@ -693,7 +693,7 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         }
 
         // document number
-        docNumberField.bind(bg, entity, entProps.getPropertyDetails("documentNumber"));
+        docNumberField.bind(bg, entity, entProps.getEntityProperty("documentNumber"));
 
         // completion time
         if (entity.getCompletionTime() != null) {
@@ -706,17 +706,17 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         }
 
         // customer
-        customerField.bind(bg, customerListPanel, entity, entProps.getPropertyDetails("customer"),
+        customerField.bind(bg, customerListPanel, entity, entProps.getEntityProperty("customer"),
                 "${displayName}", UpdateStrategy.READ_WRITE);
 
         // customer contact
         bindCustomerContact(entity.getCustomer());
 
         // status field
-        statusField.bind(bg, getStatuses(), entity, entProps.getPropertyDetails("status"));
+        statusField.bind(bg, getStatuses(), entity, entProps.getEntityProperty("status"));
 
         // created at
-        createdAtField.bind(bg, entity, entProps.getPropertyDetails("creationTime"), AcaciaUtils.getShortDateFormat());
+        createdAtField.bind(bg, entity, entProps.getEntityProperty("creationTime"), AcaciaUtils.getShortDateFormat());
 
         // created by
         if (entity.getCreator() != null) {
@@ -724,34 +724,34 @@ public class CustomerPaymentForm extends BaseEntityPanel {
         }
 
         // payment type
-        paymentTypeField.bind(bg, getPaymentTypes(), entity, entProps.getPropertyDetails("paymentType"));
+        paymentTypeField.bind(bg, getPaymentTypes(), entity, entProps.getEntityProperty("paymentType"));
 
         // amount
-        amountField.bind(bg, entity, entProps.getPropertyDetails("amount"), AcaciaUtils.getDecimalFormat());
+        amountField.bind(bg, entity, entProps.getEntityProperty("amount"), AcaciaUtils.getDecimalFormat());
 
         // currency
-        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getEntityProperty("currency"));
 
         // payment account
-        paymentAccountField.bind(bg, bankDetails, entity, entProps.getPropertyDetails("paymentAccount"));
+        paymentAccountField.bind(bg, bankDetails, entity, entProps.getEntityProperty("paymentAccount"));
 
         // cashier
-        cashierField.bind(bg, Arrays.asList(new Person[]{getAcaciaSession().getPerson()}), entity, entProps.getPropertyDetails("cashier"));
+        cashierField.bind(bg, Arrays.asList(new Person[]{getAcaciaSession().getPerson()}), entity, entProps.getEntityProperty("cashier"));
 
         // payment return
-        paymentReturnField.bind(bg, entity, entProps.getPropertyDetails("paymentReturn"));
+        paymentReturnField.bind(bg, entity, entProps.getEntityProperty("paymentReturn"));
 
         // transaction date
-        transactionDateField.bind(bg, entity, entProps.getPropertyDetails("transactionDate"), AcaciaUtils.getShortDateFormat());
+        transactionDateField.bind(bg, entity, entProps.getEntityProperty("transactionDate"), AcaciaUtils.getShortDateFormat());
 
         // transaction no
-        transactionNoField.bind(bg, entity, entProps.getPropertyDetails("referenceNo"));
+        transactionNoField.bind(bg, entity, entProps.getEntityProperty("referenceNo"));
 
         // transaction fee
-        transactionFeeField.bind(bg, entity, entProps.getPropertyDetails("transactionFee"));
+        transactionFeeField.bind(bg, entity, entProps.getEntityProperty("transactionFee"));
 
         // description
-        descriptionField.bind(bg, entity, entProps.getPropertyDetails("description"));
+        descriptionField.bind(bg, entity, entProps.getEntityProperty("description"));
 
         bg.bind();
     }
@@ -883,10 +883,10 @@ public class CustomerPaymentForm extends BaseEntityPanel {
             customerContacts = new ArrayList<ContactPerson>();
         }
 
-        PropertyDetails pd = entProps.getPropertyDetails("customerContact");
+        EntityProperty pd = entProps.getEntityProperty("customerContact");
         pd.setValidator(new CustomerContactValidator());
         customerContactBinding = customerContactField.bind(bg, customerContacts, entity,
-                entProps.getPropertyDetails("customerContact"));
+                entProps.getEntityProperty("customerContact"));
     }
 
     public void setReadonly() {

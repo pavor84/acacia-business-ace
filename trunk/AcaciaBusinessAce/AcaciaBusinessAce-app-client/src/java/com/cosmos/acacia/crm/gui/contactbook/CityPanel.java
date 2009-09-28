@@ -238,12 +238,12 @@ public class CityPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getCityEntityProperties();
 
-        countryComboBox.bind(bg, getCountries(), city, entityProps.getPropertyDetails("country"));
-        nameTextField.bind(bg, city, entityProps.getPropertyDetails("cityName"));
-        cityCodeTextField.bind(bg, city, entityProps.getPropertyDetails("cityCode"));
-        phoneCodeTextField.bind(bg, city, entityProps.getPropertyDetails("cityPhoneCode"));
-        postalCodeTextField.bind(bg, city, entityProps.getPropertyDetails("postalCode"));
-        descriptionTextPane.bind(bg, city, entityProps.getPropertyDetails("description"));
+        countryComboBox.bind(bg, getCountries(), city, entityProps.getEntityProperty("country"));
+        nameTextField.bind(bg, city, entityProps.getEntityProperty("cityName"));
+        cityCodeTextField.bind(bg, city, entityProps.getEntityProperty("cityCode"));
+        phoneCodeTextField.bind(bg, city, entityProps.getEntityProperty("cityPhoneCode"));
+        postalCodeTextField.bind(bg, city, entityProps.getEntityProperty("postalCode"));
+        descriptionTextPane.bind(bg, city, entityProps.getEntityProperty("description"));
 
         bg.bind();
     }

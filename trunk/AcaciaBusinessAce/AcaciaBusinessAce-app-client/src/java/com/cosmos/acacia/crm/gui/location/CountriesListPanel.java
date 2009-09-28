@@ -16,7 +16,7 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class CountriesListPanel extends EntityListPanel<Country> {
 
     public CountriesListPanel() {
-        super(Country.class);
+        super(Country.class, null);
     }
 
     @Override

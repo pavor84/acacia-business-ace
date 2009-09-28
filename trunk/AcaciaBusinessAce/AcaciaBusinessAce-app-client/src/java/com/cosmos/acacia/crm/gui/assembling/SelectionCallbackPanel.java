@@ -16,7 +16,7 @@ import com.cosmos.acacia.crm.data.assembling.AssemblingSchemaItem;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBScrollPane;
 import com.cosmos.swingb.TableSelectionModel;
@@ -282,19 +282,19 @@ public class SelectionCallbackPanel
     {
         EntityProperties entityProperties =
             getFormSession().getProductSelectionRowEntityProperties();
-        PropertyDetails propertyDetails;
+        EntityProperty propertyDetails;
         if(Algorithm.Type.EqualsAlgorithms.contains(algorithmType))
         {
-            propertyDetails = entityProperties.getPropertyDetails("minConstraint");
+            propertyDetails = entityProperties.getEntityProperty("minConstraint");
             propertyDetails.setColumnName("Value");
-            propertyDetails = entityProperties.getPropertyDetails("maxConstraint");
+            propertyDetails = entityProperties.getEntityProperty("maxConstraint");
             propertyDetails.setVisible(false);
         }
         else if(Algorithm.Type.UserSelectionAlgorithms.contains(algorithmType))
         {
-            propertyDetails = entityProperties.getPropertyDetails("minConstraint");
+            propertyDetails = entityProperties.getEntityProperty("minConstraint");
             propertyDetails.setVisible(false);
-            propertyDetails = entityProperties.getPropertyDetails("maxConstraint");
+            propertyDetails = entityProperties.getEntityProperty("maxConstraint");
             propertyDetails.setVisible(false);
         }
 

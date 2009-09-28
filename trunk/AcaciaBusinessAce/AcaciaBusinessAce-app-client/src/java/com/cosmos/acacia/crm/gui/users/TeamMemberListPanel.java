@@ -17,7 +17,7 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class TeamMemberListPanel extends DetailEntityListPanel<Team, TeamMember> {
 
     public TeamMemberListPanel(EntityPanel<Team> mainEntityPanel) {
-        super(mainEntityPanel, TeamMember.class);
+        super(mainEntityPanel, TeamMember.class, null);
     }
 
     @Override

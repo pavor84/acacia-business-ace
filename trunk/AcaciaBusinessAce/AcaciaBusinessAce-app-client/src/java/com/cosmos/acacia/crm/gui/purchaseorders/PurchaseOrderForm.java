@@ -42,9 +42,8 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.acacia.util.AcaciaUtils;
-import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import java.math.BigInteger;
 
@@ -673,25 +672,26 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     protected void bindComponents(BindingGroup bindGroup, EntityProperties entProps) {
         //if already persisted form - then the supplier can't be changed
         if (entity.getOrderNumber() != null && entity.getOrderNumber().compareTo(BigInteger.ZERO) > 0) {
-            entProps.getPropertyDetails("supplier").setReadOnly(true);
-            entProps.getPropertyDetails("supplier").setEditable(false);
+            EntityProperty entityProperty = entProps.getEntityProperty("supplier");
+            entityProperty.setReadOnly(true);
+            entityProperty.setEditable(false);
         }
 
         //order number
-        PropertyDetails pd = entProps.getPropertyDetails("orderNumber");
+        EntityProperty pd = entProps.getEntityProperty("orderNumber");
         pd.setRequired(false);
         pd.setValidator(null);
         orderNumberField.bind(bindGroup, entity, pd);
         //supplier order number
-        supplierOrderNumberField.bind(bindGroup, entity, entProps.getPropertyDetails("supplierOrderNumber"));
+        supplierOrderNumberField.bind(bindGroup, entity, entProps.getEntityProperty("supplierOrderNumber"));
         //order status
-        orderStatusField.bind(bindGroup, getPurchaseOrderStatuses(), entity, entProps.getPropertyDetails("status"));
+        orderStatusField.bind(bindGroup, getPurchaseOrderStatuses(), entity, entProps.getEntityProperty("status"));
         //delivery status
-        deliveryStatusField.bind(bindGroup, new ArrayList(), entity, entProps.getPropertyDetails("deliveryStatus"));
+        deliveryStatusField.bind(bindGroup, new ArrayList(), entity, entProps.getEntityProperty("deliveryStatus"));
         //branch
-        branchField.bind(bindGroup, entity, entProps.getPropertyDetails("branchName"));
+        branchField.bind(bindGroup, entity, entProps.getEntityProperty("branchName"));
         //document delivery
-        documentDeliveryField.bind(bindGroup, getDeliveryMethods(), entity, entProps.getPropertyDetails("documentDeliveryMethod"));
+        documentDeliveryField.bind(bindGroup, getDeliveryMethods(), entity, entProps.getEntityProperty("documentDeliveryMethod"));
 
         //clear explicitly any items
         supplierContactField.setModel(new DefaultComboBoxModel());
@@ -703,7 +703,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 bindGroup,
                 listPanel,
                 entity,
-                entProps.getPropertyDetails("supplier"),
+                entProps.getEntityProperty("supplier"),
                 "${displayName}",
                 UpdateStrategy.READ_WRITE);
         supplierField.addItemListener(new ItemListener() {
@@ -720,19 +720,19 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
 
         //supplier contact
-        supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
+        supplierContactBinding = supplierContactField.bind(bindGroup, getSupplierContacts(), entity, entProps.getEntityProperty("supplierContact"));
         onSelectSupplier();
 
         DateFormat dateFormat = AcaciaUtils.getShortDateFormat();
 
         //creator
-        creatorField.bind(bindGroup, entity, entProps.getPropertyDetails("creatorName"));
+        creatorField.bind(bindGroup, entity, entProps.getEntityProperty("creatorName"));
 
         //creation time
         createdAtField.setText(dateFormat.format(entity.getCreationTime()));
 
         //sender
-        senderField.bind(bindGroup, entity, entProps.getPropertyDetails("senderName"));
+        senderField.bind(bindGroup, entity, entProps.getEntityProperty("senderName"));
 
         //sent at
         if (entity.getSentTime() != null) {
@@ -755,7 +755,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
 
         //notes
-        notesField.bind(bindGroup, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bindGroup, entity, entProps.getEntityProperty("notes"));
 
         boolean statusOpen = entity.getStatus() == null || entity.getStatus().getEnumValue() == PurchaseOrderStatus.Open;
 
@@ -776,7 +776,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             entityFormButtonPanel2.setVisible(Button.Custom, false);
             documentDeliveryField.setEnabled(false);
 
-            entProps.getPropertyDetails("supplierContact").setReadOnly(true);
+            entProps.getEntityProperty("supplierContact").setReadOnly(true);
         }
 
         bindGroup.bind();
@@ -857,7 +857,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     protected void onSelectSupplier() {
         BindingGroup bg = getBindingGroup();
         bg.removeBinding(supplierContactBinding);
-        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(), entity, entProps.getPropertyDetails("supplierContact"));
+        supplierContactBinding = supplierContactField.bind(bg, getSupplierContacts(), entity, entProps.getEntityProperty("supplierContact"));
         supplierContactBinding.bind();
 
         //update the supplier name
@@ -920,10 +920,10 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         Report report2 = new Report("purchase_order", itemsTablePanel.getItems());
         report2.setLocalizationKey("ordered.quantity.only.report");
         report2.setAutoSubreport1Class(PurchaseOrderItem.class);
-        EntityProperties reportEntityProps = BeansBindingHelper.createEntityProperties(PurchaseOrderItem.class, true);
-        reportEntityProps.removePropertyDetails("deliveredQuantity");
-        reportEntityProps.removePropertyDetails("confirmedQuantity");
-        reportEntityProps.getPropertyDetails("orderedQuantity").setReportColumnWidth((byte) 24);
+        EntityProperties reportEntityProps = new EntityProperties(PurchaseOrderItem.class, true);
+        reportEntityProps.removeEntityProperty("deliveredQuantity");
+        reportEntityProps.removeEntityProperty("confirmedQuantity");
+        reportEntityProps.getEntityProperty("orderedQuantity").setReportColumnWidth((byte) 24);
         report2.setAutoSubreport1Properties(reportEntityProps);
         report.setExportFileName(exportFileName);
         reports.add(report2);

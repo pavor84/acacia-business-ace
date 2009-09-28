@@ -20,7 +20,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.swingb.DialogResponse;
 
@@ -139,7 +139,7 @@ public class PartialQuantityForm extends AcaciaPanel {
             " ("+formatNumber(from, AcaciaUtils.getDecimalFormat())+" - " + formatNumber(to, AcaciaUtils.getDecimalFormat())+"):");
         
         BindingGroup group = new BindingGroup();
-        PropertyDetails pd = new PropertyDetails("quantity", "Quantity", BigDecimal.class.getName());
+        EntityProperty pd = EntityProperty.createEntityProperty("quantity", "Quantity", BigDecimal.class.getName());
         pd.setReadOnly(false);
         pd.setEditable(true);
         pd.setVisible(true);

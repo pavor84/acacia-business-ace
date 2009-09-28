@@ -15,7 +15,7 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class PurchaseInvoiceListPanel extends BusinessDocumentListPanel<PurchaseInvoice> {
 
     public PurchaseInvoiceListPanel() {
-        super(PurchaseInvoice.class);
+        super(PurchaseInvoice.class, null);
     }
 
     @Override

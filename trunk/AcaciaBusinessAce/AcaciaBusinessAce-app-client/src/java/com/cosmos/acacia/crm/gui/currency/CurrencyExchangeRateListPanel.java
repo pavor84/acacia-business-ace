@@ -10,7 +10,7 @@ import com.cosmos.acacia.crm.data.currency.CurrencyExchangeRate;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.FormattedCellRenderer;
 import com.cosmos.swingb.JBDatePicker;
@@ -160,17 +160,17 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel<CurrencyEx
 
         DateFormat dateFormat = new SimpleDateFormat(JBDatePicker.DEFAULT_DATE_TIME_FORMAT);
         FormattedCellRenderer cellRenderer = new FormattedCellRenderer(dateFormat);
-        PropertyDetails propDetails = ep.getPropertyDetails("validFrom");
+        EntityProperty propDetails = ep.getEntityProperty("validFrom");
         TableColumnExt columnExt = dataTable.getColumn(propDetails);
         columnExt.setCellRenderer(cellRenderer);
 
-        propDetails = ep.getPropertyDetails("validUntil");
+        propDetails = ep.getEntityProperty("validUntil");
         columnExt = dataTable.getColumn(propDetails);
         columnExt.setCellRenderer(cellRenderer);
 
         DecimalFormat decimalFormat = new DecimalFormat(JBDecimalField.CURRENCY_EXCHANGE_RATE_PATTERN);
         cellRenderer = new FormattedCellRenderer(decimalFormat);
-        propDetails = ep.getPropertyDetails("exchangeRate");
+        propDetails = ep.getEntityProperty("exchangeRate");
         columnExt = dataTable.getColumn(propDetails);
         columnExt.setCellRenderer(cellRenderer);
 

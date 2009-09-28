@@ -273,10 +273,10 @@ public class ClassifierPanel extends BaseEntityPanel {
 
         entityProps = getClassifierEntityProperties();
 
-        codeTextField.bind(bg, classifier, entityProps.getPropertyDetails("classifierCode"));
-        nameTextField.bind(bg, classifier, entityProps.getPropertyDetails("classifierName"));
-        groupComboBox.bind(bg, getClassifierGroups(), classifier, entityProps.getPropertyDetails("classifierGroup"));
-        descriptionTextPane.bind(bg, classifier, entityProps.getPropertyDetails("description"));
+        codeTextField.bind(bg, classifier, entityProps.getEntityProperty("classifierCode"));
+        nameTextField.bind(bg, classifier, entityProps.getEntityProperty("classifierName"));
+        groupComboBox.bind(bg, getClassifierGroups(), classifier, entityProps.getEntityProperty("classifierGroup"));
+        descriptionTextPane.bind(bg, classifier, entityProps.getEntityProperty("description"));
 
         dataObjectTypesTable = new DataObjectTypesListPanel(null, classifier);
         //dataObjectTypesTable.setVisibleButtons(8 + 16);

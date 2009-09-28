@@ -263,16 +263,16 @@ public class BankDetailPanel extends BaseEntityPanel {
 
         entityProps = getBankDetailEntityProperties();
 
-        ibanTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("iban"));
-        accountTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("bankAccount"));
-        bicTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("bic"));
-        swiftTextField.bind(bg, bankDetail, entityProps.getPropertyDetails("swiftCode"));
-        defaultCheckBox.bind(bg, bankDetail, entityProps.getPropertyDetails("isDefault"));
+        ibanTextField.bind(bg, bankDetail, entityProps.getEntityProperty("iban"));
+        accountTextField.bind(bg, bankDetail, entityProps.getEntityProperty("bankAccount"));
+        bicTextField.bind(bg, bankDetail, entityProps.getEntityProperty("bic"));
+        swiftTextField.bind(bg, bankDetail, entityProps.getEntityProperty("swiftCode"));
+        defaultCheckBox.bind(bg, bankDetail, entityProps.getEntityProperty("isDefault"));
 
         currencyComboBox.bind(bg,
                 getCurrencies(),
                 bankDetail,
-                entityProps.getPropertyDetails("currency"));
+                entityProps.getEntityProperty("currency"));
 
         bankBinding = bankLookup.bind(new AcaciaLookupProvider() {
                 @Override
@@ -281,7 +281,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 }
             }, bg,
             bankDetail,
-            entityProps.getPropertyDetails("bank"),
+            entityProps.getEntityProperty("bank"),
             "${organizationName}",
             UpdateStrategy.READ_WRITE);
        bankBinding.addBindingListener(new AbstractBindingListener() {
@@ -300,7 +300,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 }
             }, bg,
             bankDetail,
-            entityProps.getPropertyDetails("bankBranch"),
+            entityProps.getEntityProperty("bankBranch"),
             "${addressName}",
             UpdateStrategy.READ_WRITE);
 
@@ -319,7 +319,7 @@ public class BankDetailPanel extends BaseEntityPanel {
                 }
             }, bg,
             bankDetail,
-            entityProps.getPropertyDetails("bankContact"),
+            entityProps.getEntityProperty("bankContact"),
             "${firstName} ${secondName} ${lastName}",
             UpdateStrategy.READ_WRITE);
 

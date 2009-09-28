@@ -160,14 +160,14 @@ public class PatternMaskFormatPanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getFormSession().getPatternMaskEntityProperties();
 
-        nameField.bind(bg, format, entityProps.getPropertyDetails("patternName"));
-        formatField.bind(bg, format, entityProps.getPropertyDetails("format"));
-        descriptionField.bind(bg, format, entityProps.getPropertyDetails("description"));
+        nameField.bind(bg, format, entityProps.getEntityProperty("patternName"));
+        formatField.bind(bg, format, entityProps.getEntityProperty("format"));
+        descriptionField.bind(bg, format, entityProps.getEntityProperty("description"));
         if(listPanel == null) {
             Classifier classifier = getClassifier(Classifier.Supplier.getClassifierCode());
             listPanel = new BusinessPartnersListPanel(classifier);
         }
-        ownerField.bind(bg, listPanel, format, entityProps.getPropertyDetails("owner"),
+        ownerField.bind(bg, listPanel, format, entityProps.getEntityProperty("owner"),
             "${displayName}", UpdateStrategy.READ_WRITE);
         
         bg.bind();

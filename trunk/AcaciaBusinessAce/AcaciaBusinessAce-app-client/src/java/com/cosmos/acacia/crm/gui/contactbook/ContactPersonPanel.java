@@ -141,7 +141,7 @@ public class ContactPersonPanel extends BaseEntityPanel {
                 }
             }, bg,
             contactPerson,
-            entityProps.getPropertyDetails("positionType"),
+            entityProps.getEntityProperty("positionType"),
             "${positionTypeName}",
             UpdateStrategy.READ_WRITE);
 
@@ -152,8 +152,8 @@ public class ContactPersonPanel extends BaseEntityPanel {
                 }
             }, bg,
             contactPerson,
-            entityProps.getPropertyDetails("contact"),
-            entityProps.getPropertyDetails("contact")
+            entityProps.getEntityProperty("contact"),
+            entityProps.getEntityProperty("contact")
                     .getCustomDisplay().replaceAll("contact.", ""),
             UpdateStrategy.READ_WRITE);
 

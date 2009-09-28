@@ -29,7 +29,7 @@ import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -312,7 +312,7 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
         
         //product
-        PropertyDetails pd = entProps.getPropertyDetails("product");
+        EntityProperty pd = entProps.getEntityProperty("product");
         pd.setRequired(true);
         ProductsListPanel listPanel = new ProductsListPanel(getOrganizationDataObjectId());
         productField.bind(
@@ -329,30 +329,30 @@ public class PurchaseOrderItemForm extends BaseEntityPanel {
             }
         }, true);
         
-        measureUnitField.bind(bg, getMeasureUnits(), entity, entProps.getPropertyDetails("measureUnit"));
+        measureUnitField.bind(bg, getMeasureUnits(), entity, entProps.getEntityProperty("measureUnit"));
         //ordered quantity
-        orderedQuantityField.bind(bg, entity, entProps.getPropertyDetails("orderedQuantity"), getDecimalFormat());
+        orderedQuantityField.bind(bg, entity, entProps.getEntityProperty("orderedQuantity"), getDecimalFormat());
         
         //confirmed quantity
-        confirmedQuantityField.bind(bg, entity, entProps.getPropertyDetails("confirmedQuantity"), getDecimalFormat());
+        confirmedQuantityField.bind(bg, entity, entProps.getEntityProperty("confirmedQuantity"), getDecimalFormat());
         
         //delivered quantity
-        deliveredQuantityField.bind(bg, entity, entProps.getPropertyDetails("deliveredQuantity"), getDecimalFormat());
+        deliveredQuantityField.bind(bg, entity, entProps.getEntityProperty("deliveredQuantity"), getDecimalFormat());
         
         //purchase price
-        purchasePriceField.bind(bg, entity, entProps.getPropertyDetails("purchasePrice"), getDecimalFormat());
+        purchasePriceField.bind(bg, entity, entProps.getEntityProperty("purchasePrice"), getDecimalFormat());
         
         //currency
-        currencyField.bind(bg, getCurrencies(), entity, entProps.getPropertyDetails("currency"));
+        currencyField.bind(bg, getCurrencies(), entity, entProps.getEntityProperty("currency"));
         
         //ship date from
-        shipDateFromField.bind(bg, entity, entProps.getPropertyDetails("shipDateFrom"), AcaciaUtils.getShortDateFormat());
+        shipDateFromField.bind(bg, entity, entProps.getEntityProperty("shipDateFrom"), AcaciaUtils.getShortDateFormat());
         
         //ship date to
-        shipDateToField.bind(bg, entity, entProps.getPropertyDetails("shipDateTo"), AcaciaUtils.getShortDateFormat());
+        shipDateToField.bind(bg, entity, entProps.getEntityProperty("shipDateTo"), AcaciaUtils.getShortDateFormat());
         
         //notes
-        notesField.bind(bg, entity, entProps.getPropertyDetails("notes"));
+        notesField.bind(bg, entity, entProps.getEntityProperty("notes"));
         
         bg.bind();
     }

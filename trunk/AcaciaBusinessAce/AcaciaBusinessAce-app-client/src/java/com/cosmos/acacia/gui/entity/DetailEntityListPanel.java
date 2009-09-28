@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.util.PersistentEntity;
 import java.util.ArrayList;
@@ -19,12 +20,13 @@ public class DetailEntityListPanel<E extends PersistentEntity, I extends Persist
     public DetailEntityListPanel(
             EntityPanel<E> mainEntityPanel,
             Class<I> itemEntityClass,
+            Classifier classifier,
             Object... parameters) {
-        super(mainEntityPanel, null, itemEntityClass, parameters);
+        super(mainEntityPanel, null, itemEntityClass, classifier, parameters);
     }
 
-    public DetailEntityListPanel(E mainEntity, Class<I> itemEntityClass, Object... parameters) {
-        super(null, mainEntity, itemEntityClass, parameters);
+    public DetailEntityListPanel(E mainEntity, Class<I> itemEntityClass, Classifier classifier, Object... parameters) {
+        super(null, mainEntity, itemEntityClass, classifier, parameters);
     }
 
     @Override

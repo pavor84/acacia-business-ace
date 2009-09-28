@@ -185,7 +185,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
 //            bindGroup,
 //            listPanel,
 //            entity,
-//            entProps.getPropertyDetails("supplier"),
+//            entProps.getEntityProperty("supplier"),
 //            "${recipient.displayName} - ${invoiceNumber}",
 //            UpdateStrategy.READ_WRITE);
         

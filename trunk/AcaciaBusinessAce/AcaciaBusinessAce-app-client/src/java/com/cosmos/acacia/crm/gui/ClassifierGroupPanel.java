@@ -173,10 +173,10 @@ public class ClassifierGroupPanel extends BaseEntityPanel {
 
         entityProps = getClassifierGroupEntityProperties();
 
-        codeTextField.bind(bg, classifierGroup, entityProps.getPropertyDetails("classifierGroupCode"));
-        nameTextField.bind(bg, classifierGroup, entityProps.getPropertyDetails("classifierGroupName"));
-        descriptionTextPane.bind(bg, classifierGroup, entityProps.getPropertyDetails("description"));
-        systemClassifierGroupCheckBox.bind(bg, classifierGroup, entityProps.getPropertyDetails("isSystemGroup"));
+        codeTextField.bind(bg, classifierGroup, entityProps.getEntityProperty("classifierGroupCode"));
+        nameTextField.bind(bg, classifierGroup, entityProps.getEntityProperty("classifierGroupName"));
+        descriptionTextPane.bind(bg, classifierGroup, entityProps.getEntityProperty("description"));
+        systemClassifierGroupCheckBox.bind(bg, classifierGroup, entityProps.getEntityProperty("isSystemGroup"));
 
         bg.bind();
 

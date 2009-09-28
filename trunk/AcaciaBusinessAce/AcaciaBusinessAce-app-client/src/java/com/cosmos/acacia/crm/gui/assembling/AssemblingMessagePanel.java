@@ -11,7 +11,7 @@ import com.cosmos.acacia.gui.AbstractTablePanel.Button;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import javax.ejb.EJB;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -226,36 +226,36 @@ public class AssemblingMessagePanel
     @Override
     protected void initData() {
         entityProps = getFormSession().getAssemblingMessageEntityProperties();
-        PropertyDetails propDetails;
+        EntityProperty propDetails;
 
         BindingGroup bg = getBindingGroup();
 
         //messageCodeTextField
-        propDetails = entityProps.getPropertyDetails("messageCode");
+        propDetails = entityProps.getEntityProperty("messageCode");
         messageCodeTextField.bind(bg, entity, propDetails);
 
         //messageLabelTextField
-        propDetails = entityProps.getPropertyDetails("messageLabel");
+        propDetails = entityProps.getEntityProperty("messageLabel");
         messageLabelTextField.bind(bg, entity, propDetails);
 
         //selectionTextTextField
-        propDetails = entityProps.getPropertyDetails("selectionText");
+        propDetails = entityProps.getEntityProperty("selectionText");
         selectionTextTextField.bind(bg, entity, propDetails);
 
         //selectionTitleTextField
-        propDetails = entityProps.getPropertyDetails("selectionTitle");
+        propDetails = entityProps.getEntityProperty("selectionTitle");
         selectionTitleTextField.bind(bg, entity, propDetails);
 
         //inputTextTextField
-        propDetails = entityProps.getPropertyDetails("inputText");
+        propDetails = entityProps.getEntityProperty("inputText");
         inputTextTextField.bind(bg, entity, propDetails);
 
         //inputTitleTextField
-        propDetails = entityProps.getPropertyDetails("inputTitle");
+        propDetails = entityProps.getEntityProperty("inputTitle");
         inputTitleTextField.bind(bg, entity, propDetails);
 
         //descriptionTextPane
-        propDetails = entityProps.getPropertyDetails("description");
+        propDetails = entityProps.getEntityProperty("description");
         descriptionTextPane.bind(bg, entity, propDetails);
 
         bg.bind();

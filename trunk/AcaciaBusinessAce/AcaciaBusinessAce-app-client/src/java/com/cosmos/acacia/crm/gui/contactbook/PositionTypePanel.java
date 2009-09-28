@@ -176,12 +176,12 @@ public class PositionTypePanel extends BaseEntityPanel {
 
         EntityProperties entityProps = getPositionTypeEntityProperties();
 
-        nameTextField.bind(bg, positionType, entityProps.getPropertyDetails("positionTypeName"));
-        descriptionTextPane.bind(bg, positionType, entityProps.getPropertyDetails("description"));
+        nameTextField.bind(bg, positionType, entityProps.getEntityProperty("positionTypeName"));
+        descriptionTextPane.bind(bg, positionType, entityProps.getEntityProperty("description"));
 
         groupComboList.setEnabled(true);
         UserGroupsListPanel groupsTable = new UserGroupsListPanel(getOrganizationDataObjectId());
-        groupComboList.bind(bg, groupsTable, positionType, entityProps.getPropertyDetails("userGroup"), "${name}");
+        groupComboList.bind(bg, groupsTable, positionType, entityProps.getEntityProperty("userGroup"), "${name}");
 
         bg.bind();
     }

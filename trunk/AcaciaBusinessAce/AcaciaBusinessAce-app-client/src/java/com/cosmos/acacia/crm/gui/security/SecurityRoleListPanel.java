@@ -19,15 +19,15 @@ import java.util.List;
 public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
 
     public SecurityRoleListPanel() {
-        super(SecurityRole.class);
+        super(SecurityRole.class, null);
     }
 
     public SecurityRoleListPanel(BusinessUnit businessUnit) {
-        super(SecurityRole.class, businessUnit);
+        super(SecurityRole.class, null, businessUnit);
     }
 
     public SecurityRoleListPanel(UserOrganization userOrganization, UserSecurityRole userSecurityRole) {
-        super(SecurityRole.class, userOrganization, userSecurityRole);
+        super(SecurityRole.class, null, userOrganization, userSecurityRole);
     }
 
     @Override

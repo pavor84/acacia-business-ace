@@ -13,7 +13,7 @@ import com.cosmos.acacia.crm.gui.pricing.ProductPricingValueListPanel;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 import com.cosmos.swingb.JBButton;
 import com.cosmos.swingb.JBComboBox;
@@ -558,11 +558,11 @@ public class ProductPricingPanel extends AcaciaPanel {
         });
 
         //ListPriceBindingListener listPriceBindingListener = new ListPriceBindingListener();
-        PropertyDetails propDetails = entityProps.getPropertyDetails("listPrice");
+        EntityProperty propDetails = entityProps.getEntityProperty("listPrice");
         Binding binding = listPriceDecimalField.bind(bindingGroup, product, propDetails);
         //binding.addBindingListener(listPriceBindingListener);
 
-        propDetails = entityProps.getPropertyDetails("currency");
+        propDetails = entityProps.getEntityProperty("currency");
         binding = currencyComboBox.bind(bindingGroup, getEnumResources(Currency.class), product, propDetails);
         binding.addBindingListener(new AbstractBindingListener() {
 
@@ -572,7 +572,7 @@ public class ProductPricingPanel extends AcaciaPanel {
             }
         });
 
-        propDetails = entityProps.getPropertyDetails("transportValue");
+        propDetails = entityProps.getEntityProperty("transportValue");
         transportValueField.bind(bindingGroup, product, propDetails).addBindingListener(
                 new AbstractBindingListener() {
 

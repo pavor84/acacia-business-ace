@@ -24,7 +24,7 @@ import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -143,10 +143,10 @@ public class SpecialPermissionPanel extends BaseEntityPanel {
         BindingGroup bg = getBindingGroup();
         EntityProperties entityProps = getFormSession().getUserRightEntityProperties();
 
-        permissionComboBox.bind(bg, getSpecialPermissions(), right, entityProps.getPropertyDetails("specialPermission"));
+        permissionComboBox.bind(bg, getSpecialPermissions(), right, entityProps.getEntityProperty("specialPermission"));
 
         AcaciaToStringConverter converter = new AcaciaToStringConverter("${dataObjectType}");
-        PropertyDetails pDetails = entityProps.getPropertyDetails("dataObjectType");
+        EntityProperty pDetails = entityProps.getEntityProperty("dataObjectType");
         dataObjectTypeComboBox.bind(bg,
                 getDataObjectTypes(),
                 right,

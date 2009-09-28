@@ -18,7 +18,7 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.beansbinding.validation.NumericRangeValidator;
 import com.cosmos.swingb.DialogResponse;
 
@@ -143,7 +143,7 @@ public class MatchAmountForm extends AcaciaPanel {
             minStr, maxStr);
         matchAmountLabel.setText(amountLabel);
         
-        PropertyDetails pd = new PropertyDetails("matchAmount", "", BigDecimal.class.getName());
+        EntityProperty pd = EntityProperty.createEntityProperty("matchAmount", "", BigDecimal.class.getName());
         pd.setRequired(true);
         NumericRangeValidator val = new NumericRangeValidator();
         val.setRequired(true);

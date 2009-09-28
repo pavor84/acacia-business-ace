@@ -33,7 +33,7 @@ import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
 
 /**
@@ -574,7 +574,7 @@ public class PricelistItemForm extends BaseEntityPanel {
         categoryField.setVisible(false);
         
         // apply client disc.
-        applyDiscountField.bind(bindGroup, entity, entProps.getPropertyDetails("applyClientDiscount"));
+        applyDiscountField.bind(bindGroup, entity, entProps.getEntityProperty("applyClientDiscount"));
         if ( !multipleMode )
             applyDiscountField.addActionListener(new ActionListener() {
                 @Override
@@ -584,10 +584,10 @@ public class PricelistItemForm extends BaseEntityPanel {
             });
         
         // min qty.
-        minimalQtyField.bind(bindGroup, entity, entProps.getPropertyDetails("minQuantity"), getDecimalFormat());
+        minimalQtyField.bind(bindGroup, entity, entProps.getEntityProperty("minQuantity"), getDecimalFormat());
         
         // discount
-        discountField.bind(bindGroup, entity, entProps.getPropertyDetails("discountPercent"), getDecimalFormat());
+        discountField.bind(bindGroup, entity, entProps.getEntityProperty("discountPercent"), getDecimalFormat());
         if ( !multipleMode )
             discountField.getBinding().addBindingListener(new AbstractBindingListener() {
                 public void targetChanged(Binding binding, PropertyStateEvent event) {
@@ -616,10 +616,10 @@ public class PricelistItemForm extends BaseEntityPanel {
         return res;
     }
 
-    private Collection<PropertyDetails> createProductsTableDetails() {
-        PropertyDetails product = new PropertyDetails("productName", "Product Name", String.class.getName());
-        PropertyDetails code = new PropertyDetails("codeFormatted", "Product Code", String.class.getName());
-        PropertyDetails category = new PropertyDetails("category.categoryName", "Category", String.class.getName());
+    private Collection<EntityProperty> createProductsTableDetails() {
+        EntityProperty product = EntityProperty.createEntityProperty("productName", "Product Name", String.class.getName());
+        EntityProperty code = EntityProperty.createEntityProperty("codeFormatted", "Product Code", String.class.getName());
+        EntityProperty category = EntityProperty.createEntityProperty("category.categoryName", "Category", String.class.getName());
         return Arrays.asList(product, code, category);
     }
 

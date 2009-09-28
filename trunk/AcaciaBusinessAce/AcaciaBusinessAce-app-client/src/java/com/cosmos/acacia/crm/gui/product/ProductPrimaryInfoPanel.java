@@ -18,7 +18,7 @@ import com.cosmos.acacia.gui.AcaciaComboBox;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBDecimalField;
 import com.cosmos.swingb.JBIntegerField;
@@ -345,10 +345,10 @@ public class ProductPrimaryInfoPanel extends JBPanel {
         AutoCompleteDecorator.decorate(measureUnitComboBox, resourceToStringConverter);
         AutoCompleteDecorator.decorate(productColorComboBox, resourceToStringConverter);
 
-        PropertyDetails propDetails = entityProps.getPropertyDetails("productName");
+        EntityProperty propDetails = entityProps.getEntityProperty("productName");
         productNameTextField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("category");
+        propDetails = entityProps.getEntityProperty("category");
         ProductCategoriesTreePanel categoryListPanel = new ProductCategoriesTreePanel(
                 productPanel.getParentDataObjectId());
         productCategoryComboList.bind(bindingGroup, categoryListPanel, product, propDetails,
@@ -362,7 +362,7 @@ public class ProductPrimaryInfoPanel extends JBPanel {
         }, true);
         //categoryCodeFormatTextField
 
-        propDetails = entityProps.getPropertyDetails("patternMaskFormat");
+        propDetails = entityProps.getEntityProperty("patternMaskFormat");
         PatternMaskFormatListPanel formatsListPanel = new PatternMaskFormatListPanel(
                 productPanel.getParentDataObjectId());
         productCodeFormatComboList.bind(bindingGroup, formatsListPanel, product, propDetails,
@@ -375,50 +375,50 @@ public class ProductPrimaryInfoPanel extends JBPanel {
             }
         }, true);
 
-        propDetails = entityProps.getPropertyDetails("productCode");
+        propDetails = entityProps.getEntityProperty("productCode");
         productCodeTextField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("measureUnit");
+        propDetails = entityProps.getEntityProperty("measureUnit");
         measureUnitComboBox.bind(bindingGroup, productPanel.getMeasureUnits(), product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("productColor");
+        propDetails = entityProps.getEntityProperty("productColor");
         productColorComboBox.bind(bindingGroup, productPanel.getProductColors(), product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("producer");
+        propDetails = entityProps.getEntityProperty("producer");
         Classifier producerClassifier = productPanel.getProducerClassifier();
         BusinessPartnersListPanel producerListPanel = new BusinessPartnersListPanel(producerClassifier);
         producerComboList.bind(bindingGroup, producerListPanel, product, propDetails,
                 "${displayName}", UpdateStrategy.READ_WRITE);
 
-        propDetails = entityProps.getPropertyDetails("quantityPerPackage");
+        propDetails = entityProps.getEntityProperty("quantityPerPackage");
         quantityPerPackageIntegerField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("purchased");
+        propDetails = entityProps.getEntityProperty("purchased");
         purchasedCheckBox.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("salable");
+        propDetails = entityProps.getEntityProperty("salable");
         salableCheckBox.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("obsolete");
+        propDetails = entityProps.getEntityProperty("obsolete");
         obsoleteCheckBox.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("pricePerQuantity");
+        propDetails = entityProps.getEntityProperty("pricePerQuantity");
         pricePerQuantityDecimalField.bind(bindingGroup, product, propDetails);
 
         salesPriceDecimalField.setEditable(false);
-//        propDetails = entityProps.getPropertyDetails("salePrice");
+//        propDetails = entityProps.getEntityProperty("salePrice");
 //        salesPriceDecimalField.bind(bindingGroup, product, propDetails);
 
-//        propDetails = entityProps.getPropertyDetails("currency");
+//        propDetails = entityProps.getEntityProperty("currency");
 //        currencyValueLabel.bind(bindingGroup, product, propDetails, "enumValue");
 
-        propDetails = entityProps.getPropertyDetails("minimumQuantity");
+        propDetails = entityProps.getEntityProperty("minimumQuantity");
         minDecimalField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("defaultQuantity");
+        propDetails = entityProps.getEntityProperty("defaultQuantity");
         defaultDecimalField.bind(bindingGroup, product, propDetails);
 
-        propDetails = entityProps.getPropertyDetails("maximumQuantity");
+        propDetails = entityProps.getEntityProperty("maximumQuantity");
         maxDecimalField.bind(bindingGroup, product, propDetails);
     }
 
