@@ -42,9 +42,8 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.lowagie.text.pdf.BaseFont;
 
 @SuppressWarnings("unchecked")
@@ -174,7 +173,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         underscoreSeparatedName = pluralize(underscoreSeparatedName);
 
         if (entityProps == null)
-            entityProps = BeansBindingHelper.createEntityProperties(entityClass, true);
+            entityProps = new EntityProperties(entityClass, true);
 
         return createTableReport(entityProps, underscoreSeparatedName, isSubreport);
     }
@@ -244,7 +243,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         design.addImport("com.cosmos.acacia.crm.reports.*");
 
         // Fields
-        for (PropertyDetails pd : entityProps.getValues()) {
+        for (EntityProperty pd : entityProps.getValues()) {
             JRDesignField field = createDesignField(pd);
             design.addField(field);
         }
@@ -266,8 +265,8 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         }
         int nextX = 1;
         int i = 0;
-        PropertyDetails pd = null;
-        Iterator<PropertyDetails> propertyDetailsIterator = entityProps.getValues().iterator();
+        EntityProperty pd = null;
+        Iterator<EntityProperty> propertyDetailsIterator = entityProps.getValues().iterator();
         boolean isIdColumn = true;
         // First iteration is for the ID column
         while (pd != null || propertyDetailsIterator.hasNext()) {
@@ -464,7 +463,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         return design;
     }
 
-    private JRDesignField createDesignField(PropertyDetails pd) {
+    private JRDesignField createDesignField(EntityProperty pd) {
         JRDesignField field = new JRDesignField();
         String fieldName = "";
         if (pd.getCustomDisplay() != null) {

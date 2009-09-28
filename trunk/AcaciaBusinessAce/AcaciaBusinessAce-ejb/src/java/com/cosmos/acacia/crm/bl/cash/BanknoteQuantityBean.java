@@ -19,7 +19,7 @@ import com.cosmos.acacia.crm.data.cash.CurrencyNominal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.validation.impl.BanknoteQuantityValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 
 /**
  * 
@@ -37,17 +37,15 @@ public class BanknoteQuantityBean implements BanknoteQuantityRemote, BanknoteQua
     
     @EJB
     private BanknoteQuantityValidatorLocal validator;
-    
-    public EntityProperties getListingEntityProperties() {
 
+    @Override
+    public EntityProperties getListingEntityProperties() {
         EntityProperties ep = esm.getEntityProperties(BanknoteQuantity.class);
-        
-        ep.addPropertyDetails(new PropertyDetails("currencyNominal.currency.enumValue.code", "Currency", String.class.getName(), 10));
-        ep.getPropertyDetails("quantity").setOrderPosition(20);
-        ep.addPropertyDetails(new PropertyDetails("currencyNominal.nominal", "Nominal", BigDecimal.class.getName(), 30));
-        
-        ep.removePropertyDetails("currencyNominal");
-        
+        ep.removeEntityProperty("currencyNominal");
+        ep.addEntityProperty(EntityProperty.createEntityProperty("currencyNominal.currency.enumValue.code", "Currency", String.class.getName(), 10));
+        ep.setOrderPosition("quantity", 20);
+        ep.addEntityProperty(EntityProperty.createEntityProperty("currencyNominal.nominal", "Nominal", BigDecimal.class.getName(), 30));
+
         return ep;
     }
 
@@ -82,9 +80,9 @@ public class BanknoteQuantityBean implements BanknoteQuantityRemote, BanknoteQua
         EntityProperties ep = esm.getEntityProperties(BanknoteQuantity.class);
         ep.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         
-        ep.addPropertyDetails(new PropertyDetails("currencyNominal.currency", "Currency", DbResource.class.getName(), 10));
-        ep.getPropertyDetails("quantity").setOrderPosition(20);
-        ep.addPropertyDetails(new PropertyDetails("currencyNominal.nominal", "Nominal", BigDecimal.class.getName(), 30));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("currencyNominal.currency", "Currency", DbResource.class.getName(), 10));
+        ep.setOrderPosition("quantity", 20);
+        ep.addEntityProperty(EntityProperty.createEntityProperty("currencyNominal.nominal", "Nominal", BigDecimal.class.getName(), 30));
         
         return ep;
     }

@@ -23,7 +23,6 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.location.Country;
-import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBDatePicker;
@@ -73,8 +72,7 @@ import java.util.UUID;
                 ),
                 componentConstraints="span, growx"
             ),
-            //componentIndex=Integer.MAX_VALUE - 100
-            componentIndex=EntityFormProcessor.CUSTOM_INDEX_VALUE + 400
+            componentIndex=Property.CUSTOM_INDEX_VALUE + 400
         )
     },
     serviceClass = UsersServiceRemote.class

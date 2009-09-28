@@ -80,9 +80,9 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
         EntityProperties entityProperties = esm.getEntityProperties(OrderConfirmation.class);
         
         //let's keep the columns in the table a reasonable count, so remove all not-crucial information
-        entityProperties.removePropertyDetails("supplierName");
-        entityProperties.removePropertyDetails("supplierContactName");
-        entityProperties.removePropertyDetails("notes");
+        entityProperties.removeEntityProperty("supplierName");
+        entityProperties.removeEntityProperty("supplierContactName");
+        entityProperties.removeEntityProperty("notes");
         
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -171,7 +171,7 @@ public class OrderConfirmationListBean implements OrderConfirmationListLocal, Or
     
     public EntityProperties getItemsListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(OrderConfirmationItem.class);
-        entityProperties.removePropertyDetails("notes");
+        entityProperties.removeEntityProperty("notes");
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }

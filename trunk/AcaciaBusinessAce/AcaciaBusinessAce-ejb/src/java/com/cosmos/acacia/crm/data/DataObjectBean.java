@@ -56,7 +56,7 @@ import javax.persistence.Transient;
                 componentClass=JBPanel.class
             ),
             layout=@Layout(layoutClass=BorderLayout.class),
-            componentIndex=Integer.MAX_VALUE
+            componentIndex=DataObjectBean.NOTES_PANEL_INDEX
         )
     }
 )
@@ -66,7 +66,10 @@ public abstract class DataObjectBean implements PersistentEntity<DataObjectBean,
     public static final String MAIN_TABBED_PANE = "mainTabbedPane";
     public static final String PRIMARY_INFO = "primaryInfo";
     public static final String NOTES = "notes";
-
+    //
+    public static final int NOTES_PANEL_INDEX = Property.CUSTOM_INDEX_VALUE + 30000 * Property.STEP_VALUE;
+    public static final int NOTES_COMPONENT_INDEX = NOTES_PANEL_INDEX + Property.STEP_VALUE;
+    //
     private transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private URI smallImageURI;
     private Image smallImage;
@@ -82,7 +85,7 @@ public abstract class DataObjectBean implements PersistentEntity<DataObjectBean,
                 scrollable=true
             ),
             parentContainerName="notes"
-        ), index=Integer.MAX_VALUE
+        ), index=NOTES_COMPONENT_INDEX
     )
     private String notes;
 

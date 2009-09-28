@@ -13,6 +13,7 @@ import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.entity.AbstractEntityService;
+import com.cosmos.beansbinding.EntityProperties;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -66,8 +67,6 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
     @Override
     public List<Person> getPersons(UUID parentBusinessPartnerId) {
         if(parentBusinessPartnerId == null) {
-            System.out.println("session.getOrganization(): " + session.getOrganization());
-            System.out.println("session.getSystemOrganization(): " + session.getSystemOrganization());
             throw new NullPointerException("parentBusinessPartnerId can not be null.");
         }
         Query q = em.createNamedQuery(Person.NQ_FIND_ALL_PERSONS);
@@ -91,6 +90,12 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
 
     @Override
     public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+        if(Organization.class == entityClass) {
+            if(extraParameters.length == 0) {
+                return (List<E>) getOrganizations(session.getOrganization().getBusinessPartnerId());
+            }
+        }
+
         return super.getEntities(entityClass, extraParameters);
     }
 

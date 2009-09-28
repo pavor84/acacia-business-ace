@@ -53,7 +53,7 @@ import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 
 /**
  * Created	:	10.09.2008
@@ -93,33 +93,33 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         EntityProperties entityProperties = esm.getEntityProperties(Invoice.class);
         
         //let's keep the columns in the table a reasonable count, so remove all not-crucial information
-        entityProperties.removePropertyDetails("branchName");
-        entityProperties.removePropertyDetails("branch");
-        entityProperties.removePropertyDetails("recipientName");
-        entityProperties.removePropertyDetails("recipientContactName");
-        entityProperties.removePropertyDetails("invoiceType");
-        entityProperties.removePropertyDetails("creatorName");
-        entityProperties.removePropertyDetails("documentDeliveryMethod");
-        entityProperties.removePropertyDetails("transportationMethod");
-        entityProperties.removePropertyDetails("discountAmount");
-        entityProperties.removePropertyDetails("discountPercent");
-        entityProperties.removePropertyDetails("exciseDutyValue");
-        entityProperties.removePropertyDetails("paymentTerms");
-        entityProperties.removePropertyDetails("singlePayAmount");
-        entityProperties.removePropertyDetails("paymentsCount");
-        entityProperties.removePropertyDetails("daysBetweenPayments");
-        entityProperties.removePropertyDetails("deliveryType");
-        entityProperties.removePropertyDetails("senderName");
-        entityProperties.removePropertyDetails("sender");
-        entityProperties.removePropertyDetails("shipDateFrom");
-        entityProperties.removePropertyDetails("shipDateTo");
-        entityProperties.removePropertyDetails("notes");
-        entityProperties.removePropertyDetails("vatConditionNotes");
-        entityProperties.removePropertyDetails("completionDate");
-        entityProperties.removePropertyDetails("deliveryStatus");
-        entityProperties.removePropertyDetails("validTo");
-        entityProperties.removePropertyDetails("attendee");
-        entityProperties.removePropertyDetails("additionalTerms");
+        entityProperties.removeEntityProperty("branchName");
+        entityProperties.removeEntityProperty("branch");
+        entityProperties.removeEntityProperty("recipientName");
+        entityProperties.removeEntityProperty("recipientContactName");
+        entityProperties.removeEntityProperty("invoiceType");
+        entityProperties.removeEntityProperty("creatorName");
+        entityProperties.removeEntityProperty("documentDeliveryMethod");
+        entityProperties.removeEntityProperty("transportationMethod");
+        entityProperties.removeEntityProperty("discountAmount");
+        entityProperties.removeEntityProperty("discountPercent");
+        entityProperties.removeEntityProperty("exciseDutyValue");
+        entityProperties.removeEntityProperty("paymentTerms");
+        entityProperties.removeEntityProperty("singlePayAmount");
+        entityProperties.removeEntityProperty("paymentsCount");
+        entityProperties.removeEntityProperty("daysBetweenPayments");
+        entityProperties.removeEntityProperty("deliveryType");
+        entityProperties.removeEntityProperty("senderName");
+        entityProperties.removeEntityProperty("sender");
+        entityProperties.removeEntityProperty("shipDateFrom");
+        entityProperties.removeEntityProperty("shipDateTo");
+        entityProperties.removeEntityProperty("notes");
+        entityProperties.removeEntityProperty("vatConditionNotes");
+        entityProperties.removeEntityProperty("completionDate");
+        entityProperties.removeEntityProperty("deliveryStatus");
+        entityProperties.removeEntityProperty("validTo");
+        entityProperties.removeEntityProperty("attendee");
+        entityProperties.removeEntityProperty("additionalTerms");
         
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -283,18 +283,17 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     public EntityProperties getItemsListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(InvoiceItem.class);
-        entityProperties.removePropertyDetails("productDescription");
-        entityProperties.removePropertyDetails("notes");
-        entityProperties.removePropertyDetails("discountAmount");
-        entityProperties.removePropertyDetails("discountPercent");
-        entityProperties.removePropertyDetails("shipDateFrom");
-        entityProperties.removePropertyDetails("shipDateTo");
+        entityProperties.removeEntityProperty("productDescription");
+        entityProperties.removeEntityProperty("notes");
+        entityProperties.removeEntityProperty("discountAmount");
+        entityProperties.removeEntityProperty("discountPercent");
+        entityProperties.removeEntityProperty("shipDateFrom");
+        entityProperties.removeEntityProperty("shipDateTo");
         
-        PropertyDetails productCode = new PropertyDetails("product.codeFormatted", "Code", SimpleProduct.class.getName());
+        EntityProperty productCode = EntityProperty.createEntityProperty("product.codeFormatted", "Code", SimpleProduct.class.getName(), 25);
         productCode.setCustomDisplay("${product.codeFormatted}");
-        productCode.setOrderPosition(25);
         productCode.setVisible(true);
-        entityProperties.addPropertyDetails(productCode);
+        entityProperties.addEntityProperty(productCode);
         
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;

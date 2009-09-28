@@ -73,15 +73,15 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
         EntityProperties entityProperties = esm.getEntityProperties(PurchaseOrder.class);
 
         //let's keep the columns in the table a reasonable count, so remove all not-crucial information
-        entityProperties.removePropertyDetails("branchName");
-        entityProperties.removePropertyDetails("supplierName");
-        entityProperties.removePropertyDetails("supplierContactName");
-        entityProperties.removePropertyDetails("creatorName");
-        entityProperties.removePropertyDetails("sender");
-        entityProperties.removePropertyDetails("senderName");
-        entityProperties.removePropertyDetails("firstDeliveryTime");
-        entityProperties.removePropertyDetails("lastDeliveryTime");
-        entityProperties.removePropertyDetails("notes");
+        entityProperties.removeEntityProperty("branchName");
+        entityProperties.removeEntityProperty("supplierName");
+        entityProperties.removeEntityProperty("supplierContactName");
+        entityProperties.removeEntityProperty("creatorName");
+        entityProperties.removeEntityProperty("sender");
+        entityProperties.removeEntityProperty("senderName");
+        entityProperties.removeEntityProperty("firstDeliveryTime");
+        entityProperties.removeEntityProperty("lastDeliveryTime");
+        entityProperties.removeEntityProperty("notes");
 
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
 
@@ -218,7 +218,7 @@ public class PurchaseOrderListBean implements PurchaseOrderListRemote, PurchaseO
     @Override
     public EntityProperties getItemsListEntityProperties() {
         EntityProperties entityProperties = esm.getEntityProperties(PurchaseOrderItem.class);
-        entityProperties.removePropertyDetails("notes");
+        entityProperties.removeEntityProperty("notes");
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }

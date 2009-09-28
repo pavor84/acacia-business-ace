@@ -12,7 +12,7 @@ import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 
 import java.util.UUID;
 import java.util.List;
@@ -53,7 +53,7 @@ public interface EntityStoreManagerLocal extends EntityStoreManagerRemote {
      * @param position - any number. will be used to sort the property details according to the others
      * @return
      */
-    PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position);
+    EntityProperty createEntityProperty(Class entityClass, String propertyName, int position);
 
     DataObjectBean getDataObjectBean(EntityManager em, DataObject dataObject);
     DataObjectBean getDataObjectBean(EntityManager em, UUID dataObjectId);

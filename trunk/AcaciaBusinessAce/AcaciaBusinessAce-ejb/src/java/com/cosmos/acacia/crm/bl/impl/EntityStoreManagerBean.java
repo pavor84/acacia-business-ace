@@ -23,20 +23,16 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.document.BusinessDocumentStatusLog;
-import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
-import com.cosmos.acacia.crm.data.product.Product;
-import com.cosmos.acacia.crm.data.security.Privilege;
-import com.cosmos.acacia.crm.data.users.Right;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.acacia.crm.enums.EnumClassifier;
 import com.cosmos.acacia.crm.validation.ValidationException;
-import com.cosmos.beansbinding.BeansBindingHelper;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.util.NumberUtils;
 import java.util.ArrayList;
 import java.util.Date;
@@ -290,62 +286,30 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
         System.out.println("EntityStoreManager.prePersist: " + entity);
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "EJB Methods > Add Business Method" or "Web Service > Add Operation")
-    @SuppressWarnings("unchecked")
     @Override
     public EntityProperties getEntityProperties(Class entityClass) {
+        boolean debug = false && Organization.class == entityClass;
         String entityClassName = entityClass.getName();
         EntityProperties entityProperties = entityPropertiesMap.get(entityClassName);
+        if(debug && entityProperties != null) {
+            System.out.println("entityProperties=" + entityProperties);
+        }
         if (entityProperties == null) {
-            if(DataObjectBean.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, DataObjectBean.class, entityClass);
-            }
-
-            if (BusinessPartner.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, BusinessPartner.class, entityClass);
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            } else if (BusinessDocument.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, BusinessDocument.class, entityClass);
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            } else if (Product.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, Product.class, entityClass);
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            } else if (Right.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, Right.class, entityClass);
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            } else if (Privilege.class.isAssignableFrom(entityClass)) {
-                entityProperties = createEntityProperties(entityProperties, Privilege.class, entityClass);
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            } else {
-                entityProperties = createEntityProperties(entityProperties, entityClass);
-            }
-
+            entityProperties = new EntityProperties(entityClass);
             entityPropertiesMap.put(entityClassName, entityProperties);
         }
 
-        return (EntityProperties) entityProperties.clone();
-    }
-
-    private EntityProperties createEntityProperties(EntityProperties entityProperties, Class entityClass) {
-        return createEntityProperties(entityProperties, entityClass, entityClass);
-    }
-
-    private EntityProperties createEntityProperties(EntityProperties entityProperties,
-            Class superClass, Class entityClass) {
-        if(entityProperties == null) {
-            entityProperties = BeansBindingHelper.createEntityProperties(superClass, entityClass);
-        } else {
-            entityProperties.addEntityProperties(BeansBindingHelper.createEntityProperties(superClass, entityClass));
+        EntityProperties clonedEP = (EntityProperties) entityProperties.clone();
+        if(debug) {
+            System.out.println("clonedEP=" + clonedEP);
         }
-
-        return entityProperties;
+        return clonedEP;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public PropertyDetails getPropertyDetails(Class entityClass, String propertyName, int position) {
-        return BeansBindingHelper.createPropertyDetails(entityClass, propertyName, position);
+    public EntityProperty createEntityProperty(Class entityClass, String propertyName, int position) {
+        return EntityProperty.createEntityProperty(entityClass, propertyName, position);
     }
 
     @Override

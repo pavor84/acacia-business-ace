@@ -25,7 +25,7 @@ import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.crm.validation.impl.PricelistValidatorLocal;
 import com.cosmos.beansbinding.EntityProperties;
-import com.cosmos.beansbinding.PropertyDetails;
+import com.cosmos.beansbinding.EntityProperty;
 
 /**
  * 
@@ -50,8 +50,8 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
 
         EntityProperties entityProperties = esm.getEntityProperties(Pricelist.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
-        entityProperties.removePropertyDetails("forPeriod");
-        entityProperties.removePropertyDetails("generalPricelist");
+        entityProperties.removeEntityProperty("forPeriod");
+        entityProperties.removeEntityProperty("generalPricelist");
         
         return entityProperties;
     }
@@ -180,26 +180,22 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         EntityProperties entityProperties = esm.getEntityProperties(PricelistItem.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         
-        PropertyDetails categoryColumn = new PropertyDetails("product.category.categoryName", "Category", String.class.getName());
-        categoryColumn.setOrderPosition(12);
-        
-        entityProperties.addPropertyDetails(categoryColumn);
+        EntityProperty categoryColumn = EntityProperty.createEntityProperty("product.category.categoryName", "Category", String.class.getName(), 12);
+        entityProperties.addEntityProperty(categoryColumn);
         
         if ( rightsManagerLocal.isAllowed(SpecialPermission.ProductPricing) ){
-            PropertyDetails pd = new PropertyDetails("sourcePrice", "Source Price", BigDecimal.class.getName());
+            EntityProperty pd = EntityProperty.createEntityProperty("sourcePrice", "Source Price", BigDecimal.class.getName(), 35);
             pd.setReadOnly(true);
             pd.setEditable(false);
-            pd.setOrderPosition(35);
-            entityProperties.addPropertyDetails(pd);
+            entityProperties.addEntityProperty(pd);
         }else{
-            entityProperties.removePropertyDetails("discountPercent");
+            entityProperties.removeEntityProperty("discountPercent");
         }
         
-        PropertyDetails pd = new PropertyDetails("salesPrice", "Sales Price", BigDecimal.class.getName() );
+        EntityProperty pd = EntityProperty.createEntityProperty("salesPrice", "Sales Price", BigDecimal.class.getName(), 45);
         pd.setReadOnly(true);
         pd.setEditable(false);
-        pd.setOrderPosition(45);
-        entityProperties.addPropertyDetails(pd);
+        entityProperties.addEntityProperty(pd);
         
         return entityProperties;
     }
