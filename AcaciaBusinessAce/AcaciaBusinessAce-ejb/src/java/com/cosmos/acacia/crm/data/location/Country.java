@@ -17,6 +17,7 @@ import com.cosmos.acacia.crm.bl.location.LocationsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBTextField;
@@ -89,7 +90,7 @@ CREATE UNIQUE INDEX uix_countries_country_name
     entityFormClassName="com.cosmos.acacia.crm.gui.location.CountryPanel",
     entityListFormClassName="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
 )
-public class Country extends DataObjectBean implements Serializable {
+public class Country extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
     //
@@ -316,6 +317,16 @@ public class Country extends DataObjectBean implements Serializable {
 
     @Override
     public String getInfo() {
+        return getCountryName();
+    }
+
+    @Override
+    public String toShortText() {
+        return null;
+    }
+
+    @Override
+    public String toText() {
         return getCountryName();
     }
 }
