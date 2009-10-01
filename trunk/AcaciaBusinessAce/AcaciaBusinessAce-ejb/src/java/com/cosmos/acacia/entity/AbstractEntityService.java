@@ -10,10 +10,14 @@ import com.cosmos.acacia.crm.bl.document.business.BusinessDocumentException;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.ChildEntityBean;
+import com.cosmos.acacia.crm.data.ClassifiedObject;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DataObjectEntity;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.util.BooleanUtils;
+import com.cosmos.util.PersistentEntity;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -33,6 +37,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 public abstract class AbstractEntityService implements EntityService {
 
     protected static final String IS_NEW_ENTITY = "IS_NEW_ENTITY";
+    protected static final String CLASSIFIERS = "CLASSIFIERS";
 
     @PersistenceContext
     protected EntityManager em;
@@ -51,12 +56,14 @@ public abstract class AbstractEntityService implements EntityService {
     }
 
     protected <E> void postSave(E entity, Map<String, Object> parameters) {
+        setEntityClassifiers(entity, parameters);
     }
 
     protected <E> void preConfirm(E entity, Map<String, Object> parameters) {
     }
 
     protected <E> void postConfirm(E entity, Map<String, Object> parameters) {
+        setEntityClassifiers(entity, parameters);
     }
 
     protected <E> void preDelete(E entity, Map<String, Object> parameters) {
@@ -65,19 +72,34 @@ public abstract class AbstractEntityService implements EntityService {
     protected <E> void postDelete(E entity, Map<String, Object> parameters) {
     }
 
+    protected <E> void setEntityClassifiers(E entity, Map<String, Object> parameters) {
+        List<Classifier> classifiers;
+        if((classifiers = getClassifiers(parameters)) == null
+                || classifiers.size() == 0
+                || !isNewEntity(parameters)
+                || !(entity instanceof DataObjectEntity)) {
+            return;
+        }
+
+        for(Classifier classifier : classifiers) {
+            ClassifiedObject classifiedObject = new ClassifiedObject(classifier, (DataObjectEntity) entity);
+            esm.persist(em, classifiedObject);
+        }
+    }
+
     @Override
     public <E, I> boolean canDo(Operation operation, E entity, Class<I> itemClass, Object... extraParameters) {
         return true;
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
         throw new UnsupportedOperationException("Not supported operation for entityClass=" + entityClass +
                 " with parameters " + Arrays.asList(extraParameters));
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         throw new UnsupportedOperationException("Not supported operation for itemClass=" + itemClass +
                 " for entity=" + entity +
                 " with parameters " + Arrays.asList(extraParameters));
@@ -137,9 +159,37 @@ public abstract class AbstractEntityService implements EntityService {
         return null;
     }
 
-    @Override
-    public <E> E save(E entity) {
+    protected <E> Map<String, Object> getParameters(E entity, Object... extraParameters) {
         TreeMap<String, Object> parameters = new TreeMap<String, Object>();
+
+        if(entity instanceof PersistentEntity && ((PersistentEntity) entity).getId() == null) {
+            setNewEntity(parameters);
+        }
+
+        if(extraParameters != null && extraParameters.length > 0) {
+            for(Object object : extraParameters) {
+                if(object instanceof List) {
+                    List list = (List) object;
+                    if(list.size() > 0) {
+                        Object item = list.get(0);
+                        if(item instanceof Classifier) {
+                            parameters.put(CLASSIFIERS, list);
+                        }
+                    }
+                }
+            }
+        }
+
+        return parameters;
+    }
+
+    protected List<Classifier> getClassifiers(Map<String, Object> parameters) {
+        return (List<Classifier>) parameters.get(CLASSIFIERS);
+    }
+
+    @Override
+    public <E> E save(E entity, Object... extraParameters) {
+        Map<String, Object> parameters = getParameters(entity, extraParameters);
         preSave(entity, parameters);
         esm.persist(em, entity);
         postSave(entity, parameters);
@@ -158,12 +208,12 @@ public abstract class AbstractEntityService implements EntityService {
     }
 
     @Override
-    public <E> E confirm(E entity) {
+    public <E> E confirm(E entity, Object... extraParameters) {
         if(!(entity instanceof BusinessDocument)) {
             throw new UnsupportedOperationException("Not supported entity: " + entity);
         }
 
-        TreeMap<String, Object> parameters = new TreeMap<String, Object>();
+        Map<String, Object> parameters = getParameters(entity, extraParameters);
         preConfirm(entity, parameters);
 
         if(entity instanceof BusinessDocument) {

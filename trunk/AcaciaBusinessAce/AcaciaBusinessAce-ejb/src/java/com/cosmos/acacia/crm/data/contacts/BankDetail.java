@@ -1,9 +1,11 @@
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.resource.TextResource;
 
 import java.io.Serializable;
@@ -17,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -24,32 +27,44 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "bank_details")
-@NamedQueries(
-    {
-          @NamedQuery
-             (
-                name = "BankDetail.findByParentDataObjectAndDeleted",
-                query = "select bd from BankDetail bd where bd.dataObject.parentDataObjectId = :parentDataObjectId and bd.dataObject.deleted = :deleted"
-             ),
-        @NamedQuery
-             (
-                name = "BankDetail.findByParentDataObjectIsNullAndDeleted",
-                query = "select bd from BankDetail bd where bd.dataObject.parentDataObjectId is null and bd.dataObject.deleted = :deleted"
-              )
+@Table(name = "bank_details",
+    uniqueConstraints={
+        @UniqueConstraint(columnNames={"address_id", "currency_id", "bank_id", "bank_branch_id"})
     }
 )
-public class BankDetail
-        extends DataObjectBean
-        implements Serializable, TextResource
-{
-    private static final long serialVersionUID = 1L;
+@NamedQueries({
+    @NamedQuery(
+        name = BankDetail.NQ_FIND_ALL,
+        query = "select t from BankDetail t" +
+                " where" +
+                "  t.address = :address" +
+                " order by t.currency, t.bank, t.bankBranch"
+    )
+})
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.BankDetailPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.BankDetailListPanel"
+)
+public class BankDetail extends DataObjectBean implements Serializable, TextResource {
 
+    private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "BankDetail";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    //
     @Id
     @Column(name = "bank_detail_id", nullable = false)
     @Property(title="Bank Detail ID", editable=false, readOnly=true, visible=false, hidden=true)
     @Type(type="uuid")
     private UUID bankDetailId;
+
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
+    @ManyToOne(optional = false)
+    @Property(title="Address", editable=false, readOnly=true, visible=false, hidden=true)
+    private Address address;
 
     @Column(name = "bank_account")
     @Property(title="Bank Account", propertyValidator=
@@ -95,11 +110,6 @@ public class BankDetail
     @Column(name = "is_default", nullable = false)
     @Property(title="Default")
     private boolean isDefault;
-
-    @Column(name = "parent_id")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
-    private UUID parentId;
 
     @JoinColumn(name = "bank_detail_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
@@ -159,14 +169,26 @@ public class BankDetail
         this.bankBranch = bankBranchId;
     }
 
-    @Override
-    public UUID getParentId() {
-        return parentId;
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+        if(address != null) {
+            setParentId(address.getAddressId());
+        } else {
+            setParentId(null);
+        }
     }
 
     @Override
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+    public UUID getParentId() {
+        if(address != null) {
+            return address.getAddressId();
+        }
+
+        return null;
     }
 
     public DbResource getCurrency() {

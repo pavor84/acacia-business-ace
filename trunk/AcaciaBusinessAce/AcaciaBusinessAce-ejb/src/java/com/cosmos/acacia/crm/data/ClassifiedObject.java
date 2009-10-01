@@ -70,6 +70,12 @@ public class ClassifiedObject implements Serializable {
         this.classifiedObjectPK = new ClassifiedObjectPK(classifierId, classifiedObjectId);
     }
 
+    public ClassifiedObject(Classifier classifier, DataObjectEntity classifiedObject) {
+        this.classifiedObjectPK = new ClassifiedObjectPK(classifier, classifiedObject);
+        this.classifier = classifier;
+        this.dataObject = classifiedObject.getDataObject();
+    }
+
     public ClassifiedObjectPK getClassifiedObjectPK() {
         return classifiedObjectPK;
     }

@@ -5,18 +5,27 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import java.io.Serializable;
 
 /**
  *
  * @author Miro
  */
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="",
+    entityListFormClassName=""
+)
 public class BasicOrganization implements Serializable {
 
     /**

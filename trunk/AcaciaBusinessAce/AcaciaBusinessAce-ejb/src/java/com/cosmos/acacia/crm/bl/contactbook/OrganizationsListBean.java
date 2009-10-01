@@ -72,7 +72,7 @@ public class OrganizationsListBean implements OrganizationsListRemote, Organizat
 
     @Override
     public List<Organization> getOrganizations(UUID parentId) {
-        return contactsService.getOrganizations(parentId);
+        return contactsService.getOrganizations(parentId, null);
     }
 
     @Override

@@ -34,6 +34,10 @@ public class ClassifiedObjectPK implements Serializable {
         this.classifiedObjectId = classifiedObjectId;
     }
 
+    public ClassifiedObjectPK(Classifier classifier, DataObjectEntity classifiedObject) {
+        this(classifier.getClassifierId(), classifiedObject.getId());
+    }
+
     public UUID getClassifierId() {
         return classifierId;
     }

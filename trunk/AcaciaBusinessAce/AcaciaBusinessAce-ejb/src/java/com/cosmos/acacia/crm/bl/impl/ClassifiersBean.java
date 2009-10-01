@@ -113,15 +113,15 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @SuppressWarnings("unchecked")
     @Override
     public List<ClassifierGroup> getClassifierGroups() {
-        Query q = em.createNamedQuery("ClassifierGroup.getAllNotDeleted");
-        q.setParameter("parentId", session.getOrganization().getId());
+        Query q = em.createNamedQuery(ClassifierGroup.NQ_FIND_ALL);
+        q.setParameter("businessPartnerId", session.getOrganization().getId());
         return new ArrayList<ClassifierGroup>(q.getResultList());
     }
 
     @Override
     public ClassifierGroup getClassifierGroup(String classifierGroupCode) {
-        Query q = em.createNamedQuery("ClassifierGroup.getByClassifierGroupCode");
-        q.setParameter("parentId", session.getOrganization().getId());
+        Query q = em.createNamedQuery(ClassifierGroup.NQ_FIND_BY_CODE);
+        q.setParameter("businessPartnerId", session.getOrganization().getId());
         q.setParameter("classifierGroupCode", classifierGroupCode);
         try {
             return (ClassifierGroup) q.getSingleResult();
@@ -132,21 +132,19 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Classifier> getClassifiers(ClassifierGroup classifierGroup, // UUID parentDataObjectId,
+    public List<Classifier> getClassifiers(ClassifierGroup classifierGroup,
             DataObjectType dataObjectType) {
 
         List<Classifier> result = null;
 
         Query q;
         if (classifierGroup != null) {
-            q = em.createNamedQuery("Classifier.findByGroup");
+            q = em.createNamedQuery(Classifier.NQ_FIND_BY_GROUP);
             q.setParameter("classifierGroup", classifierGroup);
         } else {
-            q = em.createNamedQuery("Classifier.findAll");
+            q = em.createNamedQuery(Classifier.NQ_FIND_ALL);
         }
-        q.setParameter("parentId", session.getOrganization().getId());
-
-        q.setParameter("deleted", false);
+        q.setParameter("businessPartnerId", session.getOrganization().getId());
         result = new ArrayList(q.getResultList());
         List<Classifier> mirror = new ArrayList<Classifier>(result);
 
@@ -200,18 +198,18 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     }
 
     @Override
-    public Classifier saveClassifier(Classifier classifier, UUID groupId) {
+    public Classifier saveClassifier(Classifier classifier) {
         if (classifier.getClassifierGroup().getIsSystemGroup()) {
             if (!session.isAdministrator()) {
                 throw new ValidationException("Classifier.err.systemGroupForbidden");
             }
         }
 
-        return saveClassifierLocal(classifier, groupId);
+        return saveClassifierLocal(classifier);
     }
 
     @Override
-    public Classifier saveClassifierLocal(Classifier classifier, UUID groupId) {
+    public Classifier saveClassifierLocal(Classifier classifier) {
         if (classifier.getParentId() == null) {
             classifier.setParentId(session.getOrganization().getId());
         }
@@ -376,11 +374,9 @@ public class ClassifiersBean implements ClassifiersRemote, ClassifiersLocal {
     @SuppressWarnings("unchecked")
     @Override
     public Classifier getClassifier(String code) {
-        System.out.println("getClassifier(code=" + code + ")");
-        Query q = em.createNamedQuery("Classifier.findByCode");
+        Query q = em.createNamedQuery(Classifier.NQ_FIND_BY_CODE);
         q.setParameter("classifierCode", code);
-        q.setParameter("deleted", false);
-        q.setParameter("parentId", session.getOrganization().getId());
+        q.setParameter("businessPartnerId", session.getOrganization().getId());
 
         /*List<Classifier> result = q.getResultList();
 

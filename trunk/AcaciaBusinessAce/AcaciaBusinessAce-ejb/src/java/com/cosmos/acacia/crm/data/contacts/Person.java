@@ -5,9 +5,11 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormContainer;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -28,10 +30,12 @@ import javax.persistence.DiscriminatorValue;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.JBPanel;
 import org.hibernate.annotations.Type;
 
 /**
@@ -78,6 +82,17 @@ CREATE UNIQUE INDEX uix_persons_names_birth_date_city
     )
 })
 @Form(
+    formContainers={
+        @FormContainer(
+            name=Person.PASSPORTS,
+            title="Passports",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=Passport.class
+        )
+    },
     serviceClass=ContactsServiceRemote.class,
     entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonPanel",
     entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
@@ -88,6 +103,8 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
     //
     private static final String CLASS_NAME = "Person";
     public static final String NQ_FIND_ALL_PERSONS = CLASS_NAME + ".findAll";
+    //
+    public static final String PASSPORTS = "Passports";
 
     @Basic(optional = false)
     @Column(name = "first_name", nullable = false, length = 24)

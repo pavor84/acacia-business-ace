@@ -5,6 +5,7 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -23,6 +24,7 @@ import javax.persistence.TemporalType;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -34,39 +36,39 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "passports")
-@NamedQueries(
-    {
-        @NamedQuery
-             (
-                 name = "Passport.findByParentDataObjectAndDeleted",
-                 query = "select p from Passport p where p.dataObject.parentDataObjectId = :parentDataObjectId and p.dataObject.deleted = :deleted"
-             ),
-                @NamedQuery
-                (
-                name = "Passport.findByParentDataObjectIsNullAndDeleted",
-                query = "select p from Passport p where p.dataObject.parentDataObjectId is null and p.dataObject.deleted = :deleted"
-                ),
-                @NamedQuery
-                (
-                    name = "Passport.findByNumber",
-                    query = "select p from Passport p where p.passportNumber=:number"
-                )
-    }
+@NamedQueries({
+    @NamedQuery(
+        name =  Passport.NQ_FIND_ALL,
+        query = "select t from Passport t" +
+                " where" +
+                "  t.person = :person" +
+                " order by t.passportType, t.passportNumber"
+    )
+})
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.PersonPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.PersonListPanel"
 )
 public class Passport extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    //
+    private static final String CLASS_NAME = "Passport";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    //
     @Id
     @Column(name = "passport_id", nullable = false)
     @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Type(type="uuid")
     private UUID passportId;
 
-    @Column(name = "parent_id", nullable = false)
-    @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
-    @Type(type="uuid")
-    private UUID parentId;
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    @ManyToOne
+    @Property(title="Person", customDisplay="${person.displayName}")
+    private Person person;
 
     @JoinColumn(name = "passport_type_id", referencedColumnName = "resource_id")
     @ManyToOne
@@ -123,14 +125,26 @@ public class Passport extends DataObjectBean implements Serializable {
         this.passportId = passportId;
     }
 
-    @Override
-    public UUID getParentId() {
-        return parentId;
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+        if(person != null) {
+            setParentId(person.getBusinessPartnerId());
+        } else {
+            setParentId(null);
+        }
     }
 
     @Override
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+    public UUID getParentId() {
+        if(person != null) {
+            return person.getParentId();
+        }
+
+        return null;
     }
 
     public String getPassportNumber() {
@@ -199,31 +213,6 @@ public class Passport extends DataObjectBean implements Serializable {
 
     public void setPassportType(DbResource passportType) {
         this.passportType = passportType;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (passportId != null ? passportId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Passport)) {
-            return false;
-        }
-        Passport other = (Passport) object;
-        if ((this.passportId == null && other.passportId != null) || (this.passportId != null && !this.passportId.equals(other.passportId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.Passport[passportId=" + passportId + "]";
     }
 
     @Override

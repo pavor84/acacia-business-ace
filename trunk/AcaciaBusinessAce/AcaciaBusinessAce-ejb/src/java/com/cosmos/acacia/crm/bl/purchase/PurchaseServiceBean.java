@@ -118,7 +118,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
         String entityClassName;
         if(PURCHASE_INVOICE_CLASS_NAME.equals(entityClassName = entityClass.getName())) {
             return (List<E>)getPurchaseInvoices();
@@ -128,7 +128,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         String itemClassName;
         if(PURCHASE_INVOICE_ITEM_CLASS_NAME.equals(itemClassName = itemClass.getName())) {
             return (List<I>)getPurchaseInvoiceItems((PurchaseInvoice)entity);
@@ -138,7 +138,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E> E save(E entity) {
+    public <E> E save(E entity, Object... extraParameters) {
         if(entity instanceof PurchaseInvoice) {
             return (E)savePurchaseInvoice((PurchaseInvoice)entity);
         } else if(entity instanceof PurchaseInvoiceItem) {
@@ -149,7 +149,7 @@ public class PurchaseServiceBean implements PurchaseServiceRemote, PurchaseServi
     }
 
     @Override
-    public <E> E confirm(E entity) {
+    public <E> E confirm(E entity, Object... extraParameters) {
         if(entity instanceof PurchaseInvoice) {
             return (E)confirmPurchaseInvoice((PurchaseInvoice)entity);
         }

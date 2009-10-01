@@ -4,6 +4,8 @@
  */
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import java.io.Serializable;
@@ -40,6 +42,13 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.communicationContact.communicationType, t.communicationContact.communicationValue"
     )
 })
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="",
+    entityListFormClassName=""
+)
 public class PersonalCommunicationContact extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

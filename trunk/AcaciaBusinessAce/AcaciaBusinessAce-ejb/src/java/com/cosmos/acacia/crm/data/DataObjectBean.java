@@ -14,7 +14,6 @@ import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextPane;
-import com.cosmos.util.PersistentEntity;
 import com.cosmos.util.ImageUtils;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -60,7 +59,7 @@ import javax.persistence.Transient;
         )
     }
 )
-public abstract class DataObjectBean implements PersistentEntity<DataObjectBean, UUID>,
+public abstract class DataObjectBean implements DataObjectEntity,
         PropertyChangeNotificationBroadcaster, Comparable<DataObjectBean> {
 
     public static final String MAIN_TABBED_PANE = "mainTabbedPane";
@@ -89,10 +88,12 @@ public abstract class DataObjectBean implements PersistentEntity<DataObjectBean,
     )
     private String notes;
 
+    @Override
     public abstract DataObject getDataObject();
 
     public abstract void setDataObject(DataObject dataObject);
 
+    @Override
     public abstract UUID getId();
 
     public abstract void setId(UUID id);

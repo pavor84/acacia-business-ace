@@ -66,7 +66,19 @@ USING btree
                 " where" +
                 "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
                 "  and t.dataObject.deleted = :deleted" +
-                "  and t.businessPartnerId != t.parentBusinessPartnerId"
+                "  and t.businessPartnerId != t.parentBusinessPartnerId" +
+                " order by t.organizationName"
+    ),
+    @NamedQuery(
+        name = Organization.NQ_FIND_ALL_ORGANIZATIONS_BY_CLASSIFIERS,
+        query = "select t from Organization t, ClassifiedObject t1" +
+                " where" +
+                "  t.parentBusinessPartnerId = :parentBusinessPartnerId" +
+                "  and t.dataObject.deleted = :deleted" +
+                "  and t.businessPartnerId != t.parentBusinessPartnerId" +
+                "  and t.businessPartnerId = t1.classifiedObjectPK.classifiedObjectId" +
+                "  and t1.classifier in (:classifiers)" +
+                " order by t.organizationName"
     ),
     @NamedQuery(
         name = Organization.NQ_FIND_ORGANIZATION_BY_NAME,
@@ -94,9 +106,13 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     //
     private static final String CLASS_NAME = "Organization";
     public static final String NQ_FIND_ALL_ORGANIZATIONS = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_ALL_ORGANIZATIONS_BY_CLASSIFIERS = CLASS_NAME + ".findAllByClassifiers";
     public static final String NQ_FIND_ORGANIZATION_BY_NAME = CLASS_NAME + ".findByName";
     public static final String NQ_FIND_SYSTEM_ORGANIZATION = CLASS_NAME + ".findSystemOrganization";
-
+    //
+    public static final String BUSINESS_UNITS = "BusinessUnits";
+    public static final String TEAMS = "Teams";
+    //
     @Basic(optional = false)
     @Column(name = "organization_name", nullable = false, length = 128)
     @Property(title="Organization Name",
@@ -159,6 +175,21 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     )
     private String uniqueIdentifierCode;
 
+    @Column(name = "registration_code", length = 32)
+    @Property(title="Registration Code",
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Registration Code:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
+    private String registrationCode;
+
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
     @Property(title="Registration Date",
@@ -175,20 +206,26 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     )
     private Date registrationDate;
 
-    @Column(name = "share_capital", precision = 19, scale = 4)
-    @Property(title="Share Capital",
+    @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
+    @ManyToOne
+    @Property(title="Registration Organization",
+        customDisplay="${registrationOrganization.organizationName}",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.contacts.OrganizationListPanel",
+            constructorParameters={@PropertyName(getter="'RegistryAgency'", setter="classifier")}
+        ),
         formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Share Capital:"
+                text="Registration Organization:"
             ),
             secondComponent=@Component(
-                componentClass=JBDecimalField.class
+                componentClass=JBComboList.class
             )
         )
     )
-    private BigDecimal shareCapital;
+    private Organization registrationOrganization;
 
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -210,6 +247,26 @@ public class Organization extends BusinessPartner implements Serializable, TextR
         )
     )
     private Address registrationAddress;
+
+    @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
+    @ManyToOne
+    @Property(title="Organization Type",
+        resourceDisplayInTable = ResourceDisplay.FullName,
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.enums.OrganizationType"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=PRIMARY_INFO,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Organization Type:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboBox.class
+            )
+        )
+    )
+    private DbResource organizationType;
 
     @JoinColumn(name = "administration_address_id", referencedColumnName = "address_id")
     @ManyToOne
@@ -252,45 +309,20 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     )
     private DbResource shareCapitalCurrency;
 
-    @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
-    @ManyToOne
-    @Property(title="Registration Organization",
-        customDisplay="${registrationOrganization.organizationName}",
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel"
-        ),
+    @Column(name = "share_capital", precision = 19, scale = 4)
+    @Property(title="Share Capital",
         formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
             firstComponent=@Component(
                 componentClass=JBLabel.class,
-                text="Registration Organization:"
+                text="Share Capital:"
             ),
             secondComponent=@Component(
-                componentClass=JBComboList.class
+                componentClass=JBDecimalField.class
             )
         )
     )
-    private Organization registrationOrganization;
-
-    @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
-    @ManyToOne
-    @Property(title="Organization Type",
-        resourceDisplayInTable = ResourceDisplay.FullName,
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.enums.OrganizationType"
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Organization Type:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
-    )
-    private DbResource organizationType;
+    private BigDecimal shareCapital;
 
     @Basic(optional = false)
     @Column(name = "is_active", nullable = false)
@@ -408,6 +440,14 @@ public class Organization extends BusinessPartner implements Serializable, TextR
 
     public void setRegistrationOrganization(Organization registrationOrganization) {
         this.registrationOrganization = registrationOrganization;
+    }
+
+    public String getRegistrationCode() {
+        return registrationCode;
+    }
+
+    public void setRegistrationCode(String registrationCode) {
+        this.registrationCode = registrationCode;
     }
 
     public DbResource getOrganizationType() {

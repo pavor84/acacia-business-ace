@@ -321,6 +321,10 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     }
 
 /*
+delete from classified_objects;
+delete from classifier_applied_for_dot;
+delete from classifiers;
+delete from classifier_groups;
 delete from registration_codes;
 delete from assembling_messages;
 delete from expressions;

@@ -41,20 +41,20 @@ public class LocationsServiceBean extends AbstractEntityService
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
         if(Country.class == entityClass) {
             return (List<E>) getCountries();
         }
 
-        return super.getEntities(entityClass, extraParameters);
+        return super.getEntities(entityClass, classifiers, extraParameters);
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         if(City.class == itemClass) {
             return (List<I>) getCities((Country) entity);
         }
 
-        return super.getEntityItems(entity, itemClass, extraParameters);
+        return super.getEntityItems(entity, itemClass, classifiers, extraParameters);
     }
 }

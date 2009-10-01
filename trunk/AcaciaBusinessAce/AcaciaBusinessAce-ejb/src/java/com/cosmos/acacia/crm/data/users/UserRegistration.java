@@ -294,7 +294,7 @@ public class UserRegistration extends DataObjectBean implements Serializable {
     )
     private Date birthDate;
 
-    @Property(title = "Birth place country", customDisplay = "${country.countryName}",
+    @Property(title = "Birth place country", customDisplay = "${birthPlaceCountry.countryName}",
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
         ),
@@ -311,7 +311,7 @@ public class UserRegistration extends DataObjectBean implements Serializable {
     )
     private Country birthPlaceCountry;
 
-    @Property(title = "Birth place city", customDisplay = "${country.countryName}",
+    @Property(title = "Birth place city", customDisplay = "${birthPlaceCity.countryName}",
         selectableList=@SelectableList(
             className="com.cosmos.acacia.crm.gui.location.CitiesListPanel",
             constructorParameters={

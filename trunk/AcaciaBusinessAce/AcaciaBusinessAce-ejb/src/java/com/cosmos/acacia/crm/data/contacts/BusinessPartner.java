@@ -20,6 +20,7 @@ import javax.persistence.Table;
 
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
@@ -38,7 +39,7 @@ import org.hibernate.annotations.Type;
 
 /**
  * Created	:	21.03.2008
- * @author	Petar Milev
+ * @author	Miroslav Nachev
  * @version $Id: $
  *
  */
@@ -74,7 +75,18 @@ import org.hibernate.annotations.Type;
             title="Addresses",
             container=@Component(
                 componentClass=JBPanel.class
-            )
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=Address.class
+        ),
+        @FormContainer(
+            name=BusinessPartner.POSITION_TYPES,
+            title="Position Types",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=PositionType.class
         )
     },
     serviceClass=ContactsServiceRemote.class,
@@ -92,6 +104,7 @@ public abstract class BusinessPartner extends DataObjectBean implements Serializ
             CLASS_NAME + ".findAllBusinessPartnersByClassifier";
     //
     public static final String ADDRESSES = "Addresses";
+    public static final String POSITION_TYPES = "PositionTypes";
     //
     public static final int DEFAULT_CURRENCY_INDEX =
             Property.CUSTOM_INDEX_VALUE + Property.STEP_VALUE * 100;

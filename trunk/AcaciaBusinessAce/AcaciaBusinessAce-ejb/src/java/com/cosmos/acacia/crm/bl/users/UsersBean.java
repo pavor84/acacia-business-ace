@@ -626,8 +626,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
         ClassifierGroup systemClassifierGroup = null;
         for(ClassifierGroup classifierGroup : ClassifierGroup.ConstantsMap.values()) {
             String code = classifierGroup.getClassifierGroupCode();
-            ClassifierGroup entity = classifiersManager.getClassifierGroup(code);
-            if(entity == null) {
+            ClassifierGroup entity;
+            if((entity = classifiersManager.getClassifierGroup(code)) == null) {
                 entity = (ClassifierGroup)classifierGroup.clone();
                 entity = classifiersManager.saveClassifierGroupLocal(entity);
                 log.info("New ClassifierGroup '" + entity + "' was added.");
@@ -644,7 +644,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
             if((entity = classifiersManager.getClassifier(code)) == null) {
                 entity = (Classifier)classifier.clone();
                 entity.setClassifierGroup(systemClassifierGroup);
-                entity = classifiersManager.saveClassifierLocal(entity, null);
+                entity = classifiersManager.saveClassifierLocal(entity);
                 log.info("New Classifier '" + entity + "' was added.");
             }
         }

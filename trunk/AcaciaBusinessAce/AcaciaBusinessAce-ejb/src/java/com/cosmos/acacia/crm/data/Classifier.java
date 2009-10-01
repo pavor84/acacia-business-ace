@@ -30,38 +30,47 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "classifiers")
-@NamedQueries(
-    {
-        @NamedQuery
-             (
-                name = "Classifier.findByGroup",
-                query = "select c from Classifier c" +
-                        " where c.classifierGroup = :classifierGroup" +
-                        "  and c.dataObject.deleted = :deleted" +
-                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
-             ),
-        @NamedQuery
-             (
-                name = "Classifier.findAll",
-                query = "select c from Classifier c" +
-                        " where c.dataObject.deleted = :deleted" +
-                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
-              ),
-        @NamedQuery
-            (
-                name = "Classifier.findByCode",
-                query = "select c from Classifier c" +
-                        " where c.classifierCode = :classifierCode" +
-                        "  and c.dataObject.deleted = :deleted" +
-                        "  and c.classifierGroup.dataObject.parentDataObjectId = :parentId"
-            )
-    }
+@Table(name = "classifiers"
+/*
+CREATE UNIQUE INDEX uix_classifiers_business_partner_classifier_code
+  ON classifiers
+  USING btree
+  (business_partner_id, lower(classifier_code::text));
+*/
 )
+@NamedQueries({
+    @NamedQuery(
+        name =  Classifier.NQ_FIND_ALL,
+        query = "select t from Classifier t" +
+                " where" +
+                "  t.businessPartnerId = :businessPartnerId" +
+                " order by t.classifierGroup, t.classifierCode"
+    ),
+    @NamedQuery(
+        name =  Classifier.NQ_FIND_BY_GROUP,
+        query = "select t from Classifier t" +
+                " where" +
+                "  t.businessPartnerId = :businessPartnerId" +
+                "  and t.classifierGroup = :classifierGroup" +
+                " order by t.classifierCode"
+    ),
+    @NamedQuery(
+        name =  Classifier.NQ_FIND_BY_CODE,
+        query = "select t from Classifier t" +
+                " where" +
+                "  t.businessPartnerId = :businessPartnerId" +
+                "  and lower(t.classifierCode) = lower(:classifierCode)"
+    )
+})
 public class Classifier extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
-
+    //
+    private static final String CLASS_NAME = "Classifier";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_CODE = CLASS_NAME + ".findByCode";
+    public static final String NQ_FIND_BY_GROUP = CLASS_NAME + ".findByGroup";
+    //
     public static final Classifier Employee = new Classifier();
     public static final Classifier Cashier = new Classifier();
     public static final Classifier Customer = new Classifier();
@@ -192,10 +201,10 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     @Property(title="Address Id", editable=false, readOnly=true, visible=false, hidden=true)
     private UUID classifierId;
 
-    @Column(name = "parent_id")
+    @Column(name = "business_partner_id", nullable=false)
     @Type(type="uuid")
-    @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private UUID parentId;
+    @Property(title="Business Partner Id", editable=false, readOnly=true, visible=false, hidden=true)
+    private UUID businessPartnerId;
 
     @Column(name = "classifier_code", nullable = false)
     @Property(title="Code", propertyValidator=
@@ -245,14 +254,22 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
         this.classifierId = classifierId;
     }
 
+    public UUID getBusinessPartnerId() {
+        return businessPartnerId;
+    }
+
+    public void setBusinessPartnerId(UUID businessPartnerId) {
+        this.businessPartnerId = businessPartnerId;
+    }
+
     @Override
     public UUID getParentId() {
-        return parentId;
+        return getBusinessPartnerId();
     }
 
     @Override
     public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+        setBusinessPartnerId(parentId);
     }
 
     public String getClassifierCode() {
@@ -288,6 +305,15 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("; code=").append(classifierCode);
+        sb.append(", group=").append(classifierGroup);
+        return sb.toString();
+    }
+
+    @Override
     public DataObject getDataObject() {
         return dataObject;
     }
@@ -298,40 +324,13 @@ public class Classifier extends DataObjectBean implements Serializable, TextReso
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (classifierId != null ? classifierId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Classifier)) {
-            return false;
-        }
-        Classifier other = (Classifier) object;
-        if ((this.classifierId == null && other.classifierId != null) || (this.classifierId != null && !this.classifierId.equals(other.classifierId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.cosmos.acacia.crm.data.Classifier[classifierId=" + classifierId +
-                ", code=" + classifierCode +
-                ", group=" + classifierGroup + "]";
-    }
-
-    @Override
     public UUID getId() {
-        return classifierId;
+        return getClassifierId();
     }
 
     @Override
     public void setId(UUID id) {
-        this.classifierId = id;
+        setClassifierId(id);
     }
 
     @Override

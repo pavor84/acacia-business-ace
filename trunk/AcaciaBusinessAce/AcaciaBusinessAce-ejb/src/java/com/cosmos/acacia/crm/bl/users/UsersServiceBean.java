@@ -269,7 +269,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
         if(!canDo(Operation.Read, null, entityClass, extraParameters)) {
             return Collections.emptyList();
         }
@@ -302,11 +302,11 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             return new ArrayList<E>(2);
         }
 
-        return super.getEntities(entityClass, extraParameters);
+        return super.getEntities(entityClass, classifiers, extraParameters);
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         if(!canDo(Operation.Read, entity, itemClass, extraParameters)) {
             return Collections.emptyList();
         }
@@ -349,7 +349,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             }
         }
 
-        return super.getEntityItems(entity, itemClass, extraParameters);
+        return super.getEntityItems(entity, itemClass, classifiers, extraParameters);
     }
 
     @Override
@@ -394,7 +394,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public <E> E save(E entity) {
+    public <E> E save(E entity, Object... extraParameters) {
         if(entity instanceof UserRegistration) {
             return (E) saveUserRegistration((UserRegistration) entity);
         }
@@ -459,7 +459,6 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             BusinessUnit businessUnit = (BusinessUnit) entity;
             preSaveBusinessUnit(businessUnit);
         } else if(entity instanceof UserOrganization) {
-            preSaveUserOrganization((UserOrganization) entity, parameters);
         }
     }
 
@@ -487,12 +486,6 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             postSaveBusinessUnit(businessUnit);
         } else if (entity instanceof UserOrganization) {
             postSaveUserOrganization((UserOrganization) entity, parameters);
-        }
-    }
-
-    private void preSaveUserOrganization(UserOrganization userOrganization, Map<String, Object> parameters) {
-        if(userOrganization.getUserOrganizationId() == null) {
-            setNewEntity(parameters);
         }
     }
 
