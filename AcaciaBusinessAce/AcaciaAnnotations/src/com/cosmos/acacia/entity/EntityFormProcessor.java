@@ -230,6 +230,10 @@ public class EntityFormProcessor {
 
         String componentConstraints = component.componentConstraints();
         JComponent container = getContainer(parentContainerName);
+        if(container == null) {
+            throw new NullPointerException("Unknown parentContainerName='" + parentContainerName +
+                    "' for component=" + component + " and field=" + field);
+        }
         if ("".equals(componentConstraints)) {
             container.add(jComponent);
         } else {
@@ -664,6 +668,9 @@ public class EntityFormProcessor {
         merge(columnsConstraints, layout.extraColumnsConstraints());
         merge(rowsConstraints, layout.extraRowsConstraints());
 
+//        System.out.println("new MigLayout(" + constraints +
+//                ", " + toString(columnsConstraints, columnsGaps) +
+//                ", " + toString(rowsConstraints, rowsGaps) + ")");
         return new MigLayout(constraints,
                 toString(columnsConstraints, columnsGaps),
                 toString(rowsConstraints, rowsGaps));
