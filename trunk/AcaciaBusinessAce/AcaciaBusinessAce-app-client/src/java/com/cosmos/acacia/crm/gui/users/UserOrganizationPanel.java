@@ -16,6 +16,6 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class UserOrganizationPanel extends EntityPanel<UserOrganization> {
 
     public UserOrganizationPanel(AbstractEntityListPanel entityListPanel, UserOrganization entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 }

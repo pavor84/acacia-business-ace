@@ -19,7 +19,7 @@ public class SecurityRolePanel extends EntityPanel<SecurityRole> {
 
 
     public SecurityRolePanel(AbstractEntityListPanel entityListPanel, SecurityRole entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

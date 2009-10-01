@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class EntityListPanel<E extends PersistentEntity> extends AbstractEntityListPanel<E> {
 
-    public EntityListPanel(Class<E> entityClass, Classifier classifier, Object... parameters) {
-        super(entityClass, classifier, parameters);
+    public EntityListPanel(Class<E> entityClass, List<Classifier> classifiers, Object... parameters) {
+        super(entityClass, classifiers, parameters);
     }
 
     @Override
     public List<E> getEntities() {
-        return getEntityService().getEntities(getEntityClass());
+        return getEntityService().getEntities(getEntityClass(), getClassifiers());
     }
 
     @Override

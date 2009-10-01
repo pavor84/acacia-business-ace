@@ -15,7 +15,7 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class UserRegistrationPanel extends EntityPanel<UserRegistration> {
 
     public UserRegistrationPanel(UserRegistration entity) {
-        super(new UserRegistrationEntityListPanel(), entity);
+        super(new UserRegistrationEntityListPanel(), entity, null);
     }
 
     private static class UserRegistrationEntityListPanel extends EntityListPanel<UserRegistration> {

@@ -33,9 +33,9 @@ public class UserListPanel extends EntityListPanel<User> {
         User user;
         Class entityClass = getEntityClass();
         if((user = getUser()) != null) {
-            return getEntityService().getEntities(entityClass, user);
+            return getEntityService().getEntities(entityClass, getClassifiers(), user);
         } else {
-            return getEntityService().getEntities(entityClass);
+            return getEntityService().getEntities(entityClass, getClassifiers());
         }
     }
 

@@ -19,7 +19,7 @@ public class PrivilegeCategoryPanel extends EntityPanel<PrivilegeCategory> {
 
 
     public PrivilegeCategoryPanel(AbstractEntityListPanel entityListPanel, PrivilegeCategory entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

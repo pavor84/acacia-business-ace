@@ -46,17 +46,17 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
     private EntityProperties entityProperties;
     private E entity;
 
-    protected AbstractEntityListPanel(Class<E> entityClass, Classifier classifier, Object... parameters) {
-        super(null, null, entityClass, classifier, parameters);
+    protected AbstractEntityListPanel(Class<E> entityClass, List<Classifier> classifiers, Object... parameters) {
+        super(null, null, entityClass, classifiers, parameters);
     }
 
     protected AbstractEntityListPanel(
             EntityPanel mainEntityPanel,
             Object mainEntity,
             Class<E> itemEntityClass,
-            Classifier classifier,
+            List<Classifier> classifiers,
             Object... parameters) {
-        super(mainEntityPanel, mainEntity, itemEntityClass, classifier, parameters);
+        super(mainEntityPanel, mainEntity, itemEntityClass, classifiers, parameters);
     }
 
     protected EntityPanel getMainEntityPanel() {
@@ -293,7 +293,7 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
     protected abstract E newEntity(Class<E> entityClass);
 
     protected EntityPanel getEntityPanel(E entity) {
-        return new EntityPanel(this, entity);
+        return new EntityPanel(this, entity, getClassifiers());
     }
 
     @Override
