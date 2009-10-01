@@ -156,7 +156,7 @@ public class LocationsListBean implements LocationsListRemote, LocationsListLoca
             return new ArrayList<Address>();
         }
 
-        Query query = em.createNamedQuery(Address.FIND_ALL);
+        Query query = em.createNamedQuery(Address.NQ_FIND_ALL);
         query.setParameter("businessPartner", businessPartner);
 
         return new ArrayList<Address>(query.getResultList());

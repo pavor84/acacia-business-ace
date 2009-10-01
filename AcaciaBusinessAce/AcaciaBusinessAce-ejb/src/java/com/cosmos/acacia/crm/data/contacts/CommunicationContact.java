@@ -5,9 +5,11 @@ package com.cosmos.acacia.crm.data.contacts;
  * and open the template in the editor.
  */
 
+import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
@@ -70,6 +72,13 @@ CREATE UNIQUE INDEX uix_communication_contacts_parent_type_value_contact_person
                 "  and cc.dataObject.parentDataObjectId = :parentDataObjectId"
     )*/
 })
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="",
+    entityListFormClassName=""
+)
 public class CommunicationContact extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

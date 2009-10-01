@@ -5,14 +5,29 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.BorderType;
+import com.cosmos.acacia.annotation.Component;
+import com.cosmos.acacia.annotation.ComponentBorder;
+import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.FormContainer;
+import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
+import com.cosmos.swingb.JBComboList;
+import com.cosmos.swingb.JBLabel;
+import com.cosmos.swingb.JBPanel;
+import com.cosmos.swingb.JBTextField;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -42,11 +57,19 @@ CREATE UNIQUE INDEX uix_addresses_business_partner_address_name
 )
 @NamedQueries({
     @NamedQuery(
-        name=Address.FIND_ALL,
+        name=Address.NQ_FIND_ALL,
         query = "select t from Address t" +
                 " where" +
                 "  t.businessPartner = :businessPartner" +
                 " order by t.country, t.city, t.addressName"
+    ),
+    @NamedQuery(
+        name=Address.NQ_FIND_ALL_BY_NAME_PREFIX,
+        query = "select t from Address t" +
+                " where" +
+                "  t.businessPartner = :businessPartner" +
+                "  and t.addressName like :namePrefix" +
+                " order by t.addressName"
     )/*,
     @NamedQuery(
         name = "Address.findByParentDataObjectAndDeleted",
@@ -63,21 +86,93 @@ CREATE UNIQUE INDEX uix_addresses_business_partner_address_name
         query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObjectId = :parentDataObjectId"
     )*/
 })
+@Form(
+    formContainers={
+        @FormContainer(
+            name=DataObjectBean.PRIMARY_INFO,
+            title="Primary Info",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            layout=@Layout(extraRowsConstraints={"", "fill, grow"}),
+            componentIndex=1
+        ),
+        @FormContainer(
+            name=Address.ADDRESS_DETAILS,
+            title="Address Details",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Address Details"
+                ),
+                componentConstraints="span, growx"
+            ),
+            parentContainerName=DataObjectBean.PRIMARY_INFO
+        ),
+        @FormContainer(
+            name=Address.CONTACT_PERSONS,
+            title="Contact Persons",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Contact Persons"
+                ),
+                componentConstraints="spanx 2, grow"
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=ContactPerson.class,
+            parentContainerName=DataObjectBean.PRIMARY_INFO
+        ),
+        @FormContainer(
+            name=Address.COMMUNICATION_CONTACTS,
+            title="Communication Contacts",
+            container=@Component(
+                componentClass=JBPanel.class,
+                componentBorder=@ComponentBorder(
+                    borderType=BorderType.TitledBorder, title="Communication Contacts"
+                ),
+                componentConstraints="spanx 2, grow"
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=CommunicationContact.class,
+            parentContainerName=DataObjectBean.PRIMARY_INFO
+        ),
+        @FormContainer(
+            name=Address.BANK_DETAILS,
+            title="Bank Details",
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=BankDetail.class
+        )
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.AddressPanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.AddressListPanel"
+)
 public class Address extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
     //
     private static final String CLASS_NAME = "Address";
-    public static final String FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_ALL_BY_NAME_PREFIX = CLASS_NAME + ".findAllByNamePrefix";
     //
     public static final String NAME_HEADQUARTER = "Headquarter";
     public static final String NAME_POST_ADDRESS = "Post Address";
     public static final String NAME_REGISTRATION_ADDRESS = "Registration Address";
-    public static final String NAME_BILL_TO_ADDRESS = "Bill To Address";
-    public static final String NAME_SHIP_TO_ADDRESS = "Ship To Address";
-    public static final String NAME_OFFICE_ADDRESS = "Office Address";
-    public static final String NAME_HOME_ADDRESS = "Home Address";
-
+    public static final String NAME_BILL_TO_ADDRESS = "Bill To";
+    public static final String NAME_SHIP_TO_ADDRESS = "Ship To";
+    public static final String NAME_OFFICE_ADDRESS = "Office";
+    public static final String NAME_HOME_ADDRESS = "Home";
+    //
+    public static final String ADDRESS_DETAILS = "AddressDetails";
+    public static final String CONTACT_PERSONS = "ContactPersons";
+    public static final String COMMUNICATION_CONTACTS = "CommunicationContacts";
+    public static final String BANK_DETAILS = "BankDetails";
+    public static final String POSTAL_ADDRESS = "PostalAddress";
+    //
     @Id
     @Basic(optional = false)
     @Type(type="uuid")
@@ -94,25 +189,90 @@ public class Address extends DataObjectBean implements Serializable, TextResourc
     @Basic(optional = false)
     @Column(name = "address_name", nullable = false, length = 64)
     @Property(title="Name",
-            propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, required = true))
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, minLength=2, maxLength=64, required = true),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=ADDRESS_DETAILS,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Name:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String addressName;
 
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     @ManyToOne
-    @Property(title="Country", customDisplay="${country.countryName}")
+    @Property(title = "Country", customDisplay = "${country.countryName}",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=ADDRESS_DETAILS,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Country:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private Country country;
 
     @JoinColumn(name = "city_id", referencedColumnName = "city_id")
     @ManyToOne
-    @Property(title="City", customDisplay="${city.cityName}")
+    @Property(title="City", customDisplay="${city.cityName}",
+        selectableList=@SelectableList(
+            className="com.cosmos.acacia.crm.gui.location.CitiesListPanel",
+            constructorParameters={
+                @PropertyName(getter="country")
+            }
+        ),
+        formComponentPair=@FormComponentPair(
+            parentContainerName=ADDRESS_DETAILS,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="City:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBComboList.class
+            )
+        )
+    )
     private City city;
 
     @Column(name = "postal_code", length = 16)
-    @Property(title="Postcal Code")
+    @Property(title="Postcal Code",
+        formComponentPair=@FormComponentPair(
+            parentContainerName=ADDRESS_DETAILS,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Postcal Code:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class
+            )
+        )
+    )
     private String postalCode;
 
     @Column(name = "postal_address", length = 128)
-    @Property(title="Postal Address")
+    @Property(title="Postal Address",
+        formComponentPair=@FormComponentPair(
+            parentContainerName=ADDRESS_DETAILS,
+            firstComponent=@Component(
+                componentClass=JBLabel.class,
+                text="Postal Address:"
+            ),
+            secondComponent=@Component(
+                componentClass=JBTextField.class,
+                componentConstraints="span, growx"
+            )
+        )
+    )
     private String postalAddress;
 
     @JoinColumn(name = "address_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)

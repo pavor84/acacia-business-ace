@@ -63,7 +63,7 @@ public interface ClassifiersRemote {
      * @param parentDataObjectId the parent object id (classifier group)
      * @return the saved classifier
      */
-    Classifier saveClassifier(Classifier classifier, UUID parentDataObjectId);
+    Classifier saveClassifier(Classifier classifier);
 
     /**
      * Deletes the specified classifier

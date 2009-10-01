@@ -105,7 +105,7 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     @Override
-    public List getEntities(Class entityClass, Object... extraParameters) {
+    public List getEntities(Class entityClass, List classifiers, Object... extraParameters) {
         if(CurrencyExchangeRate.class == entityClass) {
             if(extraParameters.length < 1) {
                 throw new IllegalArgumentException("The ratesForDate parameter is required.");
@@ -118,12 +118,12 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public <E> E save(E entity) {
+    public <E> E save(E entity, Object... extraParameters) {
         if(entity instanceof CurrencyExchangeRate) {
             return (E)saveCurrencyExchangeRate((CurrencyExchangeRate)entity);
         }
@@ -160,7 +160,7 @@ public class CurrencyBean implements CurrencyRemote, CurrencyLocal {
     }
 
     @Override
-    public <E> E confirm(E entity) {
+    public <E> E confirm(E entity, Object... extraParameters) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

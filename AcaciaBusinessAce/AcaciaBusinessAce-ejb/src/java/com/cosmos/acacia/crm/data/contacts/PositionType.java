@@ -43,27 +43,24 @@ CREATE UNIQUE INDEX uix_position_types
 )
 @NamedQueries({
     @NamedQuery(
-        name = "PositionType.findAll",
-        query = "SELECT t FROM PositionType t" +
-                " WHERE" +
-                "  t.businessPartner = :businessPartner"
-    ),
-    @NamedQuery(
-        name = "PositionType.findByPositionTypeName",
+        name = PositionType.NQ_FIND_ALL,
         query = "SELECT t FROM PositionType t" +
                 " WHERE" +
                 "  t.businessPartner = :businessPartner" +
-                "  and t.positionTypeName = :positionTypeName"
+                " order by t.positionTypeName"
     )
 })
 @Form(
     serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.PositionTypePanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.PositionTypesListPanel"
+    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.PositionTypePanel",
+    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.PositionTypeListPanel"
 )
 public class PositionType extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
+    //
+    private static final String CLASS_NAME = "PositionType";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     //
     @Id
     @Basic(optional = false)

@@ -19,5 +19,5 @@ public interface ClassifiersLocal
     extends ClassifiersRemote
 {
     ClassifierGroup saveClassifierGroupLocal(ClassifierGroup classifierGroup);
-    Classifier saveClassifierLocal(Classifier classifier, UUID groupId);
+    Classifier saveClassifierLocal(Classifier classifier);
 }

@@ -5,8 +5,10 @@ package com.cosmos.acacia.crm.data.contacts;
  * and open the template in the editor.
  */
 
+import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.resource.TextResource;
@@ -36,6 +38,13 @@ import org.hibernate.annotations.Type;
     )
 )
 @NamedQueries({
+    @NamedQuery(
+        name = ContactPerson.NQ_FIND_ALL,
+        query = "select t from ContactPerson t" +
+                " where" +
+                "  t.address = :address" +
+                " order by t.person.firstName, t.person.lastName"
+    )
     /*@NamedQuery(
        name = "ContactPerson.findByParentDataObjectAndDeleted",
        query = "select cp from ContactPerson cp where cp.dataObject.parentDataObjectId = :parentDataObjectId and cp.dataObject.deleted = :deleted"
@@ -73,10 +82,20 @@ import org.hibernate.annotations.Type;
         "  and t2.classifiedObjectPK.classifierId = :classifierId"
     )*/
 })
+@Form(
+    formContainers={
+    },
+    serviceClass=ContactsServiceRemote.class,
+    entityFormClassName="",
+    entityListFormClassName=""
+)
 public class ContactPerson extends DataObjectBean implements TextResource, Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    //
+    private static final String CLASS_NAME = "ContactPerson";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    //
     @Id
     @Basic(optional = false)
     @Type(type="uuid")

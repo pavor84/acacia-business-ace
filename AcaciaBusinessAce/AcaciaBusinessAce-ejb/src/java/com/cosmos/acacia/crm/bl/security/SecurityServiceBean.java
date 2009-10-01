@@ -15,7 +15,6 @@ import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
 import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
-import com.cosmos.acacia.crm.data.users.User;
 import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.PermissionCategory;
@@ -128,7 +127,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
         if(!canDo(Operation.Read, null, entityClass, extraParameters)) {
             return Collections.emptyList();
         }
@@ -150,11 +149,11 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
             }
         }
 
-        return super.getEntities(entityClass, extraParameters);
+        return super.getEntities(entityClass, classifiers, extraParameters);
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
         if(!canDo(Operation.Read, entity, itemClass, extraParameters)) {
             return Collections.emptyList();
         }
@@ -165,7 +164,7 @@ public class SecurityServiceBean extends AbstractEntityService implements Securi
             return (List<I>) getPrivilegeRoles((Privilege) entity);
         }
 
-        return super.getEntityItems(entity, itemClass, extraParameters);
+        return super.getEntityItems(entity, itemClass, classifiers, extraParameters);
     }
 
     @Override

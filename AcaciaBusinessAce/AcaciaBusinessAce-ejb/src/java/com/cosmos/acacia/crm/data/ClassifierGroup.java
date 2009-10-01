@@ -29,34 +29,38 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "classifier_groups")
-@NamedQueries(
-    {
-        /**
-         * All not deleted classifier groups.
-         */
-        @NamedQuery
-            (
-            name = "ClassifierGroup.getAllNotDeleted",
-            query = "select cg from ClassifierGroup cg " +
-                    " where cg.dataObject.deleted = false" +
-                    "  and cg.dataObject.parentDataObjectId=:parentId"
-            ),
-        @NamedQuery
-            (
-            name = "ClassifierGroup.getByClassifierGroupCode",
-            query = "select cg from ClassifierGroup cg " +
-                    " where cg.dataObject.deleted = false" +
-                    "  and cg.dataObject.parentDataObjectId=:parentId" +
-                    "  and cg.classifierGroupCode = :classifierGroupCode"
-            )
-    }
+@Table(name = "classifier_groups"
+/*
+CREATE UNIQUE INDEX uix_classifier_groups_business_partner_classifier_group_code
+  ON classifier_groups
+  USING btree
+  (business_partner_id, lower(classifier_group_code::text));
+*/
 )
-public class ClassifierGroup extends DataObjectBean
-        implements Serializable, TextResource {
+@NamedQueries({
+    @NamedQuery(
+        name =  ClassifierGroup.NQ_FIND_ALL,
+        query = "select t from ClassifierGroup t" +
+                " where" +
+                "  t.businessPartnerId = :businessPartnerId" +
+                " order by t.classifierGroupCode"
+    ),
+    @NamedQuery(
+        name =  ClassifierGroup.NQ_FIND_BY_CODE,
+        query = "select t from ClassifierGroup t" +
+                " where" +
+                "  t.businessPartnerId = :businessPartnerId" +
+                "  and lower(t.classifierGroupCode) = lower(:classifierGroupCode)"
+    )
+})
+public class ClassifierGroup extends DataObjectBean implements Serializable, TextResource {
 
     private static final long serialVersionUID = 1L;
-
+    //
+    private static final String CLASS_NAME = "ClassifierGroup";
+    public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
+    public static final String NQ_FIND_BY_CODE = CLASS_NAME + ".findByCode";
+    //
     public static final ClassifierGroup System =
             new ClassifierGroup();
 
@@ -84,10 +88,10 @@ public class ClassifierGroup extends DataObjectBean
     @Property(title="Classifier Group Id", editable=false, readOnly=true, visible=false, hidden=true)
     private UUID classifierGroupId;
 
-    @Column(name = "parent_id")
+    @Column(name = "business_partner_id", nullable=false)
     @Type(type="uuid")
     @Property(title="Parent Id", editable=false, readOnly=true, visible=false, hidden=true)
-    private UUID parentId;
+    private UUID businessPartnerId;
 
     @Column(name = "classifier_group_code", nullable = false)
     @Property(title="Group Code", propertyValidator=
@@ -133,14 +137,22 @@ public class ClassifierGroup extends DataObjectBean
         this.classifierGroupId = classifierGroupId;
     }
 
+    public UUID getBusinessPartnerId() {
+        return businessPartnerId;
+    }
+
+    public void setBusinessPartnerId(UUID businessPartnerId) {
+        this.businessPartnerId = businessPartnerId;
+    }
+
     @Override
     public UUID getParentId() {
-        return parentId;
+        return getBusinessPartnerId();
     }
 
     @Override
     public void setParentId(UUID parentId) {
-        this.parentId = parentId;
+        setBusinessPartnerId(parentId);
     }
 
     public boolean getIsSystemGroup() {
@@ -186,29 +198,12 @@ public class ClassifierGroup extends DataObjectBean
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (classifierGroupId != null ? classifierGroupId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ClassifierGroup)) {
-            return false;
-        }
-        ClassifierGroup other = (ClassifierGroup) object;
-        if ((this.classifierGroupId == null && other.classifierGroupId != null) || (this.classifierGroupId != null && !this.classifierGroupId.equals(other.classifierGroupId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.ClassifierGroup[classifierGroupId=" + classifierGroupId +
-                ", code=" + classifierGroupCode + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("; code=").append(classifierGroupCode);
+        sb.append(", name=").append(classifierGroupName);
+        return sb.toString();
     }
 
     @Override

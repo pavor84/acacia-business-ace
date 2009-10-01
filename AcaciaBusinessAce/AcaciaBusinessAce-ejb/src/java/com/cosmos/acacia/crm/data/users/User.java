@@ -205,7 +205,7 @@ public class User extends DataObjectBean implements Serializable {
         editable=false,
         readOnly=true,
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
+            className="com.cosmos.acacia.crm.gui.contacts.PersonListPanel"
         ),
         formComponentPair=@FormComponentPair(
             parentContainerName=INFO_GENERAL,
