@@ -49,12 +49,14 @@ public class OrganizationPanel extends BaseEntityPanel {
         super(organization.getDataObject().getParentDataObjectId());
         this.organization = organization;
         init();
+        throw new UnsupportedOperationException("To be Removed.");
     }
 
     /** Creates new form organizationPanel */
     public OrganizationPanel(UUID parentDataObjectId) {
         super(parentDataObjectId);
         init();
+        throw new UnsupportedOperationException("To be Removed.");
     }
 
     public OrganizationPanel() {
@@ -62,6 +64,7 @@ public class OrganizationPanel extends BaseEntityPanel {
         isInternal = true;
         this.organization = getAcaciaSession().getOrganization();
         init();
+        throw new UnsupportedOperationException("To be Removed.");
     }
 
     @Override

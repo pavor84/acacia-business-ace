@@ -39,7 +39,7 @@ public class PurchaseInvoicePanel extends BusinessDocumentPanel<PurchaseInvoice>
     protected static final String INVOICE_PROPERTY_NAME = "invoice";
 
     public PurchaseInvoicePanel(AbstractEntityListPanel entityListPanel, PurchaseInvoice entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class PurchaseInvoicePanel extends BusinessDocumentPanel<PurchaseInvoice>
         String unitPricePropertyName = PurchaseInvoiceItemPanel.RECEIVED_PRICE_PROPERTY_NAME;
         String extPricePropertyName = PurchaseInvoiceItemPanel.EXTENDED_PRICE_PROPERTY_NAME;
         PurchaseInvoice invoice = getEntity();
-        List<PurchaseInvoiceItem> itemList = getEntityService().getEntityItems(invoice, PurchaseInvoiceItem.class);
+        List<PurchaseInvoiceItem> itemList = getEntityService().getEntityItems(invoice, PurchaseInvoiceItem.class, getClassifiers());
         AcaciaSessionRemote session = getAcaciaSession();
         String unitPriceExpression = session.getExpression(PurchaseInvoiceItem.class, unitPricePropertyName);
         String extPriceExpression = session.getExpression(PurchaseInvoiceItem.class, extPricePropertyName);

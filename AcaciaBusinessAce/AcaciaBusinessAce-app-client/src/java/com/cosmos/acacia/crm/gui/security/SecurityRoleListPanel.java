@@ -47,11 +47,11 @@ public class SecurityRoleListPanel extends EntityListPanel<SecurityRole> {
         UserOrganization userOrganization;
         Class entityClass = getEntityClass();
         if((businessUnit = getBusinessUnit()) != null) {
-            return getEntityService().getEntities(entityClass, businessUnit);
+            return getEntityService().getEntities(entityClass, getClassifiers(), businessUnit);
         } else if((userOrganization = getUserOrganization()) != null) {
-            return getEntityService().getEntities(entityClass, userOrganization, getUserSecurityRole());
+            return getEntityService().getEntities(entityClass, getClassifiers(), userOrganization, getUserSecurityRole());
         } else {
-            return getEntityService().getEntities(entityClass);
+            return getEntityService().getEntities(entityClass, getClassifiers());
         }
     }
 

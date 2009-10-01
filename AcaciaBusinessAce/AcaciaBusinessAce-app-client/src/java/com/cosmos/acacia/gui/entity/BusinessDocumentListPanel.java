@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import java.util.Arrays;
 
 /**
  *
@@ -18,7 +19,7 @@ import com.cosmos.acacia.crm.enums.DocumentType;
 public class BusinessDocumentListPanel<E extends BusinessDocument> extends EntityListPanel<E> {
 
     public BusinessDocumentListPanel(Class<E> entityClass, Classifier classifier) {
-        super(entityClass, classifier);
+        super(entityClass, Arrays.asList(classifier));
     }
 
     public DocumentStatus getStatus(E entity) {

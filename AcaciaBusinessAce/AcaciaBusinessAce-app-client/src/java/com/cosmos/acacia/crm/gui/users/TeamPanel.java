@@ -20,7 +20,7 @@ public class TeamPanel extends EntityPanel<Team> {
 
 
     public TeamPanel(AbstractEntityListPanel entityListPanel, Team entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

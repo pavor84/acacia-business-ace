@@ -16,6 +16,6 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class BusinessUnitAddressPanel extends EntityPanel<BusinessUnitAddress> {
 
     public BusinessUnitAddressPanel(AbstractEntityListPanel entityListPanel, BusinessUnitAddress entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 }

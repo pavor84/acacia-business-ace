@@ -76,7 +76,7 @@ public class ClassifiersTest {
         classifier.setClassifierGroup(group);
         classifier.setClassifierCode(TestUtils.getRandomString(10));
         classifier.setClassifierName(TestUtils.getRandomString(10));
-        classifier = formSession.saveClassifier(classifier, group.getId());
+        classifier = formSession.saveClassifier(classifier);
 
         // Get a data object - the one of the group
         DataObject dataObject = group.getDataObject();

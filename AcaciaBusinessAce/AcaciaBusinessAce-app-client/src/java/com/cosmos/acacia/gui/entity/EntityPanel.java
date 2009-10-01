@@ -11,6 +11,7 @@ import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
+import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.entity.ContainerEntity;
 import com.cosmos.acacia.entity.EntityFormProcessor;
@@ -87,8 +88,8 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     private ELContext elContext;
     protected DataMode dataMode;
 
-    public EntityPanel(AbstractEntityListPanel entityListPanel, E entity, Object... parameters) {
-        super(entity, parameters);
+    public EntityPanel(AbstractEntityListPanel entityListPanel, E entity, List<Classifier> classifiers, Object... parameters) {
+        super(entity, classifiers, parameters);
         this.entityListPanel = entityListPanel;
         this.entityClass = (Class<E>) getEntity().getClass();
         init();
@@ -491,35 +492,32 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         }
     }
 
-    protected SelectableListDialog getSelectableListDialog(EntityProperty propertyDetails,
+    protected SelectableListDialog getSelectableListDialog(EntityProperty entityProperty,
             EntityProperties entityProps, JComponent jComponent) {
         Class<? extends SelectableListDialog> cls = null;
         Class[] parameterTypes = null;
         Object[] parameterValues = null;
         try {
-            if ((cls = (Class<? extends SelectableListDialog>) getSelectableListDialogClass(propertyDetails)) != null) {
-                List<PropertyDetail> params;
-                if ((params = propertyDetails.getSelectableListDialogConstructorParameters()) == null || params.size() == 0) {
-                    return cls.newInstance();
-                }
-
-                addDependenciesByParameters(jComponent.getName(), params);
-                parameterTypes = getParameterTypes(params, entityProps, cls);
-                parameterValues = getParameters(params, parameterTypes);
-                SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
-                PropertyChangeHandler handler = getPropertyChangeHandler();
-                handler.addPropertyBean(params, listDialog, jComponent);
-
-                return listDialog;
+            cls = (Class<? extends SelectableListDialog>) getSelectableListDialogClass(entityProperty);
+            List<PropertyDetail> params;
+            if ((params = entityProperty.getSelectableListDialogConstructorParameters()) == null || params.size() == 0) {
+                return cls.newInstance();
             }
+
+            addDependenciesByParameters(jComponent.getName(), params);
+            parameterTypes = getParameterTypes(params, entityProps, cls);
+            parameterValues = getParameters(params, parameterTypes);
+            SelectableListDialog listDialog = (SelectableListDialog) ConstructorUtils.invokeConstructor(cls, parameterValues, parameterTypes);
+            PropertyChangeHandler handler = getPropertyChangeHandler();
+            handler.addPropertyBean(params, listDialog, jComponent);
+
+            return listDialog;
         } catch (Exception ex) {
-            throw new EntityPanelException("propertyDetails: " + propertyDetails +
+            throw new EntityPanelException("propertyDetails: " + entityProperty +
                     ", cls: " + cls +
                     ", parameterValues: " + asList(parameterValues) +
                     ", parameterTypes: " + asList(parameterTypes), ex);
         }
-
-        return new EntityListPanel(propertyDetails.getPropertyClass(), null);
     }
 
     protected <T> List<T> asList(T... values) {
@@ -559,7 +557,12 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
             PropertyDetail pd = parameters.get(i);
             String getter = pd.getGetter();
             if(isConstantParameter(getter)) {
-                parameterValues[i] = convertUtils.convert(normalizeConstant(getter), parameterTypes[i]);
+                Class parameterType = parameterTypes[i];
+                if(Classifier.class == parameterType) {
+                    parameterValues[i] = getAcaciaSession().getClassifier(normalizeConstant(getter));
+                } else {
+                    parameterValues[i] = convertUtils.convert(normalizeConstant(getter), parameterType);
+                }
             } else {
                 parameterValues[i] = getPropertyValue(getter);
             }
@@ -690,7 +693,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     public E save() {
         E entity = getEntity();
         try {
-            E result = getEntityService().save(entity);
+            E result = getEntityService().save(entity, getClassifiers());
             setSelectedValue(result);
             return result;
         } catch (Exception ex) {
@@ -704,7 +707,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     public E confirm() {
         E entity = getEntity();
         try {
-            E result = getEntityService().confirm(entity);
+            E result = getEntityService().confirm(entity, getClassifiers());
             setSelectedValue(result);
             return result;
         } catch (Exception ex) {

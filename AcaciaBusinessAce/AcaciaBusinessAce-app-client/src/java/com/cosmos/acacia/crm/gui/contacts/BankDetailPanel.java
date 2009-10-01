@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.gui.users;
+package com.cosmos.acacia.crm.gui.contacts;
 
-import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.contacts.BankDetail;
 import com.cosmos.acacia.gui.entity.AbstractEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 
@@ -13,9 +13,9 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
  *
  * @author Miro
  */
-public class UserPanel extends EntityPanel<User> {
+public class BankDetailPanel extends EntityPanel<BankDetail> {
 
-    public UserPanel(AbstractEntityListPanel entityListPanel, User entity) {
+    public BankDetailPanel(AbstractEntityListPanel entityListPanel, BankDetail entity) {
         super(entityListPanel, entity, null);
     }
 }

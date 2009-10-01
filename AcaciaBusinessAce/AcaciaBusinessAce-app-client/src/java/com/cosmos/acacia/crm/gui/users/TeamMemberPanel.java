@@ -18,6 +18,6 @@ import org.jdesktop.beansbinding.PropertyStateEvent;
 public class TeamMemberPanel extends EntityPanel<TeamMember> {
 
     public TeamMemberPanel(AbstractEntityListPanel entityListPanel, TeamMember entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 }

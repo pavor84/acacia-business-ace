@@ -6,7 +6,7 @@
 package com.cosmos.acacia.crm.gui.contacts;
 
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.gui.entity.EntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 import java.util.List;
@@ -15,9 +15,9 @@ import java.util.List;
  *
  * @author Miro
  */
-public class OrganizationPanel extends EntityPanel<Organization> {
+public class PersonPanel extends EntityPanel<Person> {
 
-    public OrganizationPanel(EntityListPanel entityListPanel, Organization entity, List<Classifier> classifiers) {
+    public PersonPanel(EntityListPanel entityListPanel, Person entity, List<Classifier> classifiers) {
         super(entityListPanel, entity, classifiers);
     }
 }

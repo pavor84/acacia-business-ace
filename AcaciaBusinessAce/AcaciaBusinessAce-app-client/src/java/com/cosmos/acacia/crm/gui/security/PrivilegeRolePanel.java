@@ -18,7 +18,7 @@ import java.util.List;
 public class PrivilegeRolePanel extends EntityPanel<PrivilegeRole> {
 
     public PrivilegeRolePanel(AbstractEntityListPanel entityListPanel, PrivilegeRole entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

@@ -59,9 +59,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  *
  * @author  Miro
  */
-public abstract class AbstractTablePanel<E extends PersistentEntity>
-        extends AcaciaPanel
-        implements SelectableListDialog {
+public abstract class AbstractTablePanel<E extends PersistentEntity> extends AcaciaPanel implements SelectableListDialog {
 
     protected static Logger log = Logger.getLogger(AbstractTablePanel.class);
 
@@ -78,12 +76,12 @@ public abstract class AbstractTablePanel<E extends PersistentEntity>
             JBPanel parentPanel,
             Object mainEntity,
             Class entityClass,
-            Classifier classifier,
+            List<Classifier> classifiers,
             Object... parameters) {
         this.parentPanel = parentPanel;
         this.mainEntity = mainEntity;
         this.entityClass = entityClass;
-        this.classifier = classifier;
+        this.classifiers = classifiers;
         this.parameters = parameters;
         init();
     }
@@ -281,6 +279,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     private boolean visibilitySetChanged = false;
     private E selectedRowObject;
     private Set<TableModificationListener> tableModificationListeners = new HashSet<TableModificationListener>();
+    private List<Classifier> classifiers;
     private Classifier classifier;
     private boolean allowClassifierChange;
     private Set<AbstractTablePanel> associatedTables = new HashSet<AbstractTablePanel>();
@@ -1147,6 +1146,24 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
     public void updateRowObject(E rowObject) {
         dataTable.updateRow(rowObject);
         fireModify(rowObject);
+    }
+
+    public List<Classifier> getClassifiers() {
+        Classifier c;
+        if((c = getClassifier()) != null) {
+            if(classifiers == null) {
+                classifiers = new ArrayList<Classifier>();
+                classifiers.add(c);
+            } else if(!classifiers.contains(c)) {
+                classifiers.add(c);
+            }
+        }
+
+        return classifiers;
+    }
+
+    public void setClassifiers(List<Classifier> classifiers) {
+        this.classifiers = classifiers;
     }
 
     /**

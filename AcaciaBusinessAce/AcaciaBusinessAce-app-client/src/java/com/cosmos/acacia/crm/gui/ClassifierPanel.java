@@ -366,9 +366,7 @@ public class ClassifierPanel extends BaseEntityPanel {
     @Override
     public void performSave(boolean closeAfter) {
         log.info("Save: classifier: " + classifier);
-        classifier = getClassifiersManager().saveClassifier(
-                classifier,
-                classifier.getClassifierGroup().getDataObject().getDataObjectId());
+        classifier = getClassifiersManager().saveClassifier(classifier);
 
         setDialogResponse(DialogResponse.SAVE);
         setSelectedValue(classifier);

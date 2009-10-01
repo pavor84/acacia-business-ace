@@ -61,7 +61,7 @@ public class CurrencyExchangeRatePanel extends BaseEntityPanel {
     private JBDecimalField exchangeRateDecimalField;
 
     public CurrencyExchangeRatePanel(CurrencyExchangeRate currencyExchangeRate) {
-        super(new Object[] {currencyExchangeRate});
+        super(currencyExchangeRate, null, new Object[] {currencyExchangeRate});
         init();
     }
 

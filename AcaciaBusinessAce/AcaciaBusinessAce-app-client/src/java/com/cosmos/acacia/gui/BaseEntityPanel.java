@@ -1,5 +1,6 @@
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.crm.data.Classifier;
 import java.awt.Component;
 import java.awt.TextComponent;
 import java.awt.event.KeyAdapter;
@@ -52,10 +53,13 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
     private EntityBindingListener entityBindingListener;
     private boolean editable = true;
     private Object entity;
+    private List<Classifier> classifiers;
+    private Classifier classifier;
     protected Object[] parameters;
 
-    public BaseEntityPanel(Object entity, Object... parameters) {
+    public BaseEntityPanel(Object entity, List<Classifier> classifiers, Object... parameters) {
         this.entity = entity;
+        this.classifiers = classifiers;
         this.parameters = parameters;
         initConstructor();
     }
@@ -92,6 +96,32 @@ public abstract class BaseEntityPanel extends AcaciaPanel {
 
     public void setEntity(Object entity) {
         this.entity = entity;
+    }
+
+    public List<Classifier> getClassifiers() {
+        Classifier c;
+        if((c = getClassifier()) != null) {
+            if(classifiers == null) {
+                classifiers = new ArrayList<Classifier>();
+                classifiers.add(c);
+            } else if(!classifiers.contains(c)) {
+                classifiers.add(c);
+            }
+        }
+
+        return classifiers;
+    }
+
+    public void setClassifiers(List<Classifier> classifiers) {
+        this.classifiers = classifiers;
+    }
+
+    public Classifier getClassifier() {
+        return classifier;
+    }
+
+    public void setClassifier(Classifier classifier) {
+        this.classifier = classifier;
     }
 
     protected void init() {

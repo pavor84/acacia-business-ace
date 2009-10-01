@@ -40,6 +40,7 @@ public class OrganizationsListPanel extends AbstractTablePanel<Organization> {
 
     public OrganizationsListPanel() {
         this(getOrganizationId());
+        throw new UnsupportedOperationException("To be Removed.");
     }
 
     private static UUID getOrganizationId() {

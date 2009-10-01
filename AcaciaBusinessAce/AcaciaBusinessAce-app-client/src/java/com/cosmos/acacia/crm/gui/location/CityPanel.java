@@ -15,6 +15,6 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class CityPanel extends EntityPanel<City> {
 
     public CityPanel(CitiesListPanel entityListPanel, City entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 }

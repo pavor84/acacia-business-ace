@@ -30,7 +30,7 @@ public class BusinessUnitPanel extends EntityPanel<BusinessUnit> {
     protected static final String ORGANIZATION_PROPERTY_NAME = "organization";
 
     public BusinessUnitPanel(AbstractEntityListPanel entityListPanel, BusinessUnit entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

@@ -20,20 +20,20 @@ public class DetailEntityListPanel<E extends PersistentEntity, I extends Persist
     public DetailEntityListPanel(
             EntityPanel<E> mainEntityPanel,
             Class<I> itemEntityClass,
-            Classifier classifier,
+            List<Classifier> classifiers,
             Object... parameters) {
-        super(mainEntityPanel, null, itemEntityClass, classifier, parameters);
+        super(mainEntityPanel, null, itemEntityClass, classifiers, parameters);
     }
 
-    public DetailEntityListPanel(E mainEntity, Class<I> itemEntityClass, Classifier classifier, Object... parameters) {
-        super(null, mainEntity, itemEntityClass, classifier, parameters);
+    public DetailEntityListPanel(E mainEntity, Class<I> itemEntityClass, List<Classifier> classifiers, Object... parameters) {
+        super(null, mainEntity, itemEntityClass, classifiers, parameters);
     }
 
     @Override
     public List<I> getEntities() {
         E mainEntity;
         if ((mainEntity = getMainEntity()) != null && mainEntity.getId() != null) {
-            return getEntityService().getEntityItems(mainEntity, getEntityClass());
+            return getEntityService().getEntityItems(mainEntity, getEntityClass(), getClassifiers());
         }
 
         return new ArrayList<I>();

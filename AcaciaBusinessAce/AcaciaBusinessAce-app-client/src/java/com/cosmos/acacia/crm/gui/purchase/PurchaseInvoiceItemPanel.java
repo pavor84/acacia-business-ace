@@ -30,7 +30,7 @@ public class PurchaseInvoiceItemPanel extends EntityPanel<PurchaseInvoiceItem> {
     protected static final String EXTENDED_PRICE_PROPERTY_NAME = "extendedPrice";
 
     public PurchaseInvoiceItemPanel(AbstractEntityListPanel entityListPanel, PurchaseInvoiceItem entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 
     @Override

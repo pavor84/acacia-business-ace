@@ -190,7 +190,7 @@ public class CurrencyExchangeRateListPanel extends AbstractTablePanel<CurrencyEx
     }
 
     protected List<CurrencyExchangeRate> getCurrencyExchangeRates() {
-        return getFormSession().getEntities(CurrencyExchangeRate.class, getRatesForDate());
+        return getFormSession().getEntities(CurrencyExchangeRate.class, getClassifiers(), getRatesForDate());
     }
 
     @Override

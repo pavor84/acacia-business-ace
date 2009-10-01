@@ -16,6 +16,6 @@ import com.cosmos.acacia.gui.entity.EntityPanel;
 public class JobTitlePanel extends EntityPanel<JobTitle> {
 
     public JobTitlePanel(AbstractEntityListPanel entityListPanel, JobTitle entity) {
-        super(entityListPanel, entity);
+        super(entityListPanel, entity, null);
     }
 }

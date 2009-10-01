@@ -54,22 +54,22 @@ public class CurrencyServiceImpl implements CurrencyRemote {
     }
 
     @Override
-    public <E> List<E> getEntities(Class<E> entityClass, Object... extraParameters) {
-        return currencyService.getEntities(entityClass, extraParameters);
+    public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
+        return currencyService.getEntities(entityClass, classifiers, extraParameters);
     }
 
     @Override
-    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, Object... extraParameters) {
-        return currencyService.getEntityItems(entity, itemClass, extraParameters);
+    public <E, I> List<I> getEntityItems(E entity, Class<I> itemClass, List classifiers, Object... extraParameters) {
+        return currencyService.getEntityItems(entity, itemClass, classifiers, extraParameters);
     }
 
     @Override
-    public <E> E save(E entity) {
+    public <E> E save(E entity, Object... extraParameters) {
         return currencyService.save(entity);
     }
 
     @Override
-    public <E> E confirm(E entity) {
+    public <E> E confirm(E entity, Object... extraParameters) {
         return currencyService.confirm(entity);
     }
 
