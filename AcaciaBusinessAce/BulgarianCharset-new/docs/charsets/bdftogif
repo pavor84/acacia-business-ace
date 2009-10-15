@@ -1,0 +1,92 @@
+#!/usr/local/bin/perl
+
+$padding = $ENV{"PADDING"} || 1;
+$grid = 1 + 16 + 2 * $padding;
+$width = $height = 16 * $grid + 1;
+
+for (1..$height)
+{
+    push (@bitmap, "0" x $width);
+}
+
+# draw grid
+
+for ($row = 0; $row < $height; $row += $grid)
+{
+    @bitmap[$row] = "1" x $width;
+}
+
+for ($column = 0; $column < $width; $column += $grid)
+{
+	for ($row = 0; $row < $height; $row += 1)
+	{
+		substr (@bitmap[$row], $column, 1)= "1";
+	}
+}
+
+@hexdigits=grep(y/-#/01/,<DATA>);
+
+while (<>)
+{
+    if (/^ENCODING\s+(\d+)/)
+    {
+	$char = $1;
+	$row  = 0xF & $char >> 4;
+	$row[$row] = 1;
+
+	$cell = 0xF & $char;
+
+	for $line (0,1,2,3,4)
+	{
+	    substr ($bitmap[$row * $grid + 2 + $line], $cell * $grid + 2, 8)
+	    = substr ($hexdigits[$line], $row * 4, 4) .
+		substr ($hexdigits[$line], $cell * 4, 4);
+	}
+
+    }
+
+    if (/^BITMAP/)
+    {
+	for ($line= $row * $grid + $padding + 1; <>; ++$line)
+	{
+	    last if /^ENDCHAR/;
+
+	    substr ($bitmap[$line], $cell * $grid + $grid - $padding - 8, 8)
+		= unpack("B8",pack("H2",$_));
+	}
+    }
+}
+
+$skip = $ENV{"SKIP"} || 
+    (
+     $ARGV =~ /ascii|646-us|ebcdic/i ? 0 :
+     $row[0] || $row[1] ? 0 :
+     $row[8] || $row[9] ? 8 : 
+     $#row > 9 ? 10 : 2
+    );
+
+for (1 .. $skip * $grid)
+{
+    shift @bitmap; -- $height;       
+}
+
+if ($#row < 8)
+{
+    for (1 .. 8 * $grid)
+    {
+	pop @bitmap; -- $height;
+    }
+}
+
+# output in pbm(5) - portable bitmap file format 
+
+open (STDOUT, "|ppmtogif 2>&-".(-t STDOUT?"|xviewer xv":""));
+$,="\n"; print "P1 $width $height", @bitmap;
+close STDOUT;
+
+__END__
+-#---#--##--##--#-#-###--##-###--#---#---#--##---##-##--###-###-
+#-#-##----#---#-#-#-#---#-----#-#-#-#-#-#-#-#-#-#---#-#-#---#---
+#-#--#---#---#--###-##--###--#---#---##-###-##--#---#-#-###-###-
+#-#--#--#-----#---#---#-#-#--#--#-#---#-#-#-#-#-#---#-#-#---#---
+-#--###-###-##----#-##---#---#---#--##--#-#-##---##-##--###-#---

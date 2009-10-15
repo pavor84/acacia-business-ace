@@ -1,0 +1,175 @@
+<TITLE>ISO 646 (Good old ASCII)</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=ISO-8859-1">
+
+<H1>Good ole' ASCII</H1>
+
+The common denominator of all modern character sets like the ones from
+<A HREF="iso8859.html" >ISO 8859</A> is the very successful American
+Standard Code for Information Interchange (<B>ASCII</B>, /'æski:/)
+which was published thirty years ago in 1968 as <A
+HREF="http://web.ansi.org/default.htm" >ANSI</A> X3.4 and looks like
+this:
+
+<P><IMG SRC="iso646-us.gif"><BR>charset=US-ASCII
+[<A HREF="iso646-us.txt.gz" >TXT</A>]
+[<A HREF="iso646-us.bdf.gz" >BDF</A>]
+
+<H2>Only <A NAME="EBCDIC" >EBCDIC</A> ignores ASCII</H2>
+
+<P>Nowadays most computers use encodings based on ASCII.  The only
+notable exception are the <A HREF="http://www.ibm.com/" >IBM</A>
+mainframes that never departed from the myriad of dialects of their
+Extended Binary Coded Decimal Information Code (<B>EBCDIC</B>) that
+predated ASCII and gave a more readable BCD coding on paper
+punch-cards:
+
+<BLOCKQUOTE>
+<P><IMG SRC="ebcdic-us.gif"><BR>charset=EBCDIC-US
+[<A HREF="ebcdic-us.txt.gz" >TXT</A>]
+[<A HREF="ebcdic-us.bdf.gz" >BDF</A>]
+</BLOCKQUOTE>
+
+<H2>US-ASCII is <A NAME="7bit" >7bit</A> only</H2>
+
+<P>But back to ASCII: <IMG SRC="iso646-us.gif">
+
+<P>Don't let your computer manufacturer tell you that there are ASCII
+characters beyond those shown above.  ASCII uses only 7 bits and
+allows the most significant <B>eighth bit</B> to be used as parity
+bit, highlight bit, end-of-string bit (all of which are considered bad
+practice nowadays) or to include additional characters for <A
+HREF="iso8859.html" >internationalization</A> (i18n for which we need
+8bit-clean programs that do none of afore-mentioned silly tricks) but
+ASCII defined no <A HREF="iso8859.html" >standard</A> for this and
+many manufacturers invented their own <A HREF="codepages.html"
+>proprietary codepages</A>.
+
+<H2>ISO-646: First attempts to <A NAME="i18n" >internationalize</A>
+the 7bit code</H2>
+
+<P>The only <B>languages</B> that can comfortably be written with the
+repertoire of US-ASCII happen to be Latin, Swahili, Hawaiian and
+American English without most typographic frills.  It is rumoured that
+there are more languages in the world.
+
+<P>That's why foreign standardizers crafted up <B>national
+variants</B> of ASCII like the German DIN 66003 which my first CP/M
+computer (a <A HREF="http://www.hh.schule.de/hhs/computer/mz700.htm"
+>Sharp MZ-731</A>) used in 1984 to communicate with its daisy wheel
+printer or the Danish DS 2089 mentioned by Bjarne Stroustrup in §
+6.5.3 of his <A
+HREF="http://www.amazon.com/exec/obidos/ISBN=0201543303" >C++
+history</A>.  These 7bit charsets used the code positions of the less
+needed ASCII characters
+
+<PRE>
+	# $ @ [ \ ] ^ ` { | } ~
+</PRE>
+
+to insert their accented letters so that
+
+<PRE>
+	,,schöne Grüße``
+</PRE>
+
+would get encoded as
+
+<PRE>
+	,,sch|ne Gr}~e``
+</PRE>
+
+and C programs like
+
+<PRE>
+	{*argv[1]='\0'}
+</PRE>
+
+showed up as
+
+<PRE>
+	æ*argvÆ1Å='Ø0'å
+</PRE>
+
+because C didn't offer alternative digraphs like Pascal's (. for [ and
+(* for {.
+
+<P>This is how these national variants looked like:
+
+<DL><DT>German<BR>
+<DD><IMG SRC="iso646-de.gif"><BR>charset=ISO-646-DE
+[<A HREF="iso646-de.txt.gz" >TXT</A>]
+[<A HREF="iso646-de.bdf.gz" >BDF</A>]
+
+<DT>Danish<BR>
+<DD><IMG SRC="iso646-dk.gif"><BR>charset=ISO-646-DK
+[<A HREF="iso646-dk.txt.gz" >TXT</A>]
+[<A HREF="iso646-dk.bdf.gz" >BDF</A>]
+</DL>
+
+<P>To save space, I have omitted the variants
+
+<DL COMPACT>
+
+<DT>CA<DD>Canadian CSA Z243.4
+<DT>CN<DD>Chinese GB 1988-80
+<DT>CU<DD>Cuban NC NC00-10
+<DT>ES<DD>Spanish
+<DT>FR<DD>French NF Z 62-010
+<DT>HU<DD>Hungarian MSZ 7795.3
+<DT>IT<DD>Italian
+<DT>JP<DD>Japanese JIS X 0201 Roman
+<DT>KR<DD>Korean KS C 5636
+<DT>NO<DD>Norwegian NS 4551-1
+<DT>PT<DD>Portuguese
+<DT>SE<DD>Swedish SEN 850200 B
+<DT>UK<DD>British BS 4730
+<DT>YU<DD>Yugoslavian JUS I.B1.002
+
+</DL>
+
+<P>ASCII and its national variants were declared international
+standard <B>ISO 646</B> in 1972.  Back then, the socialist countries
+managed to substitute the international currency sign ¤ for ASCII's
+capitalist dollar sign $ in the the first international reference
+version ISO-646-IRV but this was <A
+HREF="http://www.ecma.ch/stand/ecma-006.htm" >revised in 1991</A> and
+now ISO-646-IRV is a synonym for ISO-646-US or US-ASCII as it is used
+in the core <A HREF="http://www.ietf.org/" >Internet protocols</A>.
+ISO-646's national variants have fallen out of use because of their
+obvious problems and because the 8bit ASCII extension <A
+HREF="iso8859.html#ISO-8859-1" >ISO-8859-1</A> has offered a more
+interoperable standard.
+
+<H2><A NAME="ISO-10646">ISO-10646/Unicode</A>: ASCII's ultimate
+successor</H2>
+
+<P><A HREF="iso8859.html" >ISO 8859</A> still isn't the ultimate
+solution.  The even wider Universal Character Set (UCS, <A
+HREF="http://web.archive.org/web/czyborra.com/unicode/standard.html" >Unicode</A>) wants to simplify
+world-wide multilingual and multi-platform text exchange just like the
+ASCII standard simplified Latin text interchange and aims to become
+equally successful as <EM>the</EM> ultimate encoding standard and thus
+it was numbered <A HREF="http://www.iso.ch/cate/d18741.html" >ISO
+10646</A> = ISO 646 + 10000.  And the inevitable success seems to be
+there:
+
+<A HREF="ftp://ftp.isi.edu/in-notes/rfc2070.txt" >RFC 2070</A>
+internationalized the Internet's hypertext markup language HTML and
+declared ISO 10646 its new base charset.
+
+<A HREF="ftp://ftp.isi.edu/in-notes/rfc2277.txt" >RFC 2277</A>
+recommends the use of ISO 10646 to all new Internet protocols.
+
+<P>Unicode begins with <A HREF="iso646.html" >US-ASCII</A> and <A
+HREF="iso8859.html#ISO-8859-1" >ISO-8859-1</A> but goes beyond the
+8bit barrier and encodes <A HREF="http://web.archive.org/web/czyborra.com/unicode/characters.html" >all the
+world's characters</A> in a 16bit space and a 20bit extension zone for
+everything that did not fit into the 16bit space.
+
+The ASCII-compatible Unicode transformation scheme <A
+HREF="http://web.archive.org/web/czyborra.com/utf/#UTF-8" >UTF-8</A> lets all ASCII characters pass through
+transparently and encodes all other characters as unambiguous 8bit
+character sequences.
+
+<P><A HREF="http://web.archive.org/web/czyborra.com" >Roman Czyborra</A>
+<BR>1998-05-24 .. 1998-11-30

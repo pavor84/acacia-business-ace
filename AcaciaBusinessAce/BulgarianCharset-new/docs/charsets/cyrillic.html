@@ -1,0 +1,367 @@
+<HTML><HEAD><TITLE>The Cyrillic Charset Soup</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=ISO-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<LINK REV="made" HREF="mailto:roman@czyborra.com">
+</HEAD><BODY>
+
+<H1>The Cyrillic Charset Soup</H1>
+
+Even though <A HREF="iso8859.html" >ISO 8859</A> contains a standard
+Cyrillic charset, there is a whole bunch of other Cyrillic encodings
+being used on computers worldwide.  This page tries to explain why
+that so is by giving a historical survey.  Each charset is illustrated
+by a bitmap GIF along with the underlying Unicode mapping table and
+BDF (X/Unix) font.
+
+<H2>The Cyrillic Script</H2>
+
+<P>The brothers and orthodox Slavonic monks Cyrill and Methodius
+invented the Glagolitic script in Macedonia in the year 863 as an
+encrypted Greek alphabet with extensions for special Slavic sounds.
+Their scholar Clement of Ohrid invented the "Cyrillic" script later as
+a more readable transformed Glagolitic alphabet.  Over the course of
+the centuries the Cyrillic script was spread and transformed and it
+was modernized into its current Romanized shape (Grazhdanka) under
+Tsar Peter the Great.
+
+<P>Nowadays the Cyrillic script is used by more than 70 languages
+ranging from Eastern Europe's Slavic languages Russian (ru), Ukrainian
+(uk), Belarussian (be), Bulgarian (bg), Serbian (sr), and Macedonian
+(mk) over Central Asia's Altaic languages like <A
+HREF="http://www.azer.com/" >Azerbaijani</A> (az), Turkmen (tk),
+Kurdish (ku), Uzbek (uz), Kazakh (kk), Kirghiz (ky) to others such as
+Tajik (tg) and Mongolian (mn).  Your library may have the booklet
+"Alfavity jazykov narodov SSSR" by Kenesbai Musaevich Musaev that was
+published in 1965.
+
+<P>With a small accent-free alphabet, Russian and Bulgarian seemed
+equally well-suited for computer processing as English.
+
+<H2><A NAME="KOI" >GOST-13052: the first KOI</A></H2>
+
+<P>The oldest standardized Cyrillic computer charset I found (in John
+Clews' Language Automation Worldwide) is the governmental standard
+GOST 13052, a 7bit charset that encoded the letters of the Russian
+alphabet (which happens to satisfy all Bulgarian needs also) on top of
+corresponding <A HREF="iso646.html" >ASCII</A> letters of the opposite
+case (to recognize Russian text like "rUSSKIJ tEKST" by its case when
+presented in ASCII.  I will refer to this property as the <A
+HREF="#KOI-8" >KOI</A> correspondence), sacrificed the <A
+HREF="#KOI8-B" >dotted ë</A> to reduce the alphabet to 32 letters
+fitting in two rows and dropped the rarely needed CAPITAL HARD SIGN to
+prevent its collision with DELETE on position =7F or EOF=-1:
+
+<P><IMG SRC="koi-0.gif" ><BR> charset=koi-0
+[<A HREF="koi-0.txt.gz">TXT</A>]
+[<A HREF="koi-0.bdf.gz">BDF</A>]
+
+<P>The fact that Bulgarian uses the CAPITAL HARD SIGN much more often
+prompted some Bulgarians to encode their hard sign on top of the
+unneeded Russian YERY bI instead.
+
+<H2><A NAME="GOST-19768-74" >GOST-19768-74: KOI-7 and KOI-8</A></H2>
+
+In 1974 <A HREF="http://www.gost.ru/" >GOST</A> published another
+governmental standard GOST 19768-74, with two charsets which both
+mixed the Latin and Cyrillic alphabets in one set that kept the
+original <A HREF="#KOI" >KOI correspondence</A> idea alive:
+
+<P>The first was another 7bit charset named KOI-7 with only capital
+letters:
+
+<P><IMG SRC="koi-7.gif" ><BR> charset=koi-7
+[<A HREF="koi-7.txt.gz">TXT</A>]
+[<A HREF="koi-7.bdf.gz">BDF</A>]
+
+<H2><A NAME="KOI-8" >The Original KOI-8</A></H2>
+
+The second charset defined in <A HREF="#GOST-19768-74">GOST
+19768-74</A> was the famous <EM>8-bitny Kod dla Obmena i obrabotki
+Informacii</EM> (KOI-8) that gave <A HREF="#KOI" >decipherable</A>
+ASCII text when the highest bit was stripped and may rightfully be
+called the Cyrillic <A HREF="iso646.html" >ASCII</A>.  Here is a
+picture of its upper portion (<A
+HREF="iso2022.html" >G1</A>):
+
+<P><IMG SRC="koi8-a.gif" ><BR> charset=koi8-a
+[<A HREF="koi8-a.txt.gz">TXT</A>]
+[<A HREF="koi8-a.bdf.gz">BDF</A>]
+
+<H2><A NAME="KOI8-B" >KOI-8 with ë</A></H2>
+
+<P><A HREF="#KOI-8" >KOI-8</A> was used on many networked Unix hosts.
+Naturally, the <A HREF="iso646.html" >ASCII</A> dollar sign $ got used
+instead of the international currency sign ¤ although this was not
+politically correct.  And the dotted ë (yo) got added in column 3 so
+that words like eë (yeyo) no longer had to be written as unaccented
+ee.
+
+<P>More correctly, the last step didn't occur until the <A
+HREF="http://www.demos.ru/" >Demos</A> company started porting
+Cyrillic support to PC Unixes like Xenix in the late 1980s and
+designed a new Russian KOI-8 code page which later came to be known as
+<A HREF="#KOI8-R" >KOI8-R</A> with the dotted ë at its position from
+the first DIS-6937-8/<A HREF="#ISO-IR-111" >DIS-8859-5</A> draft and
+all non-Russian letters scraped and replaced by block graphics.
+
+<P>But many font vendors implemented only the letter subset.  Let us
+call it KOI8-B, this extended (bolshee) KOI-8 base containing the
+letters (bukvy) common (basa) to all modern variants of KOI-8:
+
+<P><IMG SRC="koi8-b.gif" ><BR> charset=koi8-b
+[<A HREF="koi8-b.txt.gz">TXT</A>]
+[<A HREF="koi8-b.bdf.gz">BDF</A>]
+
+<H2><A NAME="ISO-IR-111" >KOI-8 goes European: ISO-IR-111 alias
+ECMA-Cyrillic</A></H2>
+
+<P>In the mid-1980s, the <A HREF="http://www.ecma.ch/" >ECMA</A>
+committee designing the <A HREF="iso8859.html" >ISO-8859 series</A>
+and its Cyrillic ISO-8859-5 wanted to retain compatibility with the
+installed base of the ten-year-old standard <A HREF="#KOI-8"
+>KOI-8</A>, and elegantly added the missing Ukrainian, Byelorussian,
+Serbian and Macedonian letters in the unused code points.
+
+Their draft got published as 1st edition standard ECMA-113 in 1986 and
+draft international standard DIS-8859-5 in 1987 and was registered
+with the number 111 in ISO's <A
+HREF="http://www.itscj.ipsj.or.jp/ISO-IR/" >International register</A>
+of character sets to be used with <A
+HREF="http://www.ecma.ch/stand/ecma-035.htm" >(ISO-2022) escape
+sequences</A>, hence the name ISO-IR-111 and the nickname
+ECMA-Cyrillic:
+
+<P><IMG SRC="koi8-e.gif" ><BR> charset=koi8-e
+[<A HREF="koi8-e.txt.gz">TXT</A>]
+[<A HREF="koi8-e.bdf.gz">BDF</A>]
+
+<H2><A NAME="GOST-19768-87" >GOST-19768-87 changes everything</A></H2>
+
+<P><A HREF="#ISO-IR-111" >ISO-IR-111</A> was never adopted as final
+ISO-8859-5 because in the meantime <A HREF="http://www.gost.ru"
+>GOST</A> had inhaled some perestroika and declared the <A
+HREF="#KOI8-B" >installed base</A> and <A HREF="#KOI" >KOI
+correspondence</A> less important and revised its <A
+HREF="#GOST-19768-74" >19768</A> standard from 1974 in 1987 into an
+incompatible new GOST 19768-87 that moved the Russian letters one row
+up and ordered them in the native Russian dictionary order (ABVGD)
+instead of the KOI correspondence order (ABCDE):
+
+<P><IMG SRC="gost19768-87.gif" ><BR> charset=GOST-19768-87
+[<A HREF="gost19768-87.txt.gz">TXT</A>]
+[<A HREF="gost19768-87.bdf.gz">BDF</A>]
+
+<H2><A NAME="ISO-8859-5" >ISO-8859-5 Cyrillic</A></H2>
+
+<P>ECMA immediately followed <A HREF="#GOST-19768-87" >GOST's move</A>
+on advice of their Soviet Union experts by revising their first
+proposal and permuting their <A HREF="#ISO-IR-111" >ISO-IR-111</A>
+characters onto the code positions of the new <A HREF="#GOST-19768-87"
+>GOST 19768-87</A>.  The designers did not go all the way to also sort
+the non-Russian letters into the Russian alphabet to ensure proper
+dictionary order for all languages like you find it for example in the
+ISO 9 standard (Transliteration of Cyrillic).  The revised proposal
+got published as 2nd edition ECMA-113:1988 (superseding the original
+<A HREF="#ISO-IR-111" >ECMA-113:1986</A> which came to live on
+(popular for its combination of the non-Russian letters with KOI-8
+compatibility) under its nickname ECMA-Cyrillic (although ECMA refers
+you to ISO-8859-5 now) or ISO-IR-111) and accepted into <A
+HREF="iso8859.html" >ISO 8859</A> (in spite of the Soviet vote against
+its dollar sign) as final ISO-8859-5 (ISO-IR-144) in 1988.  Many
+people, including me, feel that it would have spared us a lot of
+trouble if the original KOI8-compatible <A HREF="#ISO-IR-111"
+>DIS-8859-5:1987</A> had also been elected ISO-8859-5:1988.  Now we
+have an international standard ISO-8859-5 which is so non-standard
+that almost nobody likes or uses it:
+
+<P><IMG SRC="iso8859-5.gif" ><BR> charset=ISO-8859-5
+[<A HREF="iso8859-5.txt.gz">TXT</A>]
+[<A HREF="iso8859-5.bdf.gz">BDF</A>]
+
+<H2><A NAME="KOI8-R" >Relcom's KOI8-R</A></H2>
+
+<P>After <A HREF="ftp://ftp.isi.edu/in-notes/rfc1341.txt" >RFC 1341
+(MIME)</A> had suggested the use of ISO-8859-5 Cyrillic in e-mail
+communication while the Russian section of the Internet (the <A
+HREF="news:relcom.*">relcom.*</A> newsgroups) was still using KOI-8,
+<A HREF="http://www.pp.nagual.ru/~ache/" >Andrei Chernov</A> went to
+publish his <A HREF="ftp://ftp.isi.edu/in-notes/rfc1489.txt" >RFC
+1489</A> Registration of a Cyrillic Character Set "KOI8-R" and
+established KOI8-R as the de-facto standard on the Internet.
+
+KOI8-R which was later also numbered <A HREF="codepages.html#CP866"
+>CP878</A> contains <A HREF="#KOI8-B" >the dotted KOI8</A> plus a lot
+of <A HREF="codepages.html#IBM437" >box-drawing characters</A>:
+
+<P><IMG SRC="koi8-r.gif" ><BR> charset=koi8-r
+[<A HREF="koi8-r.txt.gz">TXT</A>]
+[<A HREF="koi8-r.bdf.gz">BDF</A>]
+
+<P>Andrei Chernov offers a lot of practical information about KOI8-R
+on <A HREF="http://www.nagual.pp.ru/~ache/koi8.html" >his website</A>.
+
+
+<H2><A NAME="KOI8-U" >The Ukrainian KOI8-U</A></H2>
+
+<P>With all these charsets, there is a special Ukrainian problem.
+Ukrainians read the letter GHE with downstroke as heh.  To write a
+correct ghe they need the Ukrainian letter GHE WITH UPTURN that had
+been suppressed by Stalin's officials and re-established in 1990.
+
+<P>One might abuse the accented GHE (Macedonian GJE) in <A
+HREF="#ISO-IR-111" >ISO-IR-111</A> or <A HREF="#ISO-8859-5"
+>ISO-8859-5</A> to represent GHE WITH UPTURN but this does not seem to
+be the preferred option.  The Ukrainians seem to prefer charsets that
+include the real GHE WITH UPTURN.  GHE WITH UPTURN is present in
+Microsoft's <A HREF="#CP1251" >CP1251</A>, Fingertip's <A
+HREF="#KOI8-Unified">KOI8-Unified</A> and of course in <A
+HREF="#Unicode" >Unicode</A>.  Still, these options didn't seem close
+enough to <A HREF="#KOI8-R" >KOI8-R</A> to stop the <A
+HREF="http://www.net.ua/" >Ukrainian postmasters</A> from designing a
+new <A HREF="http://www.net.ua/KOI8-U/" >KOI8-U</A> and publishing it
+as <A HREF="ftp://ftp.isi.edu/in-notes/rfc2319.txt" >RFC2319</A> in
+April 1998.  KOI8-U added only the Ukrainian letters in positions
+compatible with <A HREF="#ISO-IR-111" >ISO-IR-111</A> used by many
+Ukrainians and kept as many box-drawing characters as possible because
+many users in the area are still stuck with MS-DOS.  Because of that
+preference, it lacks the Belarussian accented short U and Serbian and
+Macedonian support:
+
+<P><IMG SRC="koi8-u.gif" ><BR> charset=koi8-u
+[<A HREF="koi8-u.txt.gz">TXT</A>]
+[<A HREF="koi8-u.bdf.gz">BDF</A>]
+
+<P>I assume that <A HREF="ftp://ftp.isi.edu/in-notes/rfc2319.txt"
+>RFC2319</A>'s and <A HREF="ftp://ftp.isi.edu/in-notes/rfc1489.txt"
+>RFC1489</A>'s specification of the KOI8-R bullet as mathematical
+U+2219 BULLET OPERATOR is an error inherited from <A
+HREF="ftp://ftp.isi.edu/in-notes/rfc1345.txt" >RFC1345</A> and has to
+be corrected to U+2022 BULLET like in Keld Simonsen's own tables for
+<A HREF="ftp://dkuug.dk/i18n/charmaps/IBM437" >IBM437</A> or <A
+HREF="ftp://dkuug.dk/i18n/charmaps/KOI8-R" >KOI8-R</A>.  Generally
+note that RFC1345 and anything based on it like GNU recode 3.4.1
+contained a number of errors especially in the Cyrillic area: its
+isoir111 looks more like cp1251 than koi8.  RFC2319 contains the
+additional error that it codes CYRILLIC CAPITAL LETTER UKRAINIAN IE as
+U+0403 instead of <A HREF="#Unicode" >U+0404</A>.
+
+<H2><A NAME="KOI8-Unified" >KOI8-Unified</A></H2>
+
+Peter Cassetta of <A HREF="http://www.cyrillic.com/" >Fingertip
+Software</A> who has also published a nice <A
+HREF="http://www.cyrillic.com/ref/cyrillic/charsets.html" >Cyrillic
+charset reference</A> for his customers had already designed and
+offered a different solution:
+
+His <A HREF="http://www.cyrillic.com/ref/cyrillic/koi8-uni.html"
+>KOI8-Unified</A> unifies all <A HREF="#ISO-IR-111">ISO-IR-111</A>
+letters with the Ukrainian <A HREF="#KOI8-U">KOI8-U</A> letters and
+the basic <A HREF="#KOI8-R" >KOI8-R</A> block graphics and some
+popular symbols from the Windows codepages <A HREF="#CP1251" >1251</A>
+and <A HREF="codepages.html#CP1252" >1252</A>, balancing various needs
+of compatibility:
+
+<P><IMG SRC="koi8-f.gif" ><BR> charset=koi8-f
+[<A HREF="koi8-f.txt.gz">TXT</A>]
+[<A HREF="koi8-f.bdf.gz">BDF</A>]
+
+<P>You can use this koi8-f font to display all koi8-* text and all
+letters will show up correctly but some of the less used graphic
+symbols in koi8-r can appear wrongly.
+
+<H2><A NAME="CP1251" >Microsoft's CP1251</A></H2>
+
+Another heavy player on the field is Microsoft's WinCyrillic Windows
+<A HREF="codepages.html" >code page</A> CP1251 for which <A
+HREF="ftp://ftp.isi.edu/in-notes/iana/assignments/character-set-info/windows-1251"
+>Microsoft registered the label "Windows-1251"</A> which is not to be
+mistaken as a 13th century precursor of today's Windows95®.  As of
+December 1997, even <A HREF="http://www.gost.ru/" >GOST</A>'s new (<A
+HREF="http://www.lotus.com/" >Lotus</A> Notes) webserver greets you
+with charset=WINDOWS-1251 - GOST (the Russian standardization
+authority and <A HREF="http://www.iso.ch/" >ISO</A> member body) isn't
+even following <A HREF="#GOST-19768-87" >its own standards</A> any
+more!
+
+CP1251 has a rich repertoire in an ordering compatible with neither <A
+HREF="cyrillic.html#ISO-IR-111" >ISO-IR-111</A> (KOI8) nor <A
+HREF="cyrillic.html#ISO-8859-5" >ISO-8859-5</A>:
+
+<P><IMG SRC="cp1251.gif" ><BR> charset=Windows-1251
+[<A HREF="cp1251.txt.gz">TXT</A>]
+[<A HREF="cp1251.bdf.gz">BDF</A>]
+
+<H2><A NAME="MacUkrainian" >MacUkrainian</A></H2>
+
+MacUkrainian (= MacCyrillic + GHE WITH UPTURN) has the same letters
+in yet another order:
+
+<P><IMG SRC="mac-ukrainian.gif" ><BR> charset=MacUkrainian
+[<A HREF="mac-ukrainian.txt.gz">TXT</A>]
+[<A HREF="mac-ukrainian.bdf.gz">BDF</A>]
+
+<H2><A NAME="Alternativny" >Alternativny Variant</A></H2>
+
+An older popular encoding is the Alternativny variant covered by
+MS-DOS <A HREF="codepages.html#CP866" >CP866</A>:
+
+<P><IMG SRC="cp866.gif" ><BR> charset=cp866
+[<A HREF="cp866.txt.gz">TXT</A>]
+[<A HREF="cp866.bdf.gz">BDF</A>] 
+
+<H2><A NAME="MIK" >Bulgarian MIK</A></H2>
+
+The Bulgarian Prawec 16 PC and the <A
+HREF="file://localhost/usr/lib/kbd/keytables/bg.map" >Bulgarian
+keyboard map</A> on Linux use the MIK encoding:
+
+<P><IMG SRC="bulgarian-mik.gif" ><BR> charset=bulgarian-mik
+[<A HREF="bulgarian-mik.txt.gz">TXT</A>]
+[<A HREF="bulgarian-mik.bdf.gz">BDF</A>] 
+
+<H2><A NAME="Unicode" >Unicode</A></H2>
+
+<P>Have you gotten sick of this plethora of charsets with none being
+the best?  Would you like to have one good charset that is capable of
+replacing all of the above and will be accepted everywhere?  Would you
+also like to write the non-Slavic Cyrillic languages?  You get all of
+that and more with <A HREF="http://charts.unicode.org/" >Unicode</A>
+(<A HREF="iso646.html#ISO-10646" >ISO-10646</A>) which simply encodes
+<A HREF="http://web.archive.org/web/czyborra.com/unicode/characters.html" >all characters of the world</A>.
+
+<P>This is the U+0400 Cyrillic block in Unicode.  It follows the order
+of <A HREF="#ISO-8859-5" >ISO-8859-5</A>:
+
+<P><IMG SRC="u-0400.gif" ><BR> charset=unicode-2-1
+[<A HREF="u-0400.txt.gz">TXT</A>]
+[<A HREF="u-0400.bdf.gz">BDF</A>] 
+
+<P>Olga Lapko states on pages 175 and 179 of the brilliant <A
+HREF="http://www.tug.org/" >TUG</A>boat issue 17-2 (Proceedings of the
+1996 Annual TeX User Group Meeting in Dubna, Russia) that some 100
+Cyrillic letters are still missing from Unicode.  Most of them seem to be
+encodable with combining accents and the rest can be added through the <A
+HREF=/unicode/characters.html#missing" >procedure</A> described in
+Appendix B Submitting New Characters of the Unicode Standard, though. 
+
+<P>Each Cyrillic letter gets encoded as two bytes in <A HREF="http://web.archive.org/web/czyborra.com/utf/#UTF-8" 
+>UTF-8</A>.  The Standard Compression Scheme for Unicode (<A HREF="http://web.archive.org/web/czyborra.com/scsu/"
+>SCSU</A>)  allows to reduce this to the traditional one byte per letter.
+
+<P>I am still busy writing my Unicode-HOWTO for Linux.  I have added a
+<A HREF="http://web.archive.org/web/czyborra.com/yudit/Cyrillic.kmap" >Cyrillic.kmap</A> that abuses the ISO
+9 transliteration as an input method to the <A HREF="http://web.archive.org/web/czyborra.com/yudit/"
+>Yudit</A> Unicode text editor for the X Window System.
+
+<P>I encourage you to mail your comments to <A
+HREF="mailto:roman@czyborra.com" >roman@czyborra.com</A>.  I thank
+Chrystopher Nehaniv, Andreas Prilop, Peter Cassetta
+&lt;pete@cyrillic.com&gt;, Andrei Chernov, Keld Simonsen, Borislav
+Stoyanov, <A HREF="http://www.uni-karlsruhe.de/~ut13/" >Guentcho
+Skordev</A>, Ilya Vinarsky, Dima Volodin, Christian Weisgerber, Alain
+Kessi, and Yuri Demchenko for the valuable information they provided.
+
+<P><I><A HREF="http://web.archive.org/web/czyborra.com">Roman Czyborra</A></I>
+<BR>1998-05-25 .. 1998-11-30
+
+</BODY></HTML>
