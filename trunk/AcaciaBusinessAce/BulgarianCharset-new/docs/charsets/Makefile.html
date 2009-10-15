@@ -1,0 +1,86 @@
+<HTML><HEAD><TITLE>Making the charset illustrations</TITLE>
+<LINK REV="made" HREF="mailto:roman@czyborra.com" >
+</HEAD><BODY LANG="en">
+
+<H1>Making the charset illustrations</H1>
+
+Even if Unix has no full Unicode support yet, Unicode can already be
+used on Unix as a background encoding to manage various traditional
+charsets as it is done by GNU recode, the Linux console, the Lynx
+browser, the Kermit terminal program, or the Yudit editor.
+
+<P>Another instance proving this thesis for me, is my little set of
+scripts I wrote in May 1998 to maintain my charsets documentation:
+
+Two self-written scripts make it easy to generate a font and an
+illustration from a mere Unicode table instead of having to draw them
+manually.
+
+<P>For each charset, all I need is a <B>textual Unicode mapping
+table</B> defining the coded character set, for example <A
+HREF="iso8859-15.txt.gz" >iso8859-15.txt</A>:
+
+<PRE>
+=20     U+0020  SPACE
+=21     U+0021  EXCLAMATION MARK
+=22     U+0022  QUOTATION MARK
+...
+=A3     U+00A3  POUND SIGN
+=A4     U+20AC  EURO SIGN
+=A5     U+00A5  YEN SIGN
+...
+=BC     U+0152  LATIN CAPITAL LIGATURE OE
+=BD     U+0153  LATIN SMALL LIGATURE OE
+=BE     U+0178  LATIN CAPITAL LETTER Y WITH DIAERESIS
+...
+=FE     U+00FE  LATIN SMALL LETTER THORN
+=FF     U+00FF  LATIN SMALL LETTER Y WITH DIAERESIS
+</PRE>
+
+<P>Unicode mapping tables have been freely available for many charsets
+and new ISO standards such as the parts of ISO-8859 revised in 1998
+come with explicit <A HREF="http://web.archive.org/web/czyborra.com/unicode/characters.html#unichar" >UCS
+numbers</A>.
+
+<P>Whenever new charsets are defined or errors in my tables are found,
+I only have to edit the textual definition.
+
+Then, with the unicoded mapping table I can simply say
+
+<PRE>
+make iso8859-15.{bdf,gif}
+</PRE>
+
+to automatically generate the matching <A HREF="iso8859-15.bdf.gz"
+>bitmap font</A> and an illustrative <A HREF="iso8859-15.gif" >bitmap
+GIF</A> showing the code chart:
+
+<P><IMG SRC="iso8859-15.gif">
+
+<P>This is accomplished through
+
+<UL>
+
+<LI>a script called <A HREF="fixtable" >fixtable</A> that brings the
+mapping table into my canonical form,
+
+<LI>a script called <A HREF="bdfassemble" >bdfassemble</A> to assemble
+the font,
+
+<LI>a script called <A HREF="bdftogif" >bdftogif</A> to draw the image, and
+
+<LI>a <A HREF="Makefile" >Makefile</A> to put everything together
+
+</UL>
+
+<P>Beware that these scripts are poorly commented and still depend on
+my local file hierarchy and are still using an older glyph storage
+format that I originally had in mind for the <A HREF="http://web.archive.org/web/czyborra.com/unifont/" >GNU
+unifont</A> with one file for each character.
+
+<P>This is another trivial example of how Unicode can be useful in
+Unix even though it is somewhat working behind the scenes.
+
+<HR><P><A HREF="http://web.archive.org/web/czyborra.com" >Roman Czyborra</A>
+<BR>$Date: 1998/11/23 11:30:26 $
+</BODY></HTML>

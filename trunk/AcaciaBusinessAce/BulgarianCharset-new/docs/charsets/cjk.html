@@ -1,0 +1,113 @@
+<HTML><HEAD><TITLE>Traditional CJK charsets</TITLE>
+<LINK REV="made" HREF="mailto:roman@czyborra.com" >
+</HEAD><BODY LANG="en">
+
+<H1>The traditional CJK charsets</H1>
+
+<H2>CJK Ideographs</H2>
+
+<P>CJK is an acronym for "Chinese, Japanese, Korean".  What's common
+to these three East Asian languages is that they all use a substantial
+number of ideographic characters (several thousand, not enumerable
+with 8 bits) historically dating back to the Chinese Han dynasty.
+These Han ideographs are called <B>hanzi</B> in Chinese, <B>kanji</B>
+in Japanese, and <B>hanja</B> in Korean and are unified as "<A
+HREF="http://charts.unicode.org/unihan/unihan.acgi" >CJK
+ideographs</A>" in Unicode.  For most ideographs, the pronunciation
+varies between the different languages but the meaning is similar so
+that Chinese text is somewhat comprehensible to Japanese readers.
+
+<H2>CJK Syllabics</H2>
+
+Besides the ideographs, syllabic scripts are used in Japanese and
+Korean (interspersed with the Han ideographs): Japanese employs its
+Kana alphabets (<B>Hiragana</B> and <B>Katakana</B>) and Korean its <A
+HREF="http://web.archive.org/web/czyborra.com/unicode/characters.html#Hangul" >Hangul syllables</A>.
+
+<H2>The first double-byte character set: JIS X 0208</H2>
+
+The Japanese character set JIS X 0208 (originally named JIS C 6220)
+was the first standardized charset to break the 8bit barrier in 1976.
+In a way, it is an early Unicode because it also contained the basic
+Greek and Cyrillic alphabets and symbols besides the Latin alphabet,
+the Hiragana and Katakana syllables and the most important Kanji
+(Chinese ideographs) required for Japanese.
+
+<P>On X11, you can have a look at the JIS X 0208 code chart with the
+command
+
+<P><PRE>
+	xfd -fn "*jisx0208*" &amp;
+</PRE>
+
+<P><IMG SRC="jisx0208.gif" ALT="[xfd screenshot: first page of JIS X 0208]">
+
+<P>The JIS X 0208 characters are organized in 94 rows ("ku") of 94
+cells ("ten") so that they can be mapped over the 94 printable G0
+characters of ASCII as specified by <A HREF="iso2022.html" >ISO
+2022</A>.  JIS X 0208 is thus structurally limited to 94×94 = 8'836
+characters and with that low number no feasible replacement for
+Unicode with its <A HREF="http://web.archive.org/web/czyborra.com/unicode/characters.html" >40'000+
+characters</A>.  JIS X 0208 has been extended through a companion JIS
+X 0212 holding a 94×94 grid of supplementary symbols, accented letters
+and additional kanji, that can be accessed through <A
+HREF="iso2022.html" >ISO-2022</A> shift sequences.
+
+<P>JIS X 0208 was the first double-byte character set (<A NAME="DBCS"
+>DBCS</A>).  There are various <A HREF="http://web.archive.org/web/czyborra.com/utf/#CES" >character encoding
+schemes</A> to access these double-byte characters:
+
+<UL><LI>mail-safe 7bit schemes using escape sequences, either
+
+
+<UL><LI>the full <A HREF="iso2022.html" >ISO-2022</A> registered
+escape sequences or
+
+<LI>abbreviated <A HREF="ftp://ftp.isi.edu/in-notes/rfc1468.txt"
+>ISO-2022-JP</A> or
+
+</UL>
+
+
+<LI>8bit projections like the
+
+<UL><LI><PRE>ku/ten 01/01 => 7bit =21=21 + offset =80=80 => <A
+HREF="http://web.archive.org/web/czyborra.com/utf/#EUC" >EUC</A> =A1=A1 </PRE>
+
+for <B>EUC-JP</B> or
+
+<LI>Microsoft's <B>Shift-JIS</B> (<A HREF="codepages.html#CP932"
+>CP932</A>) codes floating around the halfwidth katakana codes found
+in the 8bit range =A1..=DF of the first (1969) Japanese single-byte
+8bit charset JIS X 0201.
+
+</UL></UL>
+
+<P>Much of this is described in <A
+HREF="http://www.ora.com/people/authors/lunde/" >Ken Lunde</A>'s book
+<A HREF="http://www.ora.com/catalog/ujip/" >Understanding Japanese
+Information Processing</A> and its online companion <A
+HREF="http://www.ora.com/people/authors/lunde/cjk_inf.html"
+>CJK.INF</A>.
+
+<P>On Unix/X11, the JIS X 0208 kanji can be used in the <A
+HREF="http://web.archive.org/web/czyborra.com/unix/man.cgi/man1/kterm.1" >kterm</A> terminal emulator.
+
+<H2>GB, KSC &amp; Co.: the Chinese and Korean national charsets</H2>
+
+<P>Chinese and Korean standardizers followed the JIS X 0208 example
+and defined their own 94×94 grids.  {ISO-2022,EUC}-{CN,TW,KR} are the
+MIME labels used for these national standard coded character sets.  <A
+NAME="GB2312" >GB 2312</A> is the Chinese equivalent to JIS X 0208
+holding 6'763 hanzi, <A NAME="KSC5601" >KS C 5601</A> the Korean DBCS
+holding 4'888 hanja and 2'350 Hangul syllables, and CNS 11643 Plane 1
+the Taiwanese (Traditional Chinese) standard (albeit the not formally
+specified industry-standard "Big5" is used more often in Taiwan).
+
+<P>The Chinese terminal emulator <A HREF="http://web.archive.org/web/czyborra.com/unix/man.cgi/man1/cxterm.1"
+>cxterm</A> can handle GB and Big5 hanzi using its own configurable
+input dictionary.
+
+<HR><P><A HREF="http://web.archive.org/web/czyborra.com" >Roman Czyborra</A>
+<BR>November 23, 1998
+</BODY></HTML>
