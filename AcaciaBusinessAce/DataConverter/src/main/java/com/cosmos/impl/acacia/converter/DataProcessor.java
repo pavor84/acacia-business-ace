@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.converter;
+package com.cosmos.impl.acacia.converter;
 
 import java.io.BufferedReader;
 import java.io.File;
