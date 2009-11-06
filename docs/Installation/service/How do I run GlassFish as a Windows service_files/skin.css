@@ -1,0 +1,206 @@
+/*
+ * extra vanilla skin                          
+ * additional .css on top of jspwiki.css 
+ */
+
+/* +++ 010 LAYOUT of main ID blocks +++ */
+/*#wikibody                { margin: 5px; }*/
+#page,
+#actionsBottom,
+#footer                  { margin-left: 200px !important;  margin-right: 20px; }
+#favorites               { position:absolute; width: 170px; margin-left: 0px !important;
+                           top: 120px; /* make place for the logo */ } 
+#actionsTop              { float: right; margin-top: 2px; margin-right: 20px; display: none; }
+#banner                  { font-size: x-small; }
+#banner a:link           { font-weight: bold; }
+.username                { display: none; }
+/* +++ 020 LOOK and FEEL of main blocks with ID +++ */
+#actionsBottom           { font-size: 12px; margin-top: 15px; margin-bottom: 5px; }
+#actionsBottom .actionHome,
+#actionsBottom .actionIndex,
+#actionsBottom .actionRecentChanges
+                         { display: none; }
+#actionsBottom .actionView,
+#actionsBottom .actionEdit,
+#actionsBottom .actionComment,
+#actionsBottom .actionPrefs,
+#actionsBottom .actionAttach, 
+#actionsBottom .actionInfo
+                         { display: inline; }
+.pageactions .pageinfo   { display: inline;  }
+#footer                  { margin-top: 0px ; padding: 5px 0; }
+/* +++ 200 Generic stuff here +++ */
+/* +++ 210 Page titles, headings, and paragraphs +++ */
+#header .pagename        { color: black; float: none; display:inline; clear:none; font-size:100%; margin: 0; }
+/*.pagename                { font-size: 22px; color: white; line-height: 28px;}
+h2,h3,h4                 { color: #ea6020 ;  }
+h2                       { font-size: 1.6em; line-height: normal; }
+h3                       { font-size: 1.4em; line-height: normal; }
+h4                       { font-size: 1.0em; line-height: normal; }*/
+#page H2                 { color: #E76F00; background-color: transparent; font-weight: bold; }
+/* +++ 220 Lists and bullets +++ */
+/* +++ 225 Forms, Labels, form-values and form-help +++ */
+/* +++ 230 Horizontal rules +++ */
+hr                       { border-top: 1px solid #eee; background-color:transparent;
+                           height: 0px; width:100%; text-align:center; }
+/* +++ 240 Pre-formatted text blocks and code +++ */
+tt,pre                   { font-size: 12px; line-height: 13px; 
+                           font-family:Monaco, "Courier New", Courier, mono;}
+pre                      { background: #eee; border: 1px dashed #b6b6b6; 
+                           color: black; padding: 3px; }
+/* +++ 250 Hyperlinks +++ */
+#page A.editpage         { color: #036; border-bottom: 1px dashed #003366; text-decoration:none !important; }
+#page A.editpage:hover   { border-bottom: 1px solid #363; }
+/*#page A.wikipage:hover   { border-bottom: 1px solid #999; }*/
+.calendar a,
+.breadcrumbs a,
+/* +++ 260 Image styles, and Logo +++ */
+#header a                { border-bottom: none; }
+/* +++ 270 Footnotes and small text +++ */
+.small                   { font-size: 10px; }
+.sub                     { font-size: 10px; }
+.sup                     { font-size: 10px; }
+/* +++ 280 Convenience styles and info/warning/error dialogs +++ */
+.information             { border: 1px solid #3c78b5; background-color: #e0e0ff; }
+.warning                 { border: 1px dashed #bbbbbb; background-color: #ffcccc; }
+.error                   { border: 1px dashed #c00000; background-color: #ffcccc; color: #c00000; }
+/* +++ 290 Comment boxes (used on some pages) +++ */
+.commentbox              { border: 1px dashed #b6b6b6; background: #eee; }
+/* +++ 300 Wiki tables and zebra tables +++ */
+table                    { border-collapse: collapse; }
+table.wikitable * td     { text-align: left; padding: 4px; 
+                           border: 1px solid #cccccc; }
+table.wikitable * th     { text-align: center; padding: 4px; color: #c00;
+                           background: #f0f0f0; border: 1px solid #cccccc; }
+.zebra-table th          { background: #f0f0f0; }    
+.zebra-table tr.odd td   { background: #f7f7f7; }
+/* +++ 350 Attachments +++ */
+/* +++ 400 Styles for specific JSPs +++ */
+/* +++ 405 AttachmentTab.JSP +++ */
+#attachImg               { border: 1px solid #b6b6b6; }
+#attachImg img           { border: 0; padding:0; }
+/* +++ 410 CommentContent +++ */
+/* +++ 415 ConflictContent +++ */
+/* +++ 420 DiffContent and Diff Providers: Traditional and External +++ */
+/* +++ 421 Contextual diff provider +++ */
+/* +++ 425 Edit/EditContent and CommentContent +++ */
+/* +++ 430 Edit/EditContent +++ */
+/* +++ 440 Favorites +++ */
+/* +++ 450 FindContent / 450 Graph Bars +++ */
+.graphBar                { border-color: #fad112; }
+/* +++ 455 Footer +++ */
+.copyright               { font-weight:bold; margin: 0 100px; 
+                           font-size: .90em; line-height: normal;}
+.wikiversion             { font-size: .90em; line-height: normal;} 
+/* +++ 460 Header +++ */
+.breadcrumbs             { font-size: 0.5em; padding-left: 160px; }
+.termsofuse              { font-size: 0.5em; padding-left: 160px; margin-top: -30px; margin-bottom: -5px; }
+/* +++ 465 InfoContent +++ */
+/* +++ 470 PageActions.jsp +++ */
+.pageactions             { padding: 0; }
+.pageactions span,
+.pageactions .pageinfo,
+.pageactions .quicklinks { padding: 4px; margin: 0; 
+                           font-size: 1em; line-height: normal; 
+                           background: transparent;
+                           border-right: 1px solid #b6b6b6; }
+.pageactions .pageinfo   { border-right: none; border-left: none; }
+.pageactions .quicklinks { border: none; }
+.pageactions a:link,
+.pageactions a:visited   { border-bottom: none; font-weight: bold; 
+                           color: #666; background: transparent; }
+/*.pageactions span:hover  { background: #fad112; }*/
+/* +++ 475 PageContent.jsp +++ */
+/* +++ 475 PreviewContent - "This is a preview" comment +++ */
+.previewcontent          { background: white url(images/preview.png); 
+                           border: 1px solid #b6b6b6; }
+/* +++ 480 PreferencesContent, LoginContent, GroupContent +++ */
+#userPrefs tr td         { padding: 5px ; }
+#userPrefs tr th         { text-align: right; }
+/* +++ 485 SearchBox +++ */
+#header .searchbox       { background: url(images/search.png) 0 center no-repeat; 
+                           padding-left: 20px; float:right; font-size:1.2em; }
+#header a:link, 
+#header a:visited,
+#recentSearches          { color: #666;  }
+#searchboxMenu           { border: 1px solid #b6b6b6; font-size: 90%;} 
+.searchbox input         { height:16px; }
+/* +++ 490 ViewTemplate +++ */
+/* +++ 600 JSPWiki plugins +++ */
+/* +++ 610 Image plugin +++ */
+/* +++ 203 image plugin stuff +++ */
+/* +++ 620 Index plugin +++ */
+.index .header           { padding: 4px; color: #c00; background: #fad112;
+                           font-size: 16px; font-weight: bold; text-align:center; }
+/* +++ 625 Table of contents plugin +++ */
+.toc                     { margin: 0 15%; overflow: auto; }
+.toc h4                  { background: transparent; border-bottom: 1px dashed #b6b6b6;
+                           color: gray; padding: 0.5em; }
+.toc li a                { color: gray; border-bottom: none; text-decoration: none; }
+/* +++ 630 Weblog and weblogarchive plugins +++ */
+.weblogentryheading      { background: #fad112; }
+.weblogentrytitle        { color:#c00; }
+/* +++ 800 JSPWiki JSP Taglibs +++ */
+/* +++ 805 CalendarTag +++ */
+
+table.calendar td.othermonth 
+                         { color: silver; }
+table.calendar a         { color: #c00; font-weight:bold; }
+table.calendar td.month  { font-size: 100%;  }
+table.calendar td.weekdays
+                         { font-size: 0.8em; padding: 0 0.2em; color: #c00; }
+
+
+
+/* +++ 900 "Special-effects" JavaScript styles +++ */
+/* +++ 905 Search highlights +++ */
+/* +++ 910 Tabbed Pages +++ */
+.tabs                    { border:1px solid #b6b6b6; border-top: none;
+                           padding: 10px 10px 10px 15px; }
+.tabmenu                 { border-bottom: 1px solid #b6b6b6; padding: 2px 10px; 
+                           font-size: 12px; }
+
+/*
+ * XXX: Use a child selector rule as a workaround so that IE6 won't
+ * pick these up.
+ */
+div > .tabs.mainContentTab     { border: none; }
+div > .tabmenu.mainContentTab  { display: none; }
+/* End: IE6 workaround */
+
+/* ie */
+* html .tabmenu          { margin-top: 1px; }
+.tabmenu a,
+.edit .tabmenu a         { margin: 0 0 0 4px; padding: 2px 4px;
+                           border: 1px solid #b6b6b6;
+                           color: gray; background: #eee; }
+.tabmenu a:hover, 
+.edit .tabmenu a:hover   { color: #c00;  }
+.tabmenu a.activetab, 
+.edit .tabmenu a.activetab 
+                         { color: black; background: white; 
+                           border-bottom: 1px solid white; }
+/* +++ 920 Collapsable lists +++ */
+.collapseBullet,
+.collapseOpen,
+.collapseClose           { color: #c00; }
+.collapsebox .collapseOpen,
+.collapsebox .collapseClose 
+                         { font-size: 10px; }
+.collapseOpen:hover,
+.collapseClose:hover     { background: #fad112; color: #c00; }
+
+/* +++ 930 Sortable tables +++ */
+/* +++ 940 Quick Section Links +++ */
+.quicklinks              { font-size: 12px; padding: 0 2px; }
+.quicklinks, 
+.quicklinks a            { background: #fad112; color: #c00; border: none; }
+.pageactions .quicklinks { font-size: 10px; }
+
+.categoryLink:link,
+.categoryLink:active,
+.categoryLink:hover,
+.categoryLink:visited    { border-bottom: 2px solid #ffcc33 !important; } 
+
+
+#tb button:hover { background-color: #fad112; } 

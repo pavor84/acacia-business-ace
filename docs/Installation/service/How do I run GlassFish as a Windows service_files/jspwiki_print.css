@@ -1,0 +1,73 @@
+/*
+ * CSS intended specificly for print media
+ * e.g: <link rel=stylesheet type="text/css" media="print" href="templates/default/jspwiki_print.css">
+ * This stylesheet mainly hides all the webspecific stuff.
+ * Shows content in a print friendly way.
+ * Author PhilipVanBogaert
+ * adapted for brushed template
+ */
+
+/* Webpage stuff */
+.applicationlogo,
+.companylogo,
+.searchbox,
+.breadcrumbs,
+.pageactions,
+.quicklinks,
+#actionsTop,
+#actionsBottom,
+#favorites,
+.tabmenu { display:none; }
+
+/* seems not to work as expected -- ffs */
+#pagecontent, 
+#editcontent,
+#previewcontent,
+#diffcontent,
+#infocontent,
+#findquery,
+#userPrefs  
+  { display: block; visibility: visible; }
+
+#attachments,   
+#addcomment,
+#pagelinks
+  { display: none; visibility: hidden;}
+
+
+/* Wild guess */
+/*
+body { font-size: 10pt; }
+*/
+
+/* Show links as normal text (maybe show urls at the bottom of the page) */
+a { text-decoration:none; }
+/*print href of each link
+a:after { content:attr(href); color:grey;
+          font-family:"Courier New", Courier, mono; font-size:8pt;
+        }
+*/
+
+/* Give the content what it deserves. */
+#header,
+#footer,
+.pagename,
+#page { width: 100%; margin:0; float:none; clear:both; position:static; }
+.tabs { border:none; }
+
+/* +++ 300 Wiki tables and zebra tables +++ */
+.wikitable               { border: 1px solid gray;
+                           border-collapse: collapse;
+                           margin: 1em 0; }
+.wikitable tr            { vertical-align: top; }
+.wikitable * th          { border: 1px solid gray; vertical-align:top;
+                           padding: 0.25em;
+                           white-space: normal !important; }
+.wikitable * td          { border: 1px solid gray;
+                           vertical-align: top; text-align: left;
+                           padding: 0.25em;
+                           white-space: normal !important; }
+.zebra-table th          { background: #e0e0e0; }
+.zebra-table tr.odd td   { background: #e3f0ee; } /* f0f0f0 */
+
+/* More to come. */

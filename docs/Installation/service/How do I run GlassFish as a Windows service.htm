@@ -1,0 +1,1022 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <title>GlassFish Wiki: FaqRunAsWindowsService</title>
+  
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" media="screen, projection" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/jspwiki.css">
+
+<!-- browser specific cssinclude not required in brushed template
+<script type="text/javascript"
+         src="/templates/brushed/cssinclude.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+  Wiki.loadBrowserSpecificCSS("brushed");
+//]]>
+</script>
+-->
+
+
+
+
+<link rel="stylesheet" type="text/css" media="screen, projection" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/skin.css">
+<!-- INCLUDERESOURCES (stylesheet) -->
+
+
+
+<!--[if IE]>
+<style type="text/css" media="screen">
+img, a, div { behavior: url("templates/brushed/scripts/iepngfix.htc"); }
+</style>
+<![endif]-->
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="search" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FindPage" title="Search GlassFish Wiki">
+<link rel="help" href="http://wiki.glassfish.java.net/Wiki.jsp?page=TextFormattingRules" title="Help">
+<link rel="start" href="http://wiki.glassfish.java.net/Wiki.jsp?page=Main" title="Front page">
+<link rel="stylesheet" type="text/css" media="print" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/jspwiki_print.css">
+<link rel="alternate stylesheet" type="text/css" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/jspwiki_print.css" title="Print friendly">
+<link rel="alternate stylesheet" type="text/css" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/jspwiki.css" title="Standard">
+<link rel="icon" type="image/png" href="http://wiki.glassfish.java.net/images/favicon.png">
+
+<link rel="template" href="http://wiki.glassfish.java.net/templates/brushed" id="template-dir">
+<link rel="alternate" type="application/rss+xml" title="RSS wiki feed for the entire site." href="http://wiki.glassfish.java.net/rss.rdf">
+<link rel="alternate" type="application/rss+xml" title="RSS wiki feed for page GlassFish Wiki: FaqRunAsWindowsService." href="http://wiki.glassfish.java.net/rss.jsp?page=FaqRunAsWindowsService&amp;mode=wiki">
+
+
+
+<script type="text/javascript" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/prototype.js"></script>
+<script type="text/javascript" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/brushed.js"></script>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+  Wiki.setBaseURL ( "http://wiki.glassfish.java.net/" );
+  Wiki.setPageName( "FaqRunAsWindowsService" ); /* pagename without blanks */
+  Wiki.setUserName( "78.128.19.200" );
+
+  Wiki.setDELIM              ( "¤" );
+  Wiki.setPrefDateFormat     ( "dd-MMM-yy HH:mm a, Z" );
+  Wiki.setPrefSkinName       ( "Smart" );
+  Wiki.setPrefTimeZone       ( "" );
+  Wiki.setPrefEditAreaHeight ( "24" );
+  Wiki.setPrefShowQuickLinks ( "no" );
+  Wiki.setPrefSowCalendar    ( "no" );
+//]]>
+</script>
+<script type="text/javascript" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/skin.js"></script>
+
+<!-- INCLUDERESOURCES (script) -->
+
+
+<link rel="stylesheet" type="text/css" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/tigris.css">
+<link rel="stylesheet" type="text/css" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/inst.css">
+<link rel="stylesheet" type="text/css" href="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/theme.css">
+<script src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/theme.js"></script><link rel="search" type="application/opensearchdescription+xml" href="https://glassfish.dev.java.net/coolstuff/javanet/it.xml" title="Java.net issue tracker">
+
+  
+</head><body class="view composite">
+
+<div id="wikibody">
+
+  
+
+<div id="header">
+  <div class="topline">
+    <div class="topbar">
+		  <div id="banner">
+		  	<div id="regions-box">
+		  		<div align="right">
+		  			<ul id="regions"><li><a href="https://glassfish.dev.java.net/">Tools</a><ul><li><a href="https://hudson.dev.java.net/">Hudson</a></li><li><a href="https://japex.dev.java.net/">Japex</a></li><li><a href="https://openinstaller.dev.java.net/">openInstaller</a></li><li><a href="https://glassfishplugins.dev.java.net/">IDE Plugins</a></li><li><a href="https://wsmonitor.dev.java.net/">WSMonitor</a></li><li><a href="https://license-tool.dev.java.net/">License Tool</a></li></ul></li><li><a href="https://metro.dev.java.net/">WS/XML</a><ul><li><a href="https://metro.dev.java.net/">Metro</a></li><li><a href="https://jax-ws.dev.java.net/">JAX-WS</a></li><li><a href="https://wsit.dev.java.net/">WSIT</a></li><li><a href="https://jaxb.dev.java.net/">JAXB</a></li><li><a href="https://jaxp.dev.java.net/">JAXP</a></li><li><a href="https://wiseman.dev.java.net/">Wiseman</a></li></ul></li><li><a href="https://socialsite.dev.java.net/">Web.Next</a><ul><li><a href="https://socialsite.dev.java.net/">SocialSite</a></li><li><a href="https://portal.dev.java.net/">WebSynergy</a></li><li><a href="https://ajax.dev.java.net/">jMaki</a></li><li><a href="https://slynkr.dev.java.net/">Slynkr</a></li></ul></li><li><a href="https://glassfish.dev.java.net/javaee5/webtier/webtierhome.html">Webtier</a><ul><li><a href="https://jsp.dev.java.net/">JSP</a></li><li><a href="https://uel.dev.java.net/">EL</a></li><li><a href="https://jstl.dev.java.net/">JSTL</a></li><li><a href="https://javaserverfaces.dev.java.net/">JSF</a></li><li><a href="https://jsftemplating.dev.java.net/">JSFTemplating</a></li><li><a href="https://woodstock.dev.java.net/">Woodstock</a></li><li><a href="https://jersey.dev.java.net/">Jersey</a></li><li><a href="https://phobos.dev.java.net/">Phobos</a></li><li><a href="https://wadl.dev.java.net/">WADL</a></li><li><a href="https://lrwpinjava.dev.java.net/">LRWPinJava</a></li></ul></li><li id="current-region"><a href="https://glassfish.dev.java.net/">Core</a><ul><li><a href="https://glassfish.dev.java.net/">GlassFish</a></li><li><a href="https://glassfish-samples.dev.java.net/">Samples</a></li><li><a href="https://grizzly.dev.java.net/">Grizzly</a></li><li><a href="https://glassfish-scripting.dev.java.net/">Scripting</a></li><li><a href="https://mq.dev.java.net/">OpenMQ</a></li><li><a href="https://sailfin.dev.java.net/">SailFin</a></li><li><a href="https://shoal.dev.java.net/">Shoal</a></li><li><a href="https://hk2.dev.java.net/">HK2</a></li><li><a href="http://wiki.glassfish.java.net/">Wiki</a></li></ul></li><li><a href="http://blogs.sun.com/theaquarium/">Aquarium</a></li><li id="regions-leadin"><a>&nbsp;</a></li></ul>
+		  		</div>
+		  	</div>
+
+        <div style="clear: right;"></div>
+
+        <div style="float: right;">
+          <table><tbody><tr>
+            <td>
+              <div class="searchbox">
+
+
+<form action="http://wiki.glassfish.java.net/Search.jsp" onsubmit="SearchBox.submit( this.query.value )" onmouseover="Element.show('searchboxMenu');" onmouseout="Element.hide('searchboxMenu');" name="searchForm" id="searchForm" accept-charset="UTF-8">
+  <div>
+  
+  <input onblur="if( this.value == '' ) { this.value = 'Search'}; " onfocus="if( this.value == 'Search' ) { this.value = ''}; " value="Search" name="query" id="query" size="24" accesskey="f" type="text">
+  </div>  
+  <div id="searchboxMenu" style="display: none;">
+    <div>
+      <a href="javascript://nop/" onclick="SearchBox.navigation( 'http://wiki.glassfish.java.net/Wiki.jsp?page=__PAGEHERE__','FaqRunAsWindowsService' );return false;" title="View the selected page">view</a> 
+      | 
+      <a href="javascript://nop/" onclick="SearchBox.navigation( 'http://wiki.glassfish.java.net/Edit.jsp?page=__PAGEHERE__','FaqRunAsWindowsService' );return false;" title="Edit the selected page">edit</a> 
+      | 
+      <a href="javascript://nop/" onclick="SearchBox.clone( 'http://wiki.glassfish.java.net/Edit.jsp?page=__PAGEHERE__','FaqRunAsWindowsService' );return false;" title="Clone this page">clone</a> 
+      |
+      <a href="javascript://nop/" onclick="SearchBox.navigation( 'http://wiki.glassfish.java.net/Search.jsp?query=__PAGEHERE__','FaqRunAsWindowsService' );return false;" title="Advanced Search">find</a> 
+      [ f ]
+    </div>
+    <div id="searchResult"> </div>
+    <div id="recentSearches"> </div>
+  </div>
+
+</form>
+<script type="text/javascript">
+//<![CDATA[    
+    function updateSearchResult( )
+    {  
+      if( $F('query') == 'Search' ) return;
+      new Ajax.Updater(
+        'searchResult', 
+        '/templates/brushed/FindAjax.jsp',
+        { 
+          asynchronous: true,
+          parameters: Form.serialize( 'searchForm' ) + "&compact=true"
+        } ); 
+    } ;
+    new Form.Element.Observer( "query", 1, updateSearchResult ); 
+//]]>
+</script>
+    
+   </div>
+            </td><td style="vertical-align: middle;">
+              
+                <a title="Login or Register new users" href="http://wiki.glassfish.java.net/Login.jsp">Log in</a>
+              
+              
+            </td>
+          </tr></tbody></table>
+        </div>
+
+			  <div id="logo-box" style="clear: none;">
+			    <a href="http://wiki.glassfish.java.net/"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/logo.gif"></a>
+			    <a href="http://wiki.glassfish.java.net/">Glassfish Wiki</a>
+			      »
+			    <span class="pagename">
+			    <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService">FaqRunAsWindowsService</a>
+			    </span>
+                            <div class="termsofuse">
+                             By any use of this Wiki, you acknowledge and agree to be bound by this website's
+                             <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=TermsOfUse" title="Terms of Use">Terms of Use</a>.
+                            </div>
+                            <div class="breadcrumbs">Your trail: </div>
+			  </div>
+		  </div>
+
+		  <div style="clear: both; height: 0pt;"></div>
+		</div>
+	</div>
+</div>
+
+  
+  
+
+
+
+
+
+<div id="actionsTop" class="pageactions"> 
+
+  <span class="actionHome">
+    <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishWiki" title="Go to home page GlassFishWiki ">Home</a>
+  </span>
+  
+  
+    
+
+    
+  
+  
+  <span class="actionIndex">
+     <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PageIndex" title="Alphabetically sorted list of pages [ x ]" accesskey="x">Index</a>
+  </span>
+  
+  <span class="actionRecentChanges">
+     <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=RecentChanges" title="Pages sorted by modification date [ u ]" accesskey="u">Changes</a>
+  </span>
+
+  
+    
+      <span class="actionPrefs">
+        <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=UserPreferences" title="Set User Preferences">Prefs</a>
+      </span>
+    
+  
+
+  
+    <span class="actionLogin">
+      <a title="Login or Register new users" href="http://wiki.glassfish.java.net/Login.jsp">Log in</a>
+    </span>
+  
+
+  
+
+  
+
+  <span class="quicklinks quick2Bottom">
+    <a href="#footer" title="Go to Bottom">»</a>
+  </span>
+
+  <div style="clear: both; height: 0pt;"> </div> 
+</div>
+
+
+  <div id="page" class="application">
+
+
+
+
+
+<div class="tabmenu mainContentTab">
+  
+  
+  
+  
+  
+  
+  
+
+  <span><a class="activetab" id="menu-pagecontent" onclick="TabbedSection.onclick('pagecontent')" accesskey="v"><u>V</u>iew</a></span>
+  
+  
+  <span><a id="menu-attachments" onclick="TabbedSection.onclick('attachments')" accesskey="a"><u>A</u>ttach (2)</a></span>
+  
+  <span><a id="menu-pageinfo" onclick="TabbedSection.onclick('pageinfo')" accesskey="i"><u>I</u>nfo</a></span>
+  
+</div>
+<div class="tabs mainContentTab">
+  <div id="pagecontent">
+
+    
+
+
+
+
+
+
+
+<h3 id="section-FaqRunAsWindowsService-HowDoIRunGlassFishAsAWindowsService">How do I run GlassFish as a Windows service?</h3>
+<p>Glassfish comes with a Windows executable called appservService.exe
+which communicates with the Windows service controller. It works
+similarly to programs such as <a class="external" href="http://wrapper.tanukisoftware.org/doc/english/introduction.html">Java Service Wrapper</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt="">.
+The Windows service you create for Glassfish starts appservService.exe
+with several parameters that tell it which asadmin commands to execute
+when starting and stopping.
+</p>
+<p>Glassfish does not come with a tool to easily create a Windows
+service for appservService.exe, however the installer for Sun Java
+Application Server 9.x has an "Install as a Windows service" checkbox.
+If you want to create a Windows service for Glassfish, the <a class="external" href="https://glassfish.dev.java.net/javaee5/docs/AG/ablwx.html#ablwz">instructions</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt="">
+show a rather large command to run from the command prompt. If your
+Glassfish installation path contains spaces such as C:\Program
+Files\Sun\GlassfishV2\, then finding the correct way to escape the
+escape characters becomes complicated rather quickly.
+</p>
+<h3 id="section-FaqRunAsWindowsService-GlassfishSvc.jar">GlassfishSvc.jar</h3>
+<p><a class="external" href="http://www.ryandelaplante.com/">Ryan de Laplante</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt=""> has contributed a simple command line tool that makes the creation of a Windows service effortless. <a class="attachment" href="http://wiki.glassfish.java.net/attach/FaqRunAsWindowsService/GlassfishSvc.jar">Download GlassfishSvc.jar</a><a href="http://wiki.glassfish.java.net/PageInfo.jsp?page=FaqRunAsWindowsService/GlassfishSvc.jar"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/attachment_small.png" alt="(info)" border="0"></a> <a class="attachment" href="http://wiki.glassfish.java.net/attach/FaqRunAsWindowsService/GlassfishSvc.java">(source)</a><a href="http://wiki.glassfish.java.net/PageInfo.jsp?page=FaqRunAsWindowsService/GlassfishSvc.java"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/attachment_small.png" alt="(info)" border="0"></a>
+and copy it into your Glassfish installation path (such as C:\Program
+Files\Sun\GlassfishV2\), then run the following command from the
+command line:
+</p>
+<pre>C:\Program Files\Sun\GlassfishV2&gt;java -jar GlassfishSvc.jar -i 
+
+glassfishsvc v1.0 (Aug 19 2007) 
+
+Service name : GlassfishAppServer 
+Glassfish installation path : C:\Program Files\Sun\GlassfishV2
+Glassfish domain : domain1 
+Glassfish admin username : admin 
+
+Installing service... Done.</pre>
+<p>The -i argument will install the service with default options.  A complete listing of the command line arguments follows:
+</p>
+<pre>glassfishsvc v1.0 (Aug 19 2007)
+
+DESCRIPTION:
+    Installs and uninstalls a Windows service for Glassfish
+
+USAGE:
+    java -jar glassfishsvc.jar [-i | -u] [OPTIONS]
+
+    -i        Installs a Windows service for Glassfish.
+    -u        Uninstalls a Windows service for Glassfish.
+    -n name   Name for the Windows service. Use double quotes around names
+              that contain spaces.  Defaults to GlassfishAppServer.
+    -d path   Directory where Glassfish is installed. Use double
+              quotes around paths with spaces, and escape back slashes.
+              Defaults to current directory.
+    -m domain Name of the Glassfish domain to start and stop. Defaults to
+              domain1.
+    -a user   Glassfish admin user name.  Defaults to admin.
+    -p pwd    Glassfish admin password.  A password.txt file will be created
+              in the Glassfish install directory containing the password in
+              plain text, and the Windows service will be configured to read
+              from it. This is usually not necessary. If no password is passed
+              in, the password.txt file will not be created.
+
+EXAMPLES:
+    java -jar glassfishsvc.jar -i
+    java -jar glassfishsvc.jar -i -p adminadmin
+    java -jar glassfishsvc.jar -i -n MyServiceName -d "C:\\Program Files\\Sun\\Glassfish" -m myDomain -a admin5 -p secretpwd
+    java -jar glassfishsvc.jar -u
+    java -jar glassfishsvc.jar -u -n MyServiceName
+
+AUTHOR:
+    Ryan de Laplante &lt;ryan at ijws dot com&gt;</pre>
+<h3 id="section-FaqRunAsWindowsService-ClusterProfile">Cluster Profile</h3>If
+you installed the Glassfish cluster profile then Glassfish will ask for
+the admin password as the service starts. To get around this use the -p
+option when installing the service. A password.txt file will be created
+in Glassfish's root directory containing the password in plain text.
+The Windows service will be configured to use this file so that it can
+start unattended. You should make sure to configure appropriate NTFS
+security on this file after it is created so that unauthorized users do
+not have read or write access to it.
+<h3 id="section-FaqRunAsWindowsService-WindowsUserLogOut">Windows User Log-out</h3>
+<p>By default the JVM catches signals from Windows that indicate the OS
+is shutting down, or a user is logging out, and shuts itself down
+cleanly. This means that the Glassfish service will be shut down any
+time a user logs out of Windows. This defeats the purpose of having a
+Windows service so we need to turn off this JVM feature by using the <a class="external" href="http://java.sun.com/j2se/1.3/docs/tooldocs/solaris/java.html#Xrs">-Xrs JVM option</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt="">.  
+</p>
+<p>Open the &lt;GF_HOME&gt;\domains\domain1\config\domain.xml file and
+locate the section that has a lot of &lt;jvm-options&gt;some JVM
+option&lt;/jvm-options&gt; lines. Add the following line in that
+section:
+</p>
+<pre>&lt;jvm-options&gt;-Xrs&lt;/jvm-options&gt;</pre>
+<p>Save and close domain.xml.  If the Glassfish service is already running, restart it for the change to take effect.
+</p>
+<p><b><i>Note:</i></b> There have been reports that adding the -Xrs
+jvm-option to domain.xml does not solve this problem on some Windows
+2003 Server installations. The reported solution is to add the jvm
+option to &lt;GF_HOME&gt;\lib\processLauncher.xml:
+</p>
+<pre>&lt;process name="as9-server"&gt;
+   ...
+   &lt;sysproperty key="-Xrs"/&gt;
+   ...</pre>
+<h3 id="section-FaqRunAsWindowsService-Resources">Resources</h3>
+<a class="external" href="http://www.ryandelaplante.com/rdelaplante/entry/creating_a_windows_service_for">Ryan de Laplante's blog entry</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt=""><br>
+<a class="external" href="https://glassfish.dev.java.net/javaee5/docs/AG/ablwx.html#ablwz">Sun Java System Application Server Platform Edition 9 Administration Guide - Chapter 21</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt=""><br>
+<a class="external" href="http://blogs.sun.com/theaquarium/entry/windows_services_support_in_sjs">The Aquarium - Windows Services Support in SJS AS (and GlassFish)</a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt=""><br>
+<a class="external" href="http://forums.java.net/jive/thread.jspa?messageID=243041">java.net forum post on processLauncher.xml </a><img class="outlink" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/out.png" alt="">
+
+
+
+
+  </div>
+
+  
+  
+  <div id="attachments" style="display: none;">
+
+    
+
+
+
+
+
+
+
+<div id="attachmentViewer">
+  <div class="list">
+    <h3>List of attachments &nbsp;&nbsp;&nbsp;&nbsp;
+    </h3>
+      <form action="#">
+        <select name="attachSelect" id="attachSelect" size="16" onchange="Attach.showImage(this[this.selectedIndex], '%A4', 300, 300 )">
+        <option value="Attachment Info" selected="selected">--- Select Image to preview ---</option>
+        
+          
+          <option value="GlassfishSvc.jar%A4http://wiki.glassfish.java.net/attach/FaqRunAsWindowsService/GlassfishSvc.jar%A4http://wiki.glassfish.java.net/PageInfo.jsp?page=FaqRunAsWindowsService/GlassfishSvc.jar%A48003 bytes%A41">
+            GlassfishSvc.jar (8003 bytes , revision-1, by&nbsp;Ryan de Laplante)
+          </option>
+        
+          
+          <option value="GlassfishSvc.java%A4http://wiki.glassfish.java.net/attach/FaqRunAsWindowsService/GlassfishSvc.java%A4http://wiki.glassfish.java.net/PageInfo.jsp?page=FaqRunAsWindowsService/GlassfishSvc.java%A413508 bytes%A41">
+            GlassfishSvc.java (13508 bytes , revision-1, by&nbsp;Ryan de Laplante)
+          </option>
+        
+      </select>
+    </form>
+    <div class="small">&nbsp;</div>
+  </div>  
+
+  <div class="preview">
+    <h3>Image preview</h3>
+    <div id="attachImg" title="No Image Selected">No Image Selected</div>
+    <a href="#" class="small" style="display: none;" id="attachInfo">More info, including version history</a>
+  </div>
+
+  <div style="clear: both; height: 0px;"> </div>
+
+</div>
+
+
+  </div>
+
+  
+  <div id="pageinfo" style="display: none;">
+
+    
+
+
+
+
+
+
+
+
+  <p>
+  This page (revision-8) was last changed on 
+  <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=7" title="Show changes of last page update">
+    
+    04-Nov-07 06:48 AM, -0800
+  </a> by Ryan de Laplante.
+  <a href="http://wiki.glassfish.java.net/rss.jsp?page=FaqRunAsWindowsService&amp;mode=wiki" title="RSS page feed for FaqRunAsWindowsService"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/xml.png" alt="[RSS]" border="0"></a>
+    
+    <br>
+    This page was created on 
+    <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=1">07-Sep-07 19:50 PM, -0700</a> by Ryan de Laplante.
+    
+  </p>    
+
+  
+
+  
+   
+  
+  <p><a href="http://wiki.glassfish.java.net/PageInfo.jsp?page=FaqRunAsWindowsService" id="moreinfo">More info...</a></p>
+  
+  
+
+  <div class="tabmenu">
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  <span><a class="activetab" id="menu-versionHistory" onclick="TabbedSection.onclick('versionHistory')">Version History</a></span>
+  
+
+  <span><a id="menu-incomingLinks" onclick="TabbedSection.onclick('incomingLinks')">Incoming Links</a></span>
+
+  <span><a id="menu-outgoingLinks" onclick="TabbedSection.onclick('outgoingLinks')">Outgoing Links</a></span>
+
+  
+  
+  </div>
+<div class="tabs">
+  
+  <div id="versionHistory">
+
+
+    
+    <div class="zebra-table">
+    <table class="wikitable">
+      <tbody><tr class="odd">
+        <th>Version</th>                        
+        <th>Date</th>
+        <th>Author</th>
+        <th>Size</th>
+        <th>Changes ...</th>
+        
+      </tr>
+
+      
+      
+      <tr>
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=8" accesskey="" title="">
+            8
+          </a>
+        </td>
+
+        <td>
+          04-Nov-07 06:48 AM, -0800
+        </td>
+        <td>Ryan de Laplante</td>
+        <td>5684</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=7">to previous</a>
+            
+          
+
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr class="odd">
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=7" accesskey="" title="">
+            7
+          </a>
+        </td>
+
+        <td>
+          10-Oct-07 18:35 PM, -0700
+        </td>
+        <td>GailRisdal</td>
+        <td>5243</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=7&amp;r2=6">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=7">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr>
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=6" accesskey="" title="">
+            6
+          </a>
+        </td>
+
+        <td>
+          10-Oct-07 06:02 AM, -0700
+        </td>
+        <td>VialeLpaso</td>
+        <td>5254</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=6&amp;r2=5">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=6">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr class="odd">
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=5" accesskey="" title="">
+            5
+          </a>
+        </td>
+
+        <td>
+          12-Sep-07 18:19 PM, -0700
+        </td>
+        <td>Ryan de Laplante</td>
+        <td>5243</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=5&amp;r2=4">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=5">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr>
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=4" accesskey="" title="">
+            4
+          </a>
+        </td>
+
+        <td>
+          11-Sep-07 22:09 PM, -0700
+        </td>
+        <td>Ryan de Laplante</td>
+        <td>5185</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=4&amp;r2=3">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=4">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr class="odd">
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=3" accesskey="" title="">
+            3
+          </a>
+        </td>
+
+        <td>
+          08-Sep-07 14:51 PM, -0700
+        </td>
+        <td>JohnClingan</td>
+        <td>315</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=3&amp;r2=2">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=3">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr>
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=2" accesskey="" title="">
+            2
+          </a>
+        </td>
+
+        <td>
+          08-Sep-07 14:50 PM, -0700
+        </td>
+        <td>JohnClingan</td>
+        <td>314</td>
+
+        <td>
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=2&amp;r2=1">to previous</a>
+             | 
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=2">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+      
+      <tr class="odd">
+        <td>
+          <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;version=1" accesskey="" title="">
+            1
+          </a>
+        </td>
+
+        <td>
+          07-Sep-07 19:50 PM, -0700
+        </td>
+        <td>Ryan de Laplante</td>
+        <td>147</td>
+
+        <td>
+          
+
+          
+            <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=1">to last</a>
+          
+        </td>
+
+        
+        
+      </tr>
+      
+      
+
+    </tbody></table>  
+    </div>
+    
+
+  </div>
+
+  
+
+  <div id="incomingLinks" style="display: none;">
+
+    <a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService" accesskey="" title="">FaqRunAsWindowsService</a>
+    <ul><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsServiceZh">FaqRunAsWindowsServiceZh</a>
+</li><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQ">GlassFishUserFAQ</a>
+</li><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQJa">GlassFishUserFAQJa</a>
+</li><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQJaStatus">GlassFishUserFAQJaStatus</a>
+</li><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQRu">GlassFishUserFAQRu</a>
+</li><li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQZh">GlassFishUserFAQZh</a>
+</li></ul>
+  </div>
+
+
+  <div id="outgoingLinks" style="display: none;">
+
+    
+      <div class="ReferredPagesPlugin">
+<a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService" title="ReferredPagesPlugin: depth[1] include[.*] exclude[^$] format[compact]">FaqRunAsWindowsService</a>
+<ul>
+<li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService/GlassfishSvc.jar">FaqRunAsWindowsService/GlassfishSvc.jar</a></li>
+<li><a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService/GlassfishSvc.java">FaqRunAsWindowsService/GlassfishSvc.java</a></li>
+</ul>
+</div>
+
+    
+    
+  </div>
+
+
+  
+  
+  <div style="clear: both; height: 0px;"> </div>
+</div>
+ 
+
+
+
+
+
+
+
+
+
+  </div>
+
+  
+<div style="clear: both; height: 0px;"> </div>
+</div>
+
+</div> 
+
+  
+
+
+
+<div id="navcol"><div id="favorites">
+
+
+<div class="username">G'day,
+  
+    <a title="Hi, Anonymous Guest" href="http://wiki.glassfish.java.net/Wiki.jsp?page=Login">Anonymous Guest</a>
+  
+  
+  
+  
+</div>
+
+
+
+
+
+
+
+
+<script src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/zone-wiki.js"></script><dl class="navgroup" id="projecttools"><dt id="current-zone"><a href="http://wiki.glassfish.java.net/">Glassfish Wiki</a></dt><dd id="menubar"><ul>
+  <li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishWiki">GlassFish Wiki</a>
+  </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GapTop">Grants and Awards Program</a>
+  </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=EventsCommunityOne2008">CommmunityOne 08</a>
+  </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=AboutThisWiki">About this Wiki</a>
+  </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishFAQIndex">GlassFish FAQs</a>
+  <ul>
+    <li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishUserFAQ">GlassFish User FAQ</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishDeveloperFAQ">GlassFish Developer FAQ</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishWikiFAQ">GlassFish Wiki FAQ</a>
+  </li></ul>
+  </li><li><a href="https://glassfish.dev.java.net/docs/index.html">Product Documentation</a>
+</li><li><a href="https://glassfish.dev.java.net/docs/project.html">Documentation Community</a>  
+  </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishHowTos">How-Tos</a>
+  </li><li><a href="#">Using GlassFish</a>
+  <ul>
+    <li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Milestones">Schedule for Milestones</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PlanForGlassFishV2.1">GlassFish v2.1</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PlanForGlassFishV2UR">GlassFish v2 UR1</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PlanForGlassFishV2UR2">GlassFish v2 UR2</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PlanForGlassFishV2">GlassFish v2</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PlanForGlassFishV3">GlassFish v3</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishV1UR1">GlassFish v1 UR1</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=SailFin">Communication Server</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishAdoption">Adoption</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=ProductComparisons">Product Comparisons</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Products">Commercial Products</a>
+    </li><li><a href="http://www.sun.com/service/applicationserversubscriptions/">Support</a>
+    </li><li><a href="http://java.sun.com/javaee/support/training/">Training and Certification</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Events">Events</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishTechnologyAreas">Technology Areas</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=FrameworksApplicationsToolsCatalog">GlassFish Extras Catalog</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Screencasts">Screencasts</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=TellMeShowMe">Tell Me Show Me</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=TipsAndBlogs">Tips and Blogs</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Presentations">Presentations</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Publications">Publications</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=ChatRooms">Chat Rooms (IRC)</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=G11n">Globalization(G11N)</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=UsingGlassFish">...more</a>
+  </li></ul>
+<p>  </p></li><li><a href="#">Improving GlassFish</a>
+  <ul>
+    <li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=BuildInformation">Build Information</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Deployment">Deployment</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishAdministrationPages">Administration</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishTools">Tools</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=ContributorsTopPage">Contributors</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=ModulesAndLeads">Modules and Leads</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=DevelopersTop">...more</a>
+  </li></ul>
+
+<p>  </p></li><li><a href="#">About GlassFish</a>
+  <ul>
+    <li><a href="https://glassfish.dev.java.net/public/downloadsindex.html">Downloads</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=CommunityDocs">Documentation</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=ProjectsInGlassFishCommunity">Projects</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=MiddlewareCommunities">Middleware Communities</a>
+    </li><li><a href="http://wiki.netbeans.info/">NetBeans Wiki</a>
+    </li><li><a href="http://wiki.open-esb.java.net/">Open ESB / JBI Wiki </a>
+    </li><li><a href="http://java.sun.com/javaee/overview/testimonials.jsp#3">Licensees</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=Community">Community</a>
+    </li><li><a href="http://wiki.glassfish.java.net/Wiki.jsp?page=CommunityTop">...more</a>
+  </li></ul>
+</li></ul></dd></dl>
+
+<p>
+</p><p>
+</p><hr>
+<a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=FindPage">Find pages</a><br>
+<a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=UnusedPages">Unused pages</a><br>
+<a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=UndefinedPages">Undefined pages</a><br>
+<a class="wikipage" href="http://wiki.glassfish.java.net/Wiki.jsp?page=PageIndex">Page Index</a>
+
+
+
+
+  
+<p>
+</p><p>
+
+
+
+
+</p><div class="rssfeed"><a href="http://wiki.glassfish.java.net/rss.rdf"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/xml.png" alt="[RSS]" title="Aggregate the RSS feed of the entire wiki" border="0"></a></div>
+
+<div style="clear: both; height: 0px;"> </div>
+
+</div></div> 
+
+  
+
+
+
+
+
+<div id="actionsBottom" class="pageactions"> 
+
+  <span class="quicklinks quick2Top">
+    <a href="#wikibody" title="Go to Top">«</a>
+  </span>
+
+  <span class="actionHome">
+    <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=GlassFishWiki" title="Go to home page GlassFishWiki ">Home</a>
+  </span>
+  
+  
+    
+    
+    <!-- replaces the main tab bar -->
+    <span>
+      <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;tab=attachments">Attachments</a>
+    </span>
+    <span>
+      <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=FaqRunAsWindowsService&amp;tab=pageinfo">Info</a>
+    </span>
+
+    
+  
+  
+  <span class="actionIndex">
+     <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=PageIndex" title="Alphabetically sorted list of pages [ x ]">Index</a>
+  </span>
+  
+  <span class="actionRecentChanges">
+     <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=RecentChanges" title="Pages sorted by modification date [ u ]">Changes</a>
+  </span>
+
+  
+    
+      <span class="actionPrefs">
+        <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=UserPreferences" title="Set User Preferences">Prefs</a>
+      </span>
+    
+  
+
+  
+    <div class="pageinfo">
+      
+        This page (revision-8) was last changed on 
+        <a href="http://wiki.glassfish.java.net/Diff.jsp?page=FaqRunAsWindowsService&amp;r1=8&amp;r2=7" title="Show changes of last page update">  
+        
+        04-Nov-07 06:48 AM, -0800</a>
+      
+      
+      by Ryan de Laplante
+
+      
+    </div>  
+  
+
+  <div style="clear: both; height: 0pt;"> </div> 
+</div>
+
+
+  
+
+
+<div id="footer">
+
+  
+
+  <div class="copyright">
+   By any use of this Wiki, you acknowledge and agree to be bound by this website's
+   <a href="http://wiki.glassfish.java.net/Wiki.jsp?page=TermsOfUse" title="Terms of Use">Terms of Use</a>.
+   Copyright 1994-2008 Sun Microsystems, Inc.
+  </div>
+
+  <!--div class="wikiversion">
+    JSPWiki v2.4.103                       
+  </div-->
+
+  <div class="rssfeed">
+    <a href="http://wiki.glassfish.java.net/rss.rdf"><img src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/xml.png" alt="[RSS]" title="Aggregate the RSS feed" border="0"></a>
+  </div>
+
+  <div style="clear: both; height: 0px;"> </div>
+  <script type="text/javascript" src="How%20do%20I%20run%20GlassFish%20as%20a%20Windows%20service_files/s_code_remote.js">
+  Access Count: Plugin insertion failed: Plugin failed
+ <br>
+</div>
+
+
+  <div style="clear:both; height:0;" > </div>
+
+</div>
+
+</body>
+</html>
+
+
+
+</div></div></body></html>
