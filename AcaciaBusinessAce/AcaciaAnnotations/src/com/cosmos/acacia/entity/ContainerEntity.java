@@ -16,14 +16,11 @@ public class ContainerEntity {
     private JComponent jContainer;
     private RelationshipType relationshipType;
     private Class entityClass;
-    private Class listPanelClass;
 
-    public ContainerEntity(JComponent jContainer, RelationshipType relationshipType,
-            Class entityClass, Class listPanelClass) {
+    public ContainerEntity(JComponent jContainer, RelationshipType relationshipType, Class entityClass) {
         this.jContainer = jContainer;
         this.relationshipType = relationshipType;
         this.entityClass = entityClass;
-        this.listPanelClass = listPanelClass;
     }
 
     public Class getEntityClass() {
@@ -38,7 +35,20 @@ public class ContainerEntity {
         return relationshipType;
     }
 
-    public Class getListPanelClass() {
-        return listPanelClass;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ContainerEntity[jContainer=[");
+        if(jContainer == null) {
+            sb.append(jContainer);
+        } else {
+            sb.append("class=").append(jContainer.getClass());
+            sb.append(", name=").append(jContainer.getName());
+        }
+        sb.append("], relationshipType=").append(relationshipType);
+        sb.append(", entityClass=").append(entityClass);
+        sb.append("]");
+
+        return sb.toString();
     }
 }

@@ -9,7 +9,6 @@ import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.ComponentBorder;
 import com.cosmos.acacia.annotation.ComponentProperty;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
@@ -19,9 +18,11 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.Unit;
 import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.util.BeanUtils;
+import com.cosmos.util.ClassHelper;
 import java.awt.LayoutManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +69,7 @@ public class EntityFormProcessor {
     //
     private Class entityClass;
     private ResourceMap resourceMap;
+    private Map<String, EntityAttributes<Property>> entityFormConstantsMap;
     //
     private Class<? extends EntityService> entityServiceClass;
     private Map<String, JComponent> containersMap;
@@ -78,11 +80,16 @@ public class EntityFormProcessor {
     private Map<String, Set<String>> containerDependenciesMap;
     private Map<UnitType, List<Unit>> entityListLogicUnitsMap;
     private Map<UnitType, List<Unit>> entityLogicUnitsMap;
+    private Map<String, FormContainer> formContainerMap;
     private int componentIndexCounter = Property.INITIAL_INDEX_VALUE;
 
-    public EntityFormProcessor(Class entityClass, ResourceMap resourceMap) {
+    public EntityFormProcessor(
+            Class entityClass,
+            ResourceMap resourceMap,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
         this.entityClass = entityClass;
         this.resourceMap = resourceMap;
+        this.entityFormConstantsMap = entityFormConstantsMap;
         init();
     }
 
@@ -95,6 +102,7 @@ public class EntityFormProcessor {
         containerDependenciesMap = new TreeMap<String, Set<String>>();
         entityListLogicUnitsMap = new EnumMap<UnitType, List<Unit>>(UnitType.class);
         entityLogicUnitsMap = new EnumMap<UnitType, List<Unit>>(UnitType.class);
+        formContainerMap = new TreeMap<String, FormContainer>();
 
         List<Form> forms = getAnnotations(entityClass);
         for (Form form : forms) {
@@ -143,7 +151,7 @@ public class EntityFormProcessor {
                 addFormContainer((FormContainer) object);
             } else {
                 Object[] params = (Object[]) object;
-                addFormComponent((Annotation) params[0], (Field) params[1]);
+                addFormComponent((FormComponentPair) params[0], (Field) params[1]);
             }
         }
     }
@@ -156,15 +164,15 @@ public class EntityFormProcessor {
         for(StringIntegerComparator strInt : fieldsMap.keySet()) {
             Integer index = strInt.getIntValue();
             Field field = fieldsMap.get(strInt);
-            for (Annotation annotation : getAnnotations(field)) {
-                if (annotation instanceof FormComponent || annotation instanceof FormComponentPair) {
+            Annotation annotation;
+            if((annotation = getFormComponentAnnotation(field)) != null) {
+                if (annotation instanceof FormComponentPair) {
                     if(indexedComponents.containsKey(index)) {
                         throw new EntityFormException("There is another component with index=" + index +
                                 ", existing=" + indexedComponents.get(index) +
                                 ", current=" + annotation);
                     }
                     indexedComponents.put(index, new Object[] {annotation, field});
-                    break;
                 }
             }
         }
@@ -185,7 +193,7 @@ public class EntityFormProcessor {
         if(parentContainer instanceof JTabbedPane) {
             String title;
             String name = jContainer.getName();
-            if((title = resourceMap.getString(name + ".TabConstraints.tabTitle")) == null ||
+            if((title = getResourceString(jContainer, name + ".TabConstraints.tabTitle")) == null ||
                     title.trim().length() == 0) {
                 title = formContainer.title();
             }
@@ -197,29 +205,26 @@ public class EntityFormProcessor {
         } else {
             parentContainer.add(jContainer, componentConstraints);
         }
+
+        formContainerMap.put(jContainer.getName(), formContainer);
     }
 
-    protected void addFormComponent(Annotation annotation, Field field) {
-        if (annotation instanceof FormComponent) {
-            FormComponent formComponent = (FormComponent) annotation;
-            String parentContainerName = formComponent.parentContainerName();
+    protected void addFormComponent(FormComponentPair componentPair, Field field) {
+        String parentContainerName = componentPair.parentContainerName();
 
-            Component component = formComponent.component();
+        Component component = componentPair.firstComponent();
+        if(NullJComponent.class != component.componentClass()) {
             getJComponent(component, parentContainerName, field);
-        } else if (annotation instanceof FormComponentPair) {
-            FormComponentPair componentPair = (FormComponentPair) annotation;
-            String parentContainerName = componentPair.parentContainerName();
+        }
 
-            Component component = componentPair.firstComponent();
-            getJComponent(component, parentContainerName, field);
-
-            component = componentPair.secondComponent();
+        component = componentPair.secondComponent();
+        if(NullJComponent.class != component.componentClass()) {
             getJComponent(component, parentContainerName, field);
         }
     }
 
     protected JComponent getJComponent(Component component, String parentContainerName, Field field) {
-        Property property = field.getAnnotation(Property.class);
+        Property property = getProperty(field);
         String propertyName = field.getName();
         JComponent jComponent = getComponent(component, field);
 
@@ -287,6 +292,13 @@ public class EntityFormProcessor {
         }
 
         return set;
+    }
+
+    public void removeJComponents(String propertyName) {
+//        private Map<String, JComponent> containersMap;
+//        private Map<String, JComponent> componentsMap;
+//        private Map<String, Property> propertiesMap;
+//        private Map<String, String> propertyNamesMap;
     }
 
     public <C extends JComponent> C getJComponentByPropertyName(String propertyName, Class<C> componentClass) {
@@ -371,6 +383,10 @@ public class EntityFormProcessor {
         return propertiesMap;
     }
 
+    public Map<String, FormContainer> getFormContainerMap() {
+        return formContainerMap;
+    }
+
     public Map<String, String> getPropertyNamesMap() {
         return propertyNamesMap;
     }
@@ -387,8 +403,17 @@ public class EntityFormProcessor {
         return componentsMap.get(componentName);
     }
 
-    protected ResourceMap getResourceMap() {
-        return resourceMap;
+    protected ResourceMap getResourceMap(JComponent jComponent) {
+        try {
+            Method method = jComponent.getClass().getMethod("getResourceMap");
+            return (ResourceMap) method.invoke(jComponent);
+        } catch(Exception ex) {
+            if((jComponent = (JComponent) jComponent.getParent()) != null) {
+                return getResourceMap(jComponent);
+            }
+
+            return resourceMap;
+        }
     }
 
     private ContainerType getContainerType(JComponent container) {
@@ -472,7 +497,11 @@ public class EntityFormProcessor {
     }
 
     protected void initJComponentResources(JComponent jComponent) {
-        resourceMap.injectComponent(jComponent);
+        getResourceMap(jComponent).injectComponent(jComponent);
+    }
+
+    protected String getResourceString(JComponent jComponent, String key) {
+        return getResourceMap(jComponent).getString(key);
     }
 
     public JComponent getContainer(String containerName) {
@@ -503,23 +532,11 @@ public class EntityFormProcessor {
         }
 
         RelationshipType relationshipType = formContainer.relationshipType();
-        String listPanelClassName;
-        Class listPanelClass;
-        if((listPanelClassName = formContainer.listPanelClassName()).length() > 0) {
-            try {
-                listPanelClass = Class.forName(listPanelClassName);
-            } catch(Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        } else {
-            listPanelClass = null;
-        }
 
         Class containerEntityClass;
         if((!RelationshipType.None.equals(relationshipType)) &&
                 (containerEntityClass = formContainer.entityClass()) != void.class) {
-            ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType,
-                    containerEntityClass, listPanelClass);
+            ContainerEntity containerEntity = new ContainerEntity(jContainer, relationshipType, containerEntityClass);
             containerEntities.add(containerEntity);
         }
 
@@ -823,36 +840,29 @@ public class EntityFormProcessor {
             Field[] declaredFields = entityClass.getDeclaredFields();
             if (declaredFields != null && declaredFields.length > 0) {
                 for (Field field : declaredFields) {
-                    for (Annotation annotation : field.getAnnotations()) {
-                        if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
-                            if((annotation = getFormComponentAnnotation(annotation)) == null) {
-                                continue;
-                            }
+                    Property property = getProperty(field);
+                    if(property == null) {
+                        continue;
+                    }
 
-                            int index = -1;
-                            String str = "";
-                            if (annotation instanceof FormComponentPair) {
-                                index = ((FormComponentPair) annotation).componentIndex();
-                                str = ((FormComponentPair) annotation).parentContainerName();
-                            } else if (annotation instanceof FormComponent) {
-                                index = ((FormComponent) annotation).componentIndex();
-                                str = ((FormComponent) annotation).parentContainerName();
-                            }
+                    String parentContainerName = property.parentContainerName();
+                    int index = property.index();
 
-                            if(index <= 0) {
-                                Property property = field.getAnnotation(Property.class);
-                                index = property.index();
-                            }
+                    StringIntegerComparator key = null;
+                    FormComponentPair formComponentPair;
+                    if((formComponentPair = getFormComponentAnnotation(field)) != null) {
+                        index = formComponentPair.componentIndex();
+                        parentContainerName = formComponentPair.parentContainerName();
 
-                            StringIntegerComparator key;
-                            if (index <= 0) {
-                                key = new StringIntegerComparator(str, componentIndexCounter += Property.STEP_VALUE);
-                            } else {
-                                key = new StringIntegerComparator(str, index);
-                            }
-                            map.put(key, field);
-                            break;
+                        if (index <= 0) {
+                            key = new StringIntegerComparator(parentContainerName, componentIndexCounter += Property.STEP_VALUE);
+                        } else {
+                            key = new StringIntegerComparator(parentContainerName, index);
                         }
+                    }
+
+                    if(key != null) {
+                        map.put(key, field);
                     }
                 }
             }
@@ -863,54 +873,20 @@ public class EntityFormProcessor {
         return map;
     }
 
-    private List<Annotation> getAnnotations(Field field) {
-        Annotation[] declaredAnnotations = field.getDeclaredAnnotations();
-        if (declaredAnnotations == null || declaredAnnotations.length == 0) {
-            return Collections.emptyList();
-        }
-
-        int counter = Property.INITIAL_INDEX_VALUE;
-        Map<Integer, Annotation> map = new TreeMap<Integer, Annotation>();
-        for (Annotation annotation : declaredAnnotations) {
-            if (annotation.annotationType().getName().startsWith(ACACIA_ANNOTATION_PREFIX)) {
-                if((annotation = getFormComponentAnnotation(annotation)) == null) {
-                    continue;
-                }
-
-                int index = -1;
-                if (annotation instanceof FormComponentPair) {
-                    index = ((FormComponentPair) annotation).componentIndex();
-                } else if (annotation instanceof FormComponent) {
-                    index = ((FormComponent) annotation).componentIndex();
-                }
-
-                if(index <= 0) {
-                    Property property = field.getAnnotation(Property.class);
-                    index = property.index();
-                }
-
-                if (index <= 0) {
-                    map.put(counter += Property.STEP_VALUE, annotation);
-                } else {
-                    map.put(index, annotation);
-                }
-            }
-        }
-
-        return new ArrayList<Annotation>(map.values());
+    private Property getProperty(Field field) {
+        return ClassHelper.getProperty(field, entityFormConstantsMap);
     }
 
-    private Annotation getFormComponentAnnotation(Annotation annotation) {
-        if(!(annotation instanceof Property)) {
+    private FormComponentPair getFormComponentAnnotation(Field field) {
+        Property property;
+        if((property = getProperty(field)) == null) {
             return null;
         }
 
-        Property property = (Property)annotation;
-        if(property.formComponentPair().firstComponent().componentClass() != NullJComponent.class &&
-                property.formComponentPair().secondComponent().componentClass() != NullJComponent.class) {
-            return property.formComponentPair();
-        } else if(property.formComponent().component().componentClass() != NullJComponent.class) {
-            return property.formComponent();
+        FormComponentPair formComponentPair = property.formComponentPair();
+        if(formComponentPair.firstComponent().componentClass() != NullJComponent.class ||
+                formComponentPair.secondComponent().componentClass() != NullJComponent.class) {
+            return formComponentPair;
         }
 
         return null;

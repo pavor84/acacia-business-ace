@@ -5,8 +5,6 @@
 
 package com.cosmos.acacia.annotation;
 
-import java.util.Set;
-
 /**
  *
  * @author Miro

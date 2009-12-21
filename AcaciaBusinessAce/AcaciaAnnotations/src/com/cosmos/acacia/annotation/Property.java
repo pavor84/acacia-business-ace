@@ -24,7 +24,7 @@ public @interface Property {
     public static final int CUSTOM_INDEX_VALUE = 6000000;
     public static final int STEP_VALUE = 100;
 
-    String title();
+    String title() default "";
 
     boolean readOnly() default false;
 
@@ -90,12 +90,15 @@ public @interface Property {
      */
     byte reportColumnWidth() default 0;
 
-    FormComponentPair formComponentPair() default @FormComponentPair(firstComponent = @Component(componentClass = NullJComponent.class),
+    FormComponentPair formComponentPair() default @FormComponentPair(
+            firstComponent = @Component(componentClass = NullJComponent.class),
             secondComponent = @Component(componentClass = NullJComponent.class));
 
-    FormComponent formComponent() default @FormComponent(component = @Component(componentClass = NullJComponent.class));
+    String parentContainerName() default "";
 
     int maxTableColumnWidth() default 200;
 
     int index() default -1;
+
+    boolean useEntityAttributes() default true;
 }
