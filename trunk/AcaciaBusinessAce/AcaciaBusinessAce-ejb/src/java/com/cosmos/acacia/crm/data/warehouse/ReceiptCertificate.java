@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.warehouse;
 
+import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.warehouse.Warehouse;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;

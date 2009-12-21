@@ -24,9 +24,15 @@ import java.util.UUID;
 @Local
 public interface AcaciaSessionLocal extends AcaciaSessionRemote {
 
-    Organization getSystemOrganization();
+    Organization getSupervisorOrganization();
+
+    boolean isSupervisorOrganization(Organization organization);
 
     User getSupervisor();
+
+    boolean isSupervisor();
+
+    boolean isSupervisor(User user);
 
     /**
      * Logs in the user, creates new session and returns the session id.

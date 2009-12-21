@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.warehouse;
 
 import java.io.Serializable;
 import java.util.UUID;

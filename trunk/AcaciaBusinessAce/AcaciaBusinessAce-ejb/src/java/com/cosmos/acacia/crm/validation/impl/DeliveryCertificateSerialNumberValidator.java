@@ -7,9 +7,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesLocal;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateSerialNumber;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.crm.validation.ValidationException;
 

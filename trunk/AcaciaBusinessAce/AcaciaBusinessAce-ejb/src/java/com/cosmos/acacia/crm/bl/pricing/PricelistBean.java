@@ -24,6 +24,7 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
 import com.cosmos.acacia.crm.validation.impl.PricelistValidatorLocal;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
 
@@ -180,11 +181,11 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
         EntityProperties entityProperties = esm.getEntityProperties(PricelistItem.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         
-        EntityProperty categoryColumn = EntityProperty.createEntityProperty("product.category.categoryName", "Category", String.class.getName(), 12);
+        EntityProperty categoryColumn = EntityProperty.createEntityProperty("product.category.categoryName", "Category", String.class.getName(), 12, AcaciaEntityAttributes.getEntityAttributesMap());
         entityProperties.addEntityProperty(categoryColumn);
         
         if ( rightsManagerLocal.isAllowed(SpecialPermission.ProductPricing) ){
-            EntityProperty pd = EntityProperty.createEntityProperty("sourcePrice", "Source Price", BigDecimal.class.getName(), 35);
+            EntityProperty pd = EntityProperty.createEntityProperty("sourcePrice", "Source Price", BigDecimal.class.getName(), 35, AcaciaEntityAttributes.getEntityAttributesMap());
             pd.setReadOnly(true);
             pd.setEditable(false);
             entityProperties.addEntityProperty(pd);
@@ -192,7 +193,7 @@ public class PricelistBean implements PricelistLocal, PricelistRemote {
             entityProperties.removeEntityProperty("discountPercent");
         }
         
-        EntityProperty pd = EntityProperty.createEntityProperty("salesPrice", "Sales Price", BigDecimal.class.getName(), 45);
+        EntityProperty pd = EntityProperty.createEntityProperty("salesPrice", "Sales Price", BigDecimal.class.getName(), 45, AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setReadOnly(true);
         pd.setEditable(false);
         entityProperties.addEntityProperty(pd);

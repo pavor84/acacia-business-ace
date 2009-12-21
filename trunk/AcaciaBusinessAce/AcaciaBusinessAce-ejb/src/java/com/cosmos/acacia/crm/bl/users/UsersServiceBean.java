@@ -10,6 +10,7 @@ import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
+import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.BusinessUnitAddress;
 import com.cosmos.acacia.crm.data.users.JobTitle;
@@ -20,11 +21,13 @@ import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.data.users.UserRegistration;
 import com.cosmos.acacia.crm.data.users.UserSecurityRole;
 import com.cosmos.acacia.crm.enums.AccountStatus;
-import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
+import com.cosmos.acacia.crm.enums.BusinessUnitTypeJobTitle;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
 import com.cosmos.acacia.crm.enums.FunctionalHierarchy;
 import com.cosmos.acacia.entity.AbstractEntityService;
 import com.cosmos.acacia.entity.Operation;
+import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.util.SecurityUtils;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +62,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
 
     @Override
     public User newUser() {
-        User user = new User(session.getSystemOrganization());
+        User user = new User(session.getSupervisorOrganization());
         return user;
     }
 
@@ -118,14 +121,14 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     }
 
     @Override
-    public List<Organization> getActiveOrganizations(User user) {
+    public List<UserOrganization> getActiveUserOrganizations(User user) {
         if(user == null) {
             throw new NullPointerException("The user parameter can not be null.");
         }
 
         Query q = em.createNamedQuery(UserOrganization.NQ_FIND_BY_ACTIVE_USER);
         q.setParameter("user", user);
-        return new ArrayList<Organization>(q.getResultList());
+        return new ArrayList<UserOrganization>(q.getResultList());
     }
 
     @Override
@@ -221,8 +224,9 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_PARENT_BUSINESS_UNIT);
             q.setParameter("parentBusinessUnit", parentBusinessUnit);
         } else {
-            q = em.createNamedQuery(BusinessUnit.NQ_FIND_ROOT_BUSINESS_UNIT);
-            q.setParameter(ORGANIZATION_KEY, session.getOrganization());
+            Organization organization = session.getOrganization();
+            q = em.createNamedQuery(BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT);
+            q.setParameter(ORGANIZATION_KEY, organization);
         }
 
         return new ArrayList<BusinessUnit>(q.getResultList());
@@ -380,15 +384,19 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             }
         } else if (item instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit)item;
-            businessUnit.setOrganization(session.getOrganization());
-            List<BusinessUnit> businessUnits;
-            if((businessUnits = getChildrenBusinessUnits(null)).size() == 0) {
+            Organization organization;
+            if((organization = businessUnit.getOrganization()) == null) {
+                organization = session.getOrganization();
+                businessUnit.setOrganization(organization);
+            }
+            BusinessUnit rootBusinessUnit;
+            if((rootBusinessUnit = getRootBusinessUnit(organization)) != null) {
+                businessUnit.setParentBusinessUnit(rootBusinessUnit);
+            } else {
                 businessUnit.setRoot(true);
                 businessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
-                businessUnit.setBusinessUnitName(session.getOrganization().getOrganizationName());
+                businessUnit.setBusinessUnitName(organization.getOrganizationName());
                 businessUnit.setDivisionName(BusinessUnitType.Administrative.name());
-            } else {
-                businessUnit.setParentBusinessUnit(businessUnits.get(0));
             }
         }
     }
@@ -399,11 +407,11 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             return (E) saveUserRegistration((UserRegistration) entity);
         }
 
-        return super.save(entity);
+        return super.save(entity, extraParameters);
     }
 
     private UserRegistration saveUserRegistration(UserRegistration userRegistration) {
-        Organization systemOrganization = session.getSystemOrganization();
+        Organization systemOrganization = session.getSupervisorOrganization();
 
         Person person = new Person(); //contactsService.new
         person.setDefaultCurrency(userRegistration.getDefaultCurrency());
@@ -483,7 +491,7 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
     protected <E> void postSave(E entity, Map<String, Object> parameters) {
         if (entity instanceof BusinessUnit) {
             BusinessUnit businessUnit = (BusinessUnit) entity;
-            postSaveBusinessUnit(businessUnit);
+            postSaveBusinessUnit(businessUnit, parameters);
         } else if (entity instanceof UserOrganization) {
             postSaveUserOrganization((UserOrganization) entity, parameters);
         }
@@ -502,18 +510,39 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
         }
     }
 
-    private void postSaveBusinessUnit(BusinessUnit businessUnit) {
-        List<BusinessUnitAddress> businessUnitAddresses;
-        DbResource billToType = BusinessUnitAddressType.BillTo.getDbResource();
-        if((businessUnitAddresses = getBusinessUnitAddresses(businessUnit, billToType)) != null &&
-                businessUnitAddresses.size() > 0) {
-            return;
+    private void postSaveBusinessUnit(BusinessUnit businessUnit, Map<String, Object> parameters) {
+        BusinessUnitType buType = (BusinessUnitType) businessUnit.getBusinessUnitType().getEnumValue();
+        List<BusinessUnitTypeJobTitle> buJobTitles;
+        if((buJobTitles = BusinessUnitTypeJobTitle.getBusinessUnitJobTitles(buType)) == null || buJobTitles.size() == 0) {
+            throw new UnsupportedOperationException("Can not find any initialization resources for this business unit type: " + buType);
+        }
+        if(isNewEntity(parameters) || getJobTitles(businessUnit).size() == 0) {
+            for(BusinessUnitTypeJobTitle buJobTitle : buJobTitles) {
+                JobTitle jobTitle = newItem(businessUnit, JobTitle.class);
+                jobTitle.setFunctionalHierarchy(buJobTitle.getFunctionalHierarchy().getDbResource());
+                jobTitle.setJobTitle(buJobTitle.getJobTitle());
+                SecurityRole securityRole;
+                if((securityRole = securityService.getSecurityRole(jobTitle)) == null) {
+                    securityRole = securityService.newSecurityRole(jobTitle);
+                }
+                jobTitle.setSecurityRole(securityRole);
+                save(jobTitle);
+
+                securityService.newPrivileges(jobTitle, buJobTitle);
+            }
         }
 
-        BusinessUnitAddress businessUnitAddress = newItem(businessUnit, BusinessUnitAddress.class);
-        businessUnitAddress.setAddressType(billToType);
-        businessUnitAddress.setAddress(session.getBranch());
-        esm.persist(em, businessUnitAddress);
+//        List<BusinessUnitAddress> businessUnitAddresses;
+//        DbResource billToType = BusinessUnitAddressType.BillTo.getDbResource();
+//        if((businessUnitAddresses = getBusinessUnitAddresses(businessUnit, billToType)) != null &&
+//                businessUnitAddresses.size() > 0) {
+//            return;
+//        }
+
+//        BusinessUnitAddress businessUnitAddress = newItem(businessUnit, BusinessUnitAddress.class);
+//        businessUnitAddress.setAddressType(billToType);
+//        businessUnitAddress.setAddress(session.getBranch());
+//        esm.persist(em, businessUnitAddress);
     }
 
     @Override
@@ -535,5 +564,16 @@ public class UsersServiceBean extends AbstractEntityService implements UsersServ
             q.setParameter(BUSINESS_UNIT_KEY, businessUnit);
             q.executeUpdate();
         }
+    }
+
+    @Override
+    public <E> EntityProperties getEntityProperties(Class<E> entityClass) {
+        EntityProperties entityProperties = super.getEntityProperties(entityClass);
+        if(UserOrganization.class == entityClass && !session.isSupervisor()) {
+            //entityProperties.removeEntityProperty("userActive");
+            inactiveEntityProperty(entityProperties, "userActive");
+        }
+
+        return entityProperties;
     }
 }

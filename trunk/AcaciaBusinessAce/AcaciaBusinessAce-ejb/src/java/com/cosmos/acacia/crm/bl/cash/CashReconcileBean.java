@@ -21,16 +21,17 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.cash.BanknoteQuantity;
+import com.cosmos.acacia.crm.data.accounting.BanknoteQuantity;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.contacts.Person;
-import com.cosmos.acacia.crm.data.cash.CashReconcile;
-import com.cosmos.acacia.crm.data.cash.CashReconcilePaymentSummary;
+import com.cosmos.acacia.crm.data.accounting.CashReconcile;
+import com.cosmos.acacia.crm.data.accounting.CashReconcilePaymentSummary;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
 import com.cosmos.acacia.crm.enums.CustomerPaymentType;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
@@ -68,17 +69,17 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         ep.removeEntityProperty("publisher");
         ep.removeEntityProperty("publisherBranch");
         //re-order the columns and add missing property details
-        ep.addEntityProperty(EntityProperty.createEntityProperty("documentNumber", "Document Number", Long.class.getName(), 10));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("documentDate", "Document Date", Date.class.getName(), 20));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("documentNumber", "Document Number", Long.class.getName(), 10, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("documentDate", "Document Date", Date.class.getName(), 20, AcaciaEntityAttributes.getEntityAttributesMap()));
         ep.setOrderPosition("cashier", 30);
-        EntityProperty officerInCharge = EntityProperty.createEntityProperty("publisherOfficer", "Officer in Charge", Person.class.getName(), 40);
+        EntityProperty officerInCharge = EntityProperty.createEntityProperty("publisherOfficer", "Officer in Charge", Person.class.getName(), 40, AcaciaEntityAttributes.getEntityAttributesMap());
         officerInCharge.setCustomDisplay("${publisherOfficer.displayName}");
         ep.addEntityProperty(officerInCharge);
         ep.setOrderPosition("currency", 50);
-        ep.addEntityProperty(EntityProperty.createEntityProperty("initialBalance", "Initial Balance", BigDecimal.class.getName(), 60));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("periodExpenses", "Period Expenses", BigDecimal.class.getName(), 70));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("periodRevenue", "Period Revenue", BigDecimal.class.getName(), 80));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("endBalance", "End Balance", BigDecimal.class.getName(), 90));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("initialBalance", "Initial Balance", BigDecimal.class.getName(), 60, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("periodExpenses", "Period Expenses", BigDecimal.class.getName(), 70, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("periodRevenue", "Period Revenue", BigDecimal.class.getName(), 80, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("endBalance", "End Balance", BigDecimal.class.getName(), 90, AcaciaEntityAttributes.getEntityAttributesMap()));
 
         ep.getEntityProperty("documentDate").setFormatter(new DateFormatter(AcaciaUtils.getShortTimeFormat()));
 
@@ -215,14 +216,14 @@ public class CashReconcileBean implements CashReconcileLocal, CashReconcileRemot
         EntityProperties ep = esm.getEntityProperties(CashReconcile.class);
         ep.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         
-        ep.addEntityProperty(EntityProperty.createEntityProperty("documentNumber", "Document Number", Long.class.getName(), 10, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("documentDate", "Document Date", Date.class.getName(), 20, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("publisherOfficer", "Officer in Charge", Person.class.getName(), 40, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("initialBalance", "Initial Balance", BigDecimal.class.getName(), 60, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("periodExpenses", "Period Expenses", BigDecimal.class.getName(), 70, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("periodRevenue", "Period Revenue", BigDecimal.class.getName(), 80, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("endBalance", "End Balance", BigDecimal.class.getName(), 90, false));
-        ep.addEntityProperty(EntityProperty.createEntityProperty("notes", "Notes", String.class.getName()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("documentNumber", "Document Number", Long.class.getName(), 10, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("documentDate", "Document Date", Date.class.getName(), 20, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("publisherOfficer", "Officer in Charge", Person.class.getName(), 40, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("initialBalance", "Initial Balance", BigDecimal.class.getName(), 60, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("periodExpenses", "Period Expenses", BigDecimal.class.getName(), 70, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("periodRevenue", "Period Revenue", BigDecimal.class.getName(), 80, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("endBalance", "End Balance", BigDecimal.class.getName(), 90, false, AcaciaEntityAttributes.getEntityAttributesMap()));
+        ep.addEntityProperty(EntityProperty.createEntityProperty("notes", "Notes", String.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap()));
         
         return ep;
     }

@@ -9,6 +9,7 @@ import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import java.io.Serializable;
 import java.util.UUID;
@@ -31,10 +32,10 @@ import javax.persistence.DiscriminatorValue;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.RelationshipType;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.JBPanel;
 import org.hibernate.annotations.Type;
 
@@ -93,11 +94,9 @@ CREATE UNIQUE INDEX uix_persons_names_birth_date_city
             entityClass=Passport.class
         )
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.PersonsListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
-public class Person extends BusinessPartner implements Serializable, TextResource {
+public class Person extends BusinessPartner implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //
@@ -149,7 +148,10 @@ public class Person extends BusinessPartner implements Serializable, TextResourc
 
     @JoinColumn(name = "gender_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Gender")
+    @Property(title="Gender",
+        selectableList=@SelectableList(className="com.cosmos.acacia.crm.enums.Gender"),
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Gender:"))
+    )
     private DbResource gender;
 
     @Basic(optional = false)

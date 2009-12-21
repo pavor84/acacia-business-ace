@@ -28,13 +28,13 @@ import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateSerialNumberPK;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.warehouse.Warehouse;
@@ -295,17 +295,17 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	deliveryCertificate.setDeliveryCertificateNumber(BigInteger.valueOf(now.getTime()));
     	
     	UUID assignmentId = assignment.getDocumentId(); 
-    	Invoice invoice = invoicesBean.getInvoiceById(assignmentId);
-    	List<InvoiceItem> invoiceItems = invoicesBean.getInvoiceItems(invoice.getInvoiceId());
+    	SalesInvoice invoice = invoicesBean.getInvoiceById(assignmentId);
+    	List<SalesInvoiceItem> invoiceItems = invoicesBean.getInvoiceItems(invoice.getInvoiceId());
     	
     	//we have ensure enough quantities with validation
 		for(DeliveryCertificateItem dcItem : items){
-			InvoiceItem iItem = invoicesBean.getInvoiceItemById(dcItem.getReferenceItemId());
+			SalesInvoiceItem iItem = invoicesBean.getInvoiceItemById(dcItem.getReferenceItemId());
 			this.updateQuantities(dcItem.getProduct(), dcItem.getQuantity(), iItem, invoice);
 		}
 		
 		//check if we have shipped everything
-		Collection<InvoiceItem> shippedItems = CollectionUtils.select(invoiceItems, new InvoiceItemShippedPredicate());
+		Collection<SalesInvoiceItem> shippedItems = CollectionUtils.select(invoiceItems, new InvoiceItemShippedPredicate());
 		if(shippedItems.size() == invoiceItems.size()){
 			log.info("All qunatities are delivered for the invoice!");
 			invoice.setDeliveryStatus(DeliveryStatus.Delivered.getDbResource());
@@ -326,9 +326,9 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     /** Recursive
      * This method updates all necessary quantities for a Product to be shipped  
      */
-    private void updateQuantities(Product product, BigDecimal quantityToDeliver, InvoiceItem iItem, Invoice invoice){
+    private void updateQuantities(Product product, BigDecimal quantityToDeliver, SalesInvoiceItem iItem, SalesInvoice invoice){
     	
-    	//updating the InvoiceItem 
+    	//updating the SalesInvoiceItem
     	BigDecimal shipedQuantity = (iItem.getShippedQuantity() != null) ? iItem.getShippedQuantity() : BigDecimal.ZERO;
     	iItem.setShippedQuantity(shipedQuantity.add(quantityToDeliver));
 		invoicesBean.saveInvoiceItem(iItem);
@@ -374,8 +374,8 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
 
     @Override
     public DeliveryCertificateAssignment newDeliveryCertificateAssignment(DataObjectBean document) {
-        if(document instanceof Invoice){
-            Invoice invoice = (Invoice)document;
+        if(document instanceof SalesInvoice){
+            SalesInvoice invoice = (SalesInvoice)document;
             DeliveryCertificateAssignment assignment = new DeliveryCertificateAssignment();
             assignment.setDocumentNumber(String.valueOf(invoice.getInvoiceNumber()));
             assignment.setDocumentId(invoice.getId());
@@ -404,8 +404,8 @@ public class DeliveryCertificatesBean implements DeliveryCertificatesRemote, Del
     	
     	DeliveryCertificateItem dci = new DeliveryCertificateItem();
     	
-    	if(source instanceof InvoiceItem){
-    		InvoiceItem invoiceItem = ((InvoiceItem)source);
+    	if(source instanceof SalesInvoiceItem){
+    		SalesInvoiceItem invoiceItem = ((SalesInvoiceItem)source);
     		dci.setProduct(invoiceItem.getProduct());
     		BigDecimal shippedQuantity = invoiceItem.getShippedQuantity() != null ? invoiceItem.getShippedQuantity() : BigDecimal.ZERO;
     		dci.setQuantity(invoiceItem.getOrderedQuantity().subtract(shippedQuantity));

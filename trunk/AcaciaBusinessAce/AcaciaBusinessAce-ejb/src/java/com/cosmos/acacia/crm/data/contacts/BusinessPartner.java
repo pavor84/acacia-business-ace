@@ -73,6 +73,7 @@ import org.hibernate.annotations.Type;
         @FormContainer(
             name=BusinessPartner.ADDRESSES,
             title="Addresses",
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
@@ -82,6 +83,7 @@ import org.hibernate.annotations.Type;
         @FormContainer(
             name=BusinessPartner.POSITION_TYPES,
             title="Position Types",
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
             container=@Component(
                 componentClass=JBPanel.class
             ),
@@ -89,8 +91,7 @@ import org.hibernate.annotations.Type;
             entityClass=PositionType.class
         )
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
 public abstract class BusinessPartner extends DataObjectBean implements Serializable {
 

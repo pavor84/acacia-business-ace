@@ -32,9 +32,9 @@ import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
-import com.cosmos.acacia.crm.data.sales.InvoiceItemLink;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItemLink;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
@@ -51,6 +51,7 @@ import com.cosmos.acacia.crm.enums.PaymentTerm;
 import com.cosmos.acacia.crm.enums.PaymentType;
 import com.cosmos.acacia.crm.enums.TransportationMethod;
 import com.cosmos.acacia.crm.enums.VatCondition;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.util.AcaciaUtils;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
@@ -90,7 +91,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     
     public EntityProperties getListingEntityProperties() {
         
-        EntityProperties entityProperties = esm.getEntityProperties(Invoice.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SalesInvoice.class);
         
         //let's keep the columns in the table a reasonable count, so remove all not-crucial information
         entityProperties.removeEntityProperty("branchName");
@@ -128,7 +129,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Invoice> listInvoices(UUID parentDataObjectId, Address branch) {
+    public List<SalesInvoice> listInvoices(UUID parentDataObjectId, Address branch) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -137,20 +138,20 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         q.setParameter("deleted", false);
         q.setParameter("branch", branch);
         
-        List<Invoice> result = q.getResultList();
+        List<SalesInvoice> result = q.getResultList();
         return result;
     }
 
     
-    public void deleteInvoice(Invoice invoice) {
+    public void deleteInvoice(SalesInvoice invoice) {
         if ( invoice==null )
             throw new IllegalArgumentException("null: 'Invoice'");
         esm.remove(em, invoice);
     }
 
     
-    public Invoice newInvoice(UUID parentDataObjectId) {
-        Invoice c = new Invoice();
+    public SalesInvoice newInvoice(UUID parentDataObjectId) {
+        SalesInvoice c = new SalesInvoice();
         
         Address branch = acaciaSession.getBranch();
         
@@ -187,7 +188,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     
     public EntityProperties getDetailEntityProperties() {
-        EntityProperties entityProperties = esm.getEntityProperties(Invoice.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SalesInvoice.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
@@ -209,7 +210,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     
-    public Invoice saveInvoice(Invoice i) {
+    public SalesInvoice saveInvoice(SalesInvoice i) {
         if ( i.getCreationTime()==null ){
             i.setCreationTime(new Date());
             Person creator = acaciaSession.getPerson();
@@ -223,28 +224,28 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
     
     @Override
-    public List<InvoiceItem> deleteInvoiceItem(InvoiceItem item) {
-        List<InvoiceItem> copiedItems = getCopiedItemsFromTheSameDocument(item);
+    public List<SalesInvoiceItem> deleteInvoiceItem(SalesInvoiceItem item) {
+        List<SalesInvoiceItem> copiedItems = getCopiedItemsFromTheSameDocument(item);
         //handle the case where this item is copied
         if ( copiedItems!=null && !copiedItems.isEmpty() ){
-            List<InvoiceItemLink> links = getInvoiceItemLinks(copiedItems);
+            List<SalesInvoiceItemLink> links = getInvoiceItemLinks(copiedItems);
             //make sure we remove every link just once
-            Set<InvoiceItemLink> setOfLinks = new HashSet<InvoiceItemLink>(links);
-            for (InvoiceItemLink invoiceItemLink : setOfLinks) {
+            Set<SalesInvoiceItemLink> setOfLinks = new HashSet<SalesInvoiceItemLink>(links);
+            for (SalesInvoiceItemLink invoiceItemLink : setOfLinks) {
                 em.remove(invoiceItemLink);
             }
-            for (InvoiceItem copiedItem : copiedItems )
+            for (SalesInvoiceItem copiedItem : copiedItems )
                 esm.remove(em, copiedItem);
             return copiedItems;
         }
         //if this is a normal simple item
         else{
-            List<InvoiceItemLink> invoiceItemLinks = getInvoiceItemLinks(item);
-            for (InvoiceItemLink invoiceItemLink : invoiceItemLinks) {
+            List<SalesInvoiceItemLink> invoiceItemLinks = getInvoiceItemLinks(item);
+            for (SalesInvoiceItemLink invoiceItemLink : invoiceItemLinks) {
                 em.remove(invoiceItemLink);
             }
             esm.remove(em, item);
-            List<InvoiceItem> result = new ArrayList<InvoiceItem>();
+            List<SalesInvoiceItem> result = new ArrayList<SalesInvoiceItem>();
             result.add(item);
             return result;
         }
@@ -256,15 +257,15 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
      * @return
      */
     @SuppressWarnings("unchecked")
-    private List<InvoiceItemLink> getInvoiceItemLinks(List<InvoiceItem> items) {
+    private List<SalesInvoiceItemLink> getInvoiceItemLinks(List<SalesInvoiceItem> items) {
         Query q = em.createNamedQuery("InvoiceItemLink.getInvoicesItemLinksForItems");
         q.setParameter("items",items);
-        List<InvoiceItemLink> links = q.getResultList();
+        List<SalesInvoiceItemLink> links = q.getResultList();
         return links;
     }
 
     @SuppressWarnings("unchecked")
-    private List<InvoiceItem> getCopiedItemsFromTheSameDocument(InvoiceItem item) {
+    private List<SalesInvoiceItem> getCopiedItemsFromTheSameDocument(SalesInvoiceItem item) {
         Query q = em.createNamedQuery("Invoice.getCopiedItemsFromTheSameDocument");
         q.setParameter("item",item);
         
@@ -272,7 +273,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem item) {
+    public List<SalesInvoiceItemLink> getInvoiceItemLinks(SalesInvoiceItem item) {
         Query q = null;
         
         q = em.createNamedQuery("InvoiceItemLink.getInvoicesItemLinks");
@@ -282,7 +283,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     public EntityProperties getItemsListEntityProperties() {
-        EntityProperties entityProperties = esm.getEntityProperties(InvoiceItem.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SalesInvoiceItem.class);
         entityProperties.removeEntityProperty("productDescription");
         entityProperties.removeEntityProperty("notes");
         entityProperties.removeEntityProperty("discountAmount");
@@ -290,7 +291,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         entityProperties.removeEntityProperty("shipDateFrom");
         entityProperties.removeEntityProperty("shipDateTo");
         
-        EntityProperty productCode = EntityProperty.createEntityProperty("product.codeFormatted", "Code", SimpleProduct.class.getName(), 25);
+        EntityProperty productCode = EntityProperty.createEntityProperty("product.codeFormatted", "Code", SimpleProduct.class.getName(), 25, AcaciaEntityAttributes.getEntityAttributesMap());
         productCode.setCustomDisplay("${product.codeFormatted}");
         productCode.setVisible(true);
         entityProperties.addEntityProperty(productCode);
@@ -300,7 +301,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @SuppressWarnings("unchecked")
-    public List<InvoiceItem> getInvoiceItems(UUID parentDataObjectId) {
+    public List<SalesInvoiceItem> getInvoiceItems(UUID parentDataObjectId) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -308,26 +309,26 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         q.setParameter("parentDataObjectId", parentDataObjectId);
         q.setParameter("deleted", false);
         
-        List<InvoiceItem> result = q.getResultList();
+        List<SalesInvoiceItem> result = q.getResultList();
         return result;
     }
 
     
-    public InvoiceItem newInvoiceItem(UUID parentDataObjectId){
-        InvoiceItem item = new InvoiceItem();
+    public SalesInvoiceItem newInvoiceItem(UUID parentDataObjectId){
+        SalesInvoiceItem item = new SalesInvoiceItem();
         item.setParentId(parentDataObjectId);
-        Invoice invoice = em.find(Invoice.class, parentDataObjectId);
+        SalesInvoice invoice = em.find(SalesInvoice.class, parentDataObjectId);
         Warehouse warehouse = warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
         item.setWarehouse(warehouse);
         return item;
     }
     
     public Warehouse getInvoiceWarehouse(UUID invoiceId){
-        Invoice invoice = em.find(Invoice.class, invoiceId);
+        SalesInvoice invoice = em.find(SalesInvoice.class, invoiceId);
         return warehouseListLocal.getWarehouseForAddress(invoice.getBranch());
     }
     
-    public InvoiceItem saveInvoiceItem(InvoiceItem item) {
+    public SalesInvoiceItem saveInvoiceItem(SalesInvoiceItem item) {
         
         esm.persist(em, item);
         
@@ -373,7 +374,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
     
     public EntityProperties getItemDetailEntityProperties() {
-        EntityProperties entityProperties = esm.getEntityProperties(InvoiceItem.class);
+        EntityProperties entityProperties = esm.getEntityProperties(SalesInvoiceItem.class);
         entityProperties.setUpdateStrategy(UpdateStrategy.READ_WRITE);
         return entityProperties;
     }
@@ -390,7 +391,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Invoice> listInvoices(UUID parentDataObjectId, Boolean proform) {
+    public List<SalesInvoice> listInvoices(UUID parentDataObjectId, Boolean proform) {
         if ( parentDataObjectId==null )
             throw new IllegalArgumentException("parentDataObjectId can't be null");
         
@@ -402,7 +403,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         else
             q.setParameter("proformaInvoice", Boolean.FALSE);
         
-        List<Invoice> result = q.getResultList();
+        List<SalesInvoice> result = q.getResultList();
         return result;
     }
 
@@ -458,7 +459,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public Invoice sendInvoice(Invoice entity) {
+    public SalesInvoice sendInvoice(SalesInvoice entity) {
         
         Person person = acaciaSession.getPerson();
         entity.setSender(person);
@@ -469,37 +470,37 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public void saveInvoiceItems(List<InvoiceItem> newItems) {
+    public void saveInvoiceItems(List<SalesInvoiceItem> newItems) {
         if ( newItems==null )
             throw new IllegalArgumentException("newItems can't be null!");
-        for (InvoiceItem item : newItems) {
+        for (SalesInvoiceItem item : newItems) {
             esm.persist(em, item);
         }
         em.flush();
     }
 
     @Override
-    public void addInvoiceItems(List<InvoiceItemLink> itemLinks) {
-        for (InvoiceItemLink invoiceItemLink : itemLinks) {
+    public void addInvoiceItems(List<SalesInvoiceItemLink> itemLinks) {
+        for (SalesInvoiceItemLink invoiceItemLink : itemLinks) {
             saveInvoiceItem(invoiceItemLink.getInvoiceItem());
             saveInvoiceItemLink(invoiceItemLink);
         }
     }
 
-    private void saveInvoiceItemLink(InvoiceItemLink invoiceItemLink) {
+    private void saveInvoiceItemLink(SalesInvoiceItemLink invoiceItemLink) {
         esm.persist(em, invoiceItemLink);
     }
 
     @Override
     public List<?> getDocumentItems(DataObjectBean document) {
-        if ( document instanceof Invoice ){
+        if ( document instanceof SalesInvoice ){
             return getInvoiceItems(document.getId());
         }
         throw new IllegalArgumentException("Cannot get items! Document not supported: "+document);
     }
 
     @Override
-    public Invoice cancel(Invoice entity) {
+    public SalesInvoice cancel(SalesInvoice entity) {
         boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
 
         if (proforma){
@@ -517,7 +518,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public Invoice confirm(Invoice entity) {
+    public SalesInvoice confirm(SalesInvoice entity) {
         boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
 
         if (proforma){
@@ -554,16 +555,16 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
      * If this is a proforma-invoice, updates the respective invoice for the canceled amount 
      * @param entity
      */
-//    private void updateTemplateDocuments(Invoice entity) {
+//    private void updateTemplateDocuments(SalesInvoice entity) {
 //        //update the canceled amount for the template invoice if this is proforma
 //        if ( entity.getInvoiceType()!=null &&
 //                InvoiceType.CretidNoteInvoice.equals(entity.getInvoiceType().getEnumValue()) ){
 //            
-//            Set<Invoice> templateDocuments = new HashSet<Invoice>();
-//            List<InvoiceItemLink> proformaItemLinks = getInvoiceItemLinks(entity);
+//            Set<SalesInvoice> templateDocuments = new HashSet<SalesInvoice>();
+//            List<SalesInvoiceItemLink> proformaItemLinks = getInvoiceItemLinks(entity);
 //            
-//            for (InvoiceItemLink invoiceItemLink : proformaItemLinks) {
-//                Invoice template = em.getReference(Invoice.class, invoiceItemLink.getTemplateDocumentId());
+//            for (SalesInvoiceItemLink invoiceItemLink : proformaItemLinks) {
+//                SalesInvoice template = em.getReference(SalesInvoice.class, invoiceItemLink.getTemplateDocumentId());
 //                templateDocuments.add(template);
 //                
 //                BigDecimal canceledAmount = template.getCanceledAmount();
@@ -571,14 +572,14 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 //                template.setCanceledAmount(canceledAmount);
 //            }
 //            
-//            for (Invoice templateInvoices : templateDocuments) {
+//            for (SalesInvoice templateInvoices : templateDocuments) {
 //                esm.persist(em, templateInvoices);
 //            }
 //        }
 //    }
 
-    private List<InvoiceItemLink> getInvoiceItemLinks(Invoice entity) {
-        return (List<InvoiceItemLink>) 
+    private List<SalesInvoiceItemLink> getInvoiceItemLinks(SalesInvoice entity) {
+        return (List<SalesInvoiceItemLink>)
         AcaciaUtils.getResultList(em, "InvoiceItemLink.getForInvoice", "invoiceId", entity.getId());
     }
 
@@ -587,11 +588,11 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
      * @param entity
      * @param reserve - reserve or restored the quantities
      */
-    private void updateWarehouseQuantities(Invoice entity, boolean reserve) {
-        List<InvoiceItem> items = getInvoiceItems(entity.getInvoiceId());
+    private void updateWarehouseQuantities(SalesInvoice entity, boolean reserve) {
+        List<SalesInvoiceItem> items = getInvoiceItems(entity.getInvoiceId());
         Address userBranch = acaciaSession.getBranch();
         Warehouse userWarehouse = warehouseListLocal.getWarehouseForAddress(userBranch);
-        for (InvoiceItem invoiceItem : items) {
+        for (SalesInvoiceItem invoiceItem : items) {
             Product product = invoiceItem.getProduct();
             Warehouse warehouse = invoiceItem.getWarehouse();
             if ( warehouse==null )
@@ -678,8 +679,8 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         wp.setSoldQuantity(wp.getSoldQuantity().subtract(soldQuantityToUse));
         
         BigDecimal dueQuantityToUse = null;
-        if ( item instanceof InvoiceItem ){
-            InvoiceItem invoiceItem = (InvoiceItem) item;
+        if ( item instanceof SalesInvoiceItem ){
+            SalesInvoiceItem invoiceItem = (SalesInvoiceItem) item;
             if ( invoiceItem.getDueQuantity()!=null ){
                 dueQuantityToUse = invoiceItem.getDueQuantity();
             }
@@ -733,8 +734,8 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
             BigDecimal updatedDueQuantity = wp.getQuantityDue().add(dueQuantityToUse);
             wp.setQuantityDue(updatedDueQuantity);
             //update the item
-            if ( item instanceof InvoiceItem ){
-                InvoiceItem invoiceItem = (InvoiceItem) item;
+            if ( item instanceof SalesInvoiceItem ){
+                SalesInvoiceItem invoiceItem = (SalesInvoiceItem) item;
                 if ( invoiceItem.getDueQuantity()==null )
                     invoiceItem.setDueQuantity(BigDecimal.ZERO);
                 invoiceItem.setDueQuantity(invoiceItem.getDueQuantity().add(dueQuantityToUse));
@@ -769,7 +770,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public Invoice reopen(Invoice entity) {
+    public SalesInvoice reopen(SalesInvoice entity) {
         boolean proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
 
         if (proforma){
@@ -788,7 +789,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<?> getTemplateDocuments(Invoice forDocument, Boolean includeInvoices, Boolean includeProformas) {
+    public List<?> getTemplateDocuments(SalesInvoice forDocument, Boolean includeInvoices, Boolean includeProformas) {
         boolean proform = Boolean.TRUE.equals(forDocument.getProformaInvoice());
         
         if ( proform ){
@@ -808,43 +809,43 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public Boolean isTemplateItem(InvoiceItem item) {
-        List<InvoiceItemLink> links = getInvoiceItemLinks(item);
+    public Boolean isTemplateItem(SalesInvoiceItem item) {
+        List<SalesInvoiceItemLink> links = getInvoiceItemLinks(item);
         return !links.isEmpty();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Invoice> getDueDocuments(BusinessPartner recipient) {
+    public List<SalesInvoice> getDueDocuments(BusinessPartner recipient) {
         Query q = em.createNamedQuery("Invoice.getDueInvoicesForRecipient");
         q.setParameter("recipient", recipient);
         q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
         
-        List<Invoice> result = q.getResultList();
+        List<SalesInvoice> result = q.getResultList();
         return result;
     }
     
     @SuppressWarnings("unchecked")
     @Override
-    public List<Invoice> getDueDocuments() { 
+    public List<SalesInvoice> getDueDocuments() {
         Query q = em.createNamedQuery("Invoice.getDueInvoices");
         q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
         q.setParameter("parentId", acaciaSession.getOrganization().getId());
         
-        List<Invoice> result = q.getResultList();
+        List<SalesInvoice> result = q.getResultList();
         return result;
     }
     
-    private List<Invoice> getConfirmedInvoices(BusinessPartner recipient, Date startDate){
+    private List<SalesInvoice> getConfirmedInvoices(BusinessPartner recipient, Date startDate){
         Query q = em.createNamedQuery("Invoice.getConfirmedInvoicesForRecipient");
         q.setParameter("recipient", recipient);
         q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
         q.setParameter("paid", InvoiceStatus.Paid.getDbResource());
         q.setParameter("proformaInvoice", Boolean.FALSE);
         
-        List<Invoice> invoices = q.getResultList();
-        List<Invoice> result = new ArrayList<Invoice>();
-        for (Invoice invoice : invoices) {
+        List<SalesInvoice> invoices = q.getResultList();
+        List<SalesInvoice> result = new ArrayList<SalesInvoice>();
+        for (SalesInvoice invoice : invoices) {
             if ( invoice.getInvoiceDate()!=null && !invoice.getInvoiceDate().before(startDate)){
                 result.add(invoice);
             }else{
@@ -861,10 +862,10 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
      * @return
      */
     public BigDecimal getRecipientTurnover(BusinessPartner recipient, Date startDate){
-        List<Invoice> invoices = getConfirmedInvoices(recipient, startDate);
+        List<SalesInvoice> invoices = getConfirmedInvoices(recipient, startDate);
         
         BigDecimal turnover = new BigDecimal(0);
-        for (Invoice invoice : invoices) {
+        for (SalesInvoice invoice : invoices) {
             //if the current document is CREDIT note, decrease the due
             if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue()) )
                 turnover = turnover.subtract(invoice.getTotalValue());
@@ -877,7 +878,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public List<?> getInvoicesToCancel(Invoice invoice) {
+    public List<?> getInvoicesToCancel(SalesInvoice invoice) {
         if ( InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue())){
             //ok
         }else{
@@ -894,10 +895,10 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         return q.getResultList();
     }
     
-    public Invoice getInvoiceById(UUID invoiceId){
+    public SalesInvoice getInvoiceById(UUID invoiceId){
     	Query q = em.createNamedQuery("Invoice.findById");
     	q.setParameter("invoiceId", invoiceId);
-    	List<Invoice> result = q.getResultList();
+    	List<SalesInvoice> result = q.getResultList();
     	if(result.isEmpty()){
     		return null;
     	}else{
@@ -905,12 +906,12 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     	}
     }
     
-    public InvoiceItem getInvoiceItemById(UUID invoiceItemId){
+    public SalesInvoiceItem getInvoiceItemById(UUID invoiceItemId){
     	
     	Query q = em.createNamedQuery("InvoiceItem.findByIdAndDeleted");
     	q.setParameter("invoiceItemId", invoiceItemId);
     	q.setParameter("deleted", false);
-    	List<InvoiceItem> result = q.getResultList();
+    	List<SalesInvoiceItem> result = q.getResultList();
     	if(result.isEmpty()){
     		return null;
     	}else{
@@ -919,22 +920,22 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
     }
 
     @Override
-    public List<Invoice> getConfirmedDocuments() {
+    public List<SalesInvoice> getConfirmedDocuments() {
         Query q = em.createNamedQuery("Invoice.getConfirmedInvoices");
         q.setParameter("waitingForPayment", InvoiceStatus.WaitForPayment.getDbResource());
         q.setParameter("paid", InvoiceStatus.Paid.getDbResource());
         q.setParameter("parentId", acaciaSession.getOrganization().getId());
         
-        List<Invoice> result = q.getResultList();
+        List<SalesInvoice> result = q.getResultList();
         return result;
     }
 
     @Override
-    public List<Invoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
+    public List<SalesInvoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
                                             Boolean includeUnpaid) {
-        List<Invoice> result = new ArrayList<Invoice>();
+        List<SalesInvoice> result = new ArrayList<SalesInvoice>();
         if ( includedPartlyPaid ){
-            List<Invoice> partlyMatched = (List<Invoice>)
+            List<SalesInvoice> partlyMatched = (List<SalesInvoice>)
                 AcaciaUtils.getResultList(em, "Invoice.getPartlyMatched", 
                 "branch", acaciaSession.getBranch(),
                 "recipient", recipient,
@@ -943,7 +944,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
             result.addAll(partlyMatched);
         }
         if ( includeUnpaid ){
-            List<Invoice> unmatched = (List<Invoice>)
+            List<SalesInvoice> unmatched = (List<SalesInvoice>)
             AcaciaUtils.getResultList(em, "Invoice.getUnmatched",
                 "branch", acaciaSession.getBranch(),
                 "recipient", recipient,
@@ -954,7 +955,7 @@ public class InvoiceListBean implements InvoiceListLocal, InvoiceListRemote {
         
         //remove the invoices that have no due
         for (Iterator iterator = result.iterator(); iterator.hasNext();) {
-            Invoice invoice = (Invoice) iterator.next();
+            SalesInvoice invoice = (SalesInvoice) iterator.next();
             if (  BigDecimal.ZERO.compareTo(invoice.getDueAmount())>=0 ){
                 iterator.remove();
             }

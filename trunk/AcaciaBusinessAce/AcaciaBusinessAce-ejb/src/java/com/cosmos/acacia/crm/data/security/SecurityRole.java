@@ -32,7 +32,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -40,9 +39,14 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "security_roles", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "security_role_name"})
-})
+@Table(name = "security_roles", catalog = "acacia", schema = "public"
+/*
+CREATE UNIQUE INDEX uix_security_roles_organization_role_name
+  ON security_roles
+  USING btree
+  (organization_id, lower(security_role_name::text));
+*/
+)
 @NamedQueries({
     @NamedQuery(
         name = SecurityRole.NQ_FIND_ALL,
@@ -50,8 +54,15 @@ import org.hibernate.annotations.Type;
                 " WHERE" +
                 "  t.organization = :organization" +
                 "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
-                "           and t.securityRoleName = :supervisorRoleName)" +
+                "           and lower(t.securityRoleName) = lower(:supervisorRoleName))" +
                 " ORDER BY t.businessUnit.businessUnitName, t.securityRoleName"
+    ),
+    @NamedQuery(
+        name = SecurityRole.NQ_FIND_BY_SECURITY_ROLE_NAME,
+        query = "SELECT t FROM SecurityRole t" +
+                " WHERE" +
+                "  t.organization = :organization" +
+                "  and lower(t.securityRoleName) = lower(:securityRoleName)"
     ),
     @NamedQuery(
         name = SecurityRole.NQ_FIND_BY_BUSINESS_UNIT,
@@ -59,7 +70,7 @@ import org.hibernate.annotations.Type;
                 " WHERE" +
                 "  t.businessUnit = :businessUnit" +
                 "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
-                "           and t.securityRoleName = :supervisorRoleName)" +
+                "           and lower(t.securityRoleName) = lower(:supervisorRoleName))" +
                 " ORDER BY t.securityRoleName"
     ),
     @NamedQuery(
@@ -68,7 +79,7 @@ import org.hibernate.annotations.Type;
                 " WHERE" +
                 "  t.organization = :organization" +
                 "  and not (t.organization.businessPartnerId = t.organization.parentBusinessPartnerId" +
-                "           and t.securityRoleName = :supervisorRoleName)" +
+                "           and lower(t.securityRoleName) = lower(:supervisorRoleName))" +
                 "  and t.securityRoleId not in (" +
                 "   SELECT t1.securityRole.securityRoleId FROM UserSecurityRole t1" +
                 "    WHERE" +
@@ -100,6 +111,7 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_BY_BUSINESS_UNIT = CLASS_NAME + ".findByBusinessUnit";
     public static final String NQ_FIND_BY_USER_ORGANIZATION = CLASS_NAME + ".findByUserOrganization";
+    public static final String NQ_FIND_BY_SECURITY_ROLE_NAME = CLASS_NAME + ".findBySecurityRoleName";
     //
     public static final String SUPERVISOR_ROLE_NAME = "supervisorRole";
 
@@ -239,5 +251,15 @@ public class SecurityRole extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getSecurityRoleName();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

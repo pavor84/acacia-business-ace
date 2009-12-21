@@ -88,7 +88,7 @@ public class PersonsListBean implements PersonsListRemote, PersonsListLocal {
 
     @Override
     public Person newPerson(BusinessPartner parentBusinessPartner) {
-        return contactsService.newPerson(parentBusinessPartner);
+        return contactsService.newPerson();
     }
 
     public Person savePerson(Person person) {

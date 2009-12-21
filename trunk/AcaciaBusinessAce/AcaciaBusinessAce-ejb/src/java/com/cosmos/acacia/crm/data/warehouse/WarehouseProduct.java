@@ -139,6 +139,10 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     @Column(name = "default_quantity")
     private BigDecimal defaultQuantity;
 
+    @Property(title="Not Invoiced Qty")
+    @Column(name = "not_invoiced_quantity")
+    private BigDecimal notInvoicedQuantity;
+
     @Property(title="Purchase Price", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
     @Column(name = "purchase_price")
@@ -156,6 +160,7 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
     
     @Property(title="Ordered Delivery Time", propertyValidator=@PropertyValidator(
         validationType=ValidationType.NUMBER_RANGE, minValue=0d, maxValue=1000000000000d))
+    @Column(name="ordered_delivery_time")
     private Integer orderedDeliveryTime;
 
     @JoinColumn(name = "warehouse_product_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -401,5 +406,13 @@ public class WarehouseProduct extends DataObjectBean implements Serializable {
 
     public void setOrderedDeliveryTime(Integer orderedDeliveryTime) {
         this.orderedDeliveryTime = orderedDeliveryTime;
+    }
+
+    public BigDecimal getNotInvoicedQuantity() {
+        return notInvoicedQuantity;
+    }
+
+    public void setNotInvoicedQuantity(BigDecimal notInvoicedQuantity) {
+        this.notInvoicedQuantity = notInvoicedQuantity;
     }
 }

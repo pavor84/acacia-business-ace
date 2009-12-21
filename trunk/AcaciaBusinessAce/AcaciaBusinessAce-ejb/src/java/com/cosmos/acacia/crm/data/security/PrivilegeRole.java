@@ -14,9 +14,13 @@ import com.cosmos.acacia.crm.data.ChildEntityBean;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.security.AccessLevel;
+import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBLabel;
 import java.io.Serializable;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -48,13 +52,20 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.accessRight"
     ),
     @NamedQuery(
+        name = PrivilegeRole.NQ_FIND_BY_PRIVILEGE_AND_ACCESS_RIGHT,
+        query = "SELECT t FROM PrivilegeRole t" +
+                " WHERE" +
+                "  t.privilege = :privilege" +
+                "  and t.accessRight = :accessRight"
+    ),
+    @NamedQuery(
         name = PrivilegeRole.NQ_COUNT_ROLES,
         query = "SELECT count(t) FROM PrivilegeRole t" +
                 " WHERE" +
                 "  t.privilege = :privilege"
     ),
     @NamedQuery(
-        name = PrivilegeRole.NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHT,
+        name = PrivilegeRole.NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHTS,
         query = "SELECT t FROM PrivilegeRole t, EntityTypePrivilege t1" +
                 " WHERE" +
                 "  t1.securityRole.organization = :organization" +
@@ -64,7 +75,7 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.accessLevel"
     ),
     @NamedQuery(
-        name = PrivilegeRole.NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHT,
+        name = PrivilegeRole.NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHTS,
         query = "SELECT t FROM PrivilegeRole t, EntityPrivilege t1" +
                 " WHERE" +
                 "  t1.securityRole.organization = :organization" +
@@ -74,7 +85,7 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.accessLevel"
     ),
     @NamedQuery(
-        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHT,
+        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHTS,
         query = "SELECT t FROM PrivilegeRole t, SpecialPermissionPrivilege t1" +
                 " WHERE" +
                 "  t1.securityRole.organization = :organization" +
@@ -84,7 +95,7 @@ import org.hibernate.annotations.Type;
                 " ORDER BY t.accessLevel"
     ),
     @NamedQuery(
-        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHT,
+        name = PrivilegeRole.NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHTS,
         query = "SELECT t FROM PrivilegeRole t, PermissionCategoryPrivilege t1" +
                 " WHERE" +
                 "  t1.securityRole.organization = :organization" +
@@ -104,15 +115,17 @@ public class PrivilegeRole extends DataObjectBean implements Serializable, Child
     protected static final String CLASS_NAME = "PrivilegeRole";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_COUNT_ROLES = CLASS_NAME + ".countRoles";
-    public static final String NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHT =
-            CLASS_NAME + ".findByEntityTypeAndAccessRight";
-    public static final String NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHT =
-            CLASS_NAME + ".findByEntityAndAccessRight";
-    public static final String NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHT =
-            CLASS_NAME + ".findByPermissionAndAccessRight";
-    public static final String NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHT =
-            CLASS_NAME + ".findByPermissionCategoryAndAccessRight";
-
+    public static final String NQ_FIND_BY_ENTITY_TYPE_AND_ACCESS_RIGHTS =
+            CLASS_NAME + ".findByEntityTypeAndAccessRights";
+    public static final String NQ_FIND_BY_ENTITY_AND_ACCESS_RIGHTS =
+            CLASS_NAME + ".findByEntityAndAccessRights";
+    public static final String NQ_FIND_BY_PERMISSION_AND_ACCESS_RIGHTS =
+            CLASS_NAME + ".findByPermissionAndAccessRights";
+    public static final String NQ_FIND_BY_PERMISSION_CATEGORY_AND_ACCESS_RIGHTS =
+            CLASS_NAME + ".findByPermissionCategoryAndAccessRights";
+    public static final String NQ_FIND_BY_PRIVILEGE_AND_ACCESS_RIGHT =
+            CLASS_NAME + ".findByPrivilegeAndAccessRight";
+    //
     @Id
     @Basic(optional = false)
     @Column(name = "privilege_role_id", nullable = false, precision = 19, scale = 0)

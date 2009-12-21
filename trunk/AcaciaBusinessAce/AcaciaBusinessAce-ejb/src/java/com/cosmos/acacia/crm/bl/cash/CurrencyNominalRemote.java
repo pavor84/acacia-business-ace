@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.cash.CurrencyNominal;
+import com.cosmos.acacia.crm.data.accounting.CurrencyNominal;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;

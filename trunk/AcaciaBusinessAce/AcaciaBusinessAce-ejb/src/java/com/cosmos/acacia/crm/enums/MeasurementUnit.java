@@ -6,6 +6,10 @@ package com.cosmos.acacia.crm.enums;
 
 import com.cosmos.acacia.crm.data.DbResource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
 
 /*
 Scientists have adopted the metric system to simplify their calculations and
@@ -49,18 +53,11 @@ these decisions gave the central core of the MKS system preference over the CGS
 system. Although some of the CGS units remain in use for a variety of purposes,
 they are being replaced gradually by the SI units selected from the MKS system.
 */
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.List;
-
 /**
  *
  * @author miro
  */
-public enum MeasurementUnit
-    implements DatabaseResource
-{
+public enum MeasurementUnit implements DatabaseResource {
 
     Piece("piece", "pc",
             Category.Integer,

@@ -7,8 +7,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListLocal;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
 
 @Stateless
@@ -24,7 +24,7 @@ public class DeliveryCertificateItemValidator implements DeliveryCertificateItem
 		ValidationException ve = new ValidationException();
 		
 		UUID invoiceItemId = entity.getReferenceItemId();
-		InvoiceItem invoiceItem = invoices.getInvoiceItemById(invoiceItemId);
+		SalesInvoiceItem invoiceItem = invoices.getInvoiceItemById(invoiceItemId);
 		
 		BigDecimal dueQuantity = (invoiceItem.getDueQuantity() != null) ? invoiceItem.getDueQuantity() : BigDecimal.ZERO;
 		BigDecimal shipedQuantity = (invoiceItem.getShippedQuantity() != null) ? invoiceItem.getShippedQuantity() : BigDecimal.ZERO;

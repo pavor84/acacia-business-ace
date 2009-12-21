@@ -86,9 +86,7 @@ CREATE UNIQUE INDEX uix_countries_country_name
     )
 })
 @Form(
-    serviceClass=LocationsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.location.CountryPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.location.CountriesListPanel"
+    serviceClass=LocationsServiceRemote.class
 )
 public class Country extends DataObjectBean implements Serializable, TextResource {
 

@@ -12,10 +12,10 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateSerialNumber;
 import com.cosmos.beansbinding.EntityProperties;
 
 /**

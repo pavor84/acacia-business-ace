@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.cash.BanknoteQuantity;
+import com.cosmos.acacia.crm.data.accounting.BanknoteQuantity;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

@@ -11,9 +11,9 @@ import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
-import com.cosmos.acacia.crm.data.sales.InvoiceItemLink;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItemLink;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.warehouse.Warehouse;
 import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
@@ -42,21 +42,21 @@ public interface InvoiceListRemote {
      * @param proform - whether to fetch the invoices or proforma invoices
      * @return not null list
      */
-    List<Invoice> listInvoices(UUID parentDataObjectId, Boolean proform);
+    List<SalesInvoice> listInvoices(UUID parentDataObjectId, Boolean proform);
 
     /**
      * Deletes the invoice, - if the integrity is violated, throws an {@link ValidationException} 
-     * @param Invoice - not null
+     * @param SalesInvoice - not null
      */
-    void deleteInvoice(Invoice Invoice);
+    void deleteInvoice(SalesInvoice Invoice);
 
     /**
-     * Create new instance of {@link Invoice}.
+     * Create new instance of {@link SalesInvoice}.
      * 
      * @param parentDataObjectId - may be null
      * @return not null
      */
-    Invoice newInvoice(UUID parentDataObjectId);
+    SalesInvoice newInvoice(UUID parentDataObjectId);
 
     /**
      * Return entity properties for detailed view
@@ -69,7 +69,7 @@ public interface InvoiceListRemote {
      * not right
      * @param po
      */
-    Invoice saveInvoice(Invoice po);
+    SalesInvoice saveInvoice(SalesInvoice po);
 
     /**
      * Return the entity properties for listing items.
@@ -82,31 +82,31 @@ public interface InvoiceListRemote {
      * @param parentDataObjectId
      * @return
      */
-    List<InvoiceItem> getInvoiceItems(UUID parentDataObjectId);
+    List<SalesInvoiceItem> getInvoiceItems(UUID parentDataObjectId);
 
     /**
      * Delete invoice item.
-     * If the item is copied from other document ( {@link #isTemplateItem(InvoiceItem)} ),
+     * If the item is copied from other document ( {@link #isTemplateItem(SalesInvoiceItem)} ),
      * then all items copied from the same document are removed and returned. Otherwise, just
      * this item is removed and returned one element in the list.
      * 
      * @param item
      */
-    List<InvoiceItem> deleteInvoiceItem(InvoiceItem item);
+    List<SalesInvoiceItem> deleteInvoiceItem(SalesInvoiceItem item);
 
     /**
      * Create new invoice item for a given invoice
      * @param parentDataObjectId
      * @return
      */
-    InvoiceItem newInvoiceItem(UUID parentDataObjectId);
+    SalesInvoiceItem newInvoiceItem(UUID parentDataObjectId);
 
     /**
      * Save an item
      * @param entity
      * @return
      */
-    InvoiceItem saveInvoiceItem(InvoiceItem entity);
+    SalesInvoiceItem saveInvoiceItem(SalesInvoiceItem entity);
 
     /**
      * Item details entity properties
@@ -181,13 +181,13 @@ public interface InvoiceListRemote {
      * @param sent
      * @return
      */
-    Invoice sendInvoice(Invoice entity);
+    SalesInvoice sendInvoice(SalesInvoice entity);
 
     /**
      * Save invoice items
      * @param newItems
      */
-    void saveInvoiceItems(List<InvoiceItem> newItems);
+    void saveInvoiceItems(List<SalesInvoiceItem> newItems);
 
     /**
      * Get warehouse product for a given simple product
@@ -219,14 +219,14 @@ public interface InvoiceListRemote {
      * a given invoice item). Marks all documents in the links as 'usedAsTemplate'.
      * @param itemLinks
      */
-    void addInvoiceItems(List<InvoiceItemLink> itemLinks);
+    void addInvoiceItems(List<SalesInvoiceItemLink> itemLinks);
 
     /**
      * Get invoice items links for a given item
      * @param invoiceItem
      * @return
      */
-    List<InvoiceItemLink> getInvoiceItemLinks(InvoiceItem invoiceItem);
+    List<SalesInvoiceItemLink> getInvoiceItemLinks(SalesInvoiceItem invoiceItem);
     
     /**
      * Perform user operation 'confirm' on the document. The document becomes {@value InvoiceStatus#WaitForPayment}
@@ -235,7 +235,7 @@ public interface InvoiceListRemote {
      * @param invoice
      * @return
      */
-    Invoice confirm(Invoice invoice);
+    SalesInvoice confirm(SalesInvoice invoice);
     
     /**
      * Perform user operation 'reopen' on the document. The document becomes {@value InvoiceStatus#Reopen}
@@ -244,7 +244,7 @@ public interface InvoiceListRemote {
      * @param invoice
      * @return
      */
-    Invoice reopen(Invoice invoice);
+    SalesInvoice reopen(SalesInvoice invoice);
     
     /**
      * Perform user operation 'cancel' on the document. The document becomes {@value InvoiceStatus#Cancelled}
@@ -253,7 +253,7 @@ public interface InvoiceListRemote {
      * @param invoice
      * @return
      */
-    Invoice cancel(Invoice invoice);
+    SalesInvoice cancel(SalesInvoice invoice);
 
     /**
      * Get the possible template documents for the given document.
@@ -262,34 +262,34 @@ public interface InvoiceListRemote {
      * @param includeInvoices - this is irrelevant if the document is not invoice
      * @return
      */
-    List<?> getTemplateDocuments(Invoice forDocument, Boolean includeInvoices, Boolean includeProformas);
+    List<?> getTemplateDocuments(SalesInvoice forDocument, Boolean includeInvoices, Boolean includeProformas);
 
     /**
      * @param item
      * @return - true if the item is copied from other document
      */
-    Boolean isTemplateItem(InvoiceItem item);
+    Boolean isTemplateItem(SalesInvoiceItem item);
 
     /**
      * Get the documents that are still not paid for the given recipient (customer).
      * @param recipient
      * @return
      */
-    List<Invoice> getDueDocuments(BusinessPartner recipient);
+    List<SalesInvoice> getDueDocuments(BusinessPartner recipient);
     
     /**
      * Get the documents that are still not paid for the current organization.
      * @param recipient
      * @return
      */
-    List<Invoice> getDueDocuments();
+    List<SalesInvoice> getDueDocuments();
 
     /**
      * Returns the invoices that can be cancelled by a credit note
      * @param invoice - should be of type credit note
      * @return
      */
-    List<?> getInvoicesToCancel(Invoice invoice);
+    List<?> getInvoicesToCancel(SalesInvoice invoice);
     
     /**
      * Retrieve the warehouse of the invoice
@@ -312,7 +312,7 @@ public interface InvoiceListRemote {
      * {@link InvoiceStatus#Paid} )
      * @return
      */
-    List<Invoice> getConfirmedDocuments();
+    List<SalesInvoice> getConfirmedDocuments();
 
     /**
      * Get all pending invoices (the ones that are not fully matched)
@@ -321,6 +321,6 @@ public interface InvoiceListRemote {
      * @param recipient
      * @return
      */
-    List<Invoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
+    List<SalesInvoice> getPendingInvoices(BusinessPartner recipient, Boolean includedPartlyPaid,
                                      Boolean includeUnpaid);
 }

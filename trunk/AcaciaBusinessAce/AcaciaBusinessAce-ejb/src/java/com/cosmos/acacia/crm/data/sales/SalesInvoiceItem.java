@@ -6,12 +6,14 @@
 package com.cosmos.acacia.crm.data.sales;
 
 import com.cosmos.acacia.crm.data.warehouse.Warehouse;
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
+import com.cosmos.acacia.crm.data.DbResource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -44,27 +46,27 @@ import org.hibernate.annotations.Type;
          */
         @NamedQuery
             (
-                name = "InvoiceItem.findForParentAndDeleted",
-                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
+                name = "SalesInvoiceItem.findForParentAndDeleted",
+                query = "select i from SalesInvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
                         "and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             ),
         @NamedQuery
             (
-                name = "InvoiceItem.findByParentDataObjectAndDeleted",
-                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted order by i.invoiceItemId"
+                name = "SalesInvoiceItem.findByParentDataObjectAndDeleted",
+                query = "select i from SalesInvoiceItem i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             ),
         @NamedQuery
             (
-                name = "InvoiceItem.findByParentDataObjectIsNullAndDeleted",
-                query = "select i from InvoiceItem i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted order by i.invoiceItemId"
+                name = "SalesInvoiceItem.findByParentDataObjectIsNullAndDeleted",
+                query = "select i from SalesInvoiceItem i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted order by i.invoiceItemId"
             ),
         @NamedQuery
         	(
-        		name = "InvoiceItem.findByIdAndDeleted",
-        		query = "select i from InvoiceItem i where i.dataObject.deleted = :deleted and i.invoiceItemId = :invoiceItemId"
+        		name = "SalesInvoiceItem.findByIdAndDeleted",
+        		query = "select i from SalesInvoiceItem i where i.dataObject.deleted = :deleted and i.invoiceItemId = :invoiceItemId"
         	)
     })
-public class InvoiceItem extends DataObjectBean implements Serializable {
+public class SalesInvoiceItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -157,10 +159,10 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @OneToOne
     private DataObject dataObject;
 
-    public InvoiceItem() {
+    public SalesInvoiceItem() {
     }
 
-    public InvoiceItem(UUID invoiceItemId) {
+    public SalesInvoiceItem(UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }
 
@@ -270,10 +272,10 @@ public class InvoiceItem extends DataObjectBean implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof InvoiceItem)) {
+        if (!(object instanceof SalesInvoiceItem)) {
             return false;
         }
-        InvoiceItem other = (InvoiceItem) object;
+        SalesInvoiceItem other = (SalesInvoiceItem) object;
         if ((this.invoiceItemId == null && other.invoiceItemId != null) || (this.invoiceItemId != null && !this.invoiceItemId.equals(other.invoiceItemId))) {
             return false;
         }

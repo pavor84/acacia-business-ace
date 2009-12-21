@@ -150,7 +150,7 @@ public class UsersBean implements UsersRemote, UsersLocal {
 
             if (!passwordChange) {
                 UUID sessionId = session.login(user);
-                setOrganization(session.getSystemOrganization());
+                setOrganization(session.getSupervisorOrganization());
                 return sessionId;
             }
 
@@ -374,39 +374,37 @@ public class UsersBean implements UsersRemote, UsersLocal {
     @Override
     public void updateOrganization(User user, CallbackHandler handler) {
 
-        List<Organization> organizations = getActiveOrganizations(user);
-        Organization organization = null;
+        List<UserOrganization> userOrganizations = getActiveUserOrganizations(user);
+        UserOrganization userOrganization = null;
 
-        if (organizations != null && organizations.size() > 0) {
-            log.info("Organizations size: " + organizations.size());
-            if (organizations.size() > 1) {
+        if (userOrganizations != null && userOrganizations.size() > 0) {
+            log.info("Organizations size: " + userOrganizations.size());
+            if (userOrganizations.size() > 1) {
                 try {
                     CallbackTransportObject request = new CallbackTransportObject();
-                    request.put(ORGANIZATIONS_KEY, organizations);
+                    request.put(ORGANIZATIONS_KEY, userOrganizations);
                     CallbackTransportObject result = callbackHandler.handle(handler, request);
-                    organization = (Organization) result.get(ORGANIZATION_KEY);
+                    userOrganization = (UserOrganization) result.get(ORGANIZATION_KEY);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                log.info("Organization = " + organization);
-            } else if (organizations.size() == 1) {
-                organization = organizations.get(0);
+                log.info("Organization = " + userOrganization);
+            } else if (userOrganizations.size() == 1) {
+                userOrganization = userOrganizations.get(0);
             }
 
-            if (organization != null) {
-                UserOrganization uo = usersService.getUserOrganization(user, organization);
-                if (uo.isUserActive()){
-                    session.setOrganization(organization);
-                    session.setBranch(uo.getBranch());
+            if (userOrganization != null) {
+                if (userOrganization.isUserActive()){
+                    session.setOrganization(userOrganization.getOrganization());
+                    session.setBranch(userOrganization.getBranch());
                     session.setPerson(user.getPerson());
-
                 }
                 else
                     throw new ValidationException("Login.account.inactive");
             }
         }
 
-        if (organization == null) {
+        if (userOrganization == null) {
             // TODO: free user
         }
     }
@@ -434,8 +432,12 @@ public class UsersBean implements UsersRemote, UsersLocal {
     }
 
     @Override
-    public List<Organization> getActiveOrganizations(User user) {
-        return usersService.getActiveOrganizations(user);
+    public List<UserOrganization> getActiveUserOrganizations(User user) {
+        if(session.isSupervisor(user)) {
+            return Arrays.asList(getUserOrganization(user, session.getSupervisorOrganization()));
+        }
+
+        return usersService.getActiveUserOrganizations(user);
     }
 
     @Override
@@ -498,14 +500,8 @@ public class UsersBean implements UsersRemote, UsersLocal {
     }
 
     @Override
-    public void leaveOrganization(Organization organization) {
-        User user = session.getUser();
-        List<Organization> list = getActiveOrganizations(user);
-        if (list != null && list.size() == 1)
-            throw new ValidationException("Leave.impossible");
-
-        UserOrganization uo = usersService.getUserOrganization(user, organization);
-        esm.remove(em, uo);
+    public void leaveOrganization(UserOrganization userOrganization) {
+        esm.remove(em, userOrganization);
     }
 
     @Override

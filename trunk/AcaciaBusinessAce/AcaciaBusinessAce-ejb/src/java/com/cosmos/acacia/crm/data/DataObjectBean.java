@@ -6,11 +6,12 @@ package com.cosmos.acacia.crm.data;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Layout;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.beans.PropertyChangeNotificationBroadcaster;
+import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
 import com.cosmos.swingb.JBTextPane;
@@ -59,7 +60,7 @@ import javax.persistence.Transient;
         )
     }
 )
-public abstract class DataObjectBean implements DataObjectEntity,
+public abstract class DataObjectBean implements DataObjectEntity, TextResource,
         PropertyChangeNotificationBroadcaster, Comparable<DataObjectBean> {
 
     public static final String MAIN_TABBED_PANE = "mainTabbedPane";
@@ -77,8 +78,8 @@ public abstract class DataObjectBean implements DataObjectEntity,
     //
     @Transient
     @Property(title="Notes",
-        formComponent=@FormComponent(
-            component=@Component(
+        formComponentPair=@FormComponentPair(
+            firstComponent=@Component(
                 componentClass=JBTextPane.class,
                 componentConstraints=BorderLayout.CENTER,
                 scrollable=true
@@ -106,6 +107,16 @@ public abstract class DataObjectBean implements DataObjectEntity,
     }
 
     public abstract String getInfo();
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
+    }
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {

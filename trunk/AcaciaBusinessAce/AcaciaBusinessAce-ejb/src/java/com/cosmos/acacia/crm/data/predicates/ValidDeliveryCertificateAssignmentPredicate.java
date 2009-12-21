@@ -3,7 +3,7 @@ package com.cosmos.acacia.crm.data.predicates;
 import org.apache.commons.collections.Predicate;
 import org.apache.log4j.Logger;
 
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.enums.DeliveryStatus;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 
@@ -13,8 +13,8 @@ public class ValidDeliveryCertificateAssignmentPredicate implements Predicate{
 	
 	@Override
 	public boolean evaluate(Object assignment) {
-		if(assignment instanceof Invoice){
-			Invoice i = (Invoice)assignment;
+		if(assignment instanceof SalesInvoice){
+			SalesInvoice i = (SalesInvoice)assignment;
 			Enum<DeliveryStatus> deliveryStatus = i.getDeliveryStatus().getEnumValue();
 			Enum<InvoiceStatus> invoiceStatus = i.getStatus().getEnumValue();
 			if( !DeliveryStatus.Delivered.equals(deliveryStatus) && 

@@ -40,7 +40,7 @@ public interface ContactsServiceLocal extends ContactsServiceRemote {
 
     List<Address> getAddresses(BusinessPartner businessPartner, String namePrefix);
 
-    Person newPerson(BusinessPartner parentBusinessPartner);
+    Person newPerson();
 
     List<Person> getPersons(UUID parentBusinessPartnerId);
 

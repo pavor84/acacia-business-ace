@@ -13,10 +13,10 @@ import org.jdesktop.beansbinding.ELProperty;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.data.purchase.PurchaseOrder;
 import com.cosmos.acacia.crm.data.warehouse.Warehouse;
-import com.cosmos.acacia.crm.data.cash.CashReconcile;
+import com.cosmos.acacia.crm.data.accounting.CashReconcile;
 
 /**
  * Created	:	10.03.2009
@@ -83,8 +83,8 @@ public class DocumentNumberBean implements DocumentNumberLocal{
 
     //add custom support for every document entity here
     private void setNumber(DataObjectBean entity, BigInteger number) {
-        if ( entity instanceof Invoice ){
-            Invoice e = (Invoice) entity;
+        if ( entity instanceof SalesInvoice ){
+            SalesInvoice e = (SalesInvoice) entity;
             e.setInvoiceNumber(number);
         }else if ( entity instanceof CustomerPayment ){
             CustomerPayment e = (CustomerPayment) entity;
@@ -102,8 +102,8 @@ public class DocumentNumberBean implements DocumentNumberLocal{
     private Query createMaxNumberQuery(DataObjectBean entity) {
         Query q = null;
         
-        if ( entity instanceof Invoice ){
-            Invoice i = (Invoice) entity;
+        if ( entity instanceof SalesInvoice ){
+            SalesInvoice i = (SalesInvoice) entity;
             q = em.createNamedQuery("Invoice.maxInvoiceNumberForBranch");
             q.setParameter("branch", getBranch(entity));
             q.setParameter("proformaInvoice", i.getProformaInvoice());

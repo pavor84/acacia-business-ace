@@ -23,7 +23,6 @@ import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.resource.TextResource;
 import com.cosmos.swingb.JBComboList;
 import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
@@ -70,21 +69,7 @@ CREATE UNIQUE INDEX uix_addresses_business_partner_address_name
                 "  t.businessPartner = :businessPartner" +
                 "  and t.addressName like :namePrefix" +
                 " order by t.addressName"
-    )/*,
-    @NamedQuery(
-        name = "Address.findByParentDataObjectAndDeleted",
-        query = "select a from Address a" +
-                " where" +
-                " a.dataObject.parentDataObjectId = :parentDataObjectId and a.dataObject.deleted = :deleted"
-    ),
-    @NamedQuery(
-        name = "Address.findByParentDataObjectIsNullAndDeleted",
-        query = "select a from Address a where a.dataObject.parentDataObjectId is null and a.dataObject.deleted = :deleted"
-    ),
-    @NamedQuery(
-        name = "Address.findByNameAndParentDataObject",
-        query = "select a from Address a where a.addressName = :addressName and a.dataObject.parentDataObjectId = :parentDataObjectId"
-    )*/
+    )
 })
 @Form(
     formContainers={
@@ -147,11 +132,9 @@ CREATE UNIQUE INDEX uix_addresses_business_partner_address_name
             entityClass=BankDetail.class
         )
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.AddressPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.AddressListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
-public class Address extends DataObjectBean implements Serializable, TextResource {
+public class Address extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //

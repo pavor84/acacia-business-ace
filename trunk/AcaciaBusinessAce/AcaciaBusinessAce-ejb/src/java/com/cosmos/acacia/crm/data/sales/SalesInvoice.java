@@ -50,7 +50,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.getDueInvoicesForRecipient",
-                query = "select i from Invoice i where i.recipient = :recipient and i.status = :waitingForPayment"
+                query = "select i from SalesInvoice i where i.recipient = :recipient and i.status = :waitingForPayment"
             ),
         /**
          * Get all unpaid invoices for the given recipient
@@ -61,7 +61,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.getDueInvoices",
-                query = "select i from Invoice i where i.status = :waitingForPayment and i.dataObject.parentDataObjectId = :parentId"
+                query = "select i from SalesInvoice i where i.status = :waitingForPayment and i.dataObject.parentDataObjectId = :parentId"
             ),
         /**
          * If a given InvoiceItem is copied from an other document, then this query returns all
@@ -72,8 +72,8 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.getCopiedItemsFromTheSameDocument",
-                query = "select link.invoiceItem from InvoiceItemLink link where link.templateDocumentId in "+ 
-                        "(select templateDocumentId from InvoiceItemLink where invoiceItem = :item)"
+                query = "select link.invoiceItem from SalesInvoiceItemLink link where link.templateDocumentId in "+
+                        "(select templateDocumentId from SalesInvoiceItemLink where invoiceItem = :item)"
             ),
         /**
          * Parameters: 
@@ -84,11 +84,11 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.getTemplatesForInvoice",
-                query = "select i from Invoice i where i.proformaInvoice = :proformaInvoice " +
+                query = "select i from SalesInvoice i where i.proformaInvoice = :proformaInvoice " +
                 		"and i.recipient = :recipient " +
                 		"and i.status = :paid " +
                 		//at last, make sure that the selected invoice is not already used as template
-                		"and not exists (from InvoiceItemLink itemLink where itemLink.templateDocumentId = i.invoiceId)"
+                		"and not exists (from SalesInvoiceItemLink itemLink where itemLink.templateDocumentId = i.invoiceId)"
             ),
         /**
          * Get all cancel-able invoices for a given recipient. 
@@ -102,7 +102,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.getInvoiceToCancel",
-                query = "select i from Invoice i where i.proformaInvoice = :proformaInvoice " +
+                query = "select i from SalesInvoice i where i.proformaInvoice = :proformaInvoice " +
                         "and i.recipient = :recipient " +
                         "and i.status = :waitingForPayment " +
                         "and (i.invoiceType = :simpleInvoice or i.invoiceType = :vatInvoice) "
@@ -115,7 +115,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.maxInvoiceNumberForBranch",
-                query = "select max(i.invoiceNumber) from Invoice i where i.branch = :branch " +
+                query = "select max(i.invoiceNumber) from SalesInvoice i where i.branch = :branch " +
                 		"and i.proformaInvoice = :proformaInvoice "
             ),
         /**
@@ -127,23 +127,23 @@ import org.hibernate.annotations.Type;
         @NamedQuery
             (
                 name = "Invoice.findForParentAndDeleted",
-                query = "select i from Invoice i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
+                query = "select i from SalesInvoice i where i.dataObject.parentDataObjectId = :parentDataObjectId " +
                         "and i.dataObject.deleted = :deleted and i.proformaInvoice = :proformaInvoice"
             ),
         @NamedQuery
             (
                 name = "Invoice.findByParentDataObjectAndDeleted",
-                query = "select i from Invoice i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted"
+                query = "select i from SalesInvoice i where i.dataObject.parentDataObjectId = :parentDataObjectId and i.dataObject.deleted = :deleted"
             ),
         @NamedQuery
             (
                 name = "Invoice.findByParentDataObjectIsNullAndDeleted",
-                query = "select i from Invoice i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted"
+                query = "select i from SalesInvoice i where i.dataObject.parentDataObjectId is null and i.dataObject.deleted = :deleted"
             ),
         @NamedQuery
         (
             name = "Invoice.findById",
-            query = "select i from Invoice i where i.dataObject.dataObjectId = :invoiceId"
+            query = "select i from SalesInvoice i where i.dataObject.dataObjectId = :invoiceId"
         ),
         /**
          * Parameters:
@@ -155,7 +155,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
         (
             name = "Invoice.getConfirmedInvoicesForRecipient",
-            query = "select i from Invoice i where i.recipient = :recipient and " +
+            query = "select i from SalesInvoice i where i.recipient = :recipient and " +
             		"(i.status = :waitingForPayment or i.status = :paid) and " +
             		"i.proformaInvoice = :proformaInvoice order by i.invoiceDate desc"
         ),
@@ -168,7 +168,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
         (
             name = "Invoice.getConfirmedInvoices",
-            query = "select i from Invoice i where " +
+            query = "select i from SalesInvoice i where " +
             		"(i.status = :waitingForPayment or i.status = :paid)" +
             		" and i.dataObject.parentDataObjectId = :parentId and i.dataObject.deleted = false"
         ),
@@ -182,7 +182,7 @@ import org.hibernate.annotations.Type;
         @NamedQuery
         (
             name = "Invoice.getPartlyMatched",
-            query = "select i from Invoice i where " +
+            query = "select i from SalesInvoice i where " +
                     "(i.status = :waitForPayment) and i.recipient=:recipient " +
                     " and i.branch= :branch and i.dataObject.deleted = false " +
                     " and i.paidAmount is not null and i.paidAmount>0 and i.invoiceType<>:creditNote " +
@@ -198,14 +198,14 @@ import org.hibernate.annotations.Type;
         @NamedQuery
         (
             name = "Invoice.getUnmatched",
-            query = "select i from Invoice i where " +
+            query = "select i from SalesInvoice i where " +
                     "(i.status = :waitForPayment) and i.recipient=:recipient " +
                     " and i.branch= :branch and i.dataObject.deleted = false " +
                     " and (i.paidAmount is null or i.paidAmount=0) and i.invoiceType<>:creditNote " +
                     " order by i.id"
         )
     })
-public class Invoice extends DataObjectBean implements Serializable {
+public class SalesInvoice extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -449,10 +449,10 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Property(title="Invoice ID", editable=false, readOnly=true, visible=false)
     private DataObject dataObject;
 
-    public Invoice() {
+    public SalesInvoice() {
     }
 
-    public Invoice(UUID invoiceId) {
+    public SalesInvoice(UUID invoiceId) {
         this.invoiceId = invoiceId;
     }
 
@@ -724,10 +724,10 @@ public class Invoice extends DataObjectBean implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Invoice)) {
+        if (!(object instanceof SalesInvoice)) {
             return false;
         }
-        Invoice other = (Invoice) object;
+        SalesInvoice other = (SalesInvoice) object;
         if ((this.invoiceId == null && other.invoiceId != null) || (this.invoiceId != null && !this.invoiceId.equals(other.invoiceId))) {
             return false;
         }

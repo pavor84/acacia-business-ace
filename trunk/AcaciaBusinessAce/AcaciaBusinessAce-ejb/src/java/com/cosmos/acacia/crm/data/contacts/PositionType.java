@@ -7,14 +7,15 @@ package com.cosmos.acacia.crm.data.contacts;
 
 
 
+import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.resource.TextResource;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Basic;
@@ -51,11 +52,9 @@ CREATE UNIQUE INDEX uix_position_types
     )
 })
 @Form(
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.PositionTypePanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.PositionTypeListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
-public class PositionType extends DataObjectBean implements Serializable, TextResource {
+public class PositionType extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //
@@ -71,13 +70,15 @@ public class PositionType extends DataObjectBean implements Serializable, TextRe
 
     @JoinColumn(name = "business_partner_id", referencedColumnName = "business_partner_id", nullable = false)
     @OneToOne(optional = false)
-    @Property(title="Business Partner")
+    //@Property(title="Business Partner")
     private BusinessPartner businessPartner;
 
     @Basic(optional = false)
     @Column(name = "position_type_name", nullable = false, length = 32)
     @Property(title="Position Type Name", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=32))
+        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=32),
+        formComponentPair=@FormComponentPair(secondComponent=@Component(componentConstraints="span"))
+    )
     private String positionTypeName;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)

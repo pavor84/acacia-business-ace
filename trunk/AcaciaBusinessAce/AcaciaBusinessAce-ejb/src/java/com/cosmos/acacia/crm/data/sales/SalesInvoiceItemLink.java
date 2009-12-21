@@ -30,17 +30,16 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "sales_invoice_item_link")
-@NamedQueries(
-    {
+@NamedQueries({
         /**
          * Returns all InvoiceItemLinks for the given items.
          * Parameters: 
-         * - items - InvoiceItem instances, required
+         * - items - SalesInvoiceItem instances, required
          */
         @NamedQuery
             (
-                name = "InvoiceItemLink.getInvoicesItemLinksForItems",
-                query = "select link from InvoiceItemLink link where link.invoiceItem in (:items)"
+                name = "SalesInvoiceItemLink.getInvoicesItemLinksForItems",
+                query = "select link from SalesInvoiceItemLink link where link.invoiceItem in (:items)"
             ),
         /**
          * Get links for invoice item.
@@ -49,8 +48,8 @@ import org.hibernate.annotations.Type;
          */
         @NamedQuery
         (
-            name = "InvoiceItemLink.getInvoicesItemLinks",
-            query = "select itemLink from InvoiceItemLink itemLink where itemLink.invoiceItem = :invoiceItem"
+            name = "SalesInvoiceItemLink.getInvoicesItemLinks",
+            query = "select itemLink from SalesInvoiceItemLink itemLink where itemLink.invoiceItem = :invoiceItem"
         ),
         /**
          * Get links for invoice.
@@ -59,12 +58,12 @@ import org.hibernate.annotations.Type;
          */
         @NamedQuery
         (
-            name = "InvoiceItemLink.getForInvoice",
-            query = "select itemLink from InvoiceItemLink itemLink where " +
+            name = "SalesInvoiceItemLink.getForInvoice",
+            query = "select itemLink from SalesInvoiceItemLink itemLink where " +
                     "itemLink.invoiceItem.dataObject.parentDataObjectId = :invoiceId"
         )
-    })
-public class InvoiceItemLink implements Serializable{
+})
+public class SalesInvoiceItemLink implements Serializable{
     @Id
     @SequenceGenerator(name="InvoiceItemLinkSeqGen", sequenceName="invoice_item_link_seq", allocationSize=1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="InvoiceItemLinkSeqGen")
@@ -92,20 +91,20 @@ public class InvoiceItemLink implements Serializable{
      */
     @JoinColumn(name = "invoice_item_id", nullable=false)
     @OneToOne
-    private InvoiceItem invoiceItem;
+    private SalesInvoiceItem invoiceItem;
     
-    public InvoiceItemLink(UUID templateItemId, UUID templateDocumentId,
-            InvoiceItem invoiceItem) {
+    public SalesInvoiceItemLink(UUID templateItemId, UUID templateDocumentId,
+            SalesInvoiceItem invoiceItem) {
         super();
         this.templateItemId = templateItemId;
         this.templateDocumentId = templateDocumentId;
         this.invoiceItem = invoiceItem;
     }
 
-    public InvoiceItemLink(){
+    public SalesInvoiceItemLink(){
     }
     
-    public InvoiceItemLink(UUID templateItemId, InvoiceItem invoiceItem) {
+    public SalesInvoiceItemLink(UUID templateItemId, SalesInvoiceItem invoiceItem) {
         super();
         this.templateItemId = templateItemId;
         this.invoiceItem = invoiceItem;
@@ -119,11 +118,11 @@ public class InvoiceItemLink implements Serializable{
         this.id = id;
     }
 
-    public InvoiceItem getInvoiceItem() {
+    public SalesInvoiceItem getInvoiceItem() {
         return invoiceItem;
     }
 
-    public void setInvoiceItem(InvoiceItem invoiceItem) {
+    public void setInvoiceItem(SalesInvoiceItem invoiceItem) {
         this.invoiceItem = invoiceItem;
     }
 
@@ -159,7 +158,7 @@ public class InvoiceItemLink implements Serializable{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final InvoiceItemLink other = (InvoiceItemLink) obj;
+        final SalesInvoiceItemLink other = (SalesInvoiceItemLink) obj;
         if (id == null) {
             if (other.id != null)
                 return false;

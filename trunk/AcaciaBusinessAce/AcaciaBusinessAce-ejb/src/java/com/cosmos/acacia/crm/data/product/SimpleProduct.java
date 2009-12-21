@@ -6,8 +6,6 @@
 package com.cosmos.acacia.crm.data.product;
 
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
-import com.cosmos.acacia.crm.data.*;
-import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -26,6 +24,7 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
 import com.cosmos.util.CodeFormatter;
 import javax.persistence.PrimaryKeyJoinColumn;

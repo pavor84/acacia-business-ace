@@ -22,9 +22,7 @@ import java.io.Serializable;
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="",
-    entityListFormClassName=""
+    serviceClass=ContactsServiceRemote.class
 )
 public class BasicOrganization implements Serializable {
 

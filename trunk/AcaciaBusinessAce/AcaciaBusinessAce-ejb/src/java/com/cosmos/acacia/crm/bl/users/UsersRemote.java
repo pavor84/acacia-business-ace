@@ -1,6 +1,5 @@
 package com.cosmos.acacia.crm.bl.users;
 
-import java.util.UUID;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +26,7 @@ import java.util.UUID;
 public interface UsersRemote {
 
     /** TODO: decide a better place for this */
-    public static final String CHANGE_PASSWORD = "change";
+    public static final String CHANGE_PASSWORD = "changePassword";
 
     /**
      * Performs a login operation. Note that the password must be already hashed
@@ -181,7 +180,7 @@ public interface UsersRemote {
      *
      * @param organization
      */
-    void leaveOrganization (Organization organization);
+    void leaveOrganization (UserOrganization userOrganization);
 
     /**
      * Lists all organizations for the specified user
@@ -189,7 +188,7 @@ public interface UsersRemote {
      * @param user
      * @return list
      */
-    List<Organization> getActiveOrganizations(User user);
+    List<UserOrganization> getActiveUserOrganizations(User user);
 
     List<Organization> getOrganizations(User user);
 

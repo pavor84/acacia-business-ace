@@ -6,8 +6,8 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
-import com.cosmos.acacia.crm.data.cash.CashReconcile;
-import com.cosmos.acacia.crm.data.cash.CashReconcilePaymentSummary;
+import com.cosmos.acacia.crm.data.accounting.CashReconcile;
+import com.cosmos.acacia.crm.data.accounting.CashReconcilePaymentSummary;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 

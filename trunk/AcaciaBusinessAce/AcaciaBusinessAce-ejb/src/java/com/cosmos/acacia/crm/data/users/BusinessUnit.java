@@ -6,7 +6,6 @@ package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.annotation.Property;
@@ -18,6 +17,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.swingb.JBCheckBox;
 import com.cosmos.swingb.JBComboBox;
 import com.cosmos.swingb.JBComboList;
@@ -83,6 +83,14 @@ CONSTRAINT check_business_units_parent_not_null CHECK (
                 " ORDER BY t.businessUnitName"
     ),
     @NamedQuery(
+        name = BusinessUnit.NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT,
+        query = "SELECT t FROM BusinessUnit t" +
+                " WHERE" +
+                "  t.organization = :organization" +
+                "  and t.parentBusinessUnit is null" +
+                " ORDER BY t.businessUnitName"
+    ),
+    @NamedQuery(
         name = BusinessUnit.NQ_FIND_BY_BUSINESS_UNIT_NAME,
         query = "SELECT t FROM BusinessUnit t" +
                 " WHERE" +
@@ -111,6 +119,16 @@ CONSTRAINT check_business_units_parent_not_null CHECK (
             ),
             relationshipType=RelationshipType.OneToMany,
             entityClass=JobTitle.class
+        ),
+        @FormContainer(
+            name=Organization.SECURITY_ROLES,
+            title="Security Roles",
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=SecurityRole.class
         )
     },
     serviceClass=UsersServiceRemote.class
@@ -123,6 +141,7 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_ROOT_BUSINESS_UNIT = CLASS_NAME + ".findRootBusinessUnit";
     public static final String NQ_FIND_BY_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByParentBusinessUnit";
+    public static final String NQ_FIND_BY_NULL_PARENT_BUSINESS_UNIT = CLASS_NAME + ".findByNullParentBusinessUnit";
     public static final String NQ_FIND_BY_BUSINESS_UNIT_NAME = CLASS_NAME + ".findByBusinessUnitName";
     //
     public static final String ROOT_BUSINESS_UNIT_NAME = "Root";
@@ -139,9 +158,9 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Property(title="Root",
         editable=false,
         readOnly=true,
-        formComponent=@FormComponent(
+        formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
-            component=@Component(
+            firstComponent=@Component(
                 componentClass=JBCheckBox.class,
                 text="Root",
                 componentConstraints="skip 1"
@@ -153,9 +172,9 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Basic(optional = false)
     @Column(name = "is_disabled", nullable = false)
     @Property(title="Disabled",
-        formComponent=@FormComponent(
+        formComponentPair=@FormComponentPair(
             parentContainerName=PRIMARY_INFO,
-            component=@Component(
+            firstComponent=@Component(
                 componentClass=JBCheckBox.class,
                 text="Disabled",
                 componentConstraints="skip 1"
@@ -379,5 +398,15 @@ public class BusinessUnit extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getBusinessUnitName();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

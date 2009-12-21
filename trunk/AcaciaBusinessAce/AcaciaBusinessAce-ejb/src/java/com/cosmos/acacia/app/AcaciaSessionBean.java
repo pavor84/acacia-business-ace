@@ -130,9 +130,20 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     private final ReentrantLock sublevelLock = new ReentrantLock();
 
     @Override
+    public boolean isSystemOrganization(Organization organization) {
+        return getSupervisorOrganization().getBusinessPartnerId().equals(organization.getParentBusinessPartnerId());
+    }
+
+    @Override
+    public boolean isSupervisorOrganization(Organization organization) {
+        return organization.getBusinessPartnerId().equals(organization.getParentBusinessPartnerId());
+    }
+
+    @Override
     public Set<SecureAction> getSecureActions() {
         HashSet<SecureAction> secureActions;
-        if((secureActions = (HashSet<SecureAction>) SessionRegistry.getSession().getValue(SessionContext.SECURE_ACTIONS_KEY)) != null) {
+        SessionContext sessionContext = getSession();
+        if((secureActions = (HashSet<SecureAction>) sessionContext.getValue(SessionContext.SECURE_ACTIONS_KEY)) != null) {
             return secureActions;
         }
 
@@ -203,7 +214,8 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     private boolean canRead(Class entityClass) {
-        return securityService.isAllowed(entityClass, AccessRight.Read);
+        return true;
+//        return securityService.isAllowed(entityClass, AccessRight.Read);
     }
 
     @Override
@@ -322,7 +334,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     }
 
     @Override
-    public Organization getSystemOrganization() {
+    public Organization getSupervisorOrganization() {
         if(systemOrganization == null) {
             Query q = em.createNamedQuery(Organization.NQ_FIND_SYSTEM_ORGANIZATION);
             systemOrganization = (Organization) q.getSingleResult();
@@ -340,6 +352,16 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
         }
 
         return supervisor;
+    }
+
+    @Override
+    public boolean isSupervisor() {
+        return isSupervisor(getUser());
+    }
+
+    @Override
+    public boolean isSupervisor(User user) {
+        return getSupervisor().equals(user);
     }
 
     @Override
@@ -371,7 +393,7 @@ public class AcaciaSessionBean implements AcaciaSessionRemote, AcaciaSessionLoca
     @Override
     public void setOrganization(Organization organization) {
         if(getSupervisor().equals(getUser())) {
-            organization = getSystemOrganization();
+            organization = getSupervisorOrganization();
         }
         if(organization == null) {
             throw new NullPointerException("The organization can not be null.");

@@ -44,9 +44,7 @@ import org.hibernate.annotations.Type;
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.BankDetailPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.BankDetailListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
 public class BankDetail extends DataObjectBean implements Serializable, TextResource {
 

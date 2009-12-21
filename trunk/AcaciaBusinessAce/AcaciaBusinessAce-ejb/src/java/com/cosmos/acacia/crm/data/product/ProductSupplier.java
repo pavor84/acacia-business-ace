@@ -5,11 +5,10 @@
 package com.cosmos.acacia.crm.data.product;
 
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
-import com.cosmos.acacia.crm.data.*;
-import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.util.PersistentEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;

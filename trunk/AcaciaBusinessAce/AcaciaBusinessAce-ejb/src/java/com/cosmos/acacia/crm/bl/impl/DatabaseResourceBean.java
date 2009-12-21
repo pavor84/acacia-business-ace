@@ -22,10 +22,9 @@ import com.cosmos.acacia.crm.assembling.Algorithm;
 import com.cosmos.acacia.crm.bl.cash.CurrencyNominalLocal;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListLocal;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceLocal;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceLocal;
 import com.cosmos.acacia.crm.bl.users.UsersServiceLocal;
 import com.cosmos.acacia.crm.data.DataObject;
-import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.DataObjectType;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.EnumClass;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -36,10 +35,7 @@ import com.cosmos.acacia.crm.data.location.Country;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.contacts.PersonalCommunicationContact;
-import com.cosmos.acacia.crm.data.security.EntityTypePrivilege;
-import com.cosmos.acacia.crm.data.security.Privilege;
 import com.cosmos.acacia.crm.data.security.PrivilegeCategory;
-import com.cosmos.acacia.crm.data.security.PrivilegeRole;
 import com.cosmos.acacia.crm.data.security.SecurityRole;
 import com.cosmos.acacia.crm.data.users.BusinessUnit;
 import com.cosmos.acacia.crm.data.users.User;
@@ -49,6 +45,7 @@ import com.cosmos.acacia.crm.enums.AccountStatus;
 import com.cosmos.acacia.crm.enums.BusinessActivity;
 import com.cosmos.acacia.crm.enums.BusinessUnitAddressType;
 import com.cosmos.acacia.crm.enums.BusinessUnitType;
+import com.cosmos.acacia.crm.enums.BusinessUnitTypeJobTitle;
 import com.cosmos.acacia.crm.enums.CommunicationType;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
@@ -83,15 +80,12 @@ import com.cosmos.acacia.security.AccessLevel;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.security.PrivilegeCategoryType;
 import com.cosmos.acacia.security.PrivilegeType;
-import com.cosmos.util.ClassHelper;
 import com.cosmos.util.SecurityUtils;
-import java.lang.reflect.Modifier;
+import com.cosmos.util.StringUtils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -105,8 +99,7 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     private static boolean initialized = false;
     private static Map<String, EnumClass> enumClassMap;
     private static Map<Enum, Map<String, DbResource>> dbResourceMap;
-    private static Map<String, Set<Class>> entityClassesMap;
-
+    //
     @PersistenceContext
     private EntityManager em;
 
@@ -130,6 +123,12 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
 
     @EJB
     private DataObjectTypeLocal dotService;
+    //
+    @EJB
+    private SecurityServiceLocal securityService;
+    //
+    @EJB
+    private EntityServiceLocal entityService;
 
     @Override
     public synchronized void initDatabaseResource() {
@@ -321,6 +320,9 @@ public class DatabaseResourceBean implements DatabaseResourceLocal {
     }
 
 /*
+delete from job_titles;
+delete from warehouse_products;
+delete from passports;
 delete from classified_objects;
 delete from classifier_applied_for_dot;
 delete from classifiers;
@@ -343,6 +345,14 @@ delete from communication_contacts;
 delete from addresses;
 delete from users;
 delete from organizations;
+delete from persons;
+delete from currency_nominal;
+delete from currency_exchange_rates;
+delete from business_partners;
+delete from cities;
+delete from countries;
+delete from resource_bundle;
+delete from enum_classes;
 */
     private void initContacts() {
         Query q = em.createQuery("select count(t) from Organization t");
@@ -381,14 +391,17 @@ delete from organizations;
         em.persist(organization);
 
         city = locationsService.getCityByCode(bulgaria, City.CODE_STARA_ZAGORA);
-        Person person = contactsService.newPerson(organization);
+        Person person = new Person();
+        person.setDefaultCurrency(Currency.EUR.getDbResource());
+        person.setParentId(organization.getBusinessPartnerId());
         Calendar calendar = Calendar.getInstance();
         calendar.set(1966, Calendar.NOVEMBER, 17, 4, 0);
         person.setBirthDate(calendar.getTime());
         person.setBirthPlaceCountry(bulgaria);
         person.setBirthPlaceCity(city);
         person.setFirstName("Miroslav");
-        person.setLastName("Miroslav");
+        person.setLastName("Nachev");
+        person.setExtraName("Supervisor");
         person.setGender(Gender.Male.getDbResource());
         esm.persist(em, person);
 
@@ -432,18 +445,21 @@ delete from organizations;
         supervisor.setIsNew(false);
         esm.persist(em, supervisor);
 
-        BusinessUnit rootBusinessUnit = new BusinessUnit(organization);
+        BusinessUnit rootBusinessUnit = usersService.newItem(organization, BusinessUnit.class);
         rootBusinessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT_NAME);
         rootBusinessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
         rootBusinessUnit.setRoot(true);
         rootBusinessUnit.setDisabled(false);
-        esm.persist(em, rootBusinessUnit);
+        usersService.save(rootBusinessUnit);
+        System.out.println("rootBusinessUnit=" + rootBusinessUnit);
 
-        BusinessUnit usersBusinessUnit = new BusinessUnit(rootBusinessUnit);
+        BusinessUnit usersBusinessUnit = usersService.newItem(organization, BusinessUnit.class);
+        usersBusinessUnit.setParentBusinessUnit(rootBusinessUnit);
         usersBusinessUnit.setBusinessUnitName(BusinessUnit.USERS_BUSINESS_UNIT_NAME);
         usersBusinessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
         usersBusinessUnit.setDisabled(false);
-        esm.persist(em, usersBusinessUnit);
+        usersService.save(usersBusinessUnit);
+        System.out.println("usersBusinessUnit=" + usersBusinessUnit);
 
         UserOrganization userOrganization = new UserOrganization(supervisor, organization);
         userOrganization.setUserActive(true);
@@ -451,128 +467,11 @@ delete from organizations;
         userOrganization.setBusinessUnit(rootBusinessUnit);
         esm.persist(em, userOrganization);
 
-        SecurityRole securityRole = new SecurityRole(organization, rootBusinessUnit, SecurityRole.SUPERVISOR_ROLE_NAME);
-        esm.persist(em, securityRole);
+        BusinessUnitTypeJobTitle supervisorJobTitle = BusinessUnitTypeJobTitle.Supervisor;
+        String securityRoleName = supervisorJobTitle.getJobTitle();
+        SecurityRole securityRole = securityService.getSecurityRole(organization, securityRoleName);
 
         UserSecurityRole userSecurityRole = new UserSecurityRole(userOrganization, securityRole);
         esm.persist(em, userSecurityRole);
-
-        initPrivilegeCategory(organization);
-
-        Map<AccessRight, AccessLevel> roleAccessMap = new EnumMap<AccessRight, AccessLevel>(AccessRight.class);
-        roleAccessMap.put(AccessRight.Read, AccessLevel.System);
-        roleAccessMap.put(AccessRight.Create, AccessLevel.System);
-        roleAccessMap.put(AccessRight.Delete, AccessLevel.System);
-        roleAccessMap.put(AccessRight.Modify, AccessLevel.System);
-        roleAccessMap.put(AccessRight.Execute, AccessLevel.System);
-
-        setSecurityRoleAccess(organization, securityRole, User.class.getPackage(), roleAccessMap);
-        setSecurityRoleAccess(organization, securityRole, Organization.class.getPackage(), roleAccessMap);
-        setSecurityRoleAccess(organization, securityRole, Country.class.getPackage(), roleAccessMap);
-    }
-
-    private void setSecurityRoleAccess(
-            Organization organization,
-            SecurityRole securityRole,
-            Package pkg,
-            Map<AccessRight, AccessLevel> roleAccessMap) {
-        String packageName = pkg.getName();
-        PrivilegeCategory privilegeCategory = getPrivilegeCategory(organization, getLastName(packageName));
-        for(Class entityClass : getEntityClasses(packageName)) {
-            String entityClassName = entityClass.getName();
-            DataObjectType entityDataObjectType = dotService.getDataObjectType(entityClassName);
-            EntityTypePrivilege privilege = new EntityTypePrivilege(securityRole, entityDataObjectType);
-            privilege.setPrivilegeCategory(privilegeCategory);
-            privilege.setPrivilegeName(getLastName(entityClassName));
-            esm.persist(em, privilege);
-            setPrivilegeRoleAccess(privilege, roleAccessMap);
-        }
-    }
-
-    private void setPrivilegeRoleAccess(Privilege privilege, Map<AccessRight, AccessLevel> roleAccessMap) {
-        for(AccessRight right : AccessRight.values()) {
-            AccessLevel level;
-            if((level = roleAccessMap.get(right)) == null) {
-                level = AccessLevel.None;
-            }
-            PrivilegeRole privilegeRole = new PrivilegeRole(privilege, right.getDbResource(), level.getDbResource());
-            esm.persist(em, privilegeRole);
-        }
-    }
-
-    @Override
-    public void initPrivilegeCategory(Organization organization) {
-        Query q = em.createNamedQuery(PrivilegeCategory.NQ_COUNT_BY_ORGANIZATION);
-        q.setParameter("organization", organization);
-        Long count;
-        if((count = (Long) q.getSingleResult()) != null && count > 0) {
-            return;
-        }
-
-        DbResource categoryType = PrivilegeCategoryType.System.getDbResource();
-        Map<String, Set<Class>> classesMap = getEntityClassesMap();
-        for(String packageName : classesMap.keySet()) {
-            packageName = getLastName(packageName);
-            PrivilegeCategory category = new PrivilegeCategory(organization, categoryType, packageName);
-            esm.persist(em, category);
-        }
-    }
-
-    private String getLastName(String packageName) {
-        int index;
-        if((index = packageName.lastIndexOf('.')) >= 0 || (index = packageName.lastIndexOf(' ')) >= 0) {
-            packageName = packageName.substring(index + 1);
-        }
-
-        return packageName;
-    }
-
-    private PrivilegeCategory getPrivilegeCategory(Organization organization, Class entityClass) {
-        return getPrivilegeCategory(organization, getLastName(entityClass.getPackage().getName()));
-    }
-
-    private PrivilegeCategory getPrivilegeCategory(Organization organization, String categoryName) {
-        Query q = em.createNamedQuery(PrivilegeCategory.NQ_FIND_BY_NAME);
-        q.setParameter("organization", organization);
-        q.setParameter("categoryName", categoryName);
-        try {
-            return (PrivilegeCategory) q.getSingleResult();
-        } catch(NoResultException ex) {
-            return null;
-        }
-    }
-
-    private Set<Class> getEntityClasses(String packageName) {
-        return getEntityClassesMap().get(packageName);
-    }
-
-    private Map<String, Set<Class>> getEntityClassesMap() {
-        if(entityClassesMap != null) {
-            return entityClassesMap;
-        }
-
-        entityClassesMap = new TreeMap<String, Set<Class>>();
-        try {
-            Set<Class<?>> acaciaClasses = ClassHelper.getClasses("com.cosmos", true, DataObjectBean.class);
-            for(Class cls : acaciaClasses) {
-                if(Modifier.isAbstract(cls.getModifiers())) {
-                    continue;
-                }
-
-                Package pkg = cls.getPackage();
-                String packageName = pkg.getName();
-                Set<Class> classes;
-                if((classes = entityClassesMap.get(packageName)) == null) {
-                    classes = new HashSet<Class>();
-                    entityClassesMap.put(packageName, classes);
-                }
-                classes.add(cls);
-            }
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-
-        return entityClassesMap;
     }
 }

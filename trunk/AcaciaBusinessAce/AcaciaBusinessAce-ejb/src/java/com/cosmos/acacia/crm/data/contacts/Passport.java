@@ -5,7 +5,9 @@
 
 package com.cosmos.acacia.crm.data.contacts;
 
+import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
+import com.cosmos.acacia.annotation.FormComponentPair;
 import java.io.Serializable;
 import java.util.UUID;
 import java.util.Date;
@@ -22,7 +24,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
@@ -35,7 +39,14 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "passports")
+@Table(name = "passports"
+/*
+CREATE UNIQUE INDEX uix_passports_person_type_number
+  ON passports
+  USING btree
+  (person_id, passport_type_id, lower(passport_number::text));
+*/
+)
 @NamedQueries({
     @NamedQuery(
         name =  Passport.NQ_FIND_ALL,
@@ -48,9 +59,7 @@ import org.hibernate.annotations.Type;
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.PersonPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.PersonListPanel"
+    serviceClass=ContactsServiceRemote.class
 )
 public class Passport extends DataObjectBean implements Serializable {
 
@@ -61,18 +70,21 @@ public class Passport extends DataObjectBean implements Serializable {
     //
     @Id
     @Column(name = "passport_id", nullable = false)
-    @Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
+    //@Property(title="Passport Id", editable=false, readOnly=true, visible=false, hidden=true)
     @Type(type="uuid")
     private UUID passportId;
 
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     @ManyToOne
-    @Property(title="Person", customDisplay="${person.displayName}")
+    @Property(title="Person", customDisplay="${person.displayName}", useEntityAttributes=false)
     private Person person;
 
     @JoinColumn(name = "passport_type_id", referencedColumnName = "resource_id")
     @ManyToOne
-    @Property(title="Passport Type")
+    @Property(title="Passport Type",
+        selectableList=@SelectableList(className="com.cosmos.acacia.crm.enums.PassportType"),
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Passport Type:"))
+    )
     private DbResource passportType;
 
     @Column(name = "passport_number", nullable = false)
@@ -92,17 +104,27 @@ public class Passport extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "issuer_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne
-    @Property(title="Issuer", customDisplay="${issuer.organizationName}")
+    @Property(title="Issuer",
+        selectableList=@SelectableList(
+            constructorParameters={@PropertyName(getter="'PassportOffice'", setter="classifier")}
+        )
+    )
     private Organization issuer;
 
     @JoinColumn(name = "issuer_branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne
-    @Property(title="Issuer Branch", customDisplay="${issuerBranch.addressName}")
+    @Property(title="Issuer Branch",
+        selectableList=@SelectableList(
+            constructorParameters={@PropertyName(getter="issuer", setter="businessPartner")}
+        )
+    )
     private Address issuerBranch;
 
     @Column(name = "additional_info")
-    @Property(title="Additional Info", propertyValidator=
-        @PropertyValidator(validationType=ValidationType.LENGTH, maxLength=255))
+    @Property(title="Additional Info",
+        propertyValidator=@PropertyValidator(validationType=ValidationType.LENGTH, maxLength=255),
+        formComponentPair=@FormComponentPair(secondComponent=@Component(componentConstraints="span"))
+    )
     private String additionalInfo;
 
     @JoinColumn(name = "passport_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
@@ -230,4 +252,17 @@ public class Passport extends DataObjectBean implements Serializable {
         return getPassportNumber();
     }
 
+    @Override
+    public String toShortText() {
+        return toText();
+    }
+
+    @Override
+    public String toText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("No ").append(passportNumber);
+        sb.append("/").append(passportType);
+
+        return sb.toString();
+    }
 }

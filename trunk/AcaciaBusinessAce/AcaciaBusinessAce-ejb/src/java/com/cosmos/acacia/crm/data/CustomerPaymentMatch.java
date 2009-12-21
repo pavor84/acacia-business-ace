@@ -3,7 +3,7 @@
  */
 package com.cosmos.acacia.crm.data;
 
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -61,7 +61,7 @@ public class CustomerPaymentMatch extends DataObjectBean implements Serializable
     
     @JoinColumn(name = "invoice_id", nullable=false)
     @ManyToOne
-    private Invoice invoice;
+    private SalesInvoice invoice;
     
     @Column(name = "amount", nullable = false, precision=20, scale=4)
     private BigDecimal amount;
@@ -93,11 +93,11 @@ public class CustomerPaymentMatch extends DataObjectBean implements Serializable
         this.customerPayment = customerPayment;
     }
 
-    public Invoice getInvoice() {
+    public SalesInvoice getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(Invoice invoice) {
+    public void setInvoice(SalesInvoice invoice) {
         this.invoice = invoice;
     }
 
