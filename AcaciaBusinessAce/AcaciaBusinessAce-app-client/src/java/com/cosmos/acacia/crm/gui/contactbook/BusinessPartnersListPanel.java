@@ -33,6 +33,7 @@ import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType;
 import com.cosmos.acacia.crm.gui.pricing.CustomerDiscountListPanel;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaPanel;
@@ -238,7 +239,7 @@ public class BusinessPartnersListPanel extends AbstractTablePanel<BusinessPartne
             classifiedObject = new ClassifiedObject();
             comboListBindingGroup = new BindingGroup();
             EntityProperty propDetails = EntityProperty.createEntityProperty(
-                    "classifier", "Classifier", Classifier.class.getName());
+                    "classifier", "Classifier", Classifier.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
             propDetails.setColumnName("classifier");
 
             if (comboListPanel == null) {

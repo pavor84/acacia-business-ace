@@ -45,20 +45,21 @@ public class BaseTest {
     }
 
     public void login(String userName, String password) {
-        User loggedUser = getUser();
-        //already logged - so return
-        if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
-            return;
-
-        UUID sessionId = usersRemote.login(userName, password.toCharArray());
-        AcaciaApplication.setSessionId(sessionId);
-
-        User user = session.getUser();
-        List<Organization> organizations = usersRemote.getActiveOrganizations(user);
-        if ( organizations==null || organizations.isEmpty() )
-            throw new IllegalStateException("Organizations empty for this user: "+userName);
-
-        usersRemote.setOrganization(organizations.get(0));
+        throw new UnsupportedOperationException("ToDo");
+//        User loggedUser = getUser();
+//        //already logged - so return
+//        if ( loggedUser!=null && loggedUser.getUserName().equals(userName))
+//            return;
+//
+//        UUID sessionId = usersRemote.login(userName, password.toCharArray());
+//        AcaciaApplication.setSessionId(sessionId);
+//
+//        User user = session.getUser();
+//        List<Organization> organizations = usersRemote.getActiveOrganizations(user);
+//        if ( organizations==null || organizations.isEmpty() )
+//            throw new IllegalStateException("Organizations empty for this user: "+userName);
+//
+//        usersRemote.setOrganization(organizations.get(0));
     }
 
     public User getUser(){

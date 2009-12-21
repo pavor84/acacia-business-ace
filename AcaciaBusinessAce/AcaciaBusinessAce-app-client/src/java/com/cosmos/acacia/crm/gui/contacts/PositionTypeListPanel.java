@@ -24,6 +24,10 @@ public class PositionTypeListPanel extends DetailEntityListPanel<BusinessPartner
         super(mainEntity, PositionType.class, null);
     }
 
+    public PositionTypeListPanel() {
+        this(getAcaciaSession().getOrganization());
+    }
+
     @Override
     protected EntityPanel getEntityPanel(PositionType entity) {
         PositionTypePanel entityPanel = new PositionTypePanel(this, entity);

@@ -11,7 +11,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.UUID;
 import java.util.List;
 import java.util.Locale;
 import java.util.prefs.Preferences;
@@ -23,6 +22,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import com.cosmos.acacia.crm.bl.users.UsersRemote;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.users.User;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.util.AcaciaUtils;
@@ -53,7 +53,7 @@ public class LoginForm extends AcaciaPanel {
 
     /** Creates new form LoginForm */
     public LoginForm() {
-        super((UUID) null);
+        super();
         initComponents();
         initData();
     }
@@ -216,7 +216,7 @@ public class LoginForm extends AcaciaPanel {
 
 
     private UsersRemote formSession;
-    private Preferences prefs = Preferences.systemRoot();
+    private Preferences preferences = Preferences.systemRoot();
     private String lastUserLoaded = null;
 
     @Override
@@ -247,7 +247,7 @@ public class LoginForm extends AcaciaPanel {
         });
 
         usernameComboBox.removeAllItems();
-        String usernamesString = prefs.get(USERS_LIST, null);
+        String usernamesString = preferences.get(USERS_LIST, null);
         if (usernamesString != null) {
             String[] usernamesArray = usernamesString.split(",");
             for (String username : usernamesArray) {
@@ -272,7 +272,7 @@ public class LoginForm extends AcaciaPanel {
             }
         });
 
-        String username = prefs.get(USERNAME, null);
+        String username = preferences.get(USERNAME, null);
         if (username != null) {
             rememberMeCheckBox.setSelected(true);
             usernameComboBox.setSelectedItem(username);
@@ -286,7 +286,7 @@ public class LoginForm extends AcaciaPanel {
             return;
         lastUserLoaded = username;
 
-        String password = prefs.get(username + PASSWORD, null);
+        String password = preferences.get(username + PASSWORD, null);
         if (password != null) {
             rememberPasswordCheckBox.setSelected(true);
             try {
@@ -301,7 +301,7 @@ public class LoginForm extends AcaciaPanel {
             rememberPasswordCheckBox.setSelected(false);
         }
 
-        String locale = prefs.get(username + LOCALE, null);
+        String locale = preferences.get(username + LOCALE, null);
         if (locale != null)
             localeComboBox.setSelectedItem(new Locale(locale));
 
@@ -316,12 +316,12 @@ public class LoginForm extends AcaciaPanel {
 
         if (rememberPasswordCheckBox.isSelected()) {
             String encryptedPassword = getFormSession().encryptPassword(password);
-            prefs.put(username + PASSWORD, encryptedPassword);
+            preferences.put(username + PASSWORD, encryptedPassword);
         } else
-            prefs.remove(username + PASSWORD);
+            preferences.remove(username + PASSWORD);
 
         try {
-            prefs.flush();
+            preferences.flush();
         } catch (Exception ex) {
             log.error("", ex);
         }
@@ -334,39 +334,29 @@ public class LoginForm extends AcaciaPanel {
 
             setPreferences(username);
 
+            if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
+                ChangePasswordForm cpf = new ChangePasswordForm(null);
+                cpf.setCurrentPassword(new String(password));
+                cpf.showDialog(this);
+
+                //if(!DialogResponse.OK.equals(response1))
+                //    AcaciaApplication.getApplication().exit();
+            }
+
             /* End of preferences handling */
 
-            int size;
-            List<Organization> organizations = getFormSession().getActiveOrganizations(user);
-            if((size = organizations.size()) == 0) {
+            List<UserOrganization> userOrganizations = getFormSession().getActiveUserOrganizations(user);
+            if(userOrganizations.size() == 0) {
                 UserOrganizationListPanel userOrganizationListPanel = new UserOrganizationListPanel(user);
-                if(DialogResponse.SELECT.equals(userOrganizationListPanel.showDialog())) {
-                    System.out.println("userOrganizationListPanel.getSelectedRowObject(): " + userOrganizationListPanel.getSelectedRowObject());
-                } else {
-                }
-            } else {
-
+                userOrganizationListPanel.showDialog();
+                userOrganizations = getFormSession().getActiveUserOrganizations(user);
             }
 
-            Organization organization = null;
-            if (organizations.size() > 1) {
-                String defaultOrganization = prefs.get(username + ORGANIZATION, null);
-                OrganizationChoiceForm form = new OrganizationChoiceForm(null);
-                form.setDefaultOrganizationString(defaultOrganization);
-                form.init(organizations);
-                DialogResponse response = form.showDialog();
-                if(DialogResponse.SELECT.equals(response))
-                {
-                    organization = (Organization) form.getSelectedValue();
-                    prefs.put(username + ORGANIZATION, organization.getOrganizationName());
-                }
-            } else if (organizations.size() == 1) {
-                organization = organizations.get(0);
-            }
+            UserOrganization userOrganization = getUserOrganization(userOrganizations, username);
 
             // Initialization of client parameters
 
-            getFormSession().setOrganization(organization);
+            getFormSession().setOrganization(userOrganization.getOrganization());
 
             // End of initialization
 
@@ -382,15 +372,6 @@ public class LoginForm extends AcaciaPanel {
 
             //setDialogResponse(DialogResponse.LOGIN);
 
-            if (UsersRemote.CHANGE_PASSWORD.equals(user.getNextActionAfterLogin())) {
-                ChangePasswordForm cpf = new ChangePasswordForm(null);
-                cpf.setCurrentPassword(new String(password));
-                cpf.showDialog(this);
-
-                //if(!DialogResponse.OK.equals(response1))
-                //    AcaciaApplication.getApplication().exit();
-            }
-
             getFormSession().init();
 
             close(false);
@@ -399,33 +380,51 @@ public class LoginForm extends AcaciaPanel {
             ex.printStackTrace();
             handleBusinessException(ex);
         }
+    }
 
+    private UserOrganization getUserOrganization(List<UserOrganization> userOrganizations, String username) {
+        if (userOrganizations.size() == 1) {
+            return userOrganizations.get(0);
+        } else if (userOrganizations.size() > 1) {
+            String defaultOrganization = preferences.get(username + ORGANIZATION, null);
+            OrganizationChoiceForm form = new OrganizationChoiceForm(null);
+            form.setDefaultOrganizationString(defaultOrganization);
+            form.init(userOrganizations);
+            DialogResponse response = form.showDialog();
+            if(DialogResponse.SELECT.equals(response)) {
+                UserOrganization userOrganization = (UserOrganization) form.getSelectedValue();
+                Organization organization = userOrganization.getOrganization();
+                preferences.put(username + ORGANIZATION, organization.getOrganizationName());
+                return userOrganization;
+            }
+        }
 
+        return null;
     }
 
     private void setPreferences(String username) {
         /* Preferences handling*/
-        prefs.put(username + LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
+        preferences.put(username + LOCALE, ((Locale) localeComboBox.getSelectedItem()).getLanguage());
 
-        String usersList = prefs.get(USERS_LIST, null);
+        String usersList = preferences.get(USERS_LIST, null);
         if (rememberMeCheckBox.isSelected()) {
-            prefs.put(USERNAME, username);
+            preferences.put(USERNAME, username);
             if (usersList == null || usersList.length() == 0)
-                prefs.put(USERS_LIST, username);
+                preferences.put(USERS_LIST, username);
             else {
                 if (usersList.indexOf(username) == -1) {
                     usersList += "," + username;
-                    prefs.put(USERS_LIST, usersList);
+                    preferences.put(USERS_LIST, usersList);
                 }
             }
         } else {
-            prefs.remove(USERNAME);
-            prefs.remove(username + PASSWORD);
-            prefs.remove(username + LOCALE);
+            preferences.remove(USERNAME);
+            preferences.remove(username + PASSWORD);
+            preferences.remove(username + LOCALE);
             if (usersList != null && usersList.length() > 0) {
                 usersList = usersList.replaceAll("," + username, "");
                 usersList = usersList.replaceAll(username + ",", "");
-                prefs.put(USERS_LIST, usersList);
+                preferences.put(USERS_LIST, usersList);
             }
         }
     }
@@ -442,16 +441,12 @@ public class LoginForm extends AcaciaPanel {
         fpf.showDialog();
     }
 
-    protected UsersRemote getFormSession()
-    {
+    protected UsersRemote getFormSession() {
         if (formSession == null) {
-            try
-            {
+            try {
                 formSession = getBean(UsersRemote.class, false);
                 UserUtils.updateUserLocale(formSession);
-            }
-            catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }

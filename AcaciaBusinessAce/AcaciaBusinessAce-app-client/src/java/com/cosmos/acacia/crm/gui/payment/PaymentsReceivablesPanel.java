@@ -19,7 +19,7 @@ import com.cosmos.acacia.crm.bl.contactbook.BusinessPartnersListRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.CustomerPayment;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.gui.invoice.InvoiceListPanel;
@@ -188,7 +188,7 @@ public class PaymentsReceivablesPanel extends AcaciaPanel {
 
     protected void onLiabilityDocumentsButton(BusinessPartnersListPanel customersListPanel) {
         if ( customersListPanel.getDataTable().getSelectedRowObject() instanceof BusinessPartner ){
-            List<Invoice> dueDocuments = 
+            List<SalesInvoice> dueDocuments =
                 invoicesManager.getDueDocuments((BusinessPartner) customersListPanel.getDataTable().getSelectedRowObject());
             InvoiceListPanel dueInvoicesPanel = new InvoiceListPanel(getParentDataObjectId(), dueDocuments, false);
             dueInvoicesPanel.setReadonly();

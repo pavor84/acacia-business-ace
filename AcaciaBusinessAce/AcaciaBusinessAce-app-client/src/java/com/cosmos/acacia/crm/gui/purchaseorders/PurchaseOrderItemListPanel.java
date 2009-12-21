@@ -20,8 +20,8 @@ import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.data.purchase.PurchaseOrder;
 import com.cosmos.acacia.crm.data.purchase.PurchaseOrderItem;
@@ -218,7 +218,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         Random r = new Random();
         
         //invoice
-        Invoice i = new Invoice();
+        SalesInvoice i = new SalesInvoice();
         i.setId(UUID.randomUUID());
         DummyInvoice di = new DummyInvoice();
         di.invoice = i;
@@ -231,7 +231,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         result.add(di);
         
         //invoice
-        i = new Invoice();
+        i = new SalesInvoice();
         i.setId(UUID.randomUUID());
         di = new DummyInvoice();
         di.invoice = i;
@@ -244,7 +244,7 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         result.add(di);
         
         //invoice
-        i = new Invoice();
+        i = new SalesInvoice();
         i.setId(UUID.randomUUID());
         di = new DummyInvoice();
         di.invoice = i;
@@ -260,8 +260,8 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
     }
     
     public static class DummyInvoice{
-        public Invoice invoice;
-        public List<InvoiceItem> items;
+        public SalesInvoice invoice;
+        public List<SalesInvoiceItem> items;
     }
     
     private void addDummyInvoiceItems(DummyInvoice i) {
@@ -269,12 +269,12 @@ public class PurchaseOrderItemListPanel extends AbstractTablePanel<PurchaseOrder
         int howMuch = r.nextInt(5);
         howMuch++;
         
-        i.items = new ArrayList<InvoiceItem>();
+        i.items = new ArrayList<SalesInvoiceItem>();
         
         Set<SimpleProduct> addedProductsForInvoice = new HashSet<SimpleProduct>();
         
         for (int j = 0; j < howMuch; j++) {
-            InvoiceItem item = new InvoiceItem();
+            SalesInvoiceItem item = new SalesInvoiceItem();
             item.setId(UUID.randomUUID());
             item.setMeasureUnit(getRandomMeasureUnit());
             int ordered = r.nextInt(10)+1;

@@ -258,4 +258,9 @@ public class LocalSession implements AcaciaSessionRemote {
     public StatusBar getStatusBar() {
         return remoteSession.getStatusBar();
     }
+
+    @Override
+    public boolean isSystemOrganization(Organization organization) {
+        return remoteSession.isSystemOrganization(organization);
+    }
 }

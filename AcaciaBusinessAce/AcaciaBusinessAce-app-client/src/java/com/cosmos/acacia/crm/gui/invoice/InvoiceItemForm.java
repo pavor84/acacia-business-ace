@@ -35,8 +35,8 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -59,11 +59,11 @@ import com.cosmos.swingb.DialogResponse;
  */
 public class InvoiceItemForm extends BaseEntityPanel {
 
-    private InvoiceItem entity;
-    private Invoice parent;
+    private SalesInvoiceItem entity;
+    private SalesInvoice parent;
 
     /** Creates new form InvoiceFormDraft */
-    public InvoiceItemForm(Invoice invoice, InvoiceItem item) {
+    public InvoiceItemForm(SalesInvoice invoice, SalesInvoiceItem item) {
         super(item.getParentId());
         this.parent = invoice;
         this.entity = item;
@@ -407,7 +407,7 @@ public class InvoiceItemForm extends BaseEntityPanel {
     }
 
     @Override
-    public InvoiceItem getEntity() {
+    public SalesInvoiceItem getEntity() {
         return entity;
     }
 

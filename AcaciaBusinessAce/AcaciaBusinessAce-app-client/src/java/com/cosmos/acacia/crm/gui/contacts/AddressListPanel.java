@@ -29,4 +29,13 @@ public class AddressListPanel extends DetailEntityListPanel<BusinessPartner, Add
         AddressPanel entityPanel = new AddressPanel(this, entity);
         return entityPanel;
     }
+
+    public BusinessPartner getBusinessPartner() {
+        return getMainEntity();
+    }
+
+    public void setBusinessPartner(BusinessPartner businessPartner) {
+        setMainEntity(businessPartner);
+        refresh();
+    }
 }

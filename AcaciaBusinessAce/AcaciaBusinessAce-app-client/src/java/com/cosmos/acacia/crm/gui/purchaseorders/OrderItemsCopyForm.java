@@ -20,8 +20,8 @@ import javax.swing.JOptionPane;
 
 import com.cosmos.acacia.crm.bl.purchaseorder.PurchaseOrderListRemote;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.purchase.PurchaseOrderItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
@@ -171,13 +171,13 @@ public class OrderItemsCopyForm extends AcaciaPanel {
         
         //supplier
         //InvoicesListPanel listPanel = new InvoicesListPanel(getOrganizationDataObjectId());
-        List<Invoice> invoices = getInvoicesList(dummyInvoices);
+        List<SalesInvoice> invoices = getInvoicesList(dummyInvoices);
 //        DummyInvoicesListDialog listDialog = new DummyInvoicesListDialog(invoices);
 //        invoiceField.initUnbound(listDialog, "${invoiceNumber} - ${recipient.displayName}");
 //        invoiceField.addItemListener(new ItemListener() {
 //            @Override
 //            public void itemStateChanged(ItemEvent e) {
-//                onInvoiceChanged((Invoice)e.getItem());
+//                onInvoiceChanged((SalesInvoice)e.getItem());
 //            }
 //        });
 //        
@@ -213,19 +213,19 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     }
     
 
-    Set<InvoiceItem> addedItems = new HashSet<InvoiceItem>();
+    Set<SalesInvoiceItem> addedItems = new HashSet<SalesInvoiceItem>();
     
     /**
      * 
      */
     @SuppressWarnings("unchecked")
     protected void onCopyButton() {
-        List<InvoiceItem> selectedItems = copyItemsPanel.getDataTable().getSelectedRowObjects();
+        List<SalesInvoiceItem> selectedItems = copyItemsPanel.getDataTable().getSelectedRowObjects();
         if ( selectedItems==null || selectedItems.isEmpty() )
             return;
         
         boolean alreadyAdded = false;
-        for (InvoiceItem invoiceItem : selectedItems) {
+        for (SalesInvoiceItem invoiceItem : selectedItems) {
             if ( addedItems.contains(invoiceItem) ){
                 alreadyAdded = true;
                 break;
@@ -249,9 +249,9 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     
     private PurchaseOrderListRemote purchaseOrderListRemote = getBean(PurchaseOrderListRemote.class);
 
-    private void addItems(List<InvoiceItem> items) {
+    private void addItems(List<SalesInvoiceItem> items) {
         List<PurchaseOrderItem> orderItems = new ArrayList<PurchaseOrderItem>();
-        for (InvoiceItem invoiceItem : items) {
+        for (SalesInvoiceItem invoiceItem : items) {
             PurchaseOrderItem orderItem = getOrderItemForInvoiceItem(invoiceItem);
             //add only the needed quantity (the quantity that is still not shipped)
             BigDecimal addQuantity = invoiceItem.getOrderedQuantity().subtract(invoiceItem.getShippedQuantity());
@@ -266,7 +266,7 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     }
 
     @SuppressWarnings("unchecked")
-    private PurchaseOrderItem getOrderItemForInvoiceItem(InvoiceItem invoiceItem) {
+    private PurchaseOrderItem getOrderItemForInvoiceItem(SalesInvoiceItem invoiceItem) {
         List<PurchaseOrderItem> currentOrderItems = orderItemsPanel.getDataTable().getData();
         PurchaseOrderItem orderItem = null;
         for (PurchaseOrderItem purchaseOrderItem : currentOrderItems) {
@@ -319,25 +319,25 @@ public class OrderItemsCopyForm extends AcaciaPanel {
     return false;
     }
 
-    private List<Invoice> getInvoicesList(List<DummyInvoice> dInvoices) {
-        List<Invoice> result = new ArrayList<Invoice>();
+    private List<SalesInvoice> getInvoicesList(List<DummyInvoice> dInvoices) {
+        List<SalesInvoice> result = new ArrayList<SalesInvoice>();
         for (DummyInvoice dummyInvoice : dInvoices) {
             result.add(dummyInvoice.invoice);
         }
         return result;
     }
 
-    protected void onInvoiceChanged(Invoice invoice) {
-        List<InvoiceItem> items = getDummyItems(invoice);
+    protected void onInvoiceChanged(SalesInvoice invoice) {
+        List<SalesInvoiceItem> items = getDummyItems(invoice);
         copyItemsPanel.refreshList(items);
     }
     
-    private List<InvoiceItem> getDummyItems(Invoice invoice) {
+    private List<SalesInvoiceItem> getDummyItems(SalesInvoice invoice) {
         for (DummyInvoice di : dummyInvoices) {
             if ( di.invoice==invoice )
                 return di.items;
         }
-        return new ArrayList<InvoiceItem>();
+        return new ArrayList<SalesInvoiceItem>();
     }
 
 }

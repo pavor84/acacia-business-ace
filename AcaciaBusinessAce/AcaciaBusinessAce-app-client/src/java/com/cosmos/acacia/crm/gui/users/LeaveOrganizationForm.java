@@ -90,13 +90,14 @@ public class LeaveOrganizationForm extends AcaciaPanel {
     
     @Override
     public void initData() {
-        organizationsComboBox.removeAllItems();
-        int idx = -1;
-        organizations = getFormSession().getActiveOrganizations(null);
-        for (Organization org : organizations) {
-            organizationsComboBox.addItem(org);
-        }
-        organizationsComboBox.setSelectedIndex(idx);
+        throw new UnsupportedOperationException("ToDo");
+//        organizationsComboBox.removeAllItems();
+//        int idx = -1;
+//        organizations = getFormSession().getActiveUserOrganizations(null);
+//        for (Organization org : organizations) {
+//            organizationsComboBox.addItem(org);
+//        }
+//        organizationsComboBox.setSelectedIndex(idx);
     }
  
     protected UsersRemote getFormSession() {
@@ -109,27 +110,28 @@ public class LeaveOrganizationForm extends AcaciaPanel {
     
     @Action
     public void leave() {
-        try {
-            Organization org = (Organization) organizationsComboBox.getSelectedItem();
-            if (org != null) {
-                if (JOptionPane.showConfirmDialog(this,
-                        getResourceMap().getString("Leave.confirm"),
-                        getResourceMap().getString("Leave.confirm.title"),
-                        JOptionPane.YES_NO_OPTION) ==  JOptionPane.YES_OPTION)
-                {
-                    getFormSession().leaveOrganization(org);
-                    JOptionPane.showMessageDialog(this, getResourceMap().getString("Leave.successful"));
-
-                    // Quit if the current organization has been abandoned
-                    if (org.equals(getAcaciaSession().getOrganization()))
-                        AcaciaApplication.getApplication().exit();
-                    
-                    close();
-                }
-            }
-        } catch (Exception ex) {
-            handleBusinessException(ex);
-        }
+        throw new UnsupportedOperationException("ToDo");
+//        try {
+//            Organization org = (Organization) organizationsComboBox.getSelectedItem();
+//            if (org != null) {
+//                if (JOptionPane.showConfirmDialog(this,
+//                        getResourceMap().getString("Leave.confirm"),
+//                        getResourceMap().getString("Leave.confirm.title"),
+//                        JOptionPane.YES_NO_OPTION) ==  JOptionPane.YES_OPTION)
+//                {
+//                    getFormSession().leaveOrganization(org);
+//                    JOptionPane.showMessageDialog(this, getResourceMap().getString("Leave.successful"));
+//
+//                    // Quit if the current organization has been abandoned
+//                    if (org.equals(getAcaciaSession().getOrganization()))
+//                        AcaciaApplication.getApplication().exit();
+//
+//                    close();
+//                }
+//            }
+//        } catch (Exception ex) {
+//            handleBusinessException(ex);
+//        }
     }
 
 }

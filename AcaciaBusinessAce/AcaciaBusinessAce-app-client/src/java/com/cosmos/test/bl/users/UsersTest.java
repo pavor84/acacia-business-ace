@@ -189,20 +189,21 @@ public class UsersTest implements Serializable {
 
     @Test
     public void organizationsTest() {
-        Organization org = orgSession.newOrganization();
-        org.setOrganizationName(TestUtils.getRandomString(10));
-        org = orgSession.saveOrganization(org);
-        loginTest();
-
-        formSession.joinOrganization(org, null);
-        formSession.updateOrganization(user, null);
-
-        List<Organization> orgs = formSession.getActiveOrganizations(user);
-        Assert.assertNotNull(orgs);
-        Assert.assertTrue(orgs.size() >= 2);
-
-        formSession.leaveOrganization(org);
-        orgSession.deleteOrganization(org);
+        throw new UnsupportedOperationException("ToDo");
+//        Organization org = orgSession.newOrganization();
+//        org.setOrganizationName(TestUtils.getRandomString(10));
+//        org = orgSession.saveOrganization(org);
+//        loginTest();
+//
+//        formSession.joinOrganization(org, null);
+//        formSession.updateOrganization(user, null);
+//
+//        List<Organization> orgs = formSession.getActiveOrganizations(user);
+//        Assert.assertNotNull(orgs);
+//        Assert.assertTrue(orgs.size() >= 2);
+//
+//        formSession.leaveOrganization(org);
+//        orgSession.deleteOrganization(org);
     }
 }
 

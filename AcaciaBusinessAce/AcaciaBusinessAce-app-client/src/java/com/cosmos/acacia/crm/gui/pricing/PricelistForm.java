@@ -11,6 +11,7 @@ import com.cosmos.acacia.crm.bl.impl.EnumResourceRemote;
 import com.cosmos.acacia.crm.bl.pricing.PricelistRemote;
 import com.cosmos.acacia.crm.data.sales.Pricelist;
 import com.cosmos.acacia.crm.enums.Currency;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -487,7 +488,7 @@ public class PricelistForm extends BaseEntityPanel {
     }
 
     private EntityProperty createHoursPropertyDetails(String propertyName) {
-        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Hours", Integer.class.getName());
+        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Hours", Integer.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         NumericRangeValidator validator = new NumericRangeValidator();
         validator.setMinValue(0);
         validator.setMaxValue(23);
@@ -496,7 +497,7 @@ public class PricelistForm extends BaseEntityPanel {
     }
     
     private EntityProperty createMinutesPropertyDetails(String propertyName) {
-        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Minutes", Integer.class.getName());
+        EntityProperty pd =  EntityProperty.createEntityProperty(propertyName, "Minutes", Integer.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         NumericRangeValidator validator = new NumericRangeValidator();
         validator.setMinValue(0);
         validator.setMaxValue(59);

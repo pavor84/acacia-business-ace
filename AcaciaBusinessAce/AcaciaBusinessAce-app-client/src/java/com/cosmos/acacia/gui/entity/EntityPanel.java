@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.gui.DataMode;
 import com.cosmos.acacia.annotation.LogicUnitType;
@@ -14,6 +15,7 @@ import com.cosmos.acacia.annotation.UnitType;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.entity.ContainerEntity;
+import com.cosmos.acacia.entity.EntityAttributes;
 import com.cosmos.acacia.entity.EntityFormProcessor;
 import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -56,7 +58,6 @@ import javax.swing.JTabbedPane;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -74,6 +75,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
 
     //
     private static final String ON_ENTITY_CHANGE_FUNCTION = "onEntityChange";
+    private static final String IS_SYSTEM_ORGANIZATION_FUNCTION = "isSystemOrganization";
     private static final String ENTITY_PREFIX = "entity.";
     private static final Object[] EMPTY_ARRAY = new Object[0];
     //
@@ -87,6 +89,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     private Map<String, PropertyDependencies> propertyDependenciesMap;
     private ELContext elContext;
     protected DataMode dataMode;
+    private boolean initialization;
 
     public EntityPanel(AbstractEntityListPanel entityListPanel, E entity, List<Classifier> classifiers, Object... parameters) {
         super(entity, classifiers, parameters);
@@ -106,7 +109,10 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
 
     protected EntityFormProcessor getEntityFormProcessor() {
         if (entityFormProcessor == null) {
-            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap());
+            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap(), AcaciaEntityAttributes.getEntityAttributesMap());
+//            EntityProperties entityProperties = getEntityProperties();
+//            //entityProperties.re
+//            entityFormProcessor.getJComponentsByPropertyName(ENTITY_PREFIX)
         }
 
         return entityFormProcessor;
@@ -138,82 +144,86 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
 
     @Override
     protected void initData() {
-        super.initData();
+        initialization = true;
+        try {
+            super.initData();
 
-        E entity = getEntity();
+            E entity = getEntity();
 
-        EntityProperties entityProps = getEntityProperties();
-        BindingGroup bg = getBindingGroup();
-        AutoBinding.UpdateStrategy updateStrategy;
-        if(isQueryMode()) {
-            updateStrategy = AutoBinding.UpdateStrategy.READ;
-        } else {
-            updateStrategy = null;
-        }
-        for (JComponent jComponent : getJComponentsMap().values()) {
-            if (jComponent instanceof JLabel) {
-                continue;
-            }
-
-            String componentName = jComponent.getName();
-            String propertyName = getPropertyName(componentName);
-            EntityProperty propertyDetails = entityProps.getEntityProperty(propertyName);
-            if(propertyDetails == null) {
-                throw new EntityPanelException("Missing PropertyDetails of property '" + propertyName +
-                        "' for componentName=" + componentName + " and jComponent=" + jComponent +
-                        ",\n entityProps.getKeys(): " + entityProps.getKeys());
-            }
-            addDependencies(jComponent.getName(), propertyDetails.getPropertyDetailsDependencies());
-
-            if (jComponent instanceof EntityBinder) {
-                if(updateStrategy != null) {
-                    ((EntityBinder) jComponent).bind(bg, entity, propertyDetails, updateStrategy);
-                } else {
-                    ((EntityBinder) jComponent).bind(bg, entity, propertyDetails);
-                }
-            } else if (jComponent instanceof EntityListBinder) {
-                if(updateStrategy != null) {
-                    ((EntityListBinder) jComponent).bind(bg,
-                            getSelectableListDialog(propertyDetails, entityProps, jComponent),
-                            entity, propertyDetails, updateStrategy);
-                } else {
-                    ((EntityListBinder) jComponent).bind(bg,
-                            getSelectableListDialog(propertyDetails, entityProps, jComponent),
-                            entity, propertyDetails);
-                }
-            } else if (jComponent instanceof EnumerationBinder) {
-                if(DbResource.class == propertyDetails.getPropertyClass()) {
-                    Object[] params = getParameters(propertyDetails);
-                    Class selectableListDialogClass = getSelectableListDialogClass(propertyDetails);
-                    List listData = getResources(selectableListDialogClass, params);
-                    if(updateStrategy != null) {
-                        ((EnumerationBinder) jComponent).bind(bg, listData,
-                                entity, propertyDetails, updateStrategy);
-                    } else {
-                        ((EnumerationBinder) jComponent).bind(bg, listData,
-                                entity, propertyDetails);
-                    }
-                } else {
-                    SelectableListDialog selectableListDialog = getSelectableListDialog(propertyDetails, entityProps, jComponent);
-                    if(updateStrategy != null) {
-                        ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
-                                entity, propertyDetails, updateStrategy);
-                    } else {
-                        ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
-                                entity, propertyDetails);
-                    }
-                }
+            EntityProperties entityProps = getEntityProperties();
+            BindingGroup bg = getBindingGroup();
+            AutoBinding.UpdateStrategy updateStrategy;
+            if(isQueryMode()) {
+                updateStrategy = AutoBinding.UpdateStrategy.READ;
             } else {
-                if(!(jComponent instanceof JScrollPane || jComponent instanceof JButton)) {
-                    System.out.println("Unknown binder for jComponent: " + jComponent);
+                updateStrategy = null;
+            }
+            for (JComponent jComponent : getJComponentsMap().values()) {
+                if (jComponent instanceof JLabel) {
+                    continue;
+                }
+
+                String componentName = jComponent.getName();
+                String propertyName = getPropertyName(componentName);
+                EntityProperty propertyDetails = entityProps.getEntityProperty(propertyName);
+                if(propertyDetails == null) {
+                    throw new EntityPanelException("Missing PropertyDetails of property '" + propertyName +
+                            "' for componentName=" + componentName + " and jComponent=" + jComponent +
+                            ",\n entityProps.getKeys(): " + entityProps.getKeys());
+                }
+                addDependencies(jComponent.getName(), propertyDetails.getPropertyDetailsDependencies());
+
+                if (jComponent instanceof EntityBinder) {
+                    if(updateStrategy != null) {
+                        ((EntityBinder) jComponent).bind(bg, entity, propertyDetails, updateStrategy);
+                    } else {
+                        ((EntityBinder) jComponent).bind(bg, entity, propertyDetails);
+                    }
+                } else if (jComponent instanceof EntityListBinder) {
+                    if(updateStrategy != null) {
+                        ((EntityListBinder) jComponent).bind(bg,
+                                getSelectableListDialog(propertyDetails, entityProps, jComponent),
+                                entity, propertyDetails, updateStrategy);
+                    } else {
+                        ((EntityListBinder) jComponent).bind(bg,
+                                getSelectableListDialog(propertyDetails, entityProps, jComponent),
+                                entity, propertyDetails);
+                    }
+                } else if (jComponent instanceof EnumerationBinder) {
+                    if(DbResource.class == propertyDetails.getPropertyClass()) {
+                        Object[] params = getParameters(propertyDetails);
+                        Class selectableListDialogClass = getSelectableListDialogClass(propertyDetails);
+                        List listData = getResources(selectableListDialogClass, params);
+                        if(updateStrategy != null) {
+                            ((EnumerationBinder) jComponent).bind(bg, listData,
+                                    entity, propertyDetails, updateStrategy);
+                        } else {
+                            ((EnumerationBinder) jComponent).bind(bg, listData,
+                                    entity, propertyDetails);
+                        }
+                    } else {
+                        SelectableListDialog selectableListDialog = getSelectableListDialog(propertyDetails, entityProps, jComponent);
+                        if(updateStrategy != null) {
+                            ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
+                                    entity, propertyDetails, updateStrategy);
+                        } else {
+                            ((EnumerationBinder) jComponent).bind(bg, selectableListDialog,
+                                    entity, propertyDetails);
+                        }
+                    }
+                } else {
+                    if(!(jComponent instanceof JScrollPane || jComponent instanceof JButton)) {
+                        System.out.println("Unknown binder for jComponent: " + jComponent);
+                    }
                 }
             }
-        }
 
-        bg.bind();
+            bg.bind();
+        } finally {
+            initialization = false;
+        }
 
         validateForm();
-
         initDataMode(getDataMode());
     }
 
@@ -345,19 +355,91 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         return getJComponentsByPropertyName(expression);
     }
 
+    protected boolean evaluateBooleanExpression(String expression) {
+        return evaluateBooleanExpression(expression, null, null);
+    }
+
     protected boolean evaluateBooleanExpression(String expression, Binding binding, PropertyStateEvent event) {
         if(BooleanUtils.parseBoolean(expression)) {
             return true;
         }
 
-        if((expression = expression.trim()).startsWith(ON_ENTITY_CHANGE_FUNCTION + "(")) {
-            expression = expression.substring(ON_ENTITY_CHANGE_FUNCTION.length() + 1);
-            int index = expression.indexOf(')');
-            expression = expression.substring(0, index);
-            return onEntityChanged(expression, binding, event);
+        if(binding != null) {
+            if((expression = expression.trim()).startsWith(ON_ENTITY_CHANGE_FUNCTION + "(")) {
+                expression = expression.substring(ON_ENTITY_CHANGE_FUNCTION.length() + 1);
+                int index = expression.indexOf(')');
+                expression = expression.substring(0, index);
+                return onEntityChanged(expression, binding, event);
+            }
+        }
+
+        String functionName;
+        if((functionName = getFunctionName(expression)) != null) {
+            return (Boolean) executeFunction(functionName, getFunctionExpressionParameters(expression));
         }
 
         return BooleanUtils.evaluateExpression(this, expression);
+    }
+
+    protected String getFunctionName(String expression) {
+        int endIndex;
+        if((endIndex = (expression = expression.trim()).lastIndexOf(')')) <= 0) {
+            return null;
+        }
+
+        int beginIndex;
+        if((beginIndex = expression.indexOf('(')) < 0 || beginIndex > endIndex) {
+            return null;
+        }
+
+        String functionName = expression.substring(0, beginIndex);
+        for(Method method : getClass().getMethods()) {
+            if(method.getName().equals(functionName)) {
+                return functionName;
+            }
+        }
+
+        return null;
+    }
+
+    protected List<String> getFunctionExpressionParameters(String expression) {
+        int endIndex;
+        if((endIndex = (expression = expression.trim()).lastIndexOf(')')) <= 0) {
+            return Collections.emptyList();
+        }
+
+        int beginIndex;
+        if((beginIndex = expression.indexOf('(')) < 0 || beginIndex > endIndex) {
+            return Collections.emptyList();
+        }
+
+        expression = expression.substring(beginIndex + 1, endIndex);
+        String[] array = expression.split(",");
+        List<String> list = new ArrayList<String>(array.length);
+        for(String item : array) {
+            list.add(item.trim());
+        }
+        return list;
+    }
+
+    protected Object executeFunction(String functionName, List<String> parameters) {
+        int size = parameters.size();
+        Object[] parameterValues = new Object[size];
+        for(int i = 0; i < size; i++) {
+            parameterValues[i] = getPropertyValue(parameters.get(i));
+        }
+
+        Class[] parameterTypes = new Class[size];
+        for(int i = 0; i < size; i++) {
+            parameterTypes[i] = parameterValues[i].getClass();
+        }
+
+        try {
+            Method method = getClass().getMethod(functionName, parameterTypes);
+            return method.invoke(this, parameterValues);
+        } catch(Exception ex) {
+            throw new EntityPanelException(ex);
+        }
     }
 
     protected boolean onEntityChanged(String expression, Binding binding, PropertyStateEvent event) {
@@ -389,7 +471,11 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     }
 
     protected void setProperty(Object bean, String name, Object value) {
-        BeanUtils.getInstance().setPropertyValue(bean, name, value);
+        try {
+            BeanUtils.getInstance().setPropertyValue(bean, name, value);
+        } catch(RuntimeException ex) {
+            throw new RuntimeException("panel=" + getClass().getName() + ", panelName=" + getName(), ex);
+        }
     }
 
     public void refreshComponent(String propertyName) {
@@ -406,6 +492,7 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
     }
 
     protected void refreshRelatedComponents(JComponent jComponent, Object newValue) {
+//        new Throwable("refreshRelatedComponents()").printStackTrace();
         PropertyChangeHandler handler = getPropertyChangeHandler();
         String componentName = getJComponentName(jComponent);
 
@@ -433,28 +520,33 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
             return;
         }
 
-        Map<String, PropertyDependencies> pdMap = getPropertyDependenciesMap();
-        for(String propertyName : pdMap.keySet()) {
-            boolean ready = true;
-            for(String pn : pdMap.get(propertyName).getDependencies()) {
-                if(isConstantParameter(pn)) {
-                    continue;
+        if(!initialization) {
+//            new Throwable("validateForm()").printStackTrace();
+            Map<String, PropertyDependencies> pdMap = getPropertyDependenciesMap();
+            for(String propertyName : pdMap.keySet()) {
+                boolean ready = true;
+                for(String pn : pdMap.get(propertyName).getDependencies()) {
+                    if(isConstantParameter(pn)) {
+                        continue;
+                    }
+                    if(getPropertyValue(pn) == null) {
+                        ready = false;
+                        break;
+                    }
                 }
-                if(getPropertyValue(pn) == null) {
-                    ready = false;
-                    break;
-                }
-            }
 
-            JComponent jComponent = getJComponent(propertyName);
-            jComponent.setEnabled(ready);
-            if(ready) {
-                if(jComponent instanceof Refreshable) {
-                    ((Refreshable) jComponent).refresh();
-                }
-            } else {
-                if(jComponent instanceof Clearable) {
-                    ((Clearable) jComponent).clear();
+                JComponent jComponent = getJComponent(propertyName);
+                jComponent.setEnabled(ready);
+                if(ready) {
+                    if(jComponent instanceof Refreshable) {
+//                        System.out.println("validateForm().refresh(): " + jComponent);
+//                        ((Refreshable) jComponent).refresh();
+                    }
+                } else {
+                    if(jComponent instanceof Clearable) {
+//                        System.out.println("validateForm().clear(): " + jComponent);
+//                        ((Clearable) jComponent).clear();
+                    }
                 }
             }
         }
@@ -479,10 +571,10 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         }
     }
 
-    protected Class getSelectableListDialogClass(EntityProperty propertyDetails) {
+    protected Class getSelectableListDialogClass(EntityProperty entityProperty) {
         String className;
-        if ((className = propertyDetails.getSelectableListDialogClassName()) == null) {
-            return null;
+        if ((className = entityProperty.getSelectableListDialogClassName()) == null) {
+            return getListPanelClass(entityProperty.getPropertyClass());
         }
 
         try {
@@ -767,66 +859,70 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         add(getMainComponent(), BorderLayout.CENTER);
         add(getButtonPanel(), BorderLayout.PAGE_END);
 
+        Map<String, FormContainer> formContainerMap = getFormContainerMap();
         for (ContainerEntity containerEntity : formProcessor.getContainerEntities()) {
             JComponent jContainer = containerEntity.getJContainer();
-            DetailEntityListPanel<E, ?> listPanel = (DetailEntityListPanel<E, ?>)getListPanel(containerEntity);
+            FormContainer formContainer = formContainerMap.get(jContainer.getName());
+            if(!evaluateBooleanExpression(formContainer.showCondition())) {
+                removeContainer(jContainer);
+                continue;
+            }
+            AbstractEntityListPanel listPanel = getListPanel(containerEntity);
             jContainer.setLayout(new BorderLayout());
             jContainer.add(listPanel, BorderLayout.CENTER);
         }
 
         String title;
-        if (getEntityListPanel().isDetailEntity()) {
-            title = getResourceMap().getString("form.detailEntity.title");
-        } else {
-            title = getResourceMap().getString("form.entity.title");
-        }
-        if (title != null && title.trim().length() > 0) {
+        if ((title = getResourceString("form.title")) != null && title.trim().length() > 0) {
             setTitle(title);
         }
     }
 
-    protected AbstractEntityListPanel getListPanel(ContainerEntity containerEntity) {
-        Class itemEntityClass = containerEntity.getEntityClass();
-        Class listPanelClass;
-        if((listPanelClass = containerEntity.getListPanelClass()) == null) {
-            try {
-                String className = getClass().getPackage().getName() + "." + itemEntityClass.getSimpleName() + "ListPanel";
-                listPanelClass = Class.forName(className);
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
+    protected void removeContainer(JComponent jContainer) {
+        JComponent parent = (JComponent) jContainer.getParent();
+        parent.remove(jContainer);
+    }
+
+    protected Class getListPanelClass(Class entityClass) {
+        EntityAttributes<Property> entityAttributes;
+        if((entityAttributes = AcaciaEntityAttributes.getEntityAttributesMap().get(entityClass.getName())) == null) {
+            return null;
         }
+
+        try {
+            return Class.forName(entityAttributes.getListFormClassName());
+        } catch(ClassNotFoundException ex) {
+            throw new RuntimeException("Can not find list panel class for entity: " + entityClass, ex);
+        }
+    }
+
+    protected AbstractEntityListPanel getListPanel(ContainerEntity containerEntity) {
+        Class containerEntityClass = containerEntity.getEntityClass();
+        Class listPanelClass = getListPanelClass(containerEntityClass);
         RelationshipType relationshipType;
         if (RelationshipType.OneToMany.equals(relationshipType = containerEntity.getRelationshipType())) {
-            DetailEntityListPanel<E, ?> listPanel;
+            AbstractEntityListPanel<E> listPanel;
             if(listPanelClass != null) {
                 Object[] args = new Object[] {this};
                 try {
-                    listPanel = (DetailEntityListPanel<E, ?>)ConstructorUtils.invokeConstructor(
+                    listPanel = (AbstractEntityListPanel<E>)ConstructorUtils.invokeConstructor(
                             listPanelClass, args);
                 } catch(Exception ex) {
                     try {
                         args = new Object[] {getEntity()};
-                        listPanel = (DetailEntityListPanel<E, ?>)ConstructorUtils.invokeConstructor(
+                        listPanel = (AbstractEntityListPanel<E>)ConstructorUtils.invokeConstructor(
                                 listPanelClass, args);
                     } catch(Exception ex1) {
                         throw new EntityPanelException("listPanelClass=" + listPanelClass +
                                 ", args=" + Arrays.asList(args), ex1);
                     }
                 }
-            } else {
-                listPanel = new DetailEntityListPanel(this, itemEntityClass, null);
+                return listPanel;
             }
-
-            return listPanel;
         }
 
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ResourceMap getResourceMap() {
-        return entityListPanel.getResourceMap();
+        throw new IllegalStateException("Can not find list panel for containerEntityClass=" + containerEntityClass +
+                " of containerEntity=" + containerEntity);
     }
 
     protected AbstractEntityListPanel getEntityListPanel() {
@@ -1033,5 +1129,9 @@ public class EntityPanel<E extends PersistentEntity> extends BaseEntityPanel {
         }
 
         return getJComponent((Container)parentContainer, componentClass);
+    }
+
+    protected Map<String, FormContainer> getFormContainerMap() {
+        return getEntityFormProcessor().getFormContainerMap();
     }
 }

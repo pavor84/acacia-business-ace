@@ -16,6 +16,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import com.cosmos.acacia.crm.bl.contactbook.LocationsListRemote;
 import com.cosmos.acacia.crm.data.location.City;
 import com.cosmos.acacia.crm.data.location.Country;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaComboList;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -96,7 +97,7 @@ public class CitiesListPanel extends AbstractTablePanel<City> {
             countryCity = new City();
             countryBindingGroup = new BindingGroup();
             EntityProperty propDetails = EntityProperty.createEntityProperty(
-                    "country", "Country", Country.class.getName());
+                    "country", "Country", Country.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
             propDetails.setColumnName("country");
 
             if(countriesListPanel == null)

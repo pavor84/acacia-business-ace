@@ -12,21 +12,35 @@ import com.cosmos.impl.acacia.service.ServiceManagerImpl;
  */
 public class ServiceManager {
 
-    private static final InheritableThreadLocal<ServiceManagerImpl> instance =
-            new InheritableThreadLocal<ServiceManagerImpl>();
+//    private static final InheritableThreadLocal<ServiceManagerImpl> instance =
+//            new InheritableThreadLocal<ServiceManagerImpl>();
+//
+//    public static ServiceManagerImpl getInstance() {
+//        ServiceManagerImpl serviceManager;
+//        if ((serviceManager = instance.get()) == null) {
+//            serviceManager = new ServiceManagerImpl();
+//            instance.set(serviceManager);
+//        }
+//
+//        return serviceManager;
+//    }
+//
+//    public static void removeInstance() {
+//        instance.remove();
+//    }
+
+    private static ServiceManagerImpl instance;
 
     public static ServiceManagerImpl getInstance() {
-        ServiceManagerImpl serviceManager;
-        if ((serviceManager = instance.get()) == null) {
-            serviceManager = new ServiceManagerImpl();
-            instance.set(serviceManager);
+        if (instance == null) {
+            instance = new ServiceManagerImpl();
         }
 
-        return serviceManager;
+        return instance;
     }
 
     public static void removeInstance() {
-        instance.remove();
+        instance = null;
     }
 
     public static Object getService(String serviceName) {
@@ -38,6 +52,7 @@ public class ServiceManager {
     }
 
     public static <T> T getRemoteService(Class<T> serviceInterface, boolean checkPermissions) {
-        return getInstance().getRemoteService(serviceInterface, checkPermissions);
+        ServiceManagerImpl serviceManagerImpl = getInstance();
+        return serviceManagerImpl.getRemoteService(serviceInterface, checkPermissions);
     }
 }

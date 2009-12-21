@@ -29,12 +29,13 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
-import com.cosmos.acacia.crm.data.sales.InvoiceItemLink;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItemLink;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.gui.purchaseorders.CopyItemsListPanel;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.swingb.DialogResponse;
@@ -53,14 +54,14 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     
     @EJB
     private InvoiceListRemote formSession = getBean(InvoiceListRemote.class);
-    private Invoice invoice;
+    private SalesInvoice invoice;
     
     private boolean proform = false;
 
     /** Creates new form InsertFromDocumentForm 
      * @param invoice 
      * @param templateDocuments */
-    public InvoiceItemsCopyForm(UUID parentId, InvoiceItemListPanel invoiceItemsPanel, Invoice invoice) {
+    public InvoiceItemsCopyForm(UUID parentId, InvoiceItemListPanel invoiceItemsPanel, SalesInvoice invoice) {
         super(parentId);
         if ( invoiceItemsPanel==null )
             throw new IllegalArgumentException("cant be null: 'invoiceItemsPanel'");
@@ -301,7 +302,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         
         //and then bind again
         documentField.bind(new BindingGroup(), templateDocuments, this, 
-            EntityProperty.createEntityProperty("selectedDocument", "Selected Document", Object.class.getName()),
+            EntityProperty.createEntityProperty("selectedDocument", "Selected Document", Object.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap()),
             new ObjectToStringConverter() {
                 @Override
                 public String getPreferredStringForItem(Object templateDocument) {
@@ -325,8 +326,8 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
 
     protected String getTemplateDocumentDisplay(Object templateDocument) {
         String result = "";
-        if ( templateDocument instanceof Invoice ){
-            Invoice invoice = (Invoice) templateDocument;
+        if ( templateDocument instanceof SalesInvoice ){
+            SalesInvoice invoice = (SalesInvoice) templateDocument;
             result = invoice.getInvoiceNumber()==null?"":(invoice.getInvoiceNumber()+"-") +
                     invoice.getRecipientName();
             if ( Boolean.TRUE.equals(invoice.getProformaInvoice()) ) 
@@ -345,7 +346,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         return result;
     }
 
-    private List<InvoiceItemLink> allItemsLinks = null;  
+    private List<SalesInvoiceItemLink> allItemsLinks = null;
 
     @SuppressWarnings("unchecked")
     protected void copyItems(List<?> selectedItems){
@@ -357,7 +358,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
             allItemsLinks = getAllItemsLinks();
         
         Set<UUID> alreadyAddedIds = new HashSet<UUID>();
-        for (InvoiceItemLink itemLink : allItemsLinks) {
+        for (SalesInvoiceItemLink itemLink : allItemsLinks) {
             alreadyAddedIds.add(itemLink.getTemplateItemId());
         }
         boolean alreadyAddedPresent = false;
@@ -385,11 +386,11 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         }
     }
     
-    private List<InvoiceItemLink> getAllItemsLinks() {
-        List<InvoiceItemLink> result = new ArrayList<InvoiceItemLink>();
-        List<InvoiceItem> items = invoiceItemsListPanel.getItems();
-        for (InvoiceItem invoiceItem : items) {
-            List<InvoiceItemLink> itemLinks = getFormSession().getInvoiceItemLinks(invoiceItem);
+    private List<SalesInvoiceItemLink> getAllItemsLinks() {
+        List<SalesInvoiceItemLink> result = new ArrayList<SalesInvoiceItemLink>();
+        List<SalesInvoiceItem> items = invoiceItemsListPanel.getItems();
+        for (SalesInvoiceItem invoiceItem : items) {
+            List<SalesInvoiceItemLink> itemLinks = getFormSession().getInvoiceItemLinks(invoiceItem);
             result.addAll(itemLinks);
         }
         return result;
@@ -408,14 +409,14 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     private InvoiceListRemote invoiceListRemote = getBean(InvoiceListRemote.class);
 
     private void addItems(List<?> items) {
-        List<InvoiceItemLink> itemLinks = new ArrayList<InvoiceItemLink>();
+        List<SalesInvoiceItemLink> itemLinks = new ArrayList<SalesInvoiceItemLink>();
         for (Object item : items) {
             if ( !( item instanceof DataObjectBean ) ){
                 throw new IllegalStateException("A document item should be DataObjectBean!");
             }
-            InvoiceItem clonedItem = getClonedItemForItem(item);
-            InvoiceItemLink invoiceItemLink = 
-                new InvoiceItemLink(((DataObjectBean)item).getId(),
+            SalesInvoiceItem clonedItem = getClonedItemForItem(item);
+            SalesInvoiceItemLink invoiceItemLink =
+                new SalesInvoiceItemLink(((DataObjectBean)item).getId(),
                     ((DataObjectBean)item).getParentId(),
                     clonedItem);
             BigDecimal itemQuantity = getItemQuantity(item); 
@@ -431,19 +432,19 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     }
 
     private BigDecimal getItemQuantity(Object item) {
-        if ( item instanceof InvoiceItem ){
-            return ((InvoiceItem)item).getOrderedQuantity();
+        if ( item instanceof SalesInvoiceItem ){
+            return ((SalesInvoiceItem)item).getOrderedQuantity();
         }
         throw new IllegalArgumentException("Unknown item type: "+item);
     }
 
     @SuppressWarnings("unchecked")
-    private InvoiceItem getClonedItemForItem(Object documentItem) {
+    private SalesInvoiceItem getClonedItemForItem(Object documentItem) {
         @SuppressWarnings("unused")
-        List<InvoiceItem> currentItems = invoiceItemsListPanel.getDataTable().getData();
-        InvoiceItem item = null; //currently - always create new item
+        List<SalesInvoiceItem> currentItems = invoiceItemsListPanel.getDataTable().getData();
+        SalesInvoiceItem item = null; //currently - always create new item
         Product documentItemProduct = getProductForItem(documentItem);
-//        for (InvoiceItem currentItem : currentItems) {
+//        for (SalesInvoiceItem currentItem : currentItems) {
 //            Product product = currentItem.getProduct();
 //            //find for this product
 //            if ( product.equals(documentItemProduct) ){
@@ -503,8 +504,8 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
     }
 
     private Product getProductForItem(Object documentItem) {
-        if ( documentItem instanceof InvoiceItem ){
-            return ((InvoiceItem)documentItem).getProduct();
+        if ( documentItem instanceof SalesInvoiceItem ){
+            return ((SalesInvoiceItem)documentItem).getProduct();
         }
         throw new IllegalArgumentException("Not supported document item: "+documentItem);
     }
@@ -530,7 +531,7 @@ public class InvoiceItemsCopyForm extends AcaciaPanel {
         return templateDocuments;
     }
 
-    protected void onInvoiceChanged(Invoice invoice) {
+    protected void onInvoiceChanged(SalesInvoice invoice) {
         List<?> items = getFormSession().getDocumentItems(invoice);
         copyItemsListPanel.refreshList(items);
     }

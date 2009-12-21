@@ -17,8 +17,8 @@ import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -31,12 +31,12 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
+public class InvoiceItemListPanel extends AbstractTablePanel<SalesInvoiceItem> {
 
-    private Invoice invoice;
+    private SalesInvoice invoice;
 
     /** Creates new form AddresssListPanel */
-    public InvoiceItemListPanel(UUID parentDataObjectId, Invoice invoice) {
+    public InvoiceItemListPanel(UUID parentDataObjectId, SalesInvoice invoice) {
         super(parentDataObjectId);
         this.invoice = invoice;
     }
@@ -47,7 +47,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
     @EJB
     private InvoiceListRemote formSession;
     private BindingGroup bindGroup;
-    private List<InvoiceItem> items;
+    private List<SalesInvoiceItem> items;
     private EntityProperties entityProps;
 
     @Override
@@ -87,12 +87,12 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
         table.setEditable(false);
     }
 
-    protected List<InvoiceItem> getItems() {
+    protected List<SalesInvoiceItem> getItems() {
         if (items == null) {
             if (getParentDataObjectId() != null) {
                 return getFormSession().getInvoiceItems(getParentDataObjectId());
             } else {
-                return new ArrayList<InvoiceItem>();
+                return new ArrayList<SalesInvoiceItem>();
             }
         }
         return items;
@@ -104,10 +104,10 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
         }
         return formSession;
     }
-    private List<InvoiceItem> deletedItems = null;
+    private List<SalesInvoiceItem> deletedItems = null;
 
     @Override
-    protected boolean deleteRow(InvoiceItem rowObject) {
+    protected boolean deleteRow(SalesInvoiceItem rowObject) {
         if (rowObject != null) {
             deletedItems = getFormSession().deleteInvoiceItem(rowObject);
             return true;
@@ -118,7 +118,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
 
     @Action
     public void deleteAction() {
-        InvoiceItem item = (InvoiceItem) getDataTable().getSelectedRowObject();
+        SalesInvoiceItem item = (SalesInvoiceItem) getDataTable().getSelectedRowObject();
         String warningMessage = null;
         if (getFormSession().isTemplateItem(item)) {
             warningMessage = getResourceMap().getString("deleteAction.ConfirmDialog.templateItemMessage");
@@ -130,7 +130,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
             try {
                 if (deleteRow(item)) {
                     if (deletedItems != null) {
-                        for (InvoiceItem deletedItem : deletedItems) {
+                        for (SalesInvoiceItem deletedItem : deletedItems) {
                             getDataTable().removeRow(deletedItem);
                         }
                     } else {
@@ -151,7 +151,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
     }
 
     @Override
-    protected InvoiceItem modifyRow(InvoiceItem rowObject) {
+    protected SalesInvoiceItem modifyRow(SalesInvoiceItem rowObject) {
 
         if (rowObject != null && isEditable()) {
             if (rowObject.getWarehouse() == null) {
@@ -160,21 +160,21 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
             InvoiceItemForm formPanel = new InvoiceItemForm(invoice, rowObject);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return (InvoiceItem) formPanel.getSelectedValue();
+                return (SalesInvoiceItem) formPanel.getSelectedValue();
             }
         }
         return null;
     }
 
     @Override
-    protected InvoiceItem newRow() {
+    protected SalesInvoiceItem newRow() {
         if (canNestedOperationProceed()) {
             log.info(getParentDataObjectId());
-            InvoiceItem item = getFormSession().newInvoiceItem(getParentDataObjectId());
+            SalesInvoiceItem item = getFormSession().newInvoiceItem(getParentDataObjectId());
             InvoiceItemForm formPanel = new InvoiceItemForm(invoice, item);
             DialogResponse response = formPanel.showDialog(this);
             if (DialogResponse.SAVE.equals(response)) {
-                return (InvoiceItem) formPanel.getSelectedValue();
+                return (SalesInvoiceItem) formPanel.getSelectedValue();
             }
         }
         return null;
@@ -198,16 +198,16 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
     }
 
     @Override
-    public boolean canModify(InvoiceItem rowObject) {
+    public boolean canModify(SalesInvoiceItem rowObject) {
         return true;
     }
 
     @Override
-    public boolean canDelete(InvoiceItem rowObject) {
+    public boolean canDelete(SalesInvoiceItem rowObject) {
         return true;
     }
 
-    public void refreshList(List<InvoiceItem> items) {
+    public void refreshList(List<SalesInvoiceItem> items) {
         this.items = items;
 
         refreshDataTable(entityProps);
@@ -223,7 +223,7 @@ public class InvoiceItemListPanel extends AbstractTablePanel<InvoiceItem> {
     }
 
     @Override
-    protected void viewRow(InvoiceItem rowObject) {
+    protected void viewRow(SalesInvoiceItem rowObject) {
         InvoiceItemForm formPanel = new InvoiceItemForm(invoice, rowObject);
         formPanel.setReadonly();
         formPanel.showDialog(this);

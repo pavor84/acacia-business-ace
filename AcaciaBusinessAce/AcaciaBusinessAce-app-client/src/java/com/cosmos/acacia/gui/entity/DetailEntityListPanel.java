@@ -5,7 +5,6 @@
 package com.cosmos.acacia.gui.entity;
 
 import com.cosmos.acacia.crm.data.Classifier;
-import com.cosmos.acacia.entity.EntityService;
 import com.cosmos.util.PersistentEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class DetailEntityListPanel<E extends PersistentEntity, I extends Persist
     public List<I> getEntities() {
         E mainEntity;
         if ((mainEntity = getMainEntity()) != null && mainEntity.getId() != null) {
-            return getEntityService().getEntityItems(mainEntity, getEntityClass(), getClassifiers());
+            return getEntityService().getEntityItems(mainEntity, getEntityClass(), getClassifiers(), parameters);
         }
 
         return new ArrayList<I>();

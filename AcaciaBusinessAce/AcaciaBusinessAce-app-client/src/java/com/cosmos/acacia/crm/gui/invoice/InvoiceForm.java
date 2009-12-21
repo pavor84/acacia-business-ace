@@ -45,8 +45,8 @@ import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.crm.enums.InvoiceType;
 import com.cosmos.acacia.crm.enums.PaymentTerm;
@@ -79,7 +79,7 @@ import com.cosmos.util.NumberUtils;
 public class InvoiceForm extends BaseEntityPanel {
 
     protected static Logger log = Logger.getLogger(InvoiceForm.class);
-    private Invoice entity;
+    private SalesInvoice entity;
     //remember if the current document is proforma invoice or invoice; For easier re-use
     private boolean proforma;
     private EntityProperties entProps;
@@ -87,7 +87,7 @@ public class InvoiceForm extends BaseEntityPanel {
     private InvoiceListRemote formSession = getBean(InvoiceListRemote.class);
 
     /** Creates new form InvoiceFormDraft */
-    public InvoiceForm(Invoice confirmation) {
+    public InvoiceForm(SalesInvoice confirmation) {
         super(confirmation.getParentId());
         this.entity = confirmation;
         this.proforma = Boolean.TRUE.equals(entity.getProformaInvoice());
@@ -1662,7 +1662,7 @@ public class InvoiceForm extends BaseEntityPanel {
      * @param updatedEntity
      */
     @SuppressWarnings("unchecked")
-    private void refreshForm(Invoice updatedEntity) {
+    private void refreshForm(SalesInvoice updatedEntity) {
         //un-bind the group
 
         BindingGroup bg = getBindingGroup();
@@ -1687,7 +1687,7 @@ public class InvoiceForm extends BaseEntityPanel {
     @Action
     public void onSendButton() {
         if (confirmTransition("button.send.confirm")) {
-            Invoice updatedEntity = getFormSession().sendInvoice(entity);
+            SalesInvoice updatedEntity = getFormSession().sendInvoice(entity);
             refreshForm(updatedEntity);
         }
     }
@@ -1695,7 +1695,7 @@ public class InvoiceForm extends BaseEntityPanel {
     @Action
     public void onConfirmButton() {
         if (confirmTransition("button.confirm.confirm")) {
-            Invoice updatedEntity = getFormSession().confirm(entity);
+            SalesInvoice updatedEntity = getFormSession().confirm(entity);
             refreshForm(updatedEntity);
         }
     }
@@ -1703,7 +1703,7 @@ public class InvoiceForm extends BaseEntityPanel {
     @Action
     public void onCancelButton() {
         if (showConfirmationDialog(getResourceMap().getString("button.cancel.confirm"))) {
-            Invoice updatedEntity = getFormSession().cancel(entity);
+            SalesInvoice updatedEntity = getFormSession().cancel(entity);
             refreshForm(updatedEntity);
         }
     }
@@ -1711,7 +1711,7 @@ public class InvoiceForm extends BaseEntityPanel {
     @Action
     public void onReopenButton() {
         if (showConfirmationDialog(getResourceMap().getString("button.reopen.confirm"))) {
-            Invoice updatedEntity = getFormSession().reopen(entity);
+            SalesInvoice updatedEntity = getFormSession().reopen(entity);
             refreshForm(updatedEntity);
         }
     }
@@ -2074,7 +2074,7 @@ public class InvoiceForm extends BaseEntityPanel {
 
         return result;
     }
-    private List<Invoice> recipientDueDocuments = null;
+    private List<SalesInvoice> recipientDueDocuments = null;
 
     protected void onSelectRecipient(BusinessPartner recipient) {
         BindingGroup bg = getBindingGroup();
@@ -2122,7 +2122,7 @@ public class InvoiceForm extends BaseEntityPanel {
         if (recipient != null) {
             recipientDueDocuments = getFormSession().getDueDocuments(recipient);
         } else {
-            recipientDueDocuments = new ArrayList<Invoice>();
+            recipientDueDocuments = new ArrayList<SalesInvoice>();
         }
 
         //update the due field
@@ -2130,7 +2130,7 @@ public class InvoiceForm extends BaseEntityPanel {
             recipientDueField.setText("");
         } else {
             BigDecimal currentDue = new BigDecimal(0);
-            for (Invoice invoice : recipientDueDocuments) {
+            for (SalesInvoice invoice : recipientDueDocuments) {
                 //if the current document is CREDIT note, decrease the due
                 if (InvoiceType.CretidNoteInvoice.equals(invoice.getInvoiceType().getEnumValue())) {
                     currentDue = currentDue.subtract(invoice.getTotalValue());
@@ -2168,9 +2168,9 @@ public class InvoiceForm extends BaseEntityPanel {
     @SuppressWarnings("unchecked")
     @Action
     public void calculateSumFromItemsAction() {
-        List<InvoiceItem> items = itemsTablePanel.getListData();
+        List<SalesInvoiceItem> items = itemsTablePanel.getListData();
         BigDecimal sum = new BigDecimal(0);
-        for (InvoiceItem item : items) {
+        for (SalesInvoiceItem item : items) {
             sum = sum.add(item.getExtendedPrice());
         }
         // autoUpdatingInvoiceSubValue = true;
@@ -2218,7 +2218,7 @@ public class InvoiceForm extends BaseEntityPanel {
                 c.get(Calendar.DAY_OF_MONTH);
 
         Report report = new Report("invoice", itemsTablePanel.getItems());
-        report.setAutoSubreport1Class(InvoiceItem.class);
+        report.setAutoSubreport1Class(SalesInvoiceItem.class);
         report.setLocalizationKey("report.original");
         report.getParameters().put("TYPE", getResourceMap().getString("report.original"));
         report.setExportFileName(exportFileName);
@@ -2227,7 +2227,7 @@ public class InvoiceForm extends BaseEntityPanel {
         //If proforma - no original & copy
         if (!entity.getProformaInvoice()) {
             Report report2 = new Report("invoice", itemsTablePanel.getItems());
-            report2.setAutoSubreport1Class(InvoiceItem.class);
+            report2.setAutoSubreport1Class(SalesInvoiceItem.class);
             report2.setLocalizationKey("report.copy");
             report2.getParameters().put("TYPE", getResourceMap().getString("report.copy"));
             report2.setExportFileName(exportFileName);

@@ -37,6 +37,7 @@ import com.cosmos.acacia.crm.data.purchase.PurchaseOrder;
 import com.cosmos.acacia.crm.data.purchase.PurchaseOrderItem;
 import com.cosmos.acacia.crm.enums.PurchaseOrderStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
@@ -920,7 +921,7 @@ private void branchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         Report report2 = new Report("purchase_order", itemsTablePanel.getItems());
         report2.setLocalizationKey("ordered.quantity.only.report");
         report2.setAutoSubreport1Class(PurchaseOrderItem.class);
-        EntityProperties reportEntityProps = new EntityProperties(PurchaseOrderItem.class, true);
+        EntityProperties reportEntityProps = new EntityProperties(PurchaseOrderItem.class, AcaciaEntityAttributes.getEntityAttributesMap(), true);
         reportEntityProps.removeEntityProperty("deliveredQuantity");
         reportEntityProps.removeEntityProperty("confirmedQuantity");
         reportEntityProps.getEntityProperty("orderedQuantity").setReportColumnWidth((byte) 24);

@@ -4,6 +4,7 @@
  */
 package com.cosmos.acacia.gui.entity;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.DataMode;
 import com.cosmos.acacia.annotation.LogicUnitType;
 import com.cosmos.acacia.annotation.OperationRow;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -65,7 +65,7 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
 
     protected EntityFormProcessor getEntityFormProcessor() {
         if (entityFormProcessor == null) {
-            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap());
+            entityFormProcessor = new EntityFormProcessor(getEntityClass(), getResourceMap(), AcaciaEntityAttributes.getEntityAttributesMap());
         }
 
         return entityFormProcessor;
@@ -312,12 +312,7 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
         bg.bind();
 
         String title;
-        if (isDetailEntity()) {
-            title = getResourceMap().getString("form.detailEntityList.title");
-        } else {
-            title = getResourceMap().getString("form.entityList.title");
-        }
-        if (title != null && title.trim().length() > 0) {
+        if ((title = getResourceString("form.title")) != null && title.trim().length() > 0) {
             setTitle(title);
         }
 
@@ -345,16 +340,6 @@ public abstract class AbstractEntityListPanel<E extends PersistentEntity>
         }
 
         return entityService;
-    }
-
-    @Override
-    public ResourceMap getResourceMap() {
-        EntityPanel mainEntityPanel;
-        if ((mainEntityPanel = getMainEntityPanel()) != null) {
-            return mainEntityPanel.getResourceMap();
-        }
-
-        return super.getResourceMap();
     }
 
     public abstract boolean isDetailEntity();

@@ -1,6 +1,7 @@
 
 package com.cosmos.acacia.gui;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -197,7 +198,7 @@ public class AcaciaPercentValueField extends javax.swing.JPanel implements Total
         secondField.setFormat(format);
 
         EntityProperty entityProperty = EntityProperty.createEntityProperty(
-                "secondValue", "Second Value", BigDecimal.class.getName());
+                "secondValue", "Second Value", BigDecimal.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         secondBinding = secondField.bind(bindingGroup, this, entityProperty, format);
         //set up listener for value updates on the bound field
         binding.addBindingListener(new AbstractBindingListener() {

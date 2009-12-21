@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.contactbook;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import static com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType.ORGANIZATION;
 import static com.cosmos.acacia.crm.gui.contactbook.BusinessPartnerTypeChooser.PartnerType.PERSON;
 
@@ -163,7 +164,7 @@ public class BusinessPartnerTypeChooser extends AcaciaPanel {
         
         setSelectedTypeDisplay(org);
         EntityProperty pd = EntityProperty.createEntityProperty("selectedTypeDisplay", "Partner Type",
-            ToString.class.getName());
+            ToString.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setEditable(false);
         BindingGroup group = new BindingGroup();
         partnerTypeField.bind(group, types, this, pd);

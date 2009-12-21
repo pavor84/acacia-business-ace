@@ -20,7 +20,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
 import com.cosmos.acacia.crm.data.product.ComplexProduct;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.gui.ProductPanel;
