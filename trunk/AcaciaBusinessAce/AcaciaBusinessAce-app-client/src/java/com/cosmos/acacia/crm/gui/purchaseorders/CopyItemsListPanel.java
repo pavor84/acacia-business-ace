@@ -12,7 +12,7 @@ import javax.ejb.EJB;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;
@@ -22,7 +22,7 @@ import com.cosmos.beansbinding.EntityProperties;
  * @author	Petar Milev
  *
  */
-public class CopyItemsListPanel extends AbstractTablePanel<InvoiceItem> {
+public class CopyItemsListPanel extends AbstractTablePanel<SalesInvoiceItem> {
     
     private BindingGroup bindGroup;
     private List<?> items;
@@ -75,35 +75,35 @@ public class CopyItemsListPanel extends AbstractTablePanel<InvoiceItem> {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(InvoiceItem rowObject) {
+    public boolean canDelete(SalesInvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(InvoiceItem rowObject) {
+    public boolean canModify(SalesInvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(InvoiceItem rowObject) {
+    protected boolean deleteRow(SalesInvoiceItem rowObject) {
         return false;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected InvoiceItem modifyRow(InvoiceItem rowObject) {
+    protected SalesInvoiceItem modifyRow(SalesInvoiceItem rowObject) {
         return null;
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected InvoiceItem newRow() {
+    protected SalesInvoiceItem newRow() {
         return null;
     }
     

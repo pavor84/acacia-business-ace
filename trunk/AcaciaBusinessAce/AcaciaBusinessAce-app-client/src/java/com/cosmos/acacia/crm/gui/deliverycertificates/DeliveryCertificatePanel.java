@@ -36,11 +36,11 @@ import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.predicates.ValidDeliveryCertificateAssignmentPredicate;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateMethodType;
@@ -197,7 +197,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 //			public void itemStateChanged(ItemEvent item) {
 //				if(item.getItem() instanceof DbResource){
 //					DbResource reason = (DbResource)item.getItem();
-//					if(!DeliveryCertificateReason.Invoice.equals(reason.getEnumValue())){
+//					if(!DeliveryCertificateReason.SalesInvoice.equals(reason.getEnumValue())){
 //						JOptionPane.showMessageDialog(DeliveryCertificatePanel.this, "Not implemented, yet");
 //						return;
 //					}
@@ -330,7 +330,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     	if(DeliveryCertificateReason.Invoice.equals(entity.getDeliveryCertificateReason().getEnumValue())){
     		
 	    	UUID invoicesParentId = entity.getCreatorOrganization().getId();
-	    	List<Invoice> invoices = getInvoicesSession().listInvoices(invoicesParentId, false);
+	    	List<SalesInvoice> invoices = getInvoicesSession().listInvoices(invoicesParentId, false);
 	    	CollectionUtils.filter(invoices, new ValidDeliveryCertificateAssignmentPredicate());
 	
 	    	InvoiceListPanel listPanel = new InvoiceListPanel(invoicesParentId, invoices, false);
@@ -339,7 +339,7 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
 	        DialogResponse dResponse = listPanel.showDialog(this);
 	        
 	        if ( DialogResponse.SELECT.equals(dResponse) ){
-	            Invoice selectedDocument = (Invoice) listPanel.getSelectedRowObject();
+	            SalesInvoice selectedDocument = (SalesInvoice) listPanel.getSelectedRowObject();
 	             
 	            assignment.setDocumentId(selectedDocument.getId());
 	            assignment.setDocumentNumber(String.valueOf(selectedDocument.getInvoiceNumber()));
@@ -384,10 +384,10 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     }
  
     protected void bindDeliveryCertificateItems(UUID invoiceId){
-    	 List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(invoiceId);
+    	 List<SalesInvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(invoiceId);
          if(invoiceItems != null){
          	deliveryCertificateItems = new java.util.ArrayList<DeliveryCertificateItem>();
-         	for(InvoiceItem invoiceItem : invoiceItems){
+         	for(SalesInvoiceItem invoiceItem : invoiceItems){
          		DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
          		deliveryCertificateItems.add(dci);
          	}
@@ -485,12 +485,12 @@ public class DeliveryCertificatePanel extends BaseEntityPanel {
     		return;
     	}
     	
-    	List<InvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(entity.getDocumentAssignment().getDocumentId());
+    	List<SalesInvoiceItem> invoiceItems = getInvoicesSession().getInvoiceItems(entity.getDocumentAssignment().getDocumentId());
         if(deliveryCertificateItems == null){
         	deliveryCertificateItems = getFormSession().getDeliveryCertificateItems(entity.getDeliveryCertificateId());
         }
     	for(DeliveryCertificateItem item : deliveryCertificateItems){
-        	for(InvoiceItem invoiceItem : invoiceItems){
+        	for(SalesInvoiceItem invoiceItem : invoiceItems){
         		if(invoiceItem.getInvoiceItemId().equals(item.getReferenceItemId())){
         			DeliveryCertificateItem dci = getFormSession().newDeliveryCertificateItem(invoiceItem);
         			item.setQuantity(dci.getQuantity());

@@ -7,7 +7,7 @@ package com.cosmos.acacia.crm.gui.contacts;
 
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.Person;
-import com.cosmos.acacia.gui.entity.EntityListPanel;
+import com.cosmos.acacia.gui.entity.AbstractEntityListPanel;
 import com.cosmos.acacia.gui.entity.EntityPanel;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class PersonPanel extends EntityPanel<Person> {
 
-    public PersonPanel(EntityListPanel entityListPanel, Person entity, List<Classifier> classifiers) {
+    public PersonPanel(AbstractEntityListPanel entityListPanel, Person entity, List<Classifier> classifiers) {
         super(entityListPanel, entity, classifiers);
     }
 }

@@ -51,6 +51,9 @@ public abstract class AbstractApplicationAction<A extends SecureAction> extends 
         try {
             formPanel = formClass.newInstance();
         } catch(Exception ex) {
+            System.out.println("getClass().getName(): " + getClass().getName());
+            System.out.println(toString());
+            getClass().getName();
             throw new RuntimeException(ex);
         }
 
@@ -59,5 +62,14 @@ public abstract class AbstractApplicationAction<A extends SecureAction> extends 
         } else {
             formPanel.showFrame();
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append(secureAction);
+
+        return sb.toString();
     }
 }

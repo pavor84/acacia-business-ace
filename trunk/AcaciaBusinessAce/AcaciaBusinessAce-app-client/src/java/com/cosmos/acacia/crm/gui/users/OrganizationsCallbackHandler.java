@@ -5,7 +5,7 @@ import java.util.List;
 import com.cosmos.acacia.callback.CallbackTransportObject;
 import com.cosmos.acacia.callback.Callbackable;
 import com.cosmos.acacia.crm.bl.users.UsersBean;
-import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.swingb.DialogResponse;
 
 public class OrganizationsCallbackHandler implements Callbackable {
@@ -28,12 +28,11 @@ public class OrganizationsCallbackHandler implements Callbackable {
 
         OrganizationChoiceForm form = new OrganizationChoiceForm(null);
         form.setDefaultOrganizationString(defaultOrganization);
-        form.init((List<Organization>) req.get(UsersBean.ORGANIZATIONS_KEY));
+        form.init((List<UserOrganization>) req.get(UsersBean.ORGANIZATIONS_KEY));
 
         CallbackTransportObject result = new CallbackTransportObject();
         DialogResponse response = form.showDialog();
-        if(DialogResponse.SELECT.equals(response))
-        {
+        if(DialogResponse.SELECT.equals(response)) {
             result.put(UsersBean.ORGANIZATION_KEY, form.getSelectedValue());
         }
 

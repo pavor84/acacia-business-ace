@@ -29,7 +29,8 @@ import com.cosmos.acacia.crm.bl.payment.CustomerPaymentRemote;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.CustomerPaymentMatch;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.beansbinding.EntityProperties;
@@ -386,7 +387,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         return formSession.getPendingPayments(includePartlyMatched, includeUnmatched);
     }
     
-    private List<Invoice> getInvoiceList(BusinessPartner customer) {
+    private List<SalesInvoice> getInvoiceList(BusinessPartner customer) {
         String invFilterValue = (String) pendingDocsField.getSelectedItem();
         boolean includedPartlyPaid = docsAll.equals(invFilterValue) 
             || docsPartlyPaid.equals(invFilterValue);
@@ -439,7 +440,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
             }
         });
         
-        refreshInvoicesTable(new ArrayList<Invoice>());
+        refreshInvoicesTable(new ArrayList<SalesInvoice>());
         
         matchAmountButton.addActionListener(new ActionListener() {
             @Override
@@ -472,7 +473,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         entProps.setOrderPosition("creationTime", 1000);
         
         EntityProperty unmatchedAmountPD = EntityProperty.createEntityProperty("unmatchedAmount",
-            getResourceMap().getString("column.unmatchedamount"), BigDecimal.class.getName(), 35);
+            getResourceMap().getString("column.unmatchedamount"), BigDecimal.class.getName(), 35, AcaciaEntityAttributes.getEntityAttributesMap());
         entProps.addEntityProperty(unmatchedAmountPD);
         return entProps;
     }
@@ -488,7 +489,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
     }
 
     protected void onMatchAmount() {
-        Invoice i = (Invoice) pendingDocumentsTable.getSelectedRowObject();
+        SalesInvoice i = (SalesInvoice) pendingDocumentsTable.getSelectedRowObject();
         CustomerPayment p = (CustomerPayment) paymentListPanel.getDataTable().getSelectedRowObject();
         
         BigDecimal minAmount = BigDecimal.ZERO;
@@ -506,12 +507,12 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         }
     }
 
-    private void createMatchingAndRefresh(CustomerPayment p, Invoice i, BigDecimal matchAmount) {
+    private void createMatchingAndRefresh(CustomerPayment p, SalesInvoice i, BigDecimal matchAmount) {
         CustomerPaymentMatch match = formSession.matchPayment(p, i, matchAmount);
         refreshTables(match.getCustomerPayment(), match.getInvoice());
     }
 
-    private void refreshTables(CustomerPayment customerPayment, Invoice invoice) {
+    private void refreshTables(CustomerPayment customerPayment, SalesInvoice invoice) {
         paymentListPanel.refreshList(getPaymentsList());
         
         if ( paymentListPanel.getDataTable().getData().contains(customerPayment) ){
@@ -542,11 +543,11 @@ public class PaymentMatchingPanel extends AcaciaPanel {
 
     private List<EntityProperty> createInvoiceListColumns() {
         List<EntityProperty> result = new ArrayList<EntityProperty>();
-        result.add(EntityProperty.createEntityProperty("invoiceNumber", getResourceMap().getString("column.docnumber"), BigInteger.class.getName(), 10));
-        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.docdate"), Date.class.getName(), 20));
-        result.add(EntityProperty.createEntityProperty("totalValue", getResourceMap().getString("column.totalamount"), BigDecimal.class.getName(), 30));
-        result.add(EntityProperty.createEntityProperty("paidAmount", getResourceMap().getString("column.paidamount"), BigDecimal.class.getName(), 40));
-        result.add(EntityProperty.createEntityProperty("dueAmount", getResourceMap().getString("column.dueamount"), BigDecimal.class.getName(), 50));
+        result.add(EntityProperty.createEntityProperty("invoiceNumber", getResourceMap().getString("column.docnumber"), BigInteger.class.getName(), 10, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.docdate"), Date.class.getName(), 20, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("totalValue", getResourceMap().getString("column.totalamount"), BigDecimal.class.getName(), 30, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("paidAmount", getResourceMap().getString("column.paidamount"), BigDecimal.class.getName(), 40, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("dueAmount", getResourceMap().getString("column.dueamount"), BigDecimal.class.getName(), 50, AcaciaEntityAttributes.getEntityAttributesMap()));
 //        int position = 0;
 //        for (EntityProperty propertyDetails : result) {
 //            position +=10;
@@ -557,11 +558,11 @@ public class PaymentMatchingPanel extends AcaciaPanel {
     
     private List<EntityProperty> createPaymentHistoryColumns() {
         List<EntityProperty> result = new ArrayList<EntityProperty>();
-        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.matchAmount"), BigDecimal.class.getName(),10));
-        result.add(EntityProperty.createEntityProperty("matchNumber", getResourceMap().getString("column.matchNumber"), Integer.class.getName(),20));
-        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.matchDate"), Date.class.getName(),30));
-        result.add(EntityProperty.createEntityProperty("customerPayment.documentNumber", getResourceMap().getString("column.paymentNumber"), BigInteger.class.getName(),40));
-        result.add(EntityProperty.createEntityProperty("customerPayment.completionTime", getResourceMap().getString("column.paymentDate"), Date.class.getName(),50));
+        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.matchAmount"), BigDecimal.class.getName(),10, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("matchNumber", getResourceMap().getString("column.matchNumber"), Integer.class.getName(),20, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("creationTime", getResourceMap().getString("column.matchDate"), Date.class.getName(),30, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("customerPayment.documentNumber", getResourceMap().getString("column.paymentNumber"), BigInteger.class.getName(),40, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("customerPayment.completionTime", getResourceMap().getString("column.paymentDate"), Date.class.getName(),50, AcaciaEntityAttributes.getEntityAttributesMap()));
         return result;
     }
 
@@ -574,11 +575,11 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         refreshPaymentHistoryTable(getPaymentMatchList());
     }
     
-    private List<Invoice> getInvoiceList() {
-        List<Invoice> pendingInvoices = null;
+    private List<SalesInvoice> getInvoiceList() {
+        List<SalesInvoice> pendingInvoices = null;
         CustomerPayment customerPayment = (CustomerPayment) paymentListPanel.getDataTable().getSelectedRowObject();
         if ( customerPayment==null )
-            pendingInvoices = new ArrayList<Invoice>();
+            pendingInvoices = new ArrayList<SalesInvoice>();
         else{
             pendingInvoices = getInvoiceList(customerPayment.getCustomer());
         }
@@ -587,7 +588,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
     
     private List<CustomerPaymentMatch> getPaymentMatchList() {
         List<CustomerPaymentMatch> paymentMatches = null;
-        Invoice invoice = (Invoice) pendingDocumentsTable.getSelectedRowObject();
+        SalesInvoice invoice = (SalesInvoice) pendingDocumentsTable.getSelectedRowObject();
         if ( invoice==null )
             paymentMatches = new ArrayList<CustomerPaymentMatch>();
         else{
@@ -598,7 +599,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
 
     private BindingGroup pendingDocumentsBindingGroup;
 
-    private void refreshInvoicesTable(List<Invoice> pendingInvoices) {
+    private void refreshInvoicesTable(List<SalesInvoice> pendingInvoices) {
         
         if ( pendingDocumentsBindingGroup!=null ){
             pendingDocumentsBindingGroup.unbind();
@@ -606,7 +607,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         pendingDocumentsBindingGroup = new BindingGroup();
         
         List<EntityProperty> pd = createInvoiceListColumns();
-        EntityProperties ep = new EntityProperties(Object.class);
+        EntityProperties ep = new EntityProperties(Object.class, AcaciaEntityAttributes.getEntityAttributesMap());
         ep.addEntityProperties(pd);
         
         pendingDocumentsTable.bind(pendingDocumentsBindingGroup, pendingInvoices, 
@@ -623,7 +624,7 @@ public class PaymentMatchingPanel extends AcaciaPanel {
         }
         paymentHistoryBindingGroup = new BindingGroup();
 
-        EntityProperties entityProperties = new EntityProperties(Object.class);
+        EntityProperties entityProperties = new EntityProperties(Object.class, AcaciaEntityAttributes.getEntityAttributesMap());
         entityProperties.addEntityProperties(createPaymentHistoryColumns());
         paymentHistoryTable.bind(paymentHistoryBindingGroup, matchHistory, entityProperties, UpdateStrategy.READ);
         

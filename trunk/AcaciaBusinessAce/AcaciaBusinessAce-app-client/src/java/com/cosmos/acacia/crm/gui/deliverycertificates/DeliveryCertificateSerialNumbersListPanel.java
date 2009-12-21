@@ -23,7 +23,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumber;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateSerialNumber;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

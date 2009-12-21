@@ -13,6 +13,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.InitialContext;
 
 /**
@@ -20,6 +22,8 @@ import javax.naming.InitialContext;
  * @author Miro
  */
 public class ServiceManagerImpl {
+
+    private static final Logger LOGGER = Logger.getLogger("com.cosmos.impl.acacia.service");
 
     private static Map<String, ServiceDescriptor> serviceDescriptorMap =
             new TreeMap<String, ServiceDescriptor>();
@@ -67,6 +71,7 @@ public class ServiceManagerImpl {
 
     public <T> T getRemoteService(Class<T> serviceInterface, boolean checkPermissions) {
         String serviceName = serviceInterface.getName();
+        //System.out.println("serviceName=" + serviceName);
         T service;
         if((service = (T)serviceMap.get(serviceName)) != null) {
             return service;
@@ -75,9 +80,10 @@ public class ServiceManagerImpl {
         try {
             InitialContext ctx = new InitialContext();
             service = (T) ctx.lookup(serviceInterface.getName());
+            System.out.println("service=" + service);
             InvocationHandler handler = new RemoteBeanInvocationHandler(service, checkPermissions);
 
-            T proxy = (T) Proxy.newProxyInstance(getClassLoader(),
+            T proxy = (T) Proxy.newProxyInstance(getClassLoader(serviceInterface),
                     new Class[]{serviceInterface}, handler);
 
             serviceMap.put(serviceName, proxy);
@@ -88,17 +94,18 @@ public class ServiceManagerImpl {
         }
     }
 
-    public ClassLoader getClassLoader() {
-        if (classLoader == null) {
-            classLoader = getClass().getClassLoader();
-        }
-
-        return classLoader;
+    private ClassLoader getClassLoader(Class serviceInterface) {
+//        if (classLoader == null) {
+//            classLoader = getClass().getClassLoader();
+//        }
+//
+//        return classLoader;
+        return serviceInterface.getClassLoader();
     }
 
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
+//    public void setClassLoader(ClassLoader classLoader) {
+//        this.classLoader = classLoader;
+//    }
 
     protected static void addServiceDescriptor(ServiceDescriptor serviceDescriptor) {
         serviceDescriptorMap.put(serviceDescriptor.getServiceName(), serviceDescriptor);

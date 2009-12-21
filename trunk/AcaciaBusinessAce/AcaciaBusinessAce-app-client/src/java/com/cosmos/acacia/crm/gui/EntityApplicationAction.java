@@ -7,6 +7,8 @@ package com.cosmos.acacia.crm.gui;
 
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.data.ui.EntityAction;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
+import com.cosmos.acacia.entity.EntityAttributes;
 import com.cosmos.swingb.JBPanel;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
@@ -27,13 +29,13 @@ public class EntityApplicationAction extends AbstractApplicationAction<EntityAct
     }
 
     protected Class<? extends JBPanel> getEntityListFormClass(Class entityClass) {
-        Form form;
-        if((form = getForm(entityClass)) == null) {
+        EntityAttributes entityAttributes;
+        if((entityAttributes = AcaciaEntityAttributes.getEntityAttributesMap().get(entityClass.getName())) == null) {
             return null;
         }
 
         String className;
-        if((className = form.entityListFormClassName()) == null || className.length() == 0) {
+        if((className = entityAttributes.getListFormClassName()) == null || className.length() == 0) {
             return null;
         }
 

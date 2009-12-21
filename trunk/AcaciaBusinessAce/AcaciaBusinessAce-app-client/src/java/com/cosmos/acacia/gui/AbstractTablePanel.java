@@ -40,6 +40,7 @@ import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.gui.ClassifiersListPanel;
 import com.cosmos.acacia.crm.gui.ClassifyObjectPanel;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
@@ -420,7 +421,7 @@ private void onKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onKeyP
 
     public void addColumn(int orderPosition, String propertyName, String columnName,
             String customELDisplay, EntityProperties entityProperties) {
-        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition);
+        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition, AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setCustomDisplay(customELDisplay);
         entityProperties.addEntityProperty(pd);
     }

@@ -13,7 +13,7 @@ import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.enums.InvoiceStatus;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
@@ -26,19 +26,19 @@ import com.cosmos.swingb.DialogResponse;
  * @author	Petar Milev
  *
  */
-public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
+public class InvoiceListPanel extends AbstractTablePanel<SalesInvoice> {
 
     private EntityProperties entityProps;
     private InvoiceListRemote formSession;
     private BindingGroup bindingGroup;
-    private List<Invoice> list;
+    private List<SalesInvoice> list;
     private boolean proform;
 
     public InvoiceListPanel(UUID parentDataObjectId, boolean proform) {
         this(parentDataObjectId, null, proform);
     }
 
-    public InvoiceListPanel(UUID parentDataObjectId, List<Invoice> list, boolean proform) {
+    public InvoiceListPanel(UUID parentDataObjectId, List<SalesInvoice> list, boolean proform) {
         super(parentDataObjectId);
         this.list = list;
         this.proform = proform;
@@ -98,7 +98,7 @@ public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canDelete(java.lang.Object)
      */
     @Override
-    public boolean canDelete(Invoice rowObject) {
+    public boolean canDelete(SalesInvoice rowObject) {
         InvoiceStatus status = (InvoiceStatus) rowObject.getStatus().getEnumValue();
         if (isInBranch(rowObject) && (InvoiceStatus.Open.equals(status) || InvoiceStatus.Reopen.equals(status))) {
             return true;
@@ -109,14 +109,14 @@ public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#canModify(java.lang.Object)
      */
     @Override
-    public boolean canModify(Invoice rowObject) {
+    public boolean canModify(SalesInvoice rowObject) {
         return isInBranch(rowObject);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#deleteRow(java.lang.Object)
      */
     @Override
-    protected boolean deleteRow(Invoice rowObject) {
+    protected boolean deleteRow(SalesInvoice rowObject) {
         getFormSession().deleteInvoice(rowObject);
         return true;
     }
@@ -124,35 +124,35 @@ public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#modifyRow(java.lang.Object)
      */
     @Override
-    protected Invoice modifyRow(Invoice rowObject) {
+    protected SalesInvoice modifyRow(SalesInvoice rowObject) {
         return showDetailForm(rowObject, true);
     }
 
     /** @see com.cosmos.acacia.gui.AbstractTablePanel#newRow()
      */
     @Override
-    protected Invoice newRow() {
-        Invoice o = getFormSession().newInvoice(getParentDataObjectId());
+    protected SalesInvoice newRow() {
+        SalesInvoice o = getFormSession().newInvoice(getParentDataObjectId());
         if (proform) {
             o.setProformaInvoice(Boolean.TRUE);
         }
         return showDetailForm(o, true);
     }
 
-    private Invoice showDetailForm(Invoice o, boolean editable) {
+    private SalesInvoice showDetailForm(SalesInvoice o, boolean editable) {
         InvoiceForm editPanel = new InvoiceForm(o);
         if (!editable) {
             editPanel.setReadonly();
         }
         DialogResponse response = editPanel.showDialog(this);
         if (DialogResponse.SAVE.equals(response)) {
-            return (Invoice) editPanel.getSelectedValue();
+            return (SalesInvoice) editPanel.getSelectedValue();
         }
 
         return null;
     }
 
-    private boolean isInBranch(Invoice invoice) {
+    private boolean isInBranch(SalesInvoice invoice) {
         Address userBranch = getUserBranch();
         if (invoice.getBranch().equals(userBranch)) {
             return true;
@@ -172,7 +172,7 @@ public class InvoiceListPanel extends AbstractTablePanel<Invoice> {
     }
 
     @Override
-    protected void viewRow(Invoice rowObject) {
+    protected void viewRow(SalesInvoice rowObject) {
         showDetailForm(rowObject, false);
     }
 }

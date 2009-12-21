@@ -43,7 +43,6 @@ import com.cosmos.acacia.crm.bl.impl.ProductsListRemote;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.data.product.ProductCategory;
-import com.cosmos.acacia.crm.data.product.ProductPercentValue;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.MeasurementUnit;
@@ -51,6 +50,7 @@ import com.cosmos.acacia.crm.enums.SpecialPermission;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.acacia.gui.AcaciaToStringConverter;
 import com.cosmos.acacia.gui.AcaciaPercentValueField.EditType;
@@ -1042,7 +1042,7 @@ public class ProductPanel extends AcaciaPanel {
     }
 
     private EntityProperty createPricePropertyDetails(String propertyName){
-        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, propertyName, BigDecimal.class.getName());
+        EntityProperty pd = EntityProperty.createEntityProperty(propertyName, propertyName, BigDecimal.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setEditable(false);
         return pd;
     }

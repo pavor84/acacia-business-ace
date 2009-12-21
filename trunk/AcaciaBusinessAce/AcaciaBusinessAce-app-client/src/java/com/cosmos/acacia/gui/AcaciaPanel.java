@@ -43,16 +43,14 @@ import com.cosmos.acacia.crm.bl.reports.Report;
 import com.cosmos.acacia.crm.bl.reports.ReportsTools;
 import com.cosmos.acacia.crm.bl.reports.ReportsToolsRemote;
 import com.cosmos.acacia.crm.bl.security.SecurityServiceRemote;
-import com.cosmos.acacia.crm.bl.users.RightsManagerRemote;
 import com.cosmos.acacia.crm.client.LocalSession;
 import com.cosmos.acacia.crm.data.contacts.Address;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.enums.DatabaseResource;
-import com.cosmos.acacia.crm.enums.SpecialPermission;
-import com.cosmos.acacia.security.AccessRight;
 import com.cosmos.acacia.crm.gui.AcaciaApplication;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationMessage;
@@ -60,7 +58,6 @@ import com.cosmos.acacia.service.ServiceManager;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTable;
-import java.util.Collections;
 import javax.ejb.EJB;
 
 /**
@@ -77,6 +74,10 @@ public class AcaciaPanel extends JBPanel {
     private UUID parentDataObjectId;
     private DataObjectBean mainDataObject;
     private UUID organizationDataObjectId;
+    //
+    private EnumResourceRemote enumResourceRemote;
+    private Map<Class<? extends DatabaseResource>, List<DbResource>> enumResourcesCache =
+            new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
 
     public AcaciaPanel() {
     }
@@ -245,7 +246,16 @@ public class AcaciaPanel extends JBPanel {
 
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> remoteInterface, boolean checkPermissions) {
-        return ServiceManager.getRemoteService(remoteInterface, checkPermissions);
+        try {
+            return ServiceManager.getRemoteService(remoteInterface, checkPermissions);
+        } catch(NoSuchMethodError error) {
+            error.printStackTrace();
+            try {
+                return (T) InitialContext.doLookup(remoteInterface.getName());
+            } catch(NamingException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -262,9 +272,6 @@ public class AcaciaPanel extends JBPanel {
     public static AcaciaSessionRemote getAcaciaSession() {
         return LocalSession.instance();
     }
-    private EnumResourceRemote enumResourceRemote = getBean(EnumResourceRemote.class);
-    private Map<Class<? extends DatabaseResource>, List<DbResource>> enumResourcesCache =
-            new HashMap<Class<? extends DatabaseResource>, List<DbResource>>();
 
     public List<DbResource> getEnumResources(Class<? extends DatabaseResource> enumClass) {
         List<DbResource> result = enumResourcesCache.get(enumClass);
@@ -320,7 +327,7 @@ public class AcaciaPanel extends JBPanel {
      * @return
      */
     public Address getUserBranch() {
-        return LocalSession.instance().getBranch();
+        return getAcaciaSession().getBranch();
     }
 
     /**
@@ -512,7 +519,7 @@ public class AcaciaPanel extends JBPanel {
 
     private String chooseTargetPath() {
         String lastPath = Preferences.systemRoot().get(
-                LocalSession.instance().getUser().getUserName() + REPORT_PATH, null);
+                getAcaciaSession().getUser().getUserName() + REPORT_PATH, null);
 
         JFileChooser fc = new JFileChooser();
         if (lastPath != null) {
@@ -524,7 +531,7 @@ public class AcaciaPanel extends JBPanel {
         if (fChoice == JFileChooser.APPROVE_OPTION) {
             String dir = fc.getSelectedFile().getAbsolutePath();
             Preferences.systemRoot().put(
-                    LocalSession.instance().getUser().getUserName() + REPORT_PATH,
+                    getAcaciaSession().getUser().getUserName() + REPORT_PATH,
                     dir);
             return dir;
         }
@@ -551,6 +558,10 @@ public class AcaciaPanel extends JBPanel {
     }
 
     public EnumResourceRemote getEnumResourceRemote() {
+        if(enumResourceRemote == null) {
+            enumResourceRemote = getBean(EnumResourceRemote.class);
+        }
+
         return enumResourceRemote;
     }
 
@@ -581,22 +592,26 @@ public class AcaciaPanel extends JBPanel {
     }
 
     protected static boolean isAdministrator() {
-        return LocalSession.instance().isAdministrator();
+        return getAcaciaSession().isAdministrator();
     }
 
     protected static boolean isSystemAdministrator() {
-        return LocalSession.instance().isSystemAdministrator();
+        return getAcaciaSession().isSystemAdministrator();
     }
 
     protected static boolean isOrganizationAdministrator() {
-        return LocalSession.instance().isOrganizationAdministrator();
+        return getAcaciaSession().isOrganizationAdministrator();
     }
 
     protected static boolean isBranchAdministrator() {
-        return LocalSession.instance().isBranchAdministrator();
+        return getAcaciaSession().isBranchAdministrator();
     }
 
     protected static Classifier getClassifier(String classifierCode) {
-        return LocalSession.instance().getClassifier(classifierCode);
+        return getAcaciaSession().getClassifier(classifierCode);
+    }
+
+    public boolean isSystemOrganization(Organization organization) {
+        return getAcaciaSession().isSystemOrganization(organization);
     }
 }

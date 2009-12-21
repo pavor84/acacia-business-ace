@@ -15,7 +15,7 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.swingbinding.JTableBinding;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
 import com.cosmos.acacia.crm.enums.DeliveryCertificateStatus;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;

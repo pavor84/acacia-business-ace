@@ -33,7 +33,11 @@ public class PropertyBean {
     }
 
     public String getSetterName() {
-        return setterName;
+        if(setterName != null) {
+            return setterName;
+        }
+
+        return getterName;
     }
 
     public JComponent getJComponent() {

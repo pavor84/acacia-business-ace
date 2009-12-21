@@ -9,8 +9,8 @@ import com.cosmos.acacia.crm.bl.assembling.ProductItemService;
 import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import java.util.ArrayList;
@@ -52,9 +52,9 @@ public class ProductItemTreeTableNode
             return getComplexProductItems(complexProduct);
 
         DataObjectBean dataObjectBean = getDataObjectBean();
-        if(dataObjectBean instanceof Invoice)
+        if(dataObjectBean instanceof SalesInvoice)
         {
-            return service.getInvoiceItems((Invoice)dataObjectBean);
+            return service.getInvoiceItems((SalesInvoice)dataObjectBean);
         }
 
         return Collections.emptyList();
@@ -74,9 +74,9 @@ public class ProductItemTreeTableNode
             if(product instanceof ComplexProduct)
                 return (ComplexProduct)product;
         }
-        else if(dataObjectBean instanceof InvoiceItem)
+        else if(dataObjectBean instanceof SalesInvoiceItem)
         {
-            InvoiceItem invoiceItem = (InvoiceItem)dataObjectBean;
+            SalesInvoiceItem invoiceItem = (SalesInvoiceItem)dataObjectBean;
             Product product = invoiceItem.getProduct();
             if(product instanceof ComplexProduct)
                 return (ComplexProduct)product;
@@ -220,9 +220,9 @@ public class ProductItemTreeTableNode
         else
         {
             DataObjectBean dataObjectBean = getDataObjectBean();
-            if(dataObjectBean instanceof Invoice)
+            if(dataObjectBean instanceof SalesInvoice)
             {
-                childCount = service.getInvoiceItemsCount((Invoice)dataObjectBean);
+                childCount = service.getInvoiceItemsCount((SalesInvoice)dataObjectBean);
             }
         }
 

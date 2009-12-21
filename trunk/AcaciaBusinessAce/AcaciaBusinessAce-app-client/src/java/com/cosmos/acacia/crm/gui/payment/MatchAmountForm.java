@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.payment;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -143,7 +144,7 @@ public class MatchAmountForm extends AcaciaPanel {
             minStr, maxStr);
         matchAmountLabel.setText(amountLabel);
         
-        EntityProperty pd = EntityProperty.createEntityProperty("matchAmount", "", BigDecimal.class.getName());
+        EntityProperty pd = EntityProperty.createEntityProperty("matchAmount", "", BigDecimal.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setRequired(true);
         NumericRangeValidator val = new NumericRangeValidator();
         val.setRequired(true);

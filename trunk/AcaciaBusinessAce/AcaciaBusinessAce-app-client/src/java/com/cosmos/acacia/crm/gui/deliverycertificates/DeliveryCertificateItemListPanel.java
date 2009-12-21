@@ -12,7 +12,7 @@ import org.jdesktop.application.Action;
 import org.jdesktop.beansbinding.BindingGroup;
 
 import com.cosmos.acacia.crm.bl.impl.DeliveryCertificatesRemote;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AcaciaTable;
 import com.cosmos.beansbinding.EntityProperties;

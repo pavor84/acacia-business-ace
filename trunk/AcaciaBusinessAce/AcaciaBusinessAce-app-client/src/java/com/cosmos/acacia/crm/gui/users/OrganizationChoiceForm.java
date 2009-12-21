@@ -7,6 +7,7 @@
 package com.cosmos.acacia.crm.gui.users;
 
 import com.cosmos.acacia.crm.data.contacts.Organization;
+import com.cosmos.acacia.crm.data.users.UserOrganization;
 import com.cosmos.acacia.gui.AcaciaPanel;
 import com.cosmos.swingb.DialogResponse;
 import java.util.UUID;
@@ -20,12 +21,13 @@ import org.jdesktop.application.Action;
 public class OrganizationChoiceForm extends AcaciaPanel {
 
     /** Creates new form OrganizationChoiceForm */
-    public OrganizationChoiceForm(List<Organization> organizations) {
+    public OrganizationChoiceForm(List<UserOrganization> userOrganizations) {
         super((UUID) null);
-        this.organizations = organizations;
+        this.userOrganizations = userOrganizations;
         initComponents();
-        if (organizations != null)
+        if (userOrganizations != null) {
             initData();
+        }
     }
 
     /** This method is called from within the constructor to
@@ -85,35 +87,45 @@ public class OrganizationChoiceForm extends AcaciaPanel {
     private com.cosmos.swingb.JBButton proceedButton;
     // End of variables declaration//GEN-END:variables
 
-    private List<Organization> organizations;
+    private List<UserOrganization> userOrganizations;
     private String defaultOrganization;
     
     @Override
     public void initData() {
         organizationsComboBox.removeAllItems();
         int idx = -1;
-        for (Organization org : organizations) {
-            if (org.getOrganizationName().equals(defaultOrganization))
+        for (UserOrganization userOrganization : userOrganizations) {
+            Organization organization = userOrganization.getOrganization();
+            if (organization.getOrganizationName().equals(defaultOrganization)) {
                 idx = organizationsComboBox.getItemCount();
-            
-            organizationsComboBox.addItem(org);
+            }
+            organizationsComboBox.addItem(organization);
         }
         organizationsComboBox.setSelectedIndex(idx);
     }
             
-    public void init(List<Organization> data) {
+    public void init(List<UserOrganization> userOrganizations) {
         requestFocus();
-        this.organizations = data;
+        this.userOrganizations = userOrganizations;
         initData();
     }
             
     @Action
     public void proceed() {
         setDialogResponse(DialogResponse.SELECT);
-        setSelectedValue(organizationsComboBox.getSelectedItem());
+        Organization selectedOrganization;
+        if((selectedOrganization = (Organization) organizationsComboBox.getSelectedItem()) != null) {
+            for (UserOrganization userOrganization : userOrganizations) {
+                Organization organization = userOrganization.getOrganization();
+                if(selectedOrganization.equals(organization)) {
+                    setSelectedValue(userOrganization);
+                }
+            }
+        }
+
         close();
     }
-    
+
     public void setDefaultOrganizationString(String defOrgStr) {
         this.defaultOrganization = defOrgStr;
     }

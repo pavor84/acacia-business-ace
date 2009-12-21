@@ -28,6 +28,7 @@ import com.cosmos.acacia.crm.data.sales.PricelistItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.gui.pricing.ExistingProductDialog.Response;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.BaseEntityPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel;
 import com.cosmos.acacia.gui.EntityFormButtonPanel.Button;
@@ -617,9 +618,9 @@ public class PricelistItemForm extends BaseEntityPanel {
     }
 
     private Collection<EntityProperty> createProductsTableDetails() {
-        EntityProperty product = EntityProperty.createEntityProperty("productName", "Product Name", String.class.getName());
-        EntityProperty code = EntityProperty.createEntityProperty("codeFormatted", "Product Code", String.class.getName());
-        EntityProperty category = EntityProperty.createEntityProperty("category.categoryName", "Category", String.class.getName());
+        EntityProperty product = EntityProperty.createEntityProperty("productName", "Product Name", String.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
+        EntityProperty code = EntityProperty.createEntityProperty("codeFormatted", "Product Code", String.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
+        EntityProperty category = EntityProperty.createEntityProperty("category.categoryName", "Category", String.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         return Arrays.asList(product, code, category);
     }
 

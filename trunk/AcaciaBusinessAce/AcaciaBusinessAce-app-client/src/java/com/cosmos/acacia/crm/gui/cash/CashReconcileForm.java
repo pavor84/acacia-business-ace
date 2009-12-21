@@ -23,11 +23,12 @@ import com.cosmos.acacia.crm.bl.cash.CashReconcileRemote;
 import com.cosmos.acacia.crm.bl.cash.EndBalance;
 import com.cosmos.acacia.crm.bl.contactbook.PersonsListRemote;
 import com.cosmos.acacia.crm.data.contacts.Person;
-import com.cosmos.acacia.crm.data.cash.CashReconcile;
-import com.cosmos.acacia.crm.data.cash.CashReconcilePaymentSummary;
+import com.cosmos.acacia.crm.data.accounting.CashReconcile;
+import com.cosmos.acacia.crm.data.accounting.CashReconcilePaymentSummary;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.gui.contactbook.BusinessPartnersListPanel;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.acacia.gui.AbstractTablePanel;
 import com.cosmos.acacia.gui.AbstractTablePanelListener;
 import com.cosmos.acacia.gui.BaseEntityPanel;
@@ -970,7 +971,7 @@ public class CashReconcileForm extends BaseEntityPanel {
 
         //end balances table
         List<EndBalance> endBalances = getEndBalances();
-        EntityProperties entityProperties = new EntityProperties(Object.class);
+        EntityProperties entityProperties = new EntityProperties(Object.class, AcaciaEntityAttributes.getEntityAttributesMap());
         entityProperties.addEntityProperties(createEndBalancesColumns());
         entityProperties.setUpdateStrategy(UpdateStrategy.READ);
         endBalanceTable.bind(bg, endBalances, entityProperties, UpdateStrategy.READ);
@@ -980,13 +981,13 @@ public class CashReconcileForm extends BaseEntityPanel {
 
     private List<EntityProperty> createEndBalancesColumns() {
         List<EntityProperty> result = new ArrayList<EntityProperty>();
-        result.add(EntityProperty.createEntityProperty("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(), 10));
-        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(), 20));
+        result.add(EntityProperty.createEntityProperty("currency.enumValue.code", getResourceMap().getString("column.currency"), String.class.getName(), 10, AcaciaEntityAttributes.getEntityAttributesMap()));
+        result.add(EntityProperty.createEntityProperty("amount", getResourceMap().getString("column.amount"), BigDecimal.class.getName(), 20, AcaciaEntityAttributes.getEntityAttributesMap()));
         String defaultCurrencyTitle = getResourceMap().getString("column.amountDefaultCurrency");
         if (defaultCurrencyTitle.contains("{0}")) {
             defaultCurrencyTitle = MessageFormat.format(defaultCurrencyTitle, ((Currency) entity.getCurrency().getEnumValue()).getCode());
         }
-        result.add(EntityProperty.createEntityProperty("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(), 30));
+        result.add(EntityProperty.createEntityProperty("amountDefCurrency", defaultCurrencyTitle, BigDecimal.class.getName(), 30, AcaciaEntityAttributes.getEntityAttributesMap()));
         return result;
     }
 

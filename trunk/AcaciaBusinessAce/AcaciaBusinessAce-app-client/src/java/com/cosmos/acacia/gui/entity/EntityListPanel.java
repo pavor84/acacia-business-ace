@@ -21,7 +21,7 @@ public class EntityListPanel<E extends PersistentEntity> extends AbstractEntityL
 
     @Override
     public List<E> getEntities() {
-        return getEntityService().getEntities(getEntityClass(), getClassifiers());
+        return getEntityService().getEntities(getEntityClass(), getClassifiers(), parameters);
     }
 
     @Override

@@ -6,6 +6,7 @@
 
 package com.cosmos.acacia.crm.gui.purchaseorders;
 
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -139,7 +140,7 @@ public class PartialQuantityForm extends AcaciaPanel {
             " ("+formatNumber(from, AcaciaUtils.getDecimalFormat())+" - " + formatNumber(to, AcaciaUtils.getDecimalFormat())+"):");
         
         BindingGroup group = new BindingGroup();
-        EntityProperty pd = EntityProperty.createEntityProperty("quantity", "Quantity", BigDecimal.class.getName());
+        EntityProperty pd = EntityProperty.createEntityProperty("quantity", "Quantity", BigDecimal.class.getName(), AcaciaEntityAttributes.getEntityAttributesMap());
         pd.setReadOnly(false);
         pd.setEditable(true);
         pd.setVisible(true);
