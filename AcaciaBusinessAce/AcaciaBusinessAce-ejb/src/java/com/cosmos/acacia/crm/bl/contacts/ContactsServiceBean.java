@@ -64,7 +64,7 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
 
     @Override
     public List<Passport> getPassports(Person person) {
-        Query q = em.createNamedQuery(ContactPerson.NQ_FIND_ALL);
+        Query q = em.createNamedQuery(Passport.NQ_FIND_ALL);
         q.setParameter("person", person);
 
         return new ArrayList<Passport>(q.getResultList());
@@ -110,12 +110,12 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
     }
 
     private void postSaveOrganization(Organization organization, Map<String, Object> parameters) {
-        if(!session.getSystemOrganization().getBusinessPartnerId().equals(organization.getParentBusinessPartnerId())) {
+        if(!session.getSupervisorOrganization().getBusinessPartnerId().equals(organization.getParentBusinessPartnerId())) {
             return;
         }
 
         if(usersService.getRootBusinessUnit(organization) == null) {
-            BusinessUnit rootBusinessUnit = new BusinessUnit(organization);
+            BusinessUnit rootBusinessUnit = usersService.newItem(organization, BusinessUnit.class);
             rootBusinessUnit.setBusinessUnitName(BusinessUnit.ROOT_BUSINESS_UNIT_NAME);
             rootBusinessUnit.setBusinessUnitType(BusinessUnitType.Administrative.getDbResource());
             rootBusinessUnit.setRoot(true);
@@ -124,11 +124,6 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
 
             session.sendSystemMail(organization.toString(), "New user Organization: " + organization.getInfo());
         }
-    }
-
-    @Override
-    public Organization newOrganization() {
-        return newEntity(Organization.class);
     }
 
     @Override
@@ -163,12 +158,11 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
 
     @Override
     public <E> List<E> getEntities(Class<E> entityClass, List classifiers, Object... extraParameters) {
-        if(Organization.class == entityClass) {
-            if(extraParameters.length == 0) {
-                return (List<E>) getOrganizations(session.getOrganization().getBusinessPartnerId(), classifiers);
-            }
+        if(Person.class == entityClass) {
+            return (List<E>) getPersons(session.getOrganization().getBusinessPartnerId());
+        } else if(Organization.class == entityClass) {
+            return (List<E>) getOrganizations(session.getOrganization().getBusinessPartnerId(), classifiers);
         }
-
         return super.getEntities(entityClass, classifiers, extraParameters);
     }
 
@@ -204,7 +198,12 @@ public class ContactsServiceBean extends AbstractEntityService implements Contac
     }
 
     @Override
-    public Person newPerson(BusinessPartner parentBusinessPartner) {
+    public Organization newOrganization() {
+        return newEntity(Organization.class);
+    }
+
+    @Override
+    public Person newPerson() {
         return newEntity(Person.class);
     }
 

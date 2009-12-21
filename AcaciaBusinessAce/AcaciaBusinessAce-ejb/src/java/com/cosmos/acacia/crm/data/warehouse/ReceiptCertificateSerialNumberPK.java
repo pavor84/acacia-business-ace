@@ -3,13 +3,12 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.warehouse;
 
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
 import org.hibernate.annotations.Type;
 
 /**
@@ -17,7 +16,7 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Embeddable
-public class DeliveryCertificateSerialNumberPK implements Serializable {
+public class ReceiptCertificateSerialNumberPK implements Serializable {
 
     @Column(name = "certificate_item_id", nullable = false)
     @Type(type="uuid")
@@ -26,10 +25,10 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     @Column(name = "serial_number", nullable = false)
     private String serialNumber;
 
-    public DeliveryCertificateSerialNumberPK() {
+    public ReceiptCertificateSerialNumberPK() {
     }
 
-    public DeliveryCertificateSerialNumberPK(UUID certificateItemId, String serialNumber) {
+    public ReceiptCertificateSerialNumberPK(UUID certificateItemId, String serialNumber) {
         this.certificateItemId = certificateItemId;
         this.serialNumber = serialNumber;
     }
@@ -61,23 +60,22 @@ public class DeliveryCertificateSerialNumberPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DeliveryCertificateSerialNumberPK)) {
+        if (!(object instanceof ReceiptCertificateSerialNumberPK)) {
             return false;
         }
-        DeliveryCertificateSerialNumberPK other = (DeliveryCertificateSerialNumberPK) object;
+        ReceiptCertificateSerialNumberPK other = (ReceiptCertificateSerialNumberPK) object;
         if (this.certificateItemId != other.certificateItemId) {
             return false;
         }
         if ((this.serialNumber == null && other.serialNumber != null) || (this.serialNumber != null && !this.serialNumber.equals(other.serialNumber))) {
             return false;
         }
-        
         return true;
     }
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.DeliveryCertificateSerialNumberPK[certificateItemId=" + certificateItemId + ", serialNumber=" + serialNumber + "]";
+        return "com.cosmos.acacia.crm.data.test.ReceiptCertificateSerialNumberPK[certificateItemId=" + certificateItemId + ", serialNumber=" + serialNumber + "]";
     }
 
 }

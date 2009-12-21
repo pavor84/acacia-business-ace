@@ -42,6 +42,7 @@ import org.apache.log4j.Logger;
 
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
 import com.lowagie.text.pdf.BaseFont;
@@ -173,7 +174,7 @@ public class ReportsTools implements ReportsToolsRemote, ReportsToolsLocal {
         underscoreSeparatedName = pluralize(underscoreSeparatedName);
 
         if (entityProps == null)
-            entityProps = new EntityProperties(entityClass, true);
+            entityProps = new EntityProperties(entityClass, AcaciaEntityAttributes.getEntityAttributesMap(), true);
 
         return createTableReport(entityProps, underscoreSeparatedName, isSubreport);
     }

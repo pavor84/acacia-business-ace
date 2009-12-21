@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.data.predicates;
 
 import java.math.BigDecimal;
 import org.apache.commons.collections.Predicate;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 
 /**
  * Evaluate to true if all Ordered Quantities for an Invoice Item are shipped (Ordered == Shipped)
@@ -13,8 +13,8 @@ public class InvoiceItemShippedPredicate implements Predicate {
 	
 	@Override
 	public boolean evaluate(Object item) {
-		if(item instanceof InvoiceItem){
-			InvoiceItem invoiceItem = (InvoiceItem)item;
+		if(item instanceof SalesInvoiceItem){
+			SalesInvoiceItem invoiceItem = (SalesInvoiceItem)item;
 			BigDecimal shipedQuantity = (invoiceItem.getShippedQuantity() != null) ? invoiceItem.getShippedQuantity() : BigDecimal.ZERO;
 			
 			if(invoiceItem.getOrderedQuantity().compareTo(shipedQuantity) == 0){

@@ -13,8 +13,8 @@ import com.cosmos.acacia.crm.data.product.ComplexProduct;
 import com.cosmos.acacia.crm.data.product.ComplexProductItem;
 import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.product.Product;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
@@ -555,13 +555,13 @@ public class AssemblingBean
     }
 
     @Override
-    public List<InvoiceItem> getInvoiceItems(Invoice invoice)
+    public List<SalesInvoiceItem> getInvoiceItems(SalesInvoice invoice)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getInvoiceItemsCount(Invoice invoice)
+    public int getInvoiceItemsCount(SalesInvoice invoice)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }

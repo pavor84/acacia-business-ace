@@ -31,7 +31,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -39,8 +38,13 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "job_titles", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"business_unit_id", "job_title"})}
+@Table(name = "job_titles", catalog = "acacia", schema = "public"
+/*
+CREATE UNIQUE INDEX uix_job_titles_business_unit_job_title
+  ON job_titles
+  USING btree
+  (business_unit_id, lower(job_title::text));
+*/
 )
 @NamedQueries({
     @NamedQuery(
@@ -228,5 +232,15 @@ public class JobTitle extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getJobTitle();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

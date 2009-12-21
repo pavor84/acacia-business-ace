@@ -73,7 +73,7 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "user_organization_id", referencedColumnName = "user_organization_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="User Organization")
+    @Property(title="User Organization", useEntityAttributes=false)
     private UserOrganization userOrganization;
 
     @JoinColumn(name = "security_role_id", referencedColumnName = "security_role_id", nullable = false)
@@ -180,5 +180,15 @@ public class UserSecurityRole extends DataObjectBean implements Serializable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

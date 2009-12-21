@@ -17,37 +17,50 @@ public enum FunctionalHierarchy implements DatabaseResource {
     /**
      * Department Manager, Sales and Marketing Manager, etc.
      */
-    Manager(null),
+    Manager(null, Group.Management),
 
-    DeputyManager(Manager),
+    DeputyManager(Manager, Group.DeputyManagement),
 
     /**
      * Project Manager, Sales Manager, Marketing Manager, etc.
      */
-    FunctionalManager(DeputyManager),
+    FunctionalManager(DeputyManager, Group.Management),
 
-    DeputyFunctionalManager(FunctionalManager),
+    DeputyFunctionalManager(FunctionalManager, Group.DeputyManagement),
 
-    SeniorOfficer(DeputyFunctionalManager),
+    SeniorOfficer(DeputyFunctionalManager, Group.Service),
 
-    Officer(SeniorOfficer),
+    Officer(SeniorOfficer, Group.Service),
 
-    JuniorOfficer(Officer),
+    JuniorOfficer(Officer, Group.Service),
 
-    Trainee(JuniorOfficer),
+    Trainee(JuniorOfficer, Group.Guest),
 
-    Visitor(Trainee)
+    Visitor(Trainee, Group.Guest)
     ;
 
-    private FunctionalHierarchy(FunctionalHierarchy parent) {
+    public enum Group {
+        Management,
+        DeputyManagement,
+        Service,
+        Guest
+    };
+
+    private FunctionalHierarchy(FunctionalHierarchy parent, Group group) {
         this.parent = parent;
+        this.group = group;
     }
     //
     private FunctionalHierarchy parent;
     private DbResource dbResource;
+    private Group group;
 
     public FunctionalHierarchy getParent() {
         return parent;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     @Override

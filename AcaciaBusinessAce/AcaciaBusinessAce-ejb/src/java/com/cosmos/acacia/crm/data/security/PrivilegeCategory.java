@@ -30,7 +30,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -38,9 +37,13 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "privilege_categories", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"organization_id", "category_name"})
-})
+@Table(name = "privilege_categories", catalog = "acacia", schema = "public"
+/*
+CREATE UNIQUE INDEX uix_privilege_categories_organization_category_name
+  ON privilege_categories
+  USING btree
+  (organization_id, lower(category_name::text));*/
+)
 @NamedQueries({
     @NamedQuery(
         name = PrivilegeCategory.NQ_FIND_ALL,
@@ -62,7 +65,7 @@ import org.hibernate.annotations.Type;
         query = "SELECT p FROM PrivilegeCategory p" +
                 " WHERE" +
                 "  p.organization = :organization" +
-                "  and p.categoryName = :categoryName"
+                "  and lower(p.categoryName) = lower(:categoryName)"
     ),
     @NamedQuery(
         name = PrivilegeCategory.NQ_COUNT_BY_ORGANIZATION,

@@ -31,6 +31,7 @@ import com.cosmos.acacia.crm.enums.DocumentStatus;
 import com.cosmos.acacia.crm.enums.DocumentType;
 import com.cosmos.acacia.crm.enums.EnumClassifier;
 import com.cosmos.acacia.crm.validation.ValidationException;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.util.NumberUtils;
@@ -295,7 +296,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
             System.out.println("entityProperties=" + entityProperties);
         }
         if (entityProperties == null) {
-            entityProperties = new EntityProperties(entityClass);
+            entityProperties = new EntityProperties(entityClass, AcaciaEntityAttributes.getEntityAttributesMap());
             entityPropertiesMap.put(entityClassName, entityProperties);
         }
 
@@ -309,7 +310,7 @@ public class EntityStoreManagerBean implements EntityStoreManagerLocal {
     @SuppressWarnings("unchecked")
     @Override
     public EntityProperty createEntityProperty(Class entityClass, String propertyName, int position) {
-        return EntityProperty.createEntityProperty(entityClass, propertyName, position);
+        return EntityProperty.createEntityProperty(entityClass, propertyName, position, AcaciaEntityAttributes.getEntityAttributesMap());
     }
 
     @Override

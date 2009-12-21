@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.cosmos.acacia.crm.data.cash;
+package com.cosmos.acacia.crm.data.accounting;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

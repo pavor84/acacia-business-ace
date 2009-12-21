@@ -216,7 +216,7 @@ public class Warehouse extends DataObjectBean implements Serializable {
     public void setId(UUID id) {
         setWarehouseId(id);
     }
-    
+
     @Override
     public String getInfo() {
         return getAddress().getInfo();

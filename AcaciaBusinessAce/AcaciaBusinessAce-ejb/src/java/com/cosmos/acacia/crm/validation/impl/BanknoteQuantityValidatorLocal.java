@@ -2,7 +2,7 @@ package com.cosmos.acacia.crm.validation.impl;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.cash.BanknoteQuantity;
+import com.cosmos.acacia.crm.data.accounting.BanknoteQuantity;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 
 /**

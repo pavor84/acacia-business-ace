@@ -52,6 +52,8 @@
             <included-library>file.reference.MailUtils-1.0-SNAPSHOT.jar</included-library>
             <included-library>file.reference.crypto-1.0-SNAPSHOT.jar</included-library>
             <included-library>file.reference.base64-1.0-SNAPSHOT.jar</included-library>
+            <included-library>file.reference.DataConverter-1.0-SNAPSHOT.jar</included-library>
+            <included-library>file.reference.BulgarianCharset-1.0-SNAPSHOT.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

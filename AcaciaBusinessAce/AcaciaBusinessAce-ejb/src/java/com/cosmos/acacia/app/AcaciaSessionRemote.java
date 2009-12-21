@@ -32,6 +32,8 @@ import java.util.Set;
 @Remote
 public interface AcaciaSessionRemote {
 
+    boolean isSystemOrganization(Organization organization);
+
     Set<SecureAction> getSecureActions();
 
     MenuBar getMenuBar();

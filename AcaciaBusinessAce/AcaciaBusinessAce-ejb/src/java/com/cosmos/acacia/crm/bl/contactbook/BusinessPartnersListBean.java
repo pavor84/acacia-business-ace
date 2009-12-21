@@ -30,10 +30,11 @@ import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import com.cosmos.acacia.crm.data.Classifier;
 import com.cosmos.acacia.crm.data.contacts.ContactPerson;
 import com.cosmos.acacia.crm.data.CustomerPayment;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.data.contacts.Organization;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.InvoiceType;
+import com.cosmos.acacia.entity.AcaciaEntityAttributes;
 import com.cosmos.beansbinding.EntityProperties;
 import com.cosmos.beansbinding.EntityProperty;
 
@@ -96,15 +97,15 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         addPropertyDetails(10, "class", "Partner Type", "${class.simpleName}", result);
         
         //organization type
-        pd = EntityProperty.createEntityProperty(Organization.class, "organizationType", 20);
+        pd = EntityProperty.createEntityProperty(Organization.class, "organizationType", 20, AcaciaEntityAttributes.getEntityAttributesMap());
         result.addEntityProperty(pd);
         
         //gender
-        pd = EntityProperty.createEntityProperty(Person.class, "gender", 30);
+        pd = EntityProperty.createEntityProperty(Person.class, "gender", 30, AcaciaEntityAttributes.getEntityAttributesMap());
         result.addEntityProperty(pd);
    
         //administration address
-        pd = EntityProperty.createEntityProperty(Organization.class, "administrationAddress", 40);
+        pd = EntityProperty.createEntityProperty(Organization.class, "administrationAddress", 40, AcaciaEntityAttributes.getEntityAttributesMap());
         result.addEntityProperty(pd);
         
         //unique code
@@ -114,7 +115,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         addPropertyDetails(60, "birthOrRegistration", "Birth/Registration", null, result);
         
         //vat
-        pd = EntityProperty.createEntityProperty(Organization.class, "vatNumber", 70);
+        pd = EntityProperty.createEntityProperty(Organization.class, "vatNumber", 70, AcaciaEntityAttributes.getEntityAttributesMap());
         result.addEntityProperty(pd);
         
         return result;
@@ -122,7 +123,7 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
 
     private void addPropertyDetails(int orderPosition, String propertyName, String columnName,
                           String customELDisplay, EntityProperties entityProperties) {
-       EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition);
+       EntityProperty pd = EntityProperty.createEntityProperty(propertyName, columnName, null, orderPosition, AcaciaEntityAttributes.getEntityAttributesMap());
        pd.setCustomDisplay(customELDisplay);
        entityProperties.addEntityProperty(pd);
    }
@@ -190,8 +191,8 @@ public class BusinessPartnersListBean implements BusinessPartnersListLocal, Busi
         Map<BusinessPartner, BigDecimal> result = new LinkedHashMap<BusinessPartner, BigDecimal>();
         
         //invoices
-        List<Invoice> confirmedInvoices = invoiceListLocal.getConfirmedDocuments();
-        for (Invoice invoice : confirmedInvoices) {
+        List<SalesInvoice> confirmedInvoices = invoiceListLocal.getConfirmedDocuments();
+        for (SalesInvoice invoice : confirmedInvoices) {
             BigDecimal current = invoice.getTotalValue();
             BigDecimal total = result.get(invoice.getRecipient());
             if ( total==null )

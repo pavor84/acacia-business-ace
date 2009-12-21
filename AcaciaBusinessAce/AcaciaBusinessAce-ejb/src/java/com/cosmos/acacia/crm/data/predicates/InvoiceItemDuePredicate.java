@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.apache.commons.collections.Predicate;
 
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 
 /**
  * Evaluate to true if all available (Ordered-Shipped) Quantities are Due Quantities
@@ -15,8 +15,8 @@ public class InvoiceItemDuePredicate implements Predicate {
 	
 	@Override
 	public boolean evaluate(Object item) {
-		if(item instanceof InvoiceItem){
-			InvoiceItem invoiceItem = (InvoiceItem)item;
+		if(item instanceof SalesInvoiceItem){
+			SalesInvoiceItem invoiceItem = (SalesInvoiceItem)item;
 			BigDecimal dueQuantity = (invoiceItem.getDueQuantity() != null) ? invoiceItem.getDueQuantity() : BigDecimal.ZERO;
 			BigDecimal shipedQuantity = (invoiceItem.getShippedQuantity() != null) ? invoiceItem.getShippedQuantity() : BigDecimal.ZERO;
 			if( (invoiceItem.getOrderedQuantity().subtract(shipedQuantity) ).compareTo(dueQuantity) == 0){

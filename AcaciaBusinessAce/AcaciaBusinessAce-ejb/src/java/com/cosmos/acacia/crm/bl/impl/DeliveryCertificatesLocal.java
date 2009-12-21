@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
 
 /**
  *

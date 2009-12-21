@@ -4,7 +4,7 @@
  */
 package com.cosmos.acacia.crm.data.purchase;
 
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.DiscriminatorValue;

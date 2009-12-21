@@ -8,7 +8,7 @@ import javax.ejb.Remote;
 
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.CustomerPaymentMatch;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.beansbinding.EntityProperties;
 
@@ -90,12 +90,12 @@ public interface CustomerPaymentRemote {
      * @param matchAmount
      * @return
      */
-    CustomerPaymentMatch matchPayment(CustomerPayment customerPayment, Invoice invoice, BigDecimal matchAmount);
+    CustomerPaymentMatch matchPayment(CustomerPayment customerPayment, SalesInvoice invoice, BigDecimal matchAmount);
 
     /**
      * Returns all {@link CustomerPaymentMatch}s for the given invoice. The list is sorted by match number.
      * @param invoice
      * @return
      */
-    List<CustomerPaymentMatch> getPaymentMatchList(Invoice invoice);
+    List<CustomerPaymentMatch> getPaymentMatchList(SalesInvoice invoice);
 }

@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.cosmos.acacia.crm.data.cash.BanknoteQuantity;
+import com.cosmos.acacia.crm.data.accounting.BanknoteQuantity;
 import com.cosmos.acacia.crm.validation.ValidationException;
 import com.cosmos.acacia.crm.validation.ValidationUtil;
 import com.cosmos.acacia.util.AcaciaUtils;

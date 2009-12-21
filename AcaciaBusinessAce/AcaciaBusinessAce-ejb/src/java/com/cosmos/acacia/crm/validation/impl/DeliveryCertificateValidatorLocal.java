@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.cosmos.acacia.crm.data.DeliveryCertificate;
-import com.cosmos.acacia.crm.data.DeliveryCertificateAssignment;
-import com.cosmos.acacia.crm.data.DeliveryCertificateItem;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificate;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateAssignment;
+import com.cosmos.acacia.crm.data.warehouse.DeliveryCertificateItem;
 import com.cosmos.acacia.crm.validation.EntityValidator;
 import com.cosmos.acacia.crm.validation.ValidationException;
 

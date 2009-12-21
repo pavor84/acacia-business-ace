@@ -4,7 +4,6 @@
  */
 package com.cosmos.acacia.crm.data.product;
 
-import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;

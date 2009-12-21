@@ -45,9 +45,7 @@ import org.hibernate.annotations.Type;
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="",
-    entityListFormClassName=""
+    serviceClass=ContactsServiceRemote.class
 )
 public class PersonalCommunicationContact extends DataObjectBean implements Serializable {
 

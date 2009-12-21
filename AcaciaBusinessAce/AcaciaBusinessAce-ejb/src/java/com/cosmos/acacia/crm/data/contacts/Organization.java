@@ -7,8 +7,8 @@ package com.cosmos.acacia.crm.data.contacts;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
 import com.cosmos.acacia.annotation.FormComponentPair;
+import com.cosmos.acacia.annotation.FormContainer;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -29,19 +29,12 @@ import javax.persistence.Transient;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.PropertyValidator;
-import com.cosmos.acacia.annotation.ResourceDisplay;
+import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
-import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DbResource;
-import com.cosmos.resource.TextResource;
-import com.cosmos.swingb.JBCheckBox;
-import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBComboList;
-import com.cosmos.swingb.JBDatePicker;
-import com.cosmos.swingb.JBDecimalField;
-import com.cosmos.swingb.JBLabel;
-import com.cosmos.swingb.JBTextField;
+import com.cosmos.acacia.crm.data.users.BusinessUnit;
+import com.cosmos.swingb.JBPanel;
 import javax.persistence.Basic;
 import javax.persistence.DiscriminatorValue;
 import org.hibernate.annotations.Type;
@@ -96,11 +89,21 @@ USING btree
     )
 })
 @Form(
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.contacts.OrganizationPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.contacts.OrganizationListPanel"
+    formContainers={
+        @FormContainer(
+            name=Organization.BUSINESS_UNITS,
+            title="Business Units",
+            depends={FormContainer.DEPENDS_ENTITY_FORM},
+            container=@Component(
+                componentClass=JBPanel.class
+            ),
+            relationshipType=RelationshipType.OneToMany,
+            entityClass=BusinessUnit.class,
+            showCondition="isSystemOrganization(${entity})"
+        )
+    }
 )
-public class Organization extends BusinessPartner implements Serializable, TextResource {
+public class Organization extends BusinessPartner implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //
@@ -111,139 +114,65 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     public static final String NQ_FIND_SYSTEM_ORGANIZATION = CLASS_NAME + ".findSystemOrganization";
     //
     public static final String BUSINESS_UNITS = "BusinessUnits";
+    public static final String SECURITY_ROLES = "SecurityRoles";
     public static final String TEAMS = "Teams";
+    //
+    public static final int ACTIVE_INDEX = DEFAULT_CURRENCY_INDEX + Property.STEP_VALUE * 1;
     //
     @Basic(optional = false)
     @Column(name = "organization_name", nullable = false, length = 128)
     @Property(title="Organization Name",
         propertyValidator=@PropertyValidator(required=true, validationType=ValidationType.LENGTH, minLength=1, maxLength=128),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Organization Name:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Organization Name:"))
     )
     private String organizationName;
 
     @Column(name = "nickname", length = 32)
     @Property(title="Nickname",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Nickname:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Nickname:"))
     )
     private String nickname;
 
     @Column(name = "vat_number", length = 32)
     @Property(title="VAT Number",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="VAT Number:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="VAT Number:"))
     )
     private String vatNumber;
 
     @Column(name = "unique_identifier_code", length = 32)
     @Property(title="Unique Id Code",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Unique Id Code:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Unique Id Code:"))
     )
     private String uniqueIdentifierCode;
 
     @Column(name = "registration_code", length = 32)
     @Property(title="Registration Code",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Registration Code:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Registration Code:"))
     )
     private String registrationCode;
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
     @Property(title="Registration Date",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Registration Date:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBDatePicker.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Registration Date:"))
     )
     private Date registrationDate;
 
     @JoinColumn(name = "registration_organization_id", referencedColumnName = "organization_id")
     @ManyToOne
     @Property(title="Registration Organization",
-        customDisplay="${registrationOrganization.organizationName}",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contacts.OrganizationListPanel",
             constructorParameters={@PropertyName(getter="'RegistryAgency'", setter="classifier")}
         ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Registration Organization:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Registration Organization:"))
     )
     private Organization registrationOrganization;
 
     @JoinColumn(name = "registration_address_id", referencedColumnName = "address_id")
     @ManyToOne
     @Property(title="Registration Address",
-        customDisplay="${registrationAddress.addressName}",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
             constructorParameters={@PropertyName(getter="${entity}", setter="businessPartner")}
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Registration Address:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
         )
     )
     private Address registrationAddress;
@@ -251,90 +180,41 @@ public class Organization extends BusinessPartner implements Serializable, TextR
     @JoinColumn(name = "organization_type_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Organization Type",
-        resourceDisplayInTable = ResourceDisplay.FullName,
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.enums.OrganizationType"
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Organization Type:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
+        selectableList=@SelectableList(className="com.cosmos.acacia.crm.enums.OrganizationType"),
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Organization Type:"))
     )
     private DbResource organizationType;
 
     @JoinColumn(name = "administration_address_id", referencedColumnName = "address_id")
     @ManyToOne
     @Property(title="Administration Address",
-        customDisplay="${administrationAddress.addressName}",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
             constructorParameters={@PropertyName(getter="${entity}", setter="businessPartner")}
         ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Administration Address:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Administration Address:"))
     )
     private Address administrationAddress;
 
     @JoinColumn(name = "share_capital_currency_id", referencedColumnName = "resource_id")
     @ManyToOne
     @Property(title="Capital Currency",
-        resourceDisplayInTable = ResourceDisplay.FullName,
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.enums.Currency"
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Capital Currency:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
+        selectableList=@SelectableList(className="com.cosmos.acacia.crm.enums.Currency"),
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Capital Currency:"))
     )
     private DbResource shareCapitalCurrency;
 
     @Column(name = "share_capital", precision = 19, scale = 4)
     @Property(title="Share Capital",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Share Capital:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBDecimalField.class
-            )
-        )
+        formComponentPair=@FormComponentPair(firstComponent=@Component(text="Share Capital:"))
     )
     private BigDecimal shareCapital;
 
     @Basic(optional = false)
     @Column(name = "is_active", nullable = false)
     @Property(title="Active",
-        index=DEFAULT_CURRENCY_INDEX + Property.STEP_VALUE * 1,
-        formComponent=@FormComponent(
-            parentContainerName=PRIMARY_INFO,
-            component=@Component(
-                componentClass=JBCheckBox.class,
-                text="Active",
-                componentConstraints="skip 1"
-            )
+        index=ACTIVE_INDEX,
+        formComponentPair=@FormComponentPair(
+            firstComponent=@Component(text="Active")
         )
     )
     private boolean active;

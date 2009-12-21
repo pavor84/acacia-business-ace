@@ -42,7 +42,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 /**
@@ -50,9 +49,14 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "privileges", catalog = "acacia", schema = "public",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"security_role_id", "privilege_name"})
-})
+@Table(name = "privileges", catalog = "acacia", schema = "public"
+/*
+CREATE UNIQUE INDEX uix_privileges_role_name
+  ON "privileges"
+  USING btree
+  (security_role_id, lower(privilege_name::text));
+*/
+)
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="discriminator_id", discriminatorType=DiscriminatorType.STRING, length=4)
 @NamedQueries({
@@ -62,6 +66,13 @@ import org.hibernate.annotations.Type;
                 " WHERE" +
                 "  p.securityRole = :securityRole" +
                 " ORDER BY p.privilegeCategory.categoryName, p.privilegeName"
+    ),
+    @NamedQuery(
+        name = Privilege.NQ_FIND_BY_PRIVILEGE_NAME,
+        query = "SELECT p FROM Privilege p" +
+                " WHERE" +
+                "  p.securityRole = :securityRole" +
+                "  and lower(p.privilegeName) = lower(:privilegeName)"
     ),
     @NamedQuery(
         name = Privilege.NQ_FIND_ALL_NOT_EXPIRED,
@@ -100,6 +111,7 @@ public abstract class Privilege extends DataObjectBean implements Serializable {
     private static final String CLASS_NAME = "Privilege";
     public static final String NQ_FIND_ALL = CLASS_NAME + ".findAll";
     public static final String NQ_FIND_ALL_NOT_EXPIRED = CLASS_NAME + ".findAllNotExpired";
+    public static final String NQ_FIND_BY_PRIVILEGE_NAME = CLASS_NAME + ".findByPrivilegeName";
     //
     @Id
     @Basic(optional = false)

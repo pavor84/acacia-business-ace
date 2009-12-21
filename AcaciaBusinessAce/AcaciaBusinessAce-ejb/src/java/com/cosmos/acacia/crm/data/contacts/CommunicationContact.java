@@ -75,9 +75,7 @@ CREATE UNIQUE INDEX uix_communication_contacts_parent_type_value_contact_person
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="",
-    entityListFormClassName=""
+    serviceClass=ContactsServiceRemote.class
 )
 public class CommunicationContact extends DataObjectBean implements Serializable {
 
@@ -195,5 +193,15 @@ public class CommunicationContact extends DataObjectBean implements Serializable
     @Override
     public String getInfo() {
         return getCommunicationType().getEnumValue().toString() + getCommunicationValue();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

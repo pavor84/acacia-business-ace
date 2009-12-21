@@ -20,7 +20,7 @@ import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
 import com.cosmos.acacia.crm.bl.invoice.InvoiceListRemote;
 import com.cosmos.acacia.crm.data.CustomerPayment;
 import com.cosmos.acacia.crm.data.CustomerPaymentMatch;
-import com.cosmos.acacia.crm.data.sales.Invoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
 import com.cosmos.acacia.crm.data.contacts.Person;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.crm.enums.CustomerPaymentStatus;
@@ -170,7 +170,7 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
     }
 
     @Override
-    public CustomerPaymentMatch matchPayment(CustomerPayment payment, Invoice invoice,
+    public CustomerPaymentMatch matchPayment(CustomerPayment payment, SalesInvoice invoice,
                                              BigDecimal matchAmount) {
         BigDecimal maxAmount = invoice.getDueAmount();
         if ( maxAmount.compareTo(payment.getUnmatchedAmount())>0 ){
@@ -216,7 +216,7 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
         return match;
     }
 
-    private Integer getNextMatchNumber(Invoice invoice) {
+    private Integer getNextMatchNumber(SalesInvoice invoice) {
         Number maxNumber = (Number) 
             AcaciaUtils.getSingleResult(em, "CustomerPaymentMatch.maxNumber", "invoice", invoice);
         if ( maxNumber==null )
@@ -226,7 +226,7 @@ public class CustomerPaymentBean implements CustomerPaymentLocal, CustomerPaymen
     }
 
     @Override
-    public List<CustomerPaymentMatch> getPaymentMatchList(Invoice invoice) {
+    public List<CustomerPaymentMatch> getPaymentMatchList(SalesInvoice invoice) {
         List<CustomerPaymentMatch> result = (List<CustomerPaymentMatch>) 
             AcaciaUtils.getResultList(em, "CustomerPaymentMatch.getForInvoice", "invoice", invoice);
         return result;

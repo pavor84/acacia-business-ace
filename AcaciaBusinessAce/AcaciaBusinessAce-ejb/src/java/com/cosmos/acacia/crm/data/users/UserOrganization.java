@@ -2,8 +2,6 @@ package com.cosmos.acacia.crm.data.users;
 
 import com.cosmos.acacia.annotation.Component;
 import com.cosmos.acacia.annotation.Form;
-import com.cosmos.acacia.annotation.FormComponent;
-import com.cosmos.acacia.annotation.FormComponentPair;
 import com.cosmos.acacia.annotation.FormContainer;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.contacts.Address;
@@ -25,13 +23,8 @@ import com.cosmos.acacia.annotation.RelationshipType;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.users.UsersServiceRemote;
 import com.cosmos.acacia.crm.data.DataObjectBean;
-import com.cosmos.swingb.JBCheckBox;
-import com.cosmos.swingb.JBComboBox;
-import com.cosmos.swingb.JBComboList;
-import com.cosmos.swingb.JBLabel;
 import com.cosmos.swingb.JBPanel;
 import com.cosmos.swingb.JBTabbedPane;
-import com.cosmos.swingb.JBTextField;
 import javax.persistence.Basic;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -67,7 +60,7 @@ import org.hibernate.annotations.Type;
     ),
     @NamedQuery(
         name = UserOrganization.NQ_FIND_BY_ACTIVE_USER,
-        query = "select t.organization from UserOrganization t" +
+        query = "select t from UserOrganization t" +
                 " where" +
                 "  t.user = :user" +
                 "  and t.userActive = true" +
@@ -132,9 +125,7 @@ import org.hibernate.annotations.Type;
             )
         )
     },
-    serviceClass=UsersServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.users.UserOrganizationPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.users.UserOrganizationListPanel"
+    serviceClass=UsersServiceRemote.class
 )
 public class UserOrganization extends DataObjectBean implements Serializable {
 
@@ -168,156 +159,60 @@ public class UserOrganization extends DataObjectBean implements Serializable {
 
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="User")
+    @Property(title="User", useEntityAttributes=false)
     private User user;
 
     @JoinColumn(name = "organization_id", referencedColumnName = "organization_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Organization",
-        customDisplay="${organization.displayName}",
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.OrganizationsListPanel"
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Organization:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
-        )
-    )
+    @Property(title="Organization")
     private Organization organization;
 
     @JoinColumn(name = "branch_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Branch", customDisplay="${branch.addressName}",
+    @Property(title="Branch",
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.contactbook.AddressListPanel",
             constructorParameters={@PropertyName(getter="organization", setter="businessPartner")}
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Branch:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
         )
     )
     private Address branch;
 
     @Column(name = "email_address", length = 64)
-    @Property(title="Email",
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Email:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBTextField.class
-            )
-        )
-    )
+    @Property(title="Email")
     private String emailAddress;
 
     @JoinColumn(name = "business_unit_id", referencedColumnName = "business_unit_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Business Unit",
+    @Property(
         selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.users.BusinessUnitListPanel",
             constructorParameters={@PropertyName(getter="organization")}
-        ),
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Business Unit:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboList.class
-            )
         )
     )
     private BusinessUnit businessUnit;
 
     @JoinColumn(name = "job_title_id", referencedColumnName = "job_title_id")
     @ManyToOne
-    @Property(title="Job Title",
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.users.JobTitleListPanel",
-            constructorParameters={
-                @PropertyName(getter="${this}")
-            }
-        ),
-        depends={"businessUnit"},
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Job Title:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
+    @Property(
+        selectableList=@SelectableList(constructorParameters={@PropertyName(getter="${this}")}),
+        depends={"businessUnit"}
     )
     private JobTitle jobTitle;
 
     @JoinColumn(name = "manager_id", referencedColumnName = "user_id")
     @ManyToOne
     @Property(title="Manager",
-        selectableList=@SelectableList(
-            className="com.cosmos.acacia.crm.gui.users.UserListPanel",
-            constructorParameters={
-                @PropertyName(getter="manager", setter="user")
-            }
-        ),
-        depends={"jobTitle"},
-        formComponentPair=@FormComponentPair(
-            parentContainerName=PRIMARY_INFO,
-            firstComponent=@Component(
-                componentClass=JBLabel.class,
-                text="Manager:"
-            ),
-            secondComponent=@Component(
-                componentClass=JBComboBox.class
-            )
-        )
+        selectableList=@SelectableList(constructorParameters={@PropertyName(getter="manager", setter="user")}),
+        depends={"jobTitle"}
     )
     private User manager;
 
     @Basic(optional = false)
     @Column(name = "is_user_active", nullable = false)
-    @Property(title="Active",
-        formComponent=@FormComponent(
-            parentContainerName=PRIMARY_INFO,
-            component=@Component(
-                componentClass=JBCheckBox.class,
-                text="Active",
-                componentConstraints="skip 1"
-            )
-        )
-    )
+    @Property(title="Active")
     private boolean userActive;
 
     @Basic(optional = false)
     @Column(name = "default_organization", nullable = false)
-    @Property(title="Default",
-        formComponent=@FormComponent(
-            parentContainerName=PRIMARY_INFO,
-            component=@Component(
-                componentClass=JBCheckBox.class,
-                text="Default",
-                componentConstraints="skip 1"
-            )
-        )
-    )
+    @Property(title="Default")
     private boolean defaultOrganization;
 
     @JoinColumn(name = "user_organization_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
@@ -477,5 +372,15 @@ public class UserOrganization extends DataObjectBean implements Serializable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

@@ -3,19 +3,28 @@
  * and open the template in the editor.
  */
 
-package com.cosmos.acacia.crm.data;
+package com.cosmos.acacia.crm.data.warehouse;
 
-import com.cosmos.acacia.crm.data.product.SimpleProduct;
+import com.cosmos.acacia.crm.data.*;
+import com.cosmos.acacia.crm.data.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.cosmos.acacia.annotation.Property;
 import org.hibernate.annotations.Type;
 
 /**
@@ -23,8 +32,25 @@ import org.hibernate.annotations.Type;
  * @author Miro
  */
 @Entity
-@Table(name = "receipt_certificate_items")
-public class ReceiptCertificateItem implements Serializable {
+@Table(name = "delivery_certificate_items")
+@NamedQueries({ 
+    @NamedQuery
+    ( 
+        /**
+         * Get all delivery certificates for a given warehouse 
+         * Parameters:
+         * - warehouse - an warehouse
+         */
+        name = "DeliveryCertificateItem.findForCertificate",
+        query = "select dci from DeliveryCertificateItem dci where dci.parentId=:parentId and dci.dataObject.deleted = false"
+    ),
+    @NamedQuery
+    (
+    	name = "DeliveryCertificateItem.findById",
+    	query = "select dci from DeliveryCertificateItem dci where dci.certificateItemId=:itemId and dci.dataObject.deleted = false"
+    )
+})
+public class DeliveryCertificateItem extends DataObjectBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,24 +65,35 @@ public class ReceiptCertificateItem implements Serializable {
 
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     @ManyToOne
-    private SimpleProduct product;
+    @Property(title="Product", customDisplay="${product.productName}")
+    private Product product;
 
     @JoinColumn(name = "measure_unit_id", referencedColumnName = "resource_id")
     @ManyToOne
+    @Property(title="Measure Unit")
     private DbResource measureUnit;
 
     @Column(name = "quantity", nullable = false)
+    @Property(title="Quantity")
     private BigDecimal quantity;
 
+    @Column(name = "reference_item_id")
+    @Type(type="uuid")
+    @Property(title="Reference Item", visible = false)
+    private UUID referenceItemId;
+    
+    //@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="deliveryCertificateItem")
+    //private List<DeliveryCertificateSerialNumber> serialNumbers; 
+    
     @JoinColumn(name = "certificate_item_id", referencedColumnName = "data_object_id", insertable = false, updatable = false)
     @OneToOne
     private DataObject dataObject;
 
 
-    public ReceiptCertificateItem() {
+    public DeliveryCertificateItem() {
     }
 
-    public ReceiptCertificateItem(UUID certificateItemId) {
+    public DeliveryCertificateItem(UUID certificateItemId) {
         this.certificateItemId = certificateItemId;
     }
 
@@ -92,11 +129,11 @@ public class ReceiptCertificateItem implements Serializable {
         this.parentId = parentId;
     }
 
-    public SimpleProduct getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(SimpleProduct product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -108,6 +145,14 @@ public class ReceiptCertificateItem implements Serializable {
         this.measureUnit = measureUnit;
     }
 
+//    public List<DeliveryCertificateSerialNumber> getSerialNumbers() {
+//		return serialNumbers;
+//	}
+//    
+//    public void setSerialNumbers(List<DeliveryCertificateSerialNumber> list) {
+//		this.serialNumbers = list;
+//	}
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -118,10 +163,10 @@ public class ReceiptCertificateItem implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReceiptCertificateItem)) {
+        if (!(object instanceof DeliveryCertificateItem)) {
             return false;
         }
-        ReceiptCertificateItem other = (ReceiptCertificateItem) object;
+        DeliveryCertificateItem other = (DeliveryCertificateItem) object;
         if ((this.certificateItemId == null && other.certificateItemId != null) || (this.certificateItemId != null && !this.certificateItemId.equals(other.certificateItemId))) {
             return false;
         }
@@ -130,7 +175,30 @@ public class ReceiptCertificateItem implements Serializable {
 
     @Override
     public String toString() {
-        return "com.cosmos.acacia.crm.data.test.ReceiptCertificateItem[certificateItemId=" + certificateItemId + "]";
+        return "com.cosmos.acacia.crm.data.DeliveryCertificateItem[certificateItemId=" + certificateItemId + "]";
     }
 
+	@Override
+	public UUID getId() {
+		return getCertificateItemId();
+	}
+
+	@Override
+	public String getInfo() {
+		return this.toString();
+	}
+
+	@Override
+	public void setId(UUID id) {
+		setCertificateItemId(id);
+	}
+
+	public UUID getReferenceItemId() {
+		return referenceItemId;
+	}
+
+	public void setReferenceItemId(UUID referenceItemId) {
+		this.referenceItemId = referenceItemId;
+	}
+	
 }

@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
-import com.cosmos.acacia.crm.data.cash.CurrencyNominal;
+import com.cosmos.acacia.crm.data.accounting.CurrencyNominal;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.acacia.crm.enums.Currency;
 import com.cosmos.acacia.util.AcaciaUtils;

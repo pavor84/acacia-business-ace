@@ -5,8 +5,8 @@ import java.util.UUID;
 import javax.ejb.Local;
 
 import com.cosmos.acacia.crm.data.contacts.Address;
-import com.cosmos.acacia.crm.data.sales.Invoice;
-import com.cosmos.acacia.crm.data.sales.InvoiceItem;
+import com.cosmos.acacia.crm.data.sales.SalesInvoice;
+import com.cosmos.acacia.crm.data.sales.SalesInvoiceItem;
 import com.cosmos.acacia.crm.data.product.SimpleProduct;
 import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 
@@ -20,18 +20,18 @@ import com.cosmos.acacia.crm.data.warehouse.WarehouseProduct;
 public interface InvoiceListLocal extends InvoiceListRemote{
 	
 	/**
-	 * Get the Invoice by its ID 
+	 * Get the SalesInvoice by its ID
 	 * @param invoiceId
 	 * @return
 	 */
-	Invoice getInvoiceById(UUID invoiceId);
+	SalesInvoice getInvoiceById(UUID invoiceId);
 	
 	/**
-	 * Get the InvoiceItem by its ID
+	 * Get the SalesInvoiceItem by its ID
 	 * @param invoiceItemId
 	 * @return
 	 */
-	InvoiceItem getInvoiceItemById(UUID invoiceItemId);
+	SalesInvoiceItem getInvoiceItemById(UUID invoiceItemId);
 	
 	/**
      * Get warehouse product for a given simple product and warehouse

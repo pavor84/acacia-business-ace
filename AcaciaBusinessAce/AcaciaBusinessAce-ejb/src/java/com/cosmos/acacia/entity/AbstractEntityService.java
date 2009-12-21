@@ -8,6 +8,7 @@ package com.cosmos.acacia.entity;
 import com.cosmos.acacia.app.AcaciaSessionLocal;
 import com.cosmos.acacia.crm.bl.document.business.BusinessDocumentException;
 import com.cosmos.acacia.crm.bl.impl.EntityStoreManagerLocal;
+import com.cosmos.acacia.crm.bl.security.SecurityServiceLocal;
 import com.cosmos.acacia.crm.data.document.BusinessDocument;
 import com.cosmos.acacia.crm.data.ChildEntityBean;
 import com.cosmos.acacia.crm.data.ClassifiedObject;
@@ -16,6 +17,7 @@ import com.cosmos.acacia.crm.data.DataObjectBean;
 import com.cosmos.acacia.crm.data.DataObjectEntity;
 import com.cosmos.acacia.crm.data.DbResource;
 import com.cosmos.beansbinding.EntityProperties;
+import com.cosmos.beansbinding.EntityProperty;
 import com.cosmos.util.BooleanUtils;
 import com.cosmos.util.PersistentEntity;
 import java.lang.reflect.Method;
@@ -45,6 +47,8 @@ public abstract class AbstractEntityService implements EntityService {
     protected AcaciaSessionLocal session;
     @EJB
     protected EntityStoreManagerLocal esm;
+    @EJB
+    protected SecurityServiceLocal securityService;
 
     protected <E> void initEntity(E entity) {
     }
@@ -121,6 +125,9 @@ public abstract class AbstractEntityService implements EntityService {
 
     @Override
     public <E, I> I newItem(E entity, Class<I> itemClass) {
+        if(entity == null) {
+            throw new RuntimeException("Null Entity value for item class: " + itemClass);
+        }
         I item;
         try {
             item = itemClass.newInstance();
@@ -284,5 +291,16 @@ public abstract class AbstractEntityService implements EntityService {
 
     protected void setNewEntity(Map<String, Object> parameters, Boolean value) {
         parameters.put(IS_NEW_ENTITY, value);
+    }
+
+    protected void inactiveEntityProperty(EntityProperties entityProperties, String propertyName) {
+        inactiveEntityProperty(entityProperties.getEntityProperty(propertyName));
+    }
+
+    protected void inactiveEntityProperty(EntityProperty entityProperty) {
+        entityProperty.setEditable(false);
+        entityProperty.setHiden(true);
+        entityProperty.setReadOnly(true);
+        entityProperty.setVisible(false);
     }
 }

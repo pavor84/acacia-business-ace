@@ -140,9 +140,7 @@ CREATE UNIQUE INDEX uix_users_username
             parentContainerName=DataObjectBean.PRIMARY_INFO
         )
     },
-    serviceClass=UsersServiceRemote.class,
-    entityFormClassName="com.cosmos.acacia.crm.gui.users.UserPanel",
-    entityListFormClassName="com.cosmos.acacia.crm.gui.users.UserListPanel"
+    serviceClass=UsersServiceRemote.class
 )
 public class User extends DataObjectBean implements Serializable {
 
@@ -164,7 +162,7 @@ public class User extends DataObjectBean implements Serializable {
 
     @Id
     @Basic(optional = false)
-    @Column(name = "user_id", nullable = false, precision = 19, scale = 0)
+    @Column(name = "user_id", nullable = false)
     @Type(type="uuid")
     @Property(title="User ID", visible=false, hidden=true)
     private UUID userId;
@@ -257,12 +255,14 @@ public class User extends DataObjectBean implements Serializable {
     private String userPassword;
 
     @Column(name = "system_password", length = 64)
-    @Property(title="System password", visible=false, hidden=true)
+    @Property(title="System password", visible=false, hidden=true, useEntityAttributes=false)
     private String systemPassword;
 
     @Column(name = "system_password_validity")
     @Temporal(TemporalType.TIMESTAMP)
-    @Property(title="System password validity", visible=false, hidden=true)
+    @Property(title="System password validity", visible=false, hidden=true, readOnly=true,
+        parentContainerName=INFO_GENERAL
+    )
     private Date systemPasswordValidity;
 
     @Basic(optional = false)
@@ -272,16 +272,25 @@ public class User extends DataObjectBean implements Serializable {
     @Basic(optional = false)
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Property(title="Creation time")
+    @Property(title="Creation time",
+        readOnly=true,
+        parentContainerName=INFO_GENERAL
+    )
     private Date creationTime;
 
     @Column(name = "next_action_after_login", length = 1024)
-    @Property(title="Next action after login")
+    @Property(title="Next action after login",
+        readOnly=true,
+        parentContainerName=INFO_GENERAL
+    )
     private String nextActionAfterLogin;
 
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
     @ManyToOne
-    @Property(title="Creator", customDisplay="${creator.userName}")
+    @Property(title="Creator", customDisplay="${creator.userName}",
+        readOnly=true,
+        parentContainerName=INFO_GENERAL
+    )
     private User creator;
 
     @JoinColumn(name = "user_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)
@@ -455,5 +464,15 @@ public class User extends DataObjectBean implements Serializable {
     @Override
     public String getInfo() {
         return getUserName();
+    }
+
+    @Override
+    public String toShortText() {
+        return getInfo();
+    }
+
+    @Override
+    public String toText() {
+        return getInfo();
     }
 }

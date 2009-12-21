@@ -7,7 +7,9 @@ package com.cosmos.acacia.crm.data.contacts;
 
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.PropertyName;
 import com.cosmos.acacia.annotation.PropertyValidator;
+import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.crm.bl.contacts.ContactsServiceRemote;
 import com.cosmos.acacia.crm.data.DataObject;
 import com.cosmos.acacia.crm.data.DataObjectBean;
@@ -85,9 +87,7 @@ import org.hibernate.annotations.Type;
 @Form(
     formContainers={
     },
-    serviceClass=ContactsServiceRemote.class,
-    entityFormClassName="",
-    entityListFormClassName=""
+    serviceClass=ContactsServiceRemote.class
 )
 public class ContactPerson extends DataObjectBean implements TextResource, Serializable {
 
@@ -105,19 +105,17 @@ public class ContactPerson extends DataObjectBean implements TextResource, Seria
 
     @JoinColumn(name = "address_id", referencedColumnName = "address_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Address", editable=false, readOnly=true, visible=false, hidden=true)
+    @Property(title="Address", editable=false, readOnly=true, visible=false, hidden=true, useEntityAttributes=false)
     private Address address;
 
     @JoinColumn(name = "position_type_id", referencedColumnName = "position_type_id")
     @ManyToOne
-    @Property(title="Position Type", customDisplay="${positionType.positionTypeName}")
+    @Property()
     private PositionType positionType;
 
     @JoinColumn(name = "person_id", referencedColumnName = "person_id", nullable = false)
     @ManyToOne(optional = false)
-    @Property(title="Person", propertyValidator=
-        @PropertyValidator(required=true),
-        customDisplay="${contact.displayName}")
+    @Property(propertyValidator=@PropertyValidator(required=true))
     private Person person;
 
     @JoinColumn(name = "contact_person_id", referencedColumnName = "data_object_id", nullable = false, insertable = false, updatable = false)

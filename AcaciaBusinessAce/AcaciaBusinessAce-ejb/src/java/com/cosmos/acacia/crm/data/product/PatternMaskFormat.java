@@ -5,7 +5,6 @@
 
 package com.cosmos.acacia.crm.data.product;
 
-import com.cosmos.acacia.crm.data.*;
 import com.cosmos.acacia.crm.data.contacts.BusinessPartner;
 import java.io.Serializable;
 import java.util.UUID;
@@ -23,6 +22,8 @@ import javax.persistence.Table;
 import com.cosmos.acacia.annotation.Property;
 import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.crm.data.DataObject;
+import com.cosmos.acacia.crm.data.DataObjectBean;
 import org.hibernate.annotations.Type;
 
 /**

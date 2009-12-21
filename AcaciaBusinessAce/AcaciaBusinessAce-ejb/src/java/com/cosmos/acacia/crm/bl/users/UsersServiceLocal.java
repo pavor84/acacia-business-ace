@@ -54,7 +54,7 @@ public interface UsersServiceLocal extends UsersServiceRemote {
 
     List<JobTitle> getJobTitles(BusinessUnit businessUnit, Object... extraParameters);
 
-    List<Organization> getActiveOrganizations(User user);
+    List<UserOrganization> getActiveUserOrganizations(User user);
 
     List<Organization> getOrganizations(User user);
 }
