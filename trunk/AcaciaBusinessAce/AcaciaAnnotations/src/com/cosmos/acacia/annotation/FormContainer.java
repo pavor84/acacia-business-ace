@@ -33,8 +33,6 @@ public @interface FormContainer {
 
     RelationshipType relationshipType() default RelationshipType.None;
 
-    String listPanelClassName() default "";
-
     Class entityClass() default void.class;
 
     /**
@@ -44,4 +42,10 @@ public @interface FormContainer {
      * List<PropertyDetails> getPropertyDetailsDependencies() from PropertyDetails
      */
     String[] depends() default {};
+
+    /**
+     * The boolean expression which indicate whether this container to be shown or not.
+     * @return true by default;
+     */
+    String showCondition() default "true";
 }

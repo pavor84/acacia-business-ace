@@ -7,13 +7,16 @@ package com.cosmos.beansbinding;
 
 import com.cosmos.acacia.annotation.Form;
 import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.entity.EntityAttributes;
 import com.cosmos.util.ClassHelper;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,21 +34,24 @@ public class EntityProperties implements Cloneable, Serializable {
     private final ReentrantLock lock = new ReentrantLock();
     //
     private Class entityClass;
+    private Map<String, EntityAttributes<Property>> entityFormConstantsMap;
     private TreeMap<String, EntityProperty> propertyNameMap = new TreeMap<String, EntityProperty>();
     private TreeMap<Integer, EntityProperty> propertyIndexMap = new TreeMap<Integer, EntityProperty>();
     //
     private String tableName;
     private EntityProperties superEntityProperties;
     private AutoBinding.UpdateStrategy updateStrategy;
-    private Class entityFormClass;
-    private Class entityListFormClass;
 
-    public EntityProperties(Class entityClass) {
-        this(entityClass, false);
+    public EntityProperties(Class entityClass, Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
+        this(entityClass,entityFormConstantsMap, false);
     }
 
-    public EntityProperties(Class entityClass, boolean checkExportable) {
+    public EntityProperties(
+            Class entityClass,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap,
+            boolean checkExportable) {
         this.entityClass = entityClass;
+        this.entityFormConstantsMap = entityFormConstantsMap;
         List<Class> classes = ClassHelper.getSuperclasses(entityClass, true);
         createEntityProperties(classes, checkExportable);
     }
@@ -177,22 +183,6 @@ public class EntityProperties implements Cloneable, Serializable {
         return entityClass;
     }
 
-    public Class getEntityFormClass() {
-        return entityFormClass;
-    }
-
-    public void setEntityFormClass(Class entityFormClass) {
-        this.entityFormClass = entityFormClass;
-    }
-
-    public Class getEntityListFormClass() {
-        return entityListFormClass;
-    }
-
-    public void setEntityListFormClass(Class entityListFormClass) {
-        this.entityListFormClass = entityListFormClass;
-    }
-
     public TreeMap<Integer, EntityProperty> getPropertyIndexMap() {
         return propertyIndexMap;
     }
@@ -268,21 +258,6 @@ public class EntityProperties implements Cloneable, Serializable {
                 }
             } else if (annotation.annotationType().equals(Form.class)) {
                 Form form = (Form) annotation;
-                String value;
-                if((value = form.entityFormClassName()) != null && value.length() > 0) {
-                    try {
-                        setEntityFormClass(Class.forName(value));
-                    } catch(Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-                if((value = form.entityListFormClassName()) != null && value.length() > 0) {
-                    try {
-                        setEntityListFormClass(Class.forName(value));
-                    } catch(Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
             }
         }
 
@@ -296,7 +271,8 @@ public class EntityProperties implements Cloneable, Serializable {
                     field,
                     field.getName(),
                     ClassHelper.getClassName(field.getType()),
-                    null);
+                    null,
+                    entityFormConstantsMap);
 
             if (entityProperty != null) {
                 // add the property if no exportability check is required,
@@ -308,7 +284,7 @@ public class EntityProperties implements Cloneable, Serializable {
         }
 
         for (Field field : fields) {
-            Property property = field.getAnnotation(Property.class);
+            Property property = getProperty(field);
             if (property == null) {
                 continue;
             }
@@ -319,6 +295,10 @@ public class EntityProperties implements Cloneable, Serializable {
                 entityProperty.setPropertyDetailsDependencies(getEntityPropertyList(propertyNames));
             }
         }
+    }
+
+    private Property getProperty(AccessibleObject field) {
+        return ClassHelper.getProperty(field, entityFormConstantsMap);
     }
 
     private List<EntityProperty> getEntityPropertyList(String[] propertyNames) {

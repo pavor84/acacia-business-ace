@@ -4,15 +4,24 @@
  */
 package com.cosmos.util;
 
+import com.cosmos.acacia.annotation.Property;
+import com.cosmos.acacia.annotation.proxy.PropertyProxy;
+import com.cosmos.acacia.entity.EntityAttributes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.IncompleteAnnotationException;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.jar.JarEntry;
@@ -68,6 +77,10 @@ public class ClassHelper {
         } catch (ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String getClassName(AccessibleObject accessibleObject) {
+        return getClassName(getAccessibleObjectType(accessibleObject));
     }
 
     public static String getClassName(Class cls) {
@@ -261,5 +274,128 @@ public class ClassHelper {
         }
 
         return path;
+    }
+
+    public static Class getAccessibleObjectType(AccessibleObject accessibleObject) {
+        if(accessibleObject instanceof Field) {
+            return ((Field) accessibleObject).getType();
+        } else if(accessibleObject instanceof Method) {
+            return ((Method) accessibleObject).getReturnType();
+        }
+
+        throw new UnsupportedOperationException("Unsupported accessibleObject: " + accessibleObject);
+    }
+
+    public static String getAccessibleObjectName(AccessibleObject accessibleObject) {
+        if(accessibleObject instanceof Field) {
+            return ((Field) accessibleObject).getName();
+        } else if(accessibleObject instanceof Method) {
+            return ((Method) accessibleObject).getName();
+        }
+
+        throw new UnsupportedOperationException("Unsupported accessibleObject: " + accessibleObject);
+    }
+
+    public static AccessibleObject getAccessibleObject(Class cls, String fieldName) throws Exception {
+        for(Field field : cls.getDeclaredFields()) {
+            if(fieldName.equals(field.getName())) {
+                return field;
+            }
+        }
+
+        String methodNameSuffix = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        String methodName = "get" + methodNameSuffix;
+        for(Method method : cls.getDeclaredMethods()) {
+            if(methodName.equals(method.getName())) {
+                return method;
+            }
+        }
+
+        methodName = "is" + methodNameSuffix;
+        for(Method method : cls.getDeclaredMethods()) {
+            if(methodName.equals(method.getName())) {
+                return method;
+            }
+        }
+
+        throw new NoSuchFieldException(fieldName);
+    }
+
+    public static Object invoke(Method method, Annotation annotation) {
+        try {
+            return method.invoke(annotation);
+        } catch(InvocationTargetException ex) {
+            Throwable cause = ex.getCause();
+            if((cause = ex.getCause()) instanceof IncompleteAnnotationException) {
+                throw (IncompleteAnnotationException) cause;
+            }
+            throw new RuntimeException(ex);
+        } catch(IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static <T extends Annotation> boolean equals(T first, T second, Method method) {
+//        System.out.println("equals(" + first + ", " + second + ", " + method + ")");
+        Object firstResult;
+        Object secondResult;
+        try {
+            firstResult = invoke(method, first);
+//                System.out.println("firstResult='" + firstResult + "'");
+        } catch(IncompleteAnnotationException ex) {
+            try {
+                invoke(method, second);
+                return false;
+            } catch(IncompleteAnnotationException ex1) {
+                return true;
+            }
+        }
+
+        try {
+            secondResult = invoke(method, second);
+//                System.out.println("secondResult='" + secondResult + "'");
+        } catch(IncompleteAnnotationException ex) {
+            return false;
+        }
+
+//        System.out.println("firstResult.equals(secondResult)=" + firstResult.equals(secondResult));
+        return firstResult.equals(secondResult);
+    }
+
+    public static Property getProperty(
+            AccessibleObject propertyField,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
+        return getProperty(propertyField, getEntityFormConstants(entityFormConstantsMap, propertyField));
+    }
+
+    public static Property getProperty(AccessibleObject propertyField, EntityAttributes<Property> entityFormConstants) {
+        Property property;
+        if((property = propertyField.getAnnotation(Property.class)) == null) {
+            return null;
+        }
+
+        if(property.useEntityAttributes() && entityFormConstants != null) {
+            return PropertyProxy.newInstance(propertyField, entityFormConstants);
+        }
+
+        return property;
+    }
+
+    public static EntityAttributes<Property> getEntityFormConstants(
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap,
+            String className) {
+        return entityFormConstantsMap.get(className);
+    }
+
+    public static EntityAttributes<Property> getEntityFormConstants(
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap,
+            Class fieldType) {
+        return getEntityFormConstants(entityFormConstantsMap, fieldType.getName());
+    }
+
+    public static EntityAttributes<Property> getEntityFormConstants(
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap,
+            AccessibleObject field) {
+        return getEntityFormConstants(entityFormConstantsMap, getAccessibleObjectType(field));
     }
 }

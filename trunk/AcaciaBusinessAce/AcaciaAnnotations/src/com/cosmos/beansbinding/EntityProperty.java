@@ -11,6 +11,7 @@ import com.cosmos.acacia.annotation.PropertyValidator;
 import com.cosmos.acacia.annotation.ResourceDisplay;
 import com.cosmos.acacia.annotation.SelectableList;
 import com.cosmos.acacia.annotation.ValidationType;
+import com.cosmos.acacia.entity.EntityAttributes;
 import com.cosmos.beansbinding.validation.BaseValidator;
 import com.cosmos.beansbinding.validation.DateRangeValidator;
 import com.cosmos.beansbinding.validation.DateValidator;
@@ -28,6 +29,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
@@ -80,11 +82,11 @@ public class EntityProperty implements Cloneable, Serializable {
     private List<PropertyDetail> selectableListDialogConstructorParameters = new ArrayList<PropertyDetail>();
     private List<EntityProperty> propertyDetailsDependencies = new ArrayList<EntityProperty>();
 
-    public EntityProperty(String propertyName) {
+    protected EntityProperty(String propertyName) {
         this.propertyName = propertyName;
     }
 
-    public EntityProperty(String propertyName, int orderPosition) {
+    protected EntityProperty(String propertyName, int orderPosition) {
         this.propertyName = propertyName;
         this.orderPosition = orderPosition;
     }
@@ -413,10 +415,11 @@ public class EntityProperty implements Cloneable, Serializable {
 
     public static EntityProperty createEntityProperty(
             String propertyName,
-           String propertyTitle,
-           String propertyClassName,
-           int orderPosition,
-           boolean editable) {
+            String propertyTitle,
+            String propertyClassName,
+            int orderPosition,
+            boolean editable,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
         EntityProperty entityProperty = new EntityProperty(propertyName, orderPosition);
         entityProperty.setPropertyTitle(propertyTitle);
         entityProperty.setPropertyClassName(propertyClassName);
@@ -429,15 +432,17 @@ public class EntityProperty implements Cloneable, Serializable {
             String propertyName,
             String propertyTitle,
             String propertyClassName,
-            int orderPosition) {
-        return createEntityProperty(propertyName, propertyTitle, propertyClassName, orderPosition, DEFAULT_EDITABLE);
+            int orderPosition,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
+        return createEntityProperty(propertyName, propertyTitle, propertyClassName, orderPosition, DEFAULT_EDITABLE, entityFormConstantsMap);
     }
 
     public static EntityProperty createEntityProperty(
             String propertyName,
             String propertyTitle,
-            String propertyClassName) {
-        return createEntityProperty(propertyName, propertyTitle, propertyClassName, 0);
+            String propertyClassName,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
+        return createEntityProperty(propertyName, propertyTitle, propertyClassName, 0, entityFormConstantsMap);
     }
 
     /**
@@ -447,45 +452,33 @@ public class EntityProperty implements Cloneable, Serializable {
      * @param orderPosition - may be null
      * @return - null if the field for such property is not found
      */
-    public static EntityProperty createEntityProperty(Class entityClass, String propertyName, Integer orderPosition) {
+    public static EntityProperty createEntityProperty(
+            Class entityClass,
+            String propertyName,
+            Integer orderPosition,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
         try {
-            Field field = null;
-            //search for annotated field
-            Field[] fields = entityClass.getDeclaredFields();
-            for (Field f : fields) {
-                if (f.getName().equals(propertyName)) {
-                    field = f;
-                    break;
-                }
-            }
-            //if no field found - search for annotated getter
-            if (field == null) {
-                String firstLetter = "" + propertyName.charAt(0);
-                firstLetter.toUpperCase();
-                String propertyNameMod = firstLetter + propertyName.substring(1);
-                String getterName = "get" + propertyNameMod;
-                Method getter = entityClass.getMethod(getterName);
-
-                return createEntityProperty(getter, propertyName,
-                        ClassHelper.getClassName(getter.getReturnType()), orderPosition);
-                //otherwise use the field
-            } else {
-                return createEntityProperty(field, field.getName(), ClassHelper.getClassName(field.getType()), orderPosition);
-            }
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            AccessibleObject propertyField = ClassHelper.getAccessibleObject(entityClass, propertyName);
+            return createEntityProperty(
+                    propertyField,
+                    propertyName,
+                    ClassHelper.getClassName(propertyField),
+                    orderPosition,
+                    entityFormConstantsMap);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
         return null;
     }
 
     public static EntityProperty createEntityProperty(
-            AccessibleObject accessibleObject,
+            AccessibleObject propertyField,
             String propertyName,
             String propertyClassName,
-            Integer orderPosition) {
-        Property property = accessibleObject.getAnnotation(Property.class);
+            Integer orderPosition,
+            Map<String, EntityAttributes<Property>> entityFormConstantsMap) {
+        Property property = ClassHelper.getProperty(propertyField, entityFormConstantsMap);
         if (property == null) {
             return null;
         }
@@ -651,15 +644,15 @@ public class EntityProperty implements Cloneable, Serializable {
         String columnName = null;
         boolean nullable = true;
 
-        Annotation column = accessibleObject.getAnnotation(Column.class);
+        Annotation column = propertyField.getAnnotation(Column.class);
         if (column == null) {
-            column = accessibleObject.getAnnotation(JoinColumn.class);
+            column = propertyField.getAnnotation(JoinColumn.class);
         }
         if (column == null) {
-            column = accessibleObject.getAnnotation(PrimaryKeyJoinColumn.class);
+            column = propertyField.getAnnotation(PrimaryKeyJoinColumn.class);
         }
         if (column == null) {
-            column = accessibleObject.getAnnotation(DiscriminatorColumn.class);
+            column = propertyField.getAnnotation(DiscriminatorColumn.class);
         }
 
         if (column != null) {
@@ -679,9 +672,9 @@ public class EntityProperty implements Cloneable, Serializable {
             pd.setColumnName(pd.getPropertyName());
         }
 
-        Id id = accessibleObject.getAnnotation(Id.class);
-        IdClass idClass = accessibleObject.getAnnotation(IdClass.class);
-        EmbeddedId embeddedId = accessibleObject.getAnnotation(EmbeddedId.class);
+        Id id = propertyField.getAnnotation(Id.class);
+        IdClass idClass = propertyField.getAnnotation(IdClass.class);
+        EmbeddedId embeddedId = propertyField.getAnnotation(EmbeddedId.class);
         if (id != null || idClass != null || embeddedId != null) {
             pd.setReadOnly(true);
             pd.setEditable(false);

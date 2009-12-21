@@ -6,6 +6,7 @@ package com.cosmos.acacia.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import static com.cosmos.acacia.annotation.Component.NullJComponent;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -17,9 +18,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface FormComponentPair {
 
-    Component firstComponent();
+    Component firstComponent() default @Component(componentClass = NullJComponent.class);
 
-    Component secondComponent();
+    Component secondComponent() default @Component(componentClass = NullJComponent.class);
 
     int componentIndex() default -1;
 

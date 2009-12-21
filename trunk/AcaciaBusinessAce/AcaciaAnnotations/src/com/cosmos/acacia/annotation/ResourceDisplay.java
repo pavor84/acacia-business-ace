@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.cosmos.acacia.annotation;
 
 /**
@@ -11,7 +10,8 @@ package com.cosmos.acacia.annotation;
  * @author Bozhidar Bozhanov
  */
 public enum ResourceDisplay {
-        ShortName,
-        Name,
-        FullName;
+
+    ShortName,
+    Name,
+    FullName;
 }
