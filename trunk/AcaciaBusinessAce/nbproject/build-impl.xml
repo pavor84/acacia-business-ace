@@ -112,6 +112,10 @@ is divided into following sections:
                 <isset property="app.client"/>
             </and>
         </condition>
+        <path id="endorsed.classpath.path" path="${endorsed.classpath}"/>
+        <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
+            <length length="0" string="${endorsed.classpath}" when="greater"/>
+        </condition>
     </target>
     <target depends="init" name="-init-cos">
         <condition else="false" property="build.deploy.on.save">
@@ -195,7 +199,7 @@ exists or setup the property manually. For example like this:
             <fileset dir="${meta.inf}"/>
         </copy>
     </target>
-    <target depends="init,deps-jar,pre-pre-compile,pre-compile" if="do.package.not.directory.deploy" name="-do-compile-deps">
+    <target depends="init,deps-jar,pre-pre-compile,pre-compile" name="-do-compile-deps">
         <copyfiles files="${reference.AcaciaBusinessLogic.dist-ear}" todir="${build.dir}//"/>
         <copyfiles files="${reference.AcaciaBusinessAce-ejb.dist-ear}" todir="${build.dir}//"/>
         <copyfiles files="${reference.AcaciaBusinessAce-app-client.j2ee-module-car}" todir="${build.dir}//"/>
@@ -364,9 +368,14 @@ exists or setup the property manually. For example like this:
     <target depends="init" if="app.client" name="run-ac">
         <antcall target="run-${app.client}"/>
     </target>
-    <target depends="-tool-AcaciaBusinessAce-app-client,-java-AcaciaBusinessAce-app-client" name="run-AcaciaBusinessAce-app-client"/>
+    <target depends="-tool2-AcaciaBusinessAce-app-client,-old-java-AcaciaBusinessAce-app-client" name="run-AcaciaBusinessAce-app-client"/>
+    <target if="j2ee.appclient.tool.args" name="-old-java-AcaciaBusinessAce-app-client">
+        <antcall target="-tool-AcaciaBusinessAce-app-client"/>
+        <antcall target="-java-AcaciaBusinessAce-app-client"/>
+    </target>
     <target depends="-as-retrieve-option-workaround" if="j2ee.appclient.mainclass.args" name="-tool-AcaciaBusinessAce-app-client" unless="j2ee.clientName">
         <java classname="${j2ee.appclient.tool.mainclass}" fork="true">
+            <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
             <jvmarg line="${j2ee.appclient.tool.jvmoptions}"/>
             <jvmarg line="${j2ee.appclient.jvmoptions.param}"/>
             <arg line="${j2ee.appclient.tool.args}"/>
@@ -382,8 +391,24 @@ exists or setup the property manually. For example like this:
             </syspropertyset>
         </java>
     </target>
+    <target depends="run-deploy,-as-retrieve-option-workaround" if="j2ee.appclient.mainclass.args" name="-tool2-AcaciaBusinessAce-app-client" unless="j2ee.appclient.tool.args">
+        <mkdir dir="${dist.dir}/AcaciaBusinessAceClient"/>
+        <copy flatten="true" todir="${dist.dir}/AcaciaBusinessAceClient">
+            <fileset dir="${wa.copy.client.jar.from}/AcaciaBusinessAce" includes="**/*.*ar"/>
+        </copy>
+        <java dir="${basedir}" fork="true" jar="${client.jar}">
+            <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+            <jvmarg line="${j2ee.appclient.tool.jvmoptions}${client.jar},arg=-name,arg=AcaciaBusinessAce-app-client"/>
+            <arg line="${application.args.param}"/>
+            <syspropertyset>
+                <propertyref prefix="run-sys-prop."/>
+                <mapper from="run-sys-prop.*" to="*" type="glob"/>
+            </syspropertyset>
+        </java>
+    </target>
     <target if="j2ee.clientName" name="-java-AcaciaBusinessAce-app-client" unless="j2ee.appclient.mainclass.args">
         <java classname="${main.class}" fork="true">
+            <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
             <jvmarg line="${j2ee.appclient.tool.jvmoptions}"/>
             <jvmarg line="-Dj2ee.clientName=${app.client}"/>
             <jvmarg line="${j2ee.appclient.jvmoptions.param}"/>
@@ -400,7 +425,16 @@ exists or setup the property manually. For example like this:
     <target if="j2ee.appclient.mainclass.args" name="-as-retrieve-option-workaround" unless="j2ee.clientName">
         <property name="client.jar" value="${dist.dir}/AcaciaBusinessAceClient.jar"/>
         <sleep seconds="3"/>
-        <copy file="${wa.copy.client.jar.from}/AcaciaBusinessAce/AcaciaBusinessAceClient.jar" todir="${dist.dir}"/>
+        <copy failonerror="false" file="${wa.copy.client.jar.from}/AcaciaBusinessAce/AcaciaBusinessAceClient.jar" todir="${dist.dir}"/>
+        <copy failonerror="false" flatten="true" todir="${dist.dir}/">
+            <fileset dir="${wa.copy.client.jar.from}/AcaciaBusinessAce" includes="**/AcaciaBusinessAceClient.jar"/>
+        </copy>
+        <copy flatten="true" todir="${dist.dir}/AcaciaBusinessAceClient">
+            <fileset dir="${wa.copy.client.jar.from}/AcaciaBusinessAce" includes="**/*.*ar"/>
+        </copy>
+        <copy flatten="false" todir="${dist.dir}/AcaciaBusinessAceClient">
+            <fileset dir="${dist.dir}/gfdeploy" includes="**/*.jar"/>
+        </copy>
     </target>
     <!--
     DEBUGGING SECTION
@@ -415,6 +449,7 @@ exists or setup the property manually. For example like this:
         <nbjpdaconnect address="${jpda.address}" host="${jpda.host}" name="${name}" transport="${jpda.transport}">
             <classpath>
                 <path path="${debug.classpath}"/>
+                <fileset dir="${build.dir}/lib" includes="*.jar"/>
             </classpath>
             <sourcepath>
                 <path path="${ear.docbase.dirs}"/>
@@ -447,6 +482,7 @@ exists or setup the property manually. For example like this:
             <sequential>
                 <parallel>
                     <java classname="@{mainclass}" fork="true">
+                        <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
                         <jvmarg line="${j2ee.appclient.tool.jvmoptions}"/>
                         <jvmarg line="${debug-args-line}"/>
                         <jvmarg value="-Xrunjdwp:transport=${jpda.transport},server=y,address=${jpda.address},suspend=y"/>
