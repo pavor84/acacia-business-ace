@@ -83,8 +83,8 @@ The reference implementation will be hosted in [http://kenai.com/projects/acacia
  * [http://metawidget.sourceforge.net/index.html Metawidget] is a 'smart User Interface widget' that populates itself, at runtime, with UI components to match the properties of your business objects.
  * [https://jide-oss.dev.java.net/ JIDE Common Layer] is Swing component library built on top of Java/Swing. It is also the foundation of other component products from JIDE. This project has over 30 Swing components and over 100k lines of code. It greatly enhanced the default component set provided by Swing and allow developers to focus on business logic layer instead of making components.
  * [http://www.w3.org/MarkUp/Forms/ XForms] projects:
- - [http://www.mozilla.org/projects/xforms/ Mozilla XForms Project]
- - [http://developer.novell.com/wiki/index.php/Novell_XForms_Explorer/ Novell XForms Explorer]
- - [http://www.x-smiles.org/ X-Smiles]
- - [http://alphaworks.ibm.com/tech/xmlforms/ IBM XML Forms]
- - [http://www.formsplayer.com/ formsPlayer]
+  * [http://www.mozilla.org/projects/xforms/ Mozilla XForms Project]
+  * [http://developer.novell.com/wiki/index.php/Novell_XForms_Explorer/ Novell XForms Explorer]
+  * [http://www.x-smiles.org/ X-Smiles]
+  * [http://alphaworks.ibm.com/tech/xmlforms/ IBM XML Forms]
+  * [http://www.formsplayer.com/ formsPlayer]
