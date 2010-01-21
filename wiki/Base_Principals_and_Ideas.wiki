@@ -18,7 +18,7 @@ BPEL will be the connection language between the services.
 
 = Details =
 
-1. The [http://kenai.com/projects/acacia Server] and [http://kenai.com/projects/acacia-client Client] will be OSGi based using Enterprise OSGi and Distributed OSGi (RFC-119):
+1. The [http://kenai.com/projects/acacia Acacia Framework] and [http://kenai.com/projects/acacia-client Acacia Client] will be OSGi based using Enterprise OSGi and Distributed OSGi (RFC-119):
  * Client specification:
   * [https://bugs.eclipse.org/bugs/show_bug.cgi?id=272662 Universal and Distributed JWS Eclipse RCP Client]
   * [http://www.netbeans.org/issues/show_bug.cgi?id=162911 Universal and Distributed JWS OSGi Client based on NetBeans Platform]
@@ -56,7 +56,7 @@ BPEL will be the connection language between the services.
  * Entity definitions
  * Forms: Entity, Entity List, Customization, Relations
  * Form modes: read only, update, create, delete
-The reference implementation will be hosted in [http://kenai.com/projects/acacia-business-ace Kenai project space]
+The reference implementation will be hosted in Kenai Project [http://kenai.com/projects/acacia-business-ace Acacia Business Ace]
 
 3. GUI based Rich Form Development. The forms will be dynamically generated from both Java annotations or Database. The customization of the system and standard/integrated forms also will be GUI based. The primary GUI will be Swing or/and SWT based. As alternative Ajax Web Client will be provided.
 
