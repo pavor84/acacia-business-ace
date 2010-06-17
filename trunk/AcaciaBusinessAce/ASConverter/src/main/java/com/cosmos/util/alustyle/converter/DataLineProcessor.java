@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 /*
 VRSN=560
 [VRSN, 560]
@@ -43,6 +44,7 @@ public class DataLineProcessor {
 
     private LineNumberReader reader;
     private List<StringBuilder> dataLines;
+    private TreeSet<String> picturesSet = new TreeSet<String>();
 
     public DataLineProcessor(String inputFileName) throws IOException {
         this(new File(inputFileName));
@@ -123,7 +125,8 @@ public class DataLineProcessor {
                 if(MagicNode.FIELD.equals(name)) {
                     FieldNode fieldNode = processFieldNode(curlyBracketContent);
                     fileNode.addFieldNode(fieldNode);
-                    System.out.println(fieldNode.getPicture() + " => " + fieldNode.getFullPicture());
+//                    System.out.println(fieldNode.getPicture() + " => " + fieldNode.getFullPicture());
+                    picturesSet.add(fieldNode.getPicture());
                 }
                 if(line.length() > 0 && line.charAt(0) == ',') {
                     line.deleteCharAt(0);
@@ -202,6 +205,10 @@ public class DataLineProcessor {
             if((fileNode = processFileNode(dataLine)) != null) {
                 magicNode.addFileNode(fileNode);
             }
+        }
+
+        for(String picture : picturesSet) {
+            System.out.println(picture);
         }
 
         return magicNode;
