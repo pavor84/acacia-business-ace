@@ -66,7 +66,11 @@ public class FieldNode {
             if(Character.isDigit(ch)) {
                 int count = getNumber(source);
                 if(lastChar == null) {
-                    lastChar = 'X';
+                    if(number) {
+                        lastChar = '#';
+                    } else {
+                        lastChar = 'X';
+                    }
                     sb.append(lastChar);
                 }
                 while(--count > 0) {
@@ -74,19 +78,33 @@ public class FieldNode {
                 }
             } else {
                 source.deleteCharAt(0);
-                sb.append(ch);
-                lastChar = ch;
-            }
-        }
+                if(number) {
+                    switch(ch) {
+                        case 'C':
+                            int commasNumber = getCommasNumber();
+                            while(commasNumber-- > 0) {
+                                sb.insert(0, ',');
+                            }
+                            break;
 
-        if(number) {
-            int index;
-            if((index = sb.indexOf("C")) >= 0) {
-                sb.deleteCharAt(index);
-                int commasNumber = getCommasNumber();
-                while(commasNumber-- > 0) {
-                    sb.insert(0, ',');
+                        case 'N':
+                            sb.insert(0, '-');
+                            break;
+
+                        case '-':
+                        case ',':
+                        case '#':
+                        case '.':
+                            sb.append(ch);
+                            break;
+
+                        default:
+                            break;
+                    }
+                } else {
+                    sb.append(ch);
                 }
+                lastChar = ch;
             }
         }
 

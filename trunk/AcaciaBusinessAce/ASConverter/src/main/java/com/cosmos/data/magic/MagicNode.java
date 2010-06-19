@@ -4,6 +4,8 @@
  */
 package com.cosmos.data.magic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -23,6 +25,7 @@ public class MagicNode {
     public static final String DATA_TYPE = "STRG";
 
     private TreeMap<String, FileNode> fileNodesMap = new TreeMap<String, FileNode>();
+    private List<String> fileNodeNames = new ArrayList<String>();
 
     public MagicNode() {
     }
@@ -33,5 +36,19 @@ public class MagicNode {
 
     public void addFileNode(FileNode fileNode) {
         fileNodesMap.put(fileNode.getName(), fileNode);
+    }
+
+    public FileNode getFileNode(String desc) {
+        for(String name : fileNodesMap.keySet()) {
+            if(name.toUpperCase().contains(desc.toUpperCase())) {
+                return fileNodesMap.get(name);
+            }
+        }
+
+        return null;
+    }
+
+    public List<String> getFileNodeNames() {
+        return fileNodeNames;
     }
 }
