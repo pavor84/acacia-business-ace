@@ -18,12 +18,16 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hello world!
  *
  */
 public class ASConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ASConverter.class.getSimpleName());
 
     private File dataFolder;
     private HSSFWorkbook workbook;
@@ -105,6 +109,7 @@ public class ASConverter {
     }
 
     public void convert(File txtFile) throws IOException {
+        LOGGER.info("Processing " + txtFile.getName() + " ...");
         String fileName = txtFile.getName();
         int index = fileName.lastIndexOf('.');
         fileName = fileName.substring(0, index);
@@ -112,6 +117,7 @@ public class ASConverter {
         LineNumberReader reader = getLineReader(txtFile);
         String line;
         List<String> fieldNodeNames = fileNode.getFieldNodeNames();
+        int columnsCount = fieldNodeNames.size();
 
         HSSFSheet sheet = getSheet(fileName);
         int rowNumber = 0;
@@ -128,19 +134,63 @@ public class ASConverter {
             row = sheet.createRow(rowNumber++);
             for (String fieldNodeName : fieldNodeNames) {
                 FieldNode fieldNode = fileNode.getFieldNode(fieldNodeName);
-                String picture = fieldNode.getFullPicture();
-                int size = picture.length();
-                String value = line.substring(position, position + size);
+                String picture = null;
+                int size = 0;
+                String value = null;
+                try {
+                    picture = fieldNode.getFullPicture();
+                    size = picture.length();
+                    value = getValue(line, position, size);
+                } catch(RuntimeException ex) {
+                    LOGGER.error("\"" + line + "\"");
+                    LOGGER.error("picture=" + fieldNode.getPicture() + ", full picture=" + picture + ", position=" + position + ", size=" + size);
+                    LOGGER.error("value=" + value);
+                    LOGGER.error("columnsCount=" + fieldNodeNames.size() + ", cellNumber=" + cellNumber);
+                    throw ex;
+                }
                 HSSFCell cell = row.createCell(cellNumber++);
                 if (fieldNode.isNumber()) {
                     if (value != null && (value = value.trim()).length() > 0) {
-                        cell.setCellValue(Double.parseDouble(value));
+                        try {
+                            double doubleValue = parseDouble(value);
+                            cell.setCellValue(doubleValue);
+                        } catch(NumberFormatException ex) {
+                            LOGGER.error("\"" + line + "\"");
+                            LOGGER.error("picture=" + fieldNode.getPicture() + ", full picture=" + picture + ", position=" + position + ", size=" + size);
+                            LOGGER.error("value=" + value);
+                            LOGGER.error("columnsCount=" + fieldNodeNames.size() + ", cellNumber=" + cellNumber);
+                            throw ex;
+                        }
                     }
                 } else {
                     cell.setCellValue(value);
                 }
                 position += size + 1;
             }
+        }
+    }
+
+    private double parseDouble(String value) {
+        StringBuilder sb = new StringBuilder(value.length());
+        for(char ch : value.toCharArray()) {
+            if(ch != ',') {
+                sb.append(ch);
+            }
+        }
+
+        return Double.parseDouble(sb.toString());
+    }
+
+    private String getValue(String line, int position, int size) {
+        int length;
+        if(line == null || (length = line.length()) == 0 || length < position) {
+            return null;
+        }
+
+        if(length < position + size) {
+            return line.substring(position);
+        } else {
+            return line.substring(position, position + size);
         }
     }
 

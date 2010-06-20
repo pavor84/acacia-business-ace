@@ -1,0 +1,9 @@
+   1 ÅöãÉÄêàü                         359       160
+   3 Germany                          49          3
+   4 France                           33          1
+   5 SPAIN                            34          1
+   6 åÄäÖÑéçàü                                    1
+   7 OESTERREICH                      43          1
+   8 ROMANIA                          40          1
+   9 GREECE                                       1
+  10 Turkey                           90          1
