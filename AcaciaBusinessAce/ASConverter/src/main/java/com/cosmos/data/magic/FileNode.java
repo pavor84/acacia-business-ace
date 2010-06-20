@@ -5,6 +5,8 @@
 
 package com.cosmos.data.magic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -16,6 +18,7 @@ public class FileNode {
     private String name;
     private String description;
     private TreeMap<String, FieldNode> fieldNodesMap = new TreeMap<String, FieldNode>();
+    private List<String> fieldNodeNames = new ArrayList<String>();
 
     public FileNode(String name) {
         this.name = name;
@@ -38,11 +41,20 @@ public class FileNode {
     }
 
     public void addFieldNode(FieldNode fieldNode) {
-        fieldNodesMap.put(fieldNode.getDescription(), fieldNode);
+        String fieldNodeName = fieldNode.getDescription();
+        fieldNodeNames.add(fieldNodeName);
+        fieldNodesMap.put(fieldNodeName, fieldNode);
     }
 
     public TreeMap<String, FieldNode> getFieldNodesMap() {
         return fieldNodesMap;
     }
 
+    public List<String> getFieldNodeNames() {
+        return fieldNodeNames;
+    }
+
+    public FieldNode getFieldNode(String fieldNodeName) {
+        return fieldNodesMap.get(fieldNodeName);
+    }
 }

@@ -35,7 +35,9 @@ public class MagicNode {
     }
 
     public void addFileNode(FileNode fileNode) {
-        fileNodesMap.put(fileNode.getName(), fileNode);
+        String fileNodeName = fileNode.getName();
+        fileNodeNames.add(fileNodeName);
+        fileNodesMap.put(fileNodeName, fileNode);
     }
 
     public FileNode getFileNode(String desc) {
